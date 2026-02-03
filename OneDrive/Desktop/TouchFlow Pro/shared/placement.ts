@@ -55,7 +55,7 @@ export class PlacementEngine {
             'Professional': 'p'
         };
 
-        const specialistPrefixes = ['m', 'l', 'c'];
+        const specialistPrefixes = ['m', 'l', 'c', 'j', 'd', 'g'];
         const lessonsInLevel = currentLevel === 'Specialist'
             ? completedLessons.filter(id => specialistPrefixes.some(p => id.startsWith(p)))
             : completedLessons.filter(id => id.startsWith(levelPrefixes[currentLevel]));

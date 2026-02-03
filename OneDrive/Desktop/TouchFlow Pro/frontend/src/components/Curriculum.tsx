@@ -14,15 +14,15 @@ interface CurriculumProps {
 const Curriculum: React.FC<CurriculumProps> = ({ userId, progress, onStartLesson, onLevelChange: _onLevelChange }) => {
     const [lessons, setLessons] = useState<Lesson[]>([]);
     const [selectedLevel, setSelectedLevel] = useState<DifficultyLevel>(progress.assignedLevel);
-    const [selectedSpecialization, setSelectedSpecialization] = useState<'Medical' | 'Legal' | 'Coding'>('Medical');
+    const [selectedSpecialization, setSelectedSpecialization] = useState<'Medical' | 'Legal' | 'Coding' | 'Journalism' | 'DevOps' | 'Gaming'>('Medical');
 
     useEffect(() => {
         // Convert drills to lessons
-        const specPrefixes = { 'Medical': 'm', 'Legal': 'l', 'Coding': 'c' };
+        const specPrefixes = { 'Medical': 'm', 'Legal': 'l', 'Coding': 'c', 'Journalism': 'j', 'DevOps': 'd', 'Gaming': 'g' };
         const levelPrefixes = { 'Beginner': 'b', 'Intermediate': 'i', 'Professional': 'p' };
 
         const prefix = selectedLevel === 'Specialist'
-            ? specPrefixes[selectedSpecialization]
+            ? specPrefixes[selectedSpecialization as keyof typeof specPrefixes]
             : levelPrefixes[selectedLevel as keyof typeof levelPrefixes];
 
         const levelDrills = drillLibrary.filter(d => d.id.startsWith(prefix));
@@ -44,11 +44,11 @@ const Curriculum: React.FC<CurriculumProps> = ({ userId, progress, onStartLesson
         return progress.lessonScores[lessonId];
     };
 
-    const specPrefixes = { 'Medical': 'm', 'Legal': 'l', 'Coding': 'c' };
+    const specPrefixes = { 'Medical': 'm', 'Legal': 'l', 'Coding': 'c', 'Journalism': 'j', 'DevOps': 'd', 'Gaming': 'g' };
     const levelPrefixes = { 'Beginner': 'b', 'Intermediate': 'i', 'Professional': 'p' };
 
     const currentPrefix = selectedLevel === 'Specialist'
-        ? specPrefixes[selectedSpecialization]
+        ? specPrefixes[selectedSpecialization as keyof typeof specPrefixes]
         : levelPrefixes[selectedLevel as keyof typeof levelPrefixes];
 
     const levelLessons = drillLibrary.filter(d => d.id.startsWith(currentPrefix));
@@ -110,22 +110,25 @@ const Curriculum: React.FC<CurriculumProps> = ({ userId, progress, onStartLesson
                         <p className="text-text-muted text-sm mt-2 max-w-md">Targeted elite training for high-precision professional disciplines.</p>
                     </div>
 
-                    <div className="flex flex-wrap justify-center gap-4">
-                        {(['Medical', 'Legal', 'Coding'] as const).map(spec => (
+                    <div className="flex flex-wrap justify-center gap-4 max-w-4xl">
+                        {(['Medical', 'Legal', 'Coding', 'Journalism', 'DevOps', 'Gaming'] as const).map(spec => (
                             <button
                                 key={spec}
                                 onClick={() => setSelectedSpecialization(spec)}
                                 className={`
-                                    px-10 py-5 rounded-[1.5rem] font-black text-sm uppercase tracking-widest transition-all duration-300 flex items-center gap-4
+                                    px-8 py-4 rounded-[1.25rem] font-black text-xs uppercase tracking-widest transition-all duration-300 flex items-center gap-3
                                     ${selectedSpecialization === spec
                                         ? 'bg-white text-primary-blue shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1)] scale-105 border-2 border-primary-blue/20 ring-4 ring-primary-blue/5'
                                         : 'bg-slate-200/40 text-text-muted hover:bg-white hover:text-text-main hover:shadow-xl'}
                                 `}
                             >
-                                <span className="text-2xl filter drop-shadow-sm">
+                                <span className="text-xl filter drop-shadow-sm">
                                     {spec === 'Medical' && '🏥'}
                                     {spec === 'Legal' && '⚖️'}
                                     {spec === 'Coding' && '💻'}
+                                    {spec === 'Journalism' && '📰'}
+                                    {spec === 'DevOps' && '🛠️'}
+                                    {spec === 'Gaming' && '🎮'}
                                 </span>
                                 {spec}
                             </button>

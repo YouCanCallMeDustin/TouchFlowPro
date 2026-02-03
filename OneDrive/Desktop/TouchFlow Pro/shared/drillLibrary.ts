@@ -1216,5 +1216,335 @@ export const drillLibrary: Drill[] = [
             'class Database extends Service { constructor(config) { super(config); this.connected = false; } }',
             'export interface Theme { colors: { primary: string; secondary: string; background: string; }; spacing: number[]; }'
         ]
+    },
+    {
+        id: 'j1',
+        title: 'Journalism: The Newsroom Pulse',
+        content: 'LONDON, UK — The Prime Minister issued a statement regarding the unilateral ceasefire. "We remain committed to peace," the spokesperson confirmed at 10:00 PM GMT.',
+        difficulty: 'Specialist',
+        category: 'Journalism',
+        description: 'Master datelines, attribution, and time/location markers.',
+        theory: 'News reporting requires rapid switching between absolute locations (datelines) and direct speech. Precision with dashes and quotes is vital for verbatim reporting.',
+        focusKeys: ['L', 'O', 'N', 'D', '—', '"', ':', 'G', 'M', 'T'],
+        warmupSteps: [
+            { text: 'WASHINGTON, DC —', insight: 'Standard dateline format with em-dash.' },
+            { text: '"Quotes within quotes"', insight: 'Attribution marker calibration.' },
+            { text: '10:00 AM EST 12:00 PM', insight: 'Time zone and numeric precision.' },
+            { text: 'spokesperson confirmed via', insight: 'High-frequency reporting verbs.' },
+            { text: 'The Prime Minister stated', insight: 'Formal title capitalization flow.' }
+        ],
+        practiceVariations: [
+            'TOKYO, JAPAN — Markets plummeted today following the emergency announcement. "Volatility is expected," the Finance Minister noted at 09:30 AM.',
+            'PARIS, FRANCE — Protests erupted at the city center. "We will not yield," a representative said during the live broadcast at midnight JST.',
+            'BERLIN, GERMANY — The summit concluded with a joint declaration. "Unity is paramount," the Chancellor remarked at 4:15 PM CET.'
+        ]
+    },
+    {
+        id: 'j2',
+        title: 'Journalism: Headline Velocity',
+        content: 'BREAKING: BREAKDOWN IN NEGOTIATIONS AS CRISIS DEEPENS. INTERNAL MEMO LEAKED; OFFICIALS DENY ANY WRONGDOING. INVESTIGATION PENDING.',
+        difficulty: 'Specialist',
+        category: 'Journalism',
+        description: 'Practice high-pressure all-caps headlines and subheaders.',
+        theory: 'Headlines use block capitals and concise punctuation. Maintaining high speed in ALL CAPS tests your shift key stamina and rhythmic consistency.',
+        focusKeys: ['B', 'R', 'E', 'A', 'K', 'I', 'N', 'G', ':', ';', '.', ' '],
+        warmupSteps: [
+            { text: 'BREAKING NEWS ALERT', insight: 'Urgent header burst sequence.' },
+            { text: 'CRISIS DEEPENS SUDDENLY', insight: 'Aggressive block capital flow.' },
+            { text: 'NEGOTIATIONS STALLED;', insight: 'Semicolons in headline structures.' },
+            { text: 'OFFICIALS DENY ALL CLAIMS', insight: 'Standard denial terminology.' },
+            { text: 'INVESTIGATION PENDING NOW', insight: 'Procedural subheader rhythm.' }
+        ],
+        practiceVariations: [
+            'FLASH: UNEMPLOYMENT FALLS TO RECORD LOW. CONSUMER CONFIDENCE INDEX SURGES; ECONOMISTS REMAIN CAUTIOUS.',
+            'DEVELOPING: MAJOR CYBERATTACK TARGETS GRID. SECURITY FIRMS DEPLOY PATCH; NO DATA BREACH CONFIRMED YET.',
+            'EXCLUSIVE: WHISTLEBLOWER EXPOSES SYSTEMIC FRAUD. CEO RESIGNS EFFECTIVE IMMEDIATELY; BOARD SEEKING SUCCESSOR.'
+        ]
+    },
+    {
+        id: 'j3',
+        title: 'Journalism: Narrative Flow',
+        content: 'Witnesses described the scene as "chaotic but controlled." Under the heavy rain, the crowd gathered outside the courthouse, awaiting the verdict that would define a generation.',
+        difficulty: 'Specialist',
+        category: 'Journalism',
+        description: 'Focus on descriptive prose and complex sentence structures.',
+        theory: 'Feature journalism blends reporting with narrative flair. Mastering the transition between dialogue tags and descriptive clauses improves literary typing.',
+        focusKeys: ['W', 'i', 't', 'n', 'e', 's', '"', 'c', 'h', 'a', 'o', ',', '.'],
+        warmupSteps: [
+            { text: '"chaotic but controlled"', insight: 'Quoted descriptive descriptors.' },
+            { text: 'awaiting the verdict...', insight: 'Ellipsis and suspenseful flow.' },
+            { text: 'outside the courthouse,', insight: 'Locational clause punctuation.' },
+            { text: 'defined a generation.', insight: 'Polished ending phrasing.' },
+            { text: 'heavy rain falling down', insight: 'Descriptive adjective clusters.' }
+        ],
+        practiceVariations: [
+            'The atmosphere was "electric" as the countdown began. Thousands stood in silence, reflecting on the historical significance of the event.',
+            'Rarely has a speaker moved a crowd with such "ferocious grace." Her words echoed through the hall, sparking a movement that spread nationwide.',
+            'The abandoned site felt "frozen in time." Nature had begun to reclaim the steel beams, weaving green vines through the industrial skeleton.'
+        ]
+    },
+    {
+        id: 'j4',
+        title: 'Journalism: Statistical Precision',
+        content: 'The 12.5% increase in GDP surprised analysts, who had predicted a mere 0.3% growth. Meanwhile, the $1.2B surplus will be allocated to infrastructure projects.',
+        difficulty: 'Specialist',
+        category: 'Journalism',
+        description: 'Practice dense financial reporting data.',
+        theory: 'Economic reporting requires extreme precision with percentages and currency symbols. Mis-typing a decimal point changes the entire story.',
+        focusKeys: ['1', '2', '.', '5', '%', '$', 'B', 'G', 'D', 'P'],
+        warmupSteps: [
+            { text: '12.5% increase 0.3%', insight: 'Decimal and percentage accuracy.' },
+            { text: '$1.2B surplus $500M', insight: 'Currency and magnitude markers.' },
+            { text: 'predicted growth rates', insight: 'Economic forecast terminology.' },
+            { text: 'infrastructure projects', insight: 'Administrative expenditure flow.' },
+            { text: 'GDP surge analysts say', insight: 'Market reaction phrasing.' }
+        ],
+        practiceVariations: [
+            'Inflation hit a 40-year high of 9.1% in Q3. The Federal Reserve responded with a 75-basis-point hike, targeting a 2% long-term goal.',
+            'The tech giant reported a $4.5B loss this quarter. Shares fell 18.2% in after-hours trading as investors reacted to the news.',
+            'A 5-year study showed a 33.4% reduction in carbon emissions. The government pledged $10B toward renewable energy by 2030.'
+        ]
+    },
+    {
+        id: 'j5',
+        title: 'Journalism: Interview Cadence',
+        content: 'Q: How do you respond to the allegations? A: They are baseless. Q: Baseless? We have the documents. A: Then the documents are forgeries.',
+        difficulty: 'Specialist',
+        category: 'Journalism',
+        description: 'Practice the rapid back-and-forth of hard-hitting interviews.',
+        theory: 'Interviews use Q: and A: markers to denote speaker changes. This builds on the legal deposition rhythm but with shorter, more aggressive exchanges.',
+        focusKeys: ['Q', ':', ' ', 'A', '?', '.', 'b', 'a', 's', 'e', 'l', 's'],
+        warmupSteps: [
+            { text: 'Q: How do you respond?', insight: 'Interrogative speaker marker.' },
+            { text: 'A: No further comment.', insight: 'Defensive response marker.' },
+            { text: 'Q: Baseless? A: Yes.', insight: 'Rapid-fire short alternation.' },
+            { text: 'We have the documents.', insight: 'Assertive evidentiary statement.' },
+            { text: 'forgeries and lies', insight: 'Contrastive terminology flow.' }
+        ],
+        practiceVariations: [
+            'Q: Why now? A: Because the truth matters. Q: And before? A: I was constrained. Q: By whom? A: My contract.',
+            'Q: Can you confirm the location? A: No. Q: Why not? A: Operational security. Q: Is there a threat? A: Always.',
+            'Q: Is the deal dead? A: It is on life support. Q: Who pulled the plug? A: The board. Q: Unanimously? A: Yes.'
+        ]
+    },
+    {
+        id: 'd1',
+        title: 'DevOps: Pipeline Command',
+        content: 'docker build -t app:v1 . && docker push registry.internal/app:v1; kubectl apply -f ./k8s/deployment.yaml --namespace=production',
+        difficulty: 'Specialist',
+        category: 'DevOps',
+        description: 'Master containerization and orchestration commands.',
+        theory: 'DevOps requires zero-mistake typing of complex shell strings. Mixing `&&`, `;`, `-t`, and `./` paths tests your technical precision.',
+        focusKeys: ['d', 'o', 'c', 'k', 'e', 'r', '-', 't', '.', '&', 'k', 'u', 'b', 'e', 'c', 't', 'l'],
+        warmupSteps: [
+            { text: 'docker build -t app', insight: 'Container build command pattern.' },
+            { text: '&& docker push registry', insight: 'Chained command execution.' },
+            { text: 'kubectl apply -f yaml', insight: 'Orchestration manifest application.' },
+            { text: '--namespace=production', insight: 'Long-form flag and equal sign logic.' },
+            { text: './k8s/deploy.yaml', insight: 'Relative directory path navigation.' }
+        ],
+        practiceVariations: [
+            'docker images --format="{{.Repository}}: {{.Tag}}" | grep "none"; docker rmi $(docker images -q -f dangling=true)',
+            'kubectl get pods -l app=nginx -o json; kubectl logs -f deploy/api-service --tail=100 -n staging',
+            'docker-compose up -d --build; docker exec -it db-1 psql -U postgres -d analytics_db'
+        ]
+    },
+    {
+        id: 'd2',
+        title: 'DevOps: Infrastructure as Code',
+        content: 'resource "aws_instance" "web" { ami = "ami-0c55b159cbfafe1f0" instance_type = "t2.micro" tags = { Name = "ProdServer" } }',
+        difficulty: 'Specialist',
+        category: 'DevOps',
+        description: 'Focus on HCL (HashiCorp Configuration Language) syntax.',
+        theory: 'IaC involves structured blocks, quotes, and specific resource identifiers. Precision with braces `{}` and equals signs `=` is critical for cloud automation.',
+        focusKeys: ['r', 'e', 's', 'o', 'u', 'r', 'c', '"', '{', '}', '=', 'a', 'm', 'i'],
+        warmupSteps: [
+            { text: 'resource "aws_s3_bucket"', insight: 'Cloud resource definition pattern.' },
+            { text: 'instance_type = "t2"', insight: 'Attribute assignment syntax.' },
+            { text: 'tags = { Env = "Dev" }', insight: 'Nested map and metadata labels.' },
+            { text: 'terraform init && apply', insight: 'IaC lifecycle command flow.' },
+            { text: '"ami-0c55b159cbfa"', insight: 'Hexadecimal identifier accuracy.' }
+        ],
+        practiceVariations: [
+            'variable "db_pwd" { description = "Secret" type = string sensitive = true }; output "lb_ip" { value = aws_lb.ext.dns }',
+            'module "vpc" { source = "./modules/vpc" cidr = "10.0.0.0/16" azs = ["us-east-1a", "us-east-1b"] }',
+            'locals { common_tags = { Owner = "Ops" Project = "Nexus" } }; resource "aws_db" { tags = local.common_tags }'
+        ]
+    },
+    {
+        id: 'd3',
+        title: 'DevOps: Terminal Gymnastics',
+        content: 'find /var/log -name "*.log" -mtime +30 -exec rm -rf {} \\; | awk \'{print $9}\' | sort | uniq -c | head -n 5',
+        difficulty: 'Specialist',
+        category: 'DevOps',
+        description: 'Master complex Unix pipelines and file manipulations.',
+        theory: 'Terminal work uses heavy redirection and piping. Correctly escaping characters like `\\;` and using single quotes for `awk` is the mark of an expert.',
+        focusKeys: ['/', '*', '.', '+', '-', '\\', ';', '|', '`', '\'', '{', '}'],
+        warmupSteps: [
+            { text: 'find / -name "*.tmp"', insight: 'System-wide file search syntax.' },
+            { text: '-exec rm -rf {} \\;', insight: 'Escaped sub-command termination.' },
+            { text: 'awk \'{print $1}\' | sort', insight: 'Data extraction and pipe logic.' },
+            { text: 'uniq -c | head -n 10', insight: 'Summarization and capping filters.' },
+            { text: 'grep -rE "error|fail"', insight: 'Regex-enhanced search patterns.' }
+        ],
+        practiceVariations: [
+            'ls -lah /root | sed "s/root/admin/g" > output.txt; cat access.log | grep 404 | cut -d\' \' -f7 | sort | uniq',
+            'ps aux | grep node | awk \'{print $2}\' | xargs kill -9; du -sh /home/* | sort -rh | head -10',
+            'chmod +x script.sh && ./script.sh 2>&1 | tee audit.log; lsof -i :8080 | awk \'NR>1 {print $2}\''
+        ]
+    },
+    {
+        id: 'd4',
+        title: 'DevOps: Scripting Logic',
+        content: 'if [[ $? -eq 0 ]]; then echo "Deployment Successful!"; else echo "Deployment Failed!" >&2; exit 1; fi',
+        difficulty: 'Specialist',
+        category: 'DevOps',
+        description: 'Focus on Bash conditional logic and status codes.',
+        theory: 'Shell scripts rely on `$`, `[[ ]]`, and redirection `>&2`. Speed with these specific symbol clusters is essential for interactive troubleshooting.',
+        focusKeys: ['$', '?', '=', '[', ']', ';', 'e', 'c', 'h', 'o', '>', '&', '2'],
+        warmupSteps: [
+            { text: 'if [[ $status == 0 ]]', insight: 'Bash conditional test syntax.' },
+            { text: 'then echo "Success"', insight: 'Positive branch execution.' },
+            { text: 'else exit 1; fi', insight: 'Failure branch and closure.' },
+            { text: '>&2 redirect to stderr', insight: 'Error stream manipulation.' },
+            { text: '$@ for args ${VAR}', insight: 'Variable expansion and params.' }
+        ],
+        practiceVariations: [
+            'for file in *.jpg; do convert "$file" "${file%.jpg}.png"; done; while read p; do echo "Processing $p"; done < list.txt',
+            'case "$ENV" in "prod") deploy_prod ;; "test") deploy_test ;; *) echo "Unknown" ; exit 1 esac',
+            'export PATH=$PATH:~/bin; alias gs="git status"; function l() { ls -CF "$@" }'
+        ]
+    },
+    {
+        id: 'd5',
+        title: 'DevOps: Config YAML',
+        content: 'apiVersion: v1\nkind: Service\nmetadata:\n  name: api-gateway\nspec:\n  selector:\n    app: gateway\n  ports:\n    - protocol: TCP\n      port: 80\n      targetPort: 8080',
+        difficulty: 'Specialist',
+        category: 'DevOps',
+        description: 'Practice the strict indentation and key-value mapping of YAML.',
+        theory: 'YAML uses whitespace and colons for structure. Maintaining alignment across nested keys like `spec > ports > - protocol` is vital for readability.',
+        focusKeys: [':', '\n', ' ', '-', 'k', 'i', 'n', 'd', 'p', 'o', 'r', 't'],
+        warmupSteps: [
+            { text: 'apiVersion: v1', insight: 'Standard Kubernetes header.' },
+            { text: '  name: my-app', insight: 'Two-space indentation rule.' },
+            { text: '  ports: - port: 80', insight: 'List item within a map.' },
+            { text: 'targetPort: 8080', insight: 'Backend service port mapping.' },
+            { text: 'selector: app: web', insight: 'Label-based resource discovery.' }
+        ],
+        practiceVariations: [
+            'image: node:18-alpine\nworkingDir: /app\ncommand: ["npm", "start"]\nenv:\n  - name: PORT\n    value: "3000"',
+            'strategy:\n  type: RollingUpdate\n  rollingUpdate:\n    maxSurge: 25%\n    maxUnavailable: 25%',
+            'securityContext:\n  runAsUser: 1000\n  fsGroup: 2000\n  capabilities:\n    add: ["NET_ADMIN", "SYS_TIME"]'
+        ]
+    },
+    {
+        id: 'g1',
+        title: 'Gaming: Tactical Comms',
+        content: 'Enemy spotted at Long A! Flashbang going out. Bomb has been planted at B Site. Rotation incoming, watch the flank!',
+        difficulty: 'Specialist',
+        category: 'Gaming',
+        description: 'Master the high-speed jargon of tactical shooters.',
+        theory: 'Tactical comms require rapid, clear typing of location-based callouts. Precision under pressure with high-frequency abbreviations like "Long A" is key.',
+        focusKeys: ['E', 'n', 'e', 'm', 'y', 'L', 'o', 'n', 'g', 'A', '!', 'B', 'f', 'l', 'a', 'n', 'k'],
+        warmupSteps: [
+            { text: 'Enemy at Long A!', insight: 'Standard combat callout burst.' },
+            { text: 'Bomb planted at B', insight: 'Objective status notification.' },
+            { text: 'Rotation in 5s!', insight: 'Strategic movement timing.' },
+            { text: 'Flashbang out!', insight: 'Utility usage notification.' },
+            { text: 'Watch the flank!', insight: 'Positioning awareness alert.' }
+        ],
+        practiceVariations: [
+            'Need healing at Mid! Shield down, retreat to spawn. One tap on the sniper, pushing now!',
+            'Planting at A. Smokes are down, holding the corner. Defuser is in the smoke, protect it!',
+            'Eco round, don\'t buy. Stack B site, they will rush. Ready for retake, let\'s go!'
+        ]
+    },
+    {
+        id: 'g2',
+        title: 'Gaming: Raid Coordinates',
+        content: 'Tank swap at 50%. Focus the adds at West door. Boss transitioning to Phase 2. Stack on the marker (Red Circle) for the AoE!',
+        difficulty: 'Specialist',
+        category: 'Gaming',
+        description: 'Practice the complex coordination of MMO raid messaging.',
+        theory: 'Raid leaders must type precise instructions and percentages. Correctly formatting markers like "(Red Circle)" and "Phase 2" ensures clear team coordination.',
+        focusKeys: ['T', 'a', 'n', 'k', '%', 'W', 'e', 's', 't', '(', ')', 'A', 'o', 'E'],
+        warmupSteps: [
+            { text: 'Tank swap at 30%', insight: 'Percentage-based mechanic trigger.' },
+            { text: 'Focus adds now!', insight: 'Priority target directive.' },
+            { text: 'Stack on Blue!', insight: 'Positioning instruction burst.' },
+            { text: 'Phase 3 incoming!', insight: 'Progression state warning.' },
+            { text: '(Star Marker)', insight: 'Visual indicator citation.' }
+        ],
+        practiceVariations: [
+            'Healers focus the MT! Dps stop at 1%. Burn the boss down, no more distractions!',
+            'Spread for the debuff. Move to South-East quadrant. Wait for the dispel, don\'t move!',
+            'Boss is enraged! Pop all cooldowns. 5% left, finish it. Good job everyone.'
+        ]
+    },
+    {
+        id: 'g3',
+        title: 'Gaming: Pro eSports Jargon',
+        content: 'That\'s a huge GG! The meta is shifting toward aggressive rotations. Clutch play at the tie-breaker. MVP performance from the carry.',
+        difficulty: 'Specialist',
+        category: 'Gaming',
+        description: 'Master the specialized vocabulary of competitive gaming.',
+        theory: 'Competitive gaming has its own shorthand (GG, MVP, Carry). Developing a rhythm for these uppercase abbreviations within standard sentences improves commentary typing.',
+        focusKeys: ['G', 'G', 'M', 'V', 'P', 'm', 'e', 't', 'a', 'c', 'l', 'u', 't', 'c', 'h'],
+        warmupSteps: [
+            { text: 'Huge GG everyone!', insight: 'Post-match etiquette burst.' },
+            { text: 'current meta shifts', insight: 'Balance and strategy terminology.' },
+            { text: 'clutch play confirmed', insight: 'High-performance descriptor.' },
+            { text: 'MVP carry performance', insight: 'Role and award nomenclature.' },
+            { text: 'tie-breaker intensity', insight: 'Tournament structure phrasing.' }
+        ],
+        practiceVariations: [
+            'The jungler is ganking top. Secure the objective, we need the gold lead. Turret is down!',
+            'Don\'t feed the hyper-carry. We need more crowd control. Team-fight at the pit in 10!',
+            'The bracket reset is real. Who will win the grand finals? The hype is unreal right now.'
+        ]
+    },
+    {
+        id: 'g4',
+        title: 'Gaming: System & Bindings',
+        content: '/bind k "say Rush B!". sensitivity 2.5; cl_interp 0; voice_enable 1. bind mwheelup +jump; fps_max 144.',
+        difficulty: 'Specialist',
+        category: 'Gaming',
+        description: 'Practice console commands and keybinding syntax.',
+        theory: 'Power users use the developer console for optimization. Precision with forward slashes `/`, underscores `_`, and quotes `"` is vital for config accuracy.',
+        focusKeys: ['/', 'b', 'i', 'n', 'd', '"', '_', ';', '0', '1', 'f', 'p', 's'],
+        warmupSteps: [
+            { text: '/say Hello World!', insight: 'Slash command invocation.' },
+            { text: 'bind k "action"', insight: 'Hotkey assignment syntax.' },
+            { text: 'cl_showfps 1', insight: 'Settings toggle underscore logic.' },
+            { text: 'sensitivity 1.5;', insight: 'Numeric value and semicolon.' },
+            { text: 'fps_max 144.0', insight: 'Hardware limit numeric precision.' }
+        ],
+        practiceVariations: [
+            'alias +crouchjump "+jump;+duck"; bind space +crouchjump; crosshair 1; volume 0.5',
+            'net_graph 1; rate 786432; cl_cmdrate 128; echo "Config Loaded Success"',
+            '/invite "Player123"; /kick @cheater; /mute all; dev_console 1'
+        ]
+    },
+    {
+        id: 'g5',
+        title: 'Gaming: Velocity Cast',
+        content: 'He\'s around the corner, he\'s low, he\'s absolutely one-shot! The flank is real! Can he find the opening? Yes! Unbelievable reactions!',
+        difficulty: 'Specialist',
+        category: 'Gaming',
+        description: 'Simulate the frenetic pace of live shoutcasting.',
+        theory: 'Casting requires rapid sentences with emotional punctuation. "He\'s" and "Yes!" are your cadence markers for this high-velocity scenario.',
+        focusKeys: ['h', 'e', '\'', 's', '!', '?', 'Y', 'e', 's', 'U', 'n', 'b', 'e', 'l'],
+        warmupSteps: [
+            { text: 'He\'s absolutely low!', insight: 'High-energy player status burst.' },
+            { text: 'Unbelievable play!', insight: 'Signature casting exclamative.' },
+            { text: 'The flank is real!', insight: 'Positional storytelling phrasing.' },
+            { text: 'Can he find it?', insight: 'Suspenseful interrogative rhythm.' },
+            { text: 'Opening found now!', insight: 'Action resolution notification.' }
+        ],
+        practiceVariations: [
+            'The crowd is going wild! Incredible precision with the headshot. He is unstoppable right now!',
+            'Down to the wire. 1v3 situation, can he clutch this out? He does it! The greatest of all time!',
+            'Look at the movement! Dancing through the fire. He secures the double kill and the round!'
+        ]
     }
 ];
