@@ -7,10 +7,9 @@ import HeatMap from './components/HeatMap'
 import Login from './components/Auth/Login'
 import Signup from './components/Auth/Signup'
 import { useAuth } from './context/AuthContext'
-import type { TypingMetrics, KeystrokeEvent } from '@shared/types'
+import type { TypingMetrics } from '@shared/types'
 import type { UserProgress, Lesson } from '@shared/curriculum'
 import type { DifficultyLevel, PlacementResult } from '@shared/placement'
-import { getTheme } from '@shared/specialtyThemes'
 
 type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup'
 
@@ -121,11 +120,9 @@ function App() {
     )
   }
 
-  const activeTheme = currentLesson ? getTheme(currentLesson.category) : null;
-
   return (
-    <div className={`min-h-screen transition-all duration-1000 selection:bg-secondary-teal/20 ${activeTheme ? `bg-gradient-to-br ${activeTheme.bgClass}` : 'bg-bg-main'}`}>
-      <header className={`sticky top-0 z-50 backdrop-blur-md ${activeTheme ? 'bg-black/10 text-white border-white/5' : 'bg-white/50 border-slate-200/50'} border-b px-6 sm:px-12 py-4 flex justify-between items-center transition-all`}>
+    <div className="min-h-screen bg-bg-main selection:bg-secondary-teal/20">
+      <header className="sticky top-0 z-50 backdrop-blur-md bg-white/50 border-b border-slate-200/50 px-6 sm:px-12 py-4 flex justify-between items-center transition-all">
         <div className="flex flex-col">
           <h1
             className="text-2xl sm:text-3xl font-heading font-extrabold tracking-tighter cursor-pointer bg-gradient-to-br from-primary-blue to-secondary-teal bg-clip-text text-transparent active:scale-95 transition-transform"
@@ -133,7 +130,7 @@ function App() {
           >
             TouchFlow
           </h1>
-          <span className={`text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] ${activeTheme ? activeTheme.accentColor : 'text-accent-orange'} leading-none -mt-1`}>
+          <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-accent-orange leading-none -mt-1">
             Pro Mastery
           </span>
         </div>
@@ -146,7 +143,7 @@ function App() {
             </div>
             <button
               onClick={logout}
-              className={`px-4 py-2 text-xs font-bold ${activeTheme ? 'text-white border-white/20 hover:bg-white/10' : 'text-text-muted border-slate-200 hover:bg-slate-50'} rounded-lg transition-all active:scale-95 uppercase tracking-wider`}
+              className="px-4 py-2 text-xs font-bold text-text-muted border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-red-600 hover:border-red-100 transition-all active:scale-95 uppercase tracking-wider"
             >
               Sign Out
             </button>

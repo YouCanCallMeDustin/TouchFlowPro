@@ -321,3 +321,5 @@ h2 {
   color: var(--primary-blue);
   animation: pulse 1s infinite alternate;
 }
+@keyframes audio-bar { 0%, 100% { transform: scaleY(0.5); } 50% { transform: scaleY(1); } }
+.animate-audio-bar { animation: audio-bar 1s infinite ease-in-out; transform-origin: bottom; }

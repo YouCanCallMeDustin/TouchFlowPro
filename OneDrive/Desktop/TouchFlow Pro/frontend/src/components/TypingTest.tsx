@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { TypingEngine } from '@shared/typingEngine';
 import type { KeystrokeEvent, TypingMetrics } from '@shared/types';
-import type { SpecialtyTheme } from '@shared/specialtyThemes';
+import DictationEngine, { DictationUI } from './DictationMode';
 
 interface Props {
     text: string;
     onComplete?: (metrics: TypingMetrics, keystrokes: KeystrokeEvent[]) => void;
     suddenDeath?: boolean;
     onSuddenDeathFailure?: () => void;
-    theme?: SpecialtyTheme;
+    dictationMode?: boolean;
 }
 
-const TypingTest: React.FC<Props> = ({ text, onComplete, suddenDeath, onSuddenDeathFailure, theme }) => {
+const TypingTest: React.FC<Props> = ({ text, onComplete, suddenDeath, onSuddenDeathFailure, dictationMode }) => {
     const [userInput, setUserInput] = useState('');
     const [keystrokes, setKeystrokes] = useState<KeystrokeEvent[]>([]);
     const [metrics, setMetrics] = useState<TypingMetrics>({
@@ -26,6 +26,7 @@ const TypingTest: React.FC<Props> = ({ text, onComplete, suddenDeath, onSuddenDe
     const [isStarted, setIsStarted] = useState(false);
     const [isFailed, setIsFailed] = useState(false);
     const [liveWPM, setLiveWPM] = useState(0);
+    const [dictationSpeed, setDictationSpeed] = useState(1);
     const startTimeRef = useRef<number | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -124,20 +125,17 @@ const TypingTest: React.FC<Props> = ({ text, onComplete, suddenDeath, onSuddenDe
                 // Already typed
                 if (userInput[index] === char) {
                     // Correct
-                    className += theme?.category === 'Coding' || theme?.category === 'DevOps'
-                        ? ' text-green-400 bg-green-500/10 rounded-sm'
-                        : ' text-emerald-700 bg-emerald-50 rounded-sm';
+                    className += ' text-emerald-700 bg-emerald-50 rounded-sm';
                 } else {
                     // Incorrect
                     className += ' text-rose-700 bg-rose-50 underline decoration-rose-400 decoration-wavy underline-offset-4 rounded-sm';
                 }
             } else if (index === userInput.length) {
                 // Current character
-                const highlightColor = theme?.accentColor.replace('text-', 'bg-') || 'bg-accent-orange';
-                className += ` ${highlightColor} ${theme?.bgClass.includes('slate') ? 'text-white' : 'text-slate-900'} font-black rounded-md shadow-lg animate-pulse-fast relative z-10 ring-2 ring-white`;
+                className += ' bg-accent-orange text-slate-900 font-black rounded-md shadow-lg animate-pulse-fast relative z-10 ring-2 ring-white';
             } else {
                 // Not yet typed
-                className += theme?.bgClass.includes('slate') ? ' text-slate-600' : ' text-slate-400';
+                className += ' text-slate-400';
             }
 
             return (
@@ -149,7 +147,7 @@ const TypingTest: React.FC<Props> = ({ text, onComplete, suddenDeath, onSuddenDe
     };
 
     return (
-        <div className={`relative ${theme?.cardClass || 'bg-white/70'} backdrop-blur-xl border rounded-[2.5rem] shadow-2xl p-8 sm:p-12 w-full max-w-4xl mx-auto transition-all duration-300 ${isFailed ? 'border-rose-500 ring-4 ring-rose-500/20' : 'border-white/50'}`}>
+        <div className={`relative bg-white/70 backdrop-blur-xl border rounded-[2.5rem] shadow-2xl p-8 sm:p-12 w-full max-w-4xl mx-auto transition-all duration-300 ${isFailed ? 'border-rose-500 ring-4 ring-rose-500/20' : 'border-white/50'}`}>
             {/* Sudden Death Failure Overlay */}
             {isFailed && (
                 <div className="absolute inset-0 bg-rose-600/20 backdrop-blur-[2px] rounded-[2.5rem] z-50 flex items-center justify-center animate-in fade-in duration-300">
@@ -162,24 +160,24 @@ const TypingTest: React.FC<Props> = ({ text, onComplete, suddenDeath, onSuddenDe
             )}
 
             {/* Advanced Metrics Dashboard */}
-            <div className={`grid grid-cols-3 gap-4 sm:gap-8 mb-10 p-6 ${theme?.bgClass.includes('slate') ? 'bg-white/5' : 'bg-slate-900/5'} rounded-3xl border border-black/5`}>
+            <div className="grid grid-cols-3 gap-4 sm:gap-8 mb-10 p-6 bg-slate-900/5 rounded-3xl border border-slate-200/50">
                 <div className="text-center group">
-                    <div className={`text-4xl sm:text-5xl font-heading font-black ${theme?.primaryColor || 'text-primary-blue'} transition-transform group-hover:scale-110 duration-300`}>
+                    <div className="text-4xl sm:text-5xl font-heading font-black text-primary-blue transition-transform group-hover:scale-110 duration-300">
                         {liveWPM}
                     </div>
-                    <div className={`text-[10px] font-black ${theme?.bgClass.includes('slate') ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-widest mt-1`}>Live Velocity</div>
+                    <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">Live Velocity</div>
                 </div>
-                <div className={`text-center group ${theme?.bgClass.includes('slate') ? 'text-white' : 'text-slate-900'} border-x border-black/5`}>
-                    <div className={`text-4xl sm:text-5xl font-heading font-black transition-transform group-hover:scale-110 duration-300 ${metrics.accuracy >= 95 ? 'text-emerald-400' : theme?.accentColor || 'text-accent-orange'}`}>
+                <div className="text-center group text-slate-900 border-x border-slate-200">
+                    <div className={`text-4xl sm:text-5xl font-heading font-black transition-transform group-hover:scale-110 duration-300 ${metrics.accuracy >= 95 ? 'text-secondary-teal' : 'text-accent-orange'}`}>
                         {metrics.accuracy}%
                     </div>
-                    <div className={`text-[10px] font-black ${theme?.bgClass.includes('slate') ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-widest mt-1`}>Accuracy</div>
+                    <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">Accuracy</div>
                 </div>
-                <div className={`text-center group ${theme?.bgClass.includes('slate') ? 'text-white' : 'text-slate-900'}`}>
-                    <div className={`text-4xl sm:text-5xl font-heading font-black opacity-90 transition-transform group-hover:scale-110 duration-300 ${theme?.primaryColor || 'text-primary-blue'}`}>
+                <div className="text-center group text-slate-900">
+                    <div className="text-4xl sm:text-5xl font-heading font-black opacity-90 transition-transform group-hover:scale-110 duration-300 text-primary-blue">
                         {Math.round((userInput.length / text.length) * 100)}%
                     </div>
-                    <div className={`text-[10px] font-black ${theme?.bgClass.includes('slate') ? 'text-slate-400' : 'text-slate-500'} uppercase tracking-widest mt-1`}>Progression</div>
+                    <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">Progression</div>
                 </div>
             </div>
 
@@ -192,11 +190,32 @@ const TypingTest: React.FC<Props> = ({ text, onComplete, suddenDeath, onSuddenDe
             </div>
 
             <div className="relative mb-10 overflow-hidden group">
-                <div className={`absolute -inset-4 ${theme?.bgClass} rounded-3xl opacity-0 group-hover:opacity-10 opacity-30 transition-opacity`}></div>
-                <div className={`relative p-8 px-10 ${theme?.bgClass.includes('slate') ? 'bg-black/40 text-white' : 'bg-white/50 text-slate-900'} border border-black/5 rounded-3xl min-h-[160px] font-mono leading-[3] select-none text-2xl tracking-tight transition-all`}>
-                    {renderText()}
-                </div>
+                {dictationMode ? (
+                    <DictationUI
+                        text={text}
+                        isStarted={isStarted}
+                        userInput={userInput}
+                        onSpeedChange={setDictationSpeed}
+                        currentSpeed={dictationSpeed}
+                    />
+                ) : (
+                    <>
+                        <div className="absolute -inset-4 bg-gradient-to-br from-blue-50 to-teal-50 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div className="relative p-8 px-10 bg-slate-100/50 border border-slate-200 rounded-3xl min-h-[160px] font-mono leading-[3] select-none text-2xl tracking-tight transition-all text-slate-900">
+                            {renderText()}
+                        </div>
+                    </>
+                )}
             </div>
+
+            {dictationMode && (
+                <DictationEngine
+                    text={text}
+                    isActive={isStarted}
+                    speed={dictationSpeed}
+                    onComplete={() => { }}
+                />
+            )}
 
             {/* Command Interface */}
             <div className="relative">
@@ -208,9 +227,8 @@ const TypingTest: React.FC<Props> = ({ text, onComplete, suddenDeath, onSuddenDe
                     onKeyDown={handleKeyDown}
                     placeholder={isStarted ? '' : 'Capture the sequence...'}
                     className={`
-                        w-full py-6 pr-14 pl-8 text-xl font-mono border-2 rounded-2xl outline-none transition-all shadow-lg
-                        ${theme?.bgClass.includes('slate') ? 'bg-slate-800 text-white border-indigo-500/30' : 'bg-white text-slate-900 border-slate-200'}
-                        ${isStarted ? (theme?.category === 'Medical' ? 'border-primary-blue ring-8 ring-primary-blue/5' : `border-current ring-8 ${theme?.glowColor ? `ring-[${theme.glowColor}]` : 'ring-white/10'}`) : 'hover:border-slate-300'}
+                        w-full py-6 pr-14 pl-8 text-xl font-mono bg-white border-2 rounded-2xl outline-none transition-all shadow-lg
+                        ${isStarted ? 'border-primary-blue shadow-primary-blue/10 ring-8 ring-primary-blue/5' : 'border-slate-200 hover:border-slate-300'}
                     `}
                     autoComplete="off"
                     autoCorrect="off"
@@ -219,7 +237,7 @@ const TypingTest: React.FC<Props> = ({ text, onComplete, suddenDeath, onSuddenDe
                 />
 
                 <div className="absolute right-6 top-1/2 -translate-y-1/2">
-                    <div className={`w-3 h-3 rounded-full ${isStarted ? (theme?.secondaryColor.replace('text-', 'bg-') || 'bg-secondary-teal') + ' animate-ping' : 'bg-slate-300'}`}></div>
+                    <div className={`w-3 h-3 rounded-full ${isStarted ? 'bg-secondary-teal animate-ping' : 'bg-slate-300'}`}></div>
                 </div>
             </div>
 

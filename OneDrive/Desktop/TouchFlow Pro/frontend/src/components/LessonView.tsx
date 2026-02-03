@@ -3,7 +3,6 @@ import TypingTest from './TypingTest';
 import VisualKeyboard from './VisualKeyboard';
 import type { Lesson } from '@shared/curriculum';
 import type { TypingMetrics } from '@shared/types';
-import { getTheme } from '@shared/specialtyThemes';
 
 interface LessonViewProps {
     lesson: Lesson;
@@ -25,7 +24,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
     const [warmupStepMetrics, setWarmupStepMetrics] = useState<TypingMetrics | null>(null);
     const [isAdaptiveResult, setIsAdaptiveResult] = useState(false);
     const [suddenDeathEnabled, setSuddenDeathEnabled] = useState(true);
-    const theme = getTheme(lesson.category);
+    const [dictationEnabled, setDictationEnabled] = useState(false);
 
     const activeWarmupSteps = lesson.warmupSteps || [
         { text: lesson.content.split(' ').slice(0, 3).join(' '), insight: 'Let\'s start with a quick calibration to find your center.' }
@@ -110,16 +109,15 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
     };
 
     return (
-        <div className={`max-w-5xl mx-auto w-full transition-all duration-500 ${theme.fontClass}`}>
+        <div className="max-w-5xl mx-auto w-full">
             {mode === 'intro' && (
-                <div className={`${theme.cardClass} backdrop-blur-xl border rounded-[2.5rem] shadow-2xl p-10 sm:p-16 text-center animate-in fade-in zoom-in-95 duration-700`}>
-                    <div className={`inline-flex items-center gap-2 px-4 py-2 ${theme.bgClass.includes('slate') ? 'bg-white/10' : 'bg-slate-50'} ${theme.accentColor} rounded-full text-[10px] font-black uppercase tracking-widest mb-8 border border-black/5`}>
-                        <span className={`w-2 h-2 rounded-full ${theme.accentColor.replace('text-', 'bg-')} animate-pulse`}></span>
+                <div className="bg-white/70 backdrop-blur-xl border border-white/50 rounded-[2.5rem] shadow-2xl p-10 sm:p-16 text-center">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-50 text-accent-orange rounded-full text-[10px] font-black uppercase tracking-widest mb-8 border border-orange-100">
+                        <span className="w-2 h-2 rounded-full bg-accent-orange animate-pulse"></span>
                         Module {lesson.lessonNumber} • {lesson.category}
                     </div>
 
-                    <h2 className={`text-4xl sm:text-6xl font-heading font-black ${theme.bgClass.includes('slate') ? 'text-white' : 'text-text-main'} mb-6 tracking-tighter`}>
-                        <span className="mr-4">{theme.icon}</span>
+                    <h2 className="text-4xl sm:text-6xl font-heading font-black text-text-main mb-6 tracking-tighter">
                         {lesson.title}
                     </h2>
                     <p className="text-xl text-text-muted mb-12 max-w-2xl mx-auto leading-relaxed">
@@ -144,9 +142,9 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                     <div className="flex flex-col gap-4 max-w-md mx-auto">
                         <button
                             onClick={() => setMode('theory')}
-                            className={`px-10 py-6 ${theme.primaryColor.replace('text-', 'bg-')} text-white rounded-2xl font-black text-xl shadow-xl hover:opacity-90 hover:-translate-y-1 transition-all active:translate-y-0 active:scale-95 flex items-center justify-center gap-3`}
+                            className="px-10 py-6 bg-primary-blue text-white rounded-2xl font-black text-xl shadow-xl shadow-blue-200 hover:bg-blue-800 hover:-translate-y-1 transition-all active:translate-y-0 active:scale-95 flex items-center justify-center gap-3"
                         >
-                            Begin Instruction Path {theme.icon}
+                            Begin Instruction Path 🚀
                         </button>
 
                         <div className="flex gap-4">
@@ -166,6 +164,24 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                                 Skip to Test
                             </button>
                         </div>
+
+                        {lesson.difficulty === 'Specialist' && (
+                            <div className="mt-4 p-4 bg-slate-900 border border-slate-700 rounded-2xl flex items-center justify-between group hover:border-primary-blue/50 transition-all">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 bg-primary-blue/20 rounded-lg flex items-center justify-center text-primary-blue group-hover:bg-primary-blue group-hover:text-white transition-all">🎙️</div>
+                                    <div className="text-left">
+                                        <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Training Variant</div>
+                                        <div className="text-sm font-bold text-white">Audio Dictation Mode</div>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setDictationEnabled(!dictationEnabled)}
+                                    className={`w-14 h-7 rounded-full relative transition-all duration-300 ${dictationEnabled ? 'bg-primary-blue shadow-[0_0_15px_rgba(59,130,246,0.5)]' : 'bg-slate-700'}`}
+                                >
+                                    <div className={`absolute top-1 w-5 h-5 bg-white rounded-full transition-all duration-300 ${dictationEnabled ? 'left-8' : 'left-1'}`}></div>
+                                </button>
+                            </div>
+                        )}
                     </div>
 
                     <button
@@ -178,12 +194,12 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
             )}
 
             {mode === 'theory' && (
-                <div className={`${theme.cardClass} backdrop-blur-xl border rounded-[2.5rem] shadow-2xl p-10 sm:p-16 text-center animate-in fade-in slide-in-from-bottom-4 duration-500`}>
-                    <div className={`inline-flex items-center gap-2 px-4 py-2 ${theme.bgClass.includes('slate') ? 'bg-white/10' : 'bg-blue-50'} ${theme.primaryColor} rounded-full text-[10px] font-black uppercase tracking-widest mb-8 border border-black/5`}>
+                <div className="bg-white/70 backdrop-blur-xl border border-white/50 rounded-[2.5rem] shadow-2xl p-10 sm:p-16 text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-primary-blue rounded-full text-[10px] font-black uppercase tracking-widest mb-8 border border-blue-100">
                         Tactical Instruction
                     </div>
 
-                    <h3 className={`text-3xl font-heading font-black ${theme.bgClass.includes('slate') ? 'text-white' : 'text-text-main'} mb-8`}>Lesson Theory</h3>
+                    <h3 className="text-3xl font-heading font-black text-text-main mb-8">Lesson Theory</h3>
 
                     <div className="max-w-3xl mx-auto mb-12">
                         <p className="text-lg text-text-muted leading-relaxed mb-10 text-left bg-slate-50 p-6 rounded-2xl border border-slate-100 italic">
@@ -192,14 +208,14 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
 
                         <div className="mb-6 text-left">
                             <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Focus Key Mapping</div>
-                            <VisualKeyboard highlightKeys={lesson.focusKeys} theme={theme} />
+                            <VisualKeyboard highlightKeys={lesson.focusKeys} />
                         </div>
                     </div>
 
                     <div className="flex justify-center gap-4">
                         <button
                             onClick={initiateWarmup}
-                            className={`px-12 py-5 ${theme.primaryColor.replace('text-', 'bg-')} text-white rounded-2xl font-black text-lg shadow-xl hover:opacity-90 transition-all active:scale-95`}
+                            className="px-12 py-5 bg-primary-blue text-white rounded-2xl font-black text-lg shadow-xl shadow-blue-200 hover:bg-blue-800 transition-all active:scale-95"
                         >
                             Initiate Warm-up
                         </button>
@@ -222,10 +238,10 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
 
                     {!showWarmupStepInsight ? (
                         <>
-                            <TypingTest text={currentWarmup.text} onComplete={handleWarmupComplete} theme={theme} />
+                            <TypingTest text={currentWarmup.text} onComplete={handleWarmupComplete} />
                             <div className="mt-8">
                                 <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 text-center">Reference Keyboard</div>
-                                <VisualKeyboard highlightKeys={lesson.focusKeys} theme={theme} />
+                                <VisualKeyboard highlightKeys={lesson.focusKeys} />
                             </div>
                         </>
                     ) : (
@@ -250,7 +266,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                             </p>
                             <button
                                 onClick={nextWarmupStep}
-                                className={`px-12 py-5 ${theme.primaryColor.replace('text-', 'bg-')} text-white rounded-2xl font-black text-lg shadow-xl hover:opacity-90 transition-all active:scale-95 flex items-center justify-center gap-3 mx-auto`}
+                                className="px-12 py-5 bg-primary-blue text-white rounded-2xl font-black text-lg shadow-xl shadow-blue-200 hover:bg-blue-800 transition-all active:scale-95 flex items-center justify-center gap-3 mx-auto"
                             >
                                 {warmupStepIndex < activeWarmupSteps.length - 1 ? 'Next Calibration Step →' : 'Complete Preparation'}
                             </button>
@@ -293,7 +309,12 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                         </div>
                         <button onClick={() => setMode('intro')} className="text-[10px] font-black uppercase tracking-widest bg-white/10 px-4 py-2 rounded-lg hover:bg-white/20 transition-all border border-white/10">Abort Drill</button>
                     </div>
-                    <TypingTest text={practiceText} onComplete={handlePracticeComplete} suddenDeath={suddenDeathEnabled} theme={theme} />
+                    <TypingTest
+                        text={practiceText}
+                        onComplete={handlePracticeComplete}
+                        suddenDeath={suddenDeathEnabled}
+                        dictationMode={dictationEnabled}
+                    />
                 </div>
             )}
 
@@ -309,12 +330,16 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                         </div>
                         <button onClick={() => setMode('intro')} className="text-[10px] font-black uppercase tracking-widest bg-white/20 px-4 py-2 rounded-lg hover:bg-white/30 transition-all border border-white/20">Abort</button>
                     </div>
-                    <TypingTest text={lesson.content} onComplete={handleTestComplete} theme={theme} />
+                    <TypingTest
+                        text={lesson.content}
+                        onComplete={handleTestComplete}
+                        dictationMode={dictationEnabled}
+                    />
                 </div>
             )}
 
             {mode === 'results' && testMetrics && (
-                <div className={`${theme.cardClass} backdrop-blur-xl border rounded-[3rem] shadow-2xl p-10 sm:p-16 text-center relative overflow-hidden animate-in fade-in zoom-in-95 duration-700`}>
+                <div className="bg-white/70 backdrop-blur-xl border border-white/50 rounded-[3rem] shadow-2xl p-10 sm:p-16 text-center relative overflow-hidden">
                     {/* Background Glow */}
                     <div className={`absolute -top-24 -right-24 w-64 h-64 rounded-full blur-[100px] opacity-20 ${passed ? 'bg-secondary-teal' : 'bg-accent-orange'}`}></div>
 
@@ -434,11 +459,11 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                         </div>
                         <button onClick={() => setMode('results')} className="text-[10px] font-black uppercase tracking-widest bg-black/10 px-4 py-2 rounded-lg hover:bg-black/20 transition-all">Exit Sprint</button>
                     </div>
-                    <TypingTest text={adaptiveText} onComplete={handleAdaptiveComplete} theme={theme} />
-                    <div className={`p-8 ${theme.bgClass.includes('slate') ? 'bg-white/5' : 'bg-orange-50'} rounded-[2.5rem] border border-black/5 text-center`}>
+                    <TypingTest text={adaptiveText} onComplete={handleAdaptiveComplete} />
+                    <div className="p-8 bg-orange-50 rounded-[2.5rem] border border-orange-100 text-center">
                         <h4 className="text-orange-800 font-black uppercase tracking-widest text-xs mb-4">Tactical Guidance</h4>
                         <p className="text-orange-700 font-medium mb-6">Slow down. Focus exclusively on the correct finger reaches for the highlighted keys below.</p>
-                        <VisualKeyboard highlightKeys={testMetrics ? Object.keys(testMetrics.errorMap) : []} theme={theme} />
+                        <VisualKeyboard highlightKeys={testMetrics ? Object.keys(testMetrics.errorMap) : []} />
                     </div>
                 </div>
             )}
