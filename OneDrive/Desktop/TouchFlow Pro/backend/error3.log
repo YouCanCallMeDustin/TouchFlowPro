@@ -1,0 +1,38 @@
+C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\backend\node_modules\ts-node\src\index.ts:859
+    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+           ^
+TSError: Γ¿» Unable to compile TypeScript:
+src/routes/progress.ts(13,14): error TS2339: Property 'read' does not exist on type 'Promise<Low<DatabaseSchema>>'.
+src/routes/progress.ts(15,21): error TS2339: Property 'data' does not exist on type 'Promise<Low<DatabaseSchema>>'.
+src/routes/progress.ts(15,37): error TS7006: Parameter 'u' implicitly has an 'any' type.
+src/routes/progress.ts(18,24): error TS2339: Property 'data' does not exist on type 'Promise<Low<DatabaseSchema>>'.
+src/routes/progress.ts(18,49): error TS7006: Parameter 'r' implicitly has an 'any' type.
+src/routes/progress.ts(63,14): error TS2339: Property 'read' does not exist on type 'Promise<Low<DatabaseSchema>>'.
+src/routes/progress.ts(64,19): error TS2339: Property 'data' does not exist on type 'Promise<Low<DatabaseSchema>>'.
+src/routes/progress.ts(64,35): error TS7006: Parameter 'u' implicitly has an 'any' type.
+src/routes/progress.ts(78,12): error TS2339: Property 'data' does not exist on type 'Promise<Low<DatabaseSchema>>'.
+src/routes/progress.ts(80,14): error TS2339: Property 'write' does not exist on type 'Promise<Low<DatabaseSchema>>'.
+src/routes/progress.ts(107,14): error TS2339: Property 'read' does not exist on type 'Promise<Low<DatabaseSchema>>'.
+src/routes/progress.ts(110,19): error TS2339: Property 'data' does not exist on type 'Promise<Low<DatabaseSchema>>'.
+src/routes/progress.ts(110,35): error TS7006: Parameter 'u' implicitly has an 'any' type.
+src/routes/progress.ts(114,8): error TS2339: Property 'data' does not exist on type 'Promise<Low<DatabaseSchema>>'.
+src/routes/progress.ts(125,14): error TS2339: Property 'write' does not exist on type 'Promise<Low<DatabaseSchema>>'.
+src/routes/progress.ts(155,22): error TS2339: Property 'write' does not exist on type 'Promise<Low<DatabaseSchema>>'.
+
+    at createTSError (C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\backend\node_modules\ts-node\src\index.ts:859:12)
+    at reportTSError (C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\backend\node_modules\ts-node\src\index.ts:863:19)
+    at getOutput (C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\backend\node_modules\ts-node\src\index.ts:1077:36)
+    at Object.compile (C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\backend\node_modules\ts-node\src\index.ts:1433:41)
+    at Module.m._compile (C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\backend\node_modules\ts-node\src\index.ts:1617:30)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Module.require (node:internal/modules/cjs/loader:1298:19) {
+  diagnosticCodes: [
+    2339, 2339, 7006, 2339,
+    7006, 2339, 2339, 7006,
+    2339, 2339, 2339, 2339,
+    7006, 2339, 2339, 2339
+  ]
+}

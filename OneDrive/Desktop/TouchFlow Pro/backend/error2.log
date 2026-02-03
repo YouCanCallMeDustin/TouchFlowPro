@@ -1,0 +1,18 @@
+C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\backend\node_modules\ts-node\src\index.ts:859
+    return new TSError(diagnosticText, diagnosticCodes, diagnostics);
+           ^
+TSError: Γ¿» Unable to compile TypeScript:
+src/lib/db.ts(43,12): error TS1378: Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022', 'esnext', 'system', 'node16', 'node18', 'node20', 'nodenext', or 'preserve', and the 'target' option is set to 'es2017' or higher.
+
+    at createTSError (C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\backend\node_modules\ts-node\src\index.ts:859:12)
+    at reportTSError (C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\backend\node_modules\ts-node\src\index.ts:863:19)
+    at getOutput (C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\backend\node_modules\ts-node\src\index.ts:1077:36)
+    at Object.compile (C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\backend\node_modules\ts-node\src\index.ts:1433:41)
+    at Module.m._compile (C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\backend\node_modules\ts-node\src\index.ts:1617:30)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Module.require (node:internal/modules/cjs/loader:1298:19) {
+  diagnosticCodes: [ 1378 ]
+}

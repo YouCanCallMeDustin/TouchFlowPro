@@ -1,0 +1,123 @@
+{
+  "users": [
+    {
+      "id": "guest",
+      "assignedLevel": "Professional",
+      "unlockedLevels": "Professional",
+      "currentLessonId": "p1",
+      "createdAt": "2026-02-02T06:25:59.792Z"
+    },
+    {
+      "id": "25e8c03a-4fce-41ff-9779-9dca4e75c2cf",
+      "email": "elyzianeyez@gmail.com",
+      "passwordHash": "$2b$10$tcBv.ftuW4Jy6lZdYMgQNOdZPKOWZSxLPLsrK0/6npkDnd6IXk.1a",
+      "assignedLevel": "Beginner",
+      "unlockedLevels": "Beginner",
+      "currentLessonId": "b1",
+      "createdAt": "2026-02-02T22:24:31.792Z"
+    }
+  ],
+  "drillResults": [
+    {
+      "id": "191d08e9-b11d-46d1-a072-cb4ceb83dd3e",
+      "userId": "25e8c03a-4fce-41ff-9779-9dca4e75c2cf",
+      "drillId": "b1",
+      "grossWPM": 95.1,
+      "netWPM": 95.1,
+      "accuracy": 100,
+      "durationMs": 6435,
+      "timestamp": "2026-02-02T22:26:07.055Z"
+    },
+    {
+      "id": "6e3cd167-c3ad-40ae-8ae3-ce56c7a870a4",
+      "userId": "25e8c03a-4fce-41ff-9779-9dca4e75c2cf",
+      "drillId": "b2",
+      "grossWPM": 125.7,
+      "netWPM": 125.7,
+      "accuracy": 100,
+      "durationMs": 4963,
+      "timestamp": "2026-02-02T22:27:12.864Z"
+    },
+    {
+      "id": "880ffa41-b6ac-4e8b-87fc-4e23a7e9d8d9",
+      "userId": "25e8c03a-4fce-41ff-9779-9dca4e75c2cf",
+      "drillId": "b3",
+      "grossWPM": 124.3,
+      "netWPM": 124.3,
+      "accuracy": 100,
+      "durationMs": 5408,
+      "timestamp": "2026-02-02T22:27:34.774Z"
+    },
+    {
+      "id": "17cbd82e-fc99-4f49-a42a-dba7ff429a30",
+      "userId": "25e8c03a-4fce-41ff-9779-9dca4e75c2cf",
+      "drillId": "b1",
+      "grossWPM": 110.2,
+      "netWPM": 110.2,
+      "accuracy": 100,
+      "durationMs": 4902,
+      "timestamp": "2026-02-02T22:54:00.667Z"
+    },
+    {
+      "id": "45751223-c915-40f4-8f91-3990f2c3aceb",
+      "userId": "25e8c03a-4fce-41ff-9779-9dca4e75c2cf",
+      "drillId": "b4",
+      "grossWPM": 108.5,
+      "netWPM": 89.5,
+      "accuracy": 96.4,
+      "durationMs": 6305,
+      "timestamp": "2026-02-02T23:05:22.306Z"
+    },
+    {
+      "id": "b603af40-bf0c-42d6-8cc1-59c2c3e04129",
+      "userId": "25e8c03a-4fce-41ff-9779-9dca4e75c2cf",
+      "drillId": "b1",
+      "grossWPM": 114.6,
+      "netWPM": 114.6,
+      "accuracy": 100,
+      "durationMs": 4713,
+      "timestamp": "2026-02-02T23:05:33.033Z"
+    },
+    {
+      "id": "063bd8cd-02b2-47d1-8512-c1d8df584291",
+      "userId": "25e8c03a-4fce-41ff-9779-9dca4e75c2cf",
+      "drillId": "b2",
+      "grossWPM": 103.9,
+      "netWPM": 103.9,
+      "accuracy": 100,
+      "durationMs": 2542,
+      "timestamp": "2026-02-02T23:10:38.792Z"
+    },
+    {
+      "id": "29b58e9e-37d0-4bd9-b8d4-aee11da89efe",
+      "userId": "25e8c03a-4fce-41ff-9779-9dca4e75c2cf",
+      "drillId": "b5",
+      "grossWPM": 114.4,
+      "netWPM": 114.4,
+      "accuracy": 100,
+      "durationMs": 5141,
+      "timestamp": "2026-02-02T23:49:01.935Z"
+    },
+    {
+      "id": "bc38a020-3147-40eb-9395-c51c740b3cb7",
+      "userId": "25e8c03a-4fce-41ff-9779-9dca4e75c2cf",
+      "drillId": "b6",
+      "grossWPM": 101.1,
+      "netWPM": 101.1,
+      "accuracy": 100,
+      "durationMs": 7358,
+      "timestamp": "2026-02-02T23:50:20.579Z"
+    },
+    {
+      "id": "5886ae45-9734-40d2-92fd-113a1435e636",
+      "userId": "guest",
+      "drillId": "p1",
+      "grossWPM": 51.3,
+      "netWPM": 51.3,
+      "accuracy": 100,
+      "durationMs": 24334,
+      "timestamp": "2026-02-02T23:51:23.186Z"
+    }
+  ],
+  "spacedItems": []
+}

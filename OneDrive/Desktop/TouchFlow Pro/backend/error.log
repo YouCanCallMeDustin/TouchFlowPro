@@ -1,0 +1,14 @@
+C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\backend\node_modules\.prisma\client\default.js:43
+    throw new Error('@prisma/client did not initialize yet. Please run "prisma generate" and try to import it again.');
+          ^
+Error: @prisma/client did not initialize yet. Please run "prisma generate" and try to import it again.
+    at new PrismaClient (C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\backend\node_modules\.prisma\client\default.js:43:11)
+    at Object.<anonymous> (C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\backend\src\lib\prisma.ts:3:16)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module.m._compile (C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\backend\node_modules\ts-node\src\index.ts:1618:23)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Object.require.extensions.<computed> [as .ts] (C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\backend\node_modules\ts-node\src\index.ts:1621:12)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Function.Module._load (node:internal/modules/cjs/loader:1096:12)
+    at Module.require (node:internal/modules/cjs/loader:1298:19)
+    at require (node:internal/modules/helpers:182:18)
