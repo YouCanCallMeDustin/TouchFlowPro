@@ -12,11 +12,237 @@ export interface Drill {
 }
 
 export const drillLibrary: Drill[] = [
+    // CODING DRILLS
+    {
+        id: 'c1',
+        title: 'HTML Structure',
+        content: '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Document</title></head><body><main class="container"><h1>Hello World</h1><p>This is a paragraph.</p></main></body></html>',
+        difficulty: 'Intermediate',
+        category: 'Coding',
+        description: 'Practice standard HTML5 boilerplate code with common meta tags and structure.',
+        theory: 'HTML uses angle brackets and closing tags. precise typing of < and > is essential for the DOM.',
+        focusKeys: ['<', '>', '/', '!', '"', '='],
+        warmupSteps: [
+            { text: '<> </> < >', insight: 'Opening and closing tag rhythm.' },
+            { text: 'html head body', insight: 'Standard document structure tags.' },
+            { text: 'meta charset utf-8', insight: 'Attribute syntax calibration.' },
+            { text: '<title>Document</title>', insight: 'Nested tag flow.' },
+            { text: '<!DOCTYPE html>', insight: 'Declaration speed burst.' }
+        ],
+        practiceVariations: [
+            '<html><body><header><nav><ul><li>Link</li></ul></nav></header><main><h1>Title</h1></main><footer>Footer</footer></body></html>',
+            '<div class="card"><img src="thumb.jpg" alt="Thumbnail"><div class="content"><h3>Card Title</h3><p>Description text goes here.</p></div></div>',
+            '<form action="/submit" method="POST"><label for="email">Email</label><input type="email" id="email" required><button type="submit">Signup</button></form>',
+            '<table border="1"><thead><tr><th>ID</th><th>Name</th></tr></thead><tbody><tr><td>1</td><td>John</td></tr></tbody></table>',
+            '<section id="hero"><div class="hero-content"><h1>Welcome</h1><a href="#about" class="btn">Learn More</a></div></section>'
+        ]
+    },
+    {
+        id: 'c2',
+        title: 'SQL Queries',
+        content: 'SELECT u.id, u.name, u.email, o.total FROM users u JOIN orders o ON u.id = o.user_id WHERE u.active = 1 AND o.created_at >= "2024-01-01" ORDER BY o.total DESC LIMIT 50;',
+        difficulty: 'Intermediate',
+        category: 'Coding',
+        description: 'Write complex SQL database commands with joins and filters.',
+        theory: 'SQL keywords are often typed in ALL CAPS. Use the Shift key efficiently.',
+        focusKeys: ['S', 'E', 'L', 'C', 'T', '*', 'F', 'R', 'O', 'M', 'W', 'H', 'A', 'G'],
+        warmupSteps: [
+            { text: 'SELECT FROM WHERE', insight: 'The core SQL command clause.' },
+            { text: 'INSERT INTO VALUES', insight: 'Data creation commands.' },
+            { text: 'UPDATE SET WHERE', insight: 'Data modification commands.' },
+            { text: 'DELETE FROM TABLE', insight: 'Destructive command caution.' },
+            { text: 'ORDER BY DESC LIMIT', insight: 'Sorting and filtering clauses.' }
+        ],
+        practiceVariations: [
+            'SELECT p.name, c.category_name, COUNT(s.id) as sales FROM products p LEFT JOIN categories c ON p.cat_id = c.id JOIN sales s ON p.id = s.prod_id GROUP BY p.name;',
+            'INSERT INTO users (username, email, password_hash, created_at) VALUES ("jdoe", "john@example.com", "hash123", NOW()), ("asmith", "alice@example.com", "hash456", NOW());',
+            'UPDATE employees SET salary = salary * 1.05, last_raise = NOW() WHERE department_id = 10 AND performance_score > 4.5 AND years_of_service >= 2;',
+            'DELETE FROM sessions WHERE last_activity < DATE_SUB(NOW(), INTERVAL 30 DAY) AND is_active = 0 AND keep_alive = 0;',
+            'CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(50) NOT NULL UNIQUE, email VARCHAR(100) NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);'
+        ]
+    },
+    {
+        id: 'c3',
+        title: 'Python Functions',
+        content: 'def calculate_total_price(base_price, tax_rate, discount=0):\n    """Calculates final price with tax and discount"""\n    tax_amount = base_price * tax_rate\n    subtotal = base_price + tax_amount\n    return subtotal - discount',
+        difficulty: 'Intermediate',
+        category: 'Coding',
+        description: 'Type clean, indented Python code with docstrings.',
+        theory: 'Python relies on indentation. Maintain rhythm with the Tab key (or 4 spaces).',
+        focusKeys: ['d', 'e', 'f', '(', ')', ':', '_', 'r', 't', 'u', 'n', '+', '*'],
+        warmupSteps: [
+            { text: 'def return class import', insight: 'Python keyword essentials.' },
+            { text: 'self init args kwargs', insight: 'Object-oriented parameters.' },
+            { text: 'if elif else while for', insight: 'Control flow structures.' },
+            { text: 'try except finally raise', insight: 'Error handling blocks.' },
+            { text: 'print(f"Result: {value}")', insight: 'F-string formatting.' }
+        ],
+        practiceVariations: [
+            'def get_user_data(user_id):\n    try:\n        user = db.query(User).get(user_id)\n        return user.to_dict() if user else None\n    except Exception as e:\n        log_error(e)\n        return None',
+            'class Rectangle:\n    def __init__(self, width, height):\n        self.width = width\n        self.height = height\n    def area(self):\n        return self.width * self.height',
+            'list_numbers = [1, 2, 3, 4, 5]\nsquared_numbers = [x ** 2 for x in list_numbers if x % 2 == 0]\nprint(f"Squared evens: {squared_numbers}")',
+            'import os\nfrom datetime import datetime\n\ndef log_message(msg):\n    timestamp = datetime.now().isoformat()\n    print(f"[{timestamp}] {msg}")',
+            'with open("data.csv", "r") as f:\n    lines = f.readlines()\n    headers = lines[0].strip().split(",")\n    data = [line.strip().split(",") for line in lines[1:]]'
+        ]
+    },
+
+    // FUN & WISDOM DRILLS
+    {
+        id: 'f1',
+        title: 'Psalm 23:1-6 (ESV)',
+        content: 'The LORD is my shepherd; I shall not want. He makes me lie down in green pastures. He leads me beside still waters. He restores my soul. He leads me in paths of righteousness for his name\'s sake. Even though I walk through the valley of the shadow of death, I will fear no evil, for you are with me; your rod and your staff, they comfort me.',
+        difficulty: 'Intermediate',
+        category: 'Faith',
+        description: 'Type this comforting passage from Psalms.',
+        theory: 'Focus on the flow of the sentences and the punctuation pauses.',
+        focusKeys: ['L', 'O', 'R', 'D', 's', 'h', 'e', 'p', 'w', 'a', 't', 'r', '.'],
+        warmupSteps: [
+            { text: 'The LORD is my shepherd', insight: 'Establishing the subject.' },
+            { text: 'green pastures still waters', insight: 'Imagery word flow.' },
+            { text: 'He restores my soul', insight: 'Emotional connection point.' },
+            { text: 'He leads me beside', insight: 'Rhythmic verb phrases.' },
+            { text: 'I shall not want', insight: 'Declaration of contentment.' }
+        ],
+        practiceVariations: [
+            'He leads me in paths of righteousness for his name\'s sake.',
+            'Even though I walk through the valley of the shadow of death,',
+            'I will fear no evil, for you are with me;',
+            'your rod and your staff, they comfort me.',
+            'You prepare a table before me in the presence of my enemies;',
+            'you anoint my head with oil; my cup overflows.',
+            'Surely goodness and mercy shall follow me all the days of my life,',
+            'and I shall dwell in the house of the LORD forever.'
+        ]
+    },
+    {
+        id: 'f2',
+        title: 'John 3:16-17 (ESV)',
+        content: 'For God so loved the world, that he gave his only Son, that whoever believes in him should not perish but have eternal life. For God did not send his Son into the world to condemn the world, but in order that the world might be saved through him.',
+        difficulty: 'Intermediate',
+        category: 'Faith',
+        description: 'The most famous verses in the Bible.',
+        theory: 'Pay attention to the commas that divide this sentence into distinct thoughts.',
+        focusKeys: ['G', 'o', 'd', 'l', 'v', 'e', 'w', 'r', 'S', 'n', 'b', 'i', 'h'],
+        warmupSteps: [
+            { text: 'For God so loved', insight: 'Opening phrase power.' },
+            { text: 'the world that he gave', insight: 'Connecting action to object.' },
+            { text: 'his only Son', insight: 'Central figure focus.' },
+            { text: 'whoever believes in him', insight: 'Conditional clause rhythm.' },
+            { text: 'have eternal life', insight: 'Closing promise flow.' }
+        ],
+        practiceVariations: [
+            'For God did not send his Son into the world to condemn the world,',
+            'but in order that the world might be saved through him.',
+            'Whoever believes in him is not condemned,',
+            'but whoever does not believe is condemned already,',
+            'because he has not believed in the name of the only Son of God.'
+        ]
+    },
+    {
+        id: 'f3',
+        title: 'Proverbs 3:5-8 (ESV)',
+        content: 'Trust in the LORD with all your heart, and do not lean on your own understanding. In all your ways acknowledge him, and he will make straight your paths. Be not wise in your own eyes; fear the LORD, and turn away from evil. It will be healing to your flesh and refreshment to your bones.',
+        difficulty: 'Intermediate',
+        category: 'Faith',
+        description: 'Wisdom about trust and guidance.',
+        theory: 'Balance the capital letters with the flow of the longer sentences.',
+        focusKeys: ['T', 'r', 'u', 's', 't', 'L', 'O', 'R', 'D', 'h', 'e', 'a', 'r'],
+        warmupSteps: [
+            { text: 'Trust in the LORD', insight: 'Strong opening command.' },
+            { text: 'with all your heart', insight: 'Emotional center phrase.' },
+            { text: 'do not lean on', insight: 'Negative instruction rhythm.' },
+            { text: 'acknowledge him', insight: 'Action verb practice.' },
+            { text: 'make straight your paths', insight: 'Imagery based closing.' }
+        ],
+        practiceVariations: [
+            'Be not wise in your own eyes; fear the LORD, and turn away from evil.',
+            'It will be healing to your flesh and refreshment to your bones.',
+            'Honor the LORD with your wealth and with the firstfruits of all your produce;',
+            'then your barns will be filled with plenty,',
+            'and your vats will be bursting with wine.'
+        ]
+    },
+    {
+        id: 'f4',
+        title: 'Philippians 4:11-13 (ESV)',
+        content: 'Not that I am speaking of being in need, for I have learned in whatever situation I am to be content. I know how to be brought low, and I know how to abound. In any and every circumstance, I have learned the secret of facing plenty and hunger, abundance and need. I can do all things through him who strengthens me.',
+        difficulty: 'Beginner',
+        category: 'Faith',
+        description: 'A passage of encouragement and contentment.',
+        theory: 'Short and sweet. Focus on typing each word with conviction and perfect accuracy.',
+        focusKeys: ['h', 'i', 'm', 's', 't', 'r', 'e', 'n', 'g', 't', 'h', 's'],
+        warmupSteps: [
+            { text: 'I can do all things', insight: 'Empowerment phrase.' },
+            { text: 'through him who', insight: 'Connecting prepositional phrase.' },
+            { text: 'strengthens me', insight: 'Power verb focus.' },
+            { text: 'strengths strengthens', insight: 'Complex conglomerate word coding.' },
+            { text: 'I can do it', insight: 'Simple affirmation warmup.' }
+        ],
+        practiceVariations: [
+            'Rejoice in the Lord always; again I will say, rejoice.',
+            'Let your reasonableness be known to everyone. The Lord is at hand;',
+            'do not be anxious about anything,',
+            'but in everything by prayer and supplication',
+            'with thanksgiving let your requests be made known to God.'
+        ]
+    },
+
+    // FOCUS DRILLS
+    {
+        id: 'x1',
+        title: 'Difficult Words',
+        content: 'The phenomenon of pareidolia causes people to interpret random stimuli as meaningful shapes. It is why we see faces in clouds or figures on the moon. This psychological effect is a byproduct of how our brains process visual information. We are hardwired to recognize patterns even where none exist. It is a fascinating quirk of human perception.',
+        difficulty: 'Professional',
+        category: 'Focus',
+        description: 'Practice words that are notoriously hard to spell and type.',
+        theory: 'Slow down. Read the word "pareidolia" fully before committing your fingers.',
+        focusKeys: ['p', 'h', 'e', 'n', 'o', 'm', 'r', 'i', 'd', 'l', 'a'],
+        warmupSteps: [
+            { text: 'phenom phenomenon', insight: 'Greek root rhythm.' },
+            { text: 'pareid pareidolia', insight: 'Complex vowel sequence.' },
+            { text: 'interp interpret', insight: 'Standard prefix flow.' },
+            { text: 'stimu stimuli', insight: 'Latin plural ending.' },
+            { text: 'meaning meaningful', insight: 'Suffix attachment.' }
+        ],
+        practiceVariations: [
+            'The anesthetist administered the medication effectively.',
+            'The bureaucracy required unnecessary documentation.',
+            'The colonel commanded the lieutenant to reconnaissance.',
+            'The rhythm of the algorithm was unpredictable.',
+            'The queue required patience and perseverance.'
+        ]
+    },
+    {
+        id: 'x2',
+        title: 'Number Patterns',
+        content: '1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657, 46368, 75025, 121393. The Fibonacci sequence appears in nature, from the arrangement of leaves on a stem to the spiral of a nautilus shell. It represents the golden ratio of growth.',
+        difficulty: 'Intermediate',
+        category: 'Focus',
+        description: 'Type the Fibonacci sequence.',
+        theory: 'Pure number entry using commas and spaces as separators. Maintain a steady beat.',
+        focusKeys: ['1', '2', '3', '4', '5', '8', '9', ',', ' '],
+        warmupSteps: [
+            { text: '1 2 3 5 8', insight: 'Basic single digits.' },
+            { text: '13 21 34 55', insight: 'Double digit transitions.' },
+            { text: '89 144 233', insight: 'Crossing the 100 threshold.' },
+            { text: '1, 2, 3,', insight: 'Comma-space rhythm.' },
+            { text: '144 233 377', insight: 'Complex triple digits.' }
+        ],
+        practiceVariations: [
+            '2, 4, 8, 16, 32, 64, 128, 256, 512, 1024',
+            '3, 9, 27, 81, 243, 729, 2187, 6561',
+            '10, 20, 30, 40, 50, 60, 70, 80, 90, 100',
+            '100, 99, 98, 97, 96, 95, 94, 93, 92, 91',
+            '2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31'
+        ]
+    },
+
     // BEGINNER DRILLS (10)
+
     {
         id: 'b1',
         title: 'Home Row Foundation',
-        content: 'sad lad fad dad had jag lag sag hag fall hall',
+        content: 'sad lad fad dad had jag lag sag hag fall hall. all lads had a sad dad. a fad had a jag. a lad had a flag. sad dads had lads. a hag had a bag. fall hall wall ball call. half a hall is tall. all dads fall taking a call. sad lads had a ball.',
         difficulty: 'Beginner',
         category: 'Fundamentals',
         description: 'Master the home row keys where your fingers naturally rest.',
@@ -45,7 +271,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'b2',
         title: 'Common Letter Pairs',
-        content: 'The cat sat on the mat. The dog ran to the park.',
+        content: 'The cat sat on the mat. The dog ran to the park. He and she are in the car. It is an on and off thing. The man and the pan. To be or not to be. He ran to the van. She sat on the hat. The rat ran in the vat. It is interesting to see the inner tea.',
         difficulty: 'Beginner',
         category: 'Bigrams',
         description: 'Practice the most frequent two-letter combinations in English.',
@@ -74,7 +300,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'b3',
         title: 'Top Row Basics',
-        content: 'Type your report. Write your query. Update your profile.',
+        content: 'Type your report. Write your query. Update your profile. Pretty purple peppers. Top row power output. Try to type true. Your poor tour is over. Quietly quit the quote. Put up your popup. We were where we were. You wrote your output prior to the report.',
         difficulty: 'Beginner',
         category: 'Fundamentals',
         description: 'Build confidence with the top row of the keyboard.',
@@ -103,7 +329,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'b4',
         title: 'Bottom Row Practice',
-        content: 'Can you come back next Monday? We can meet in the zone.',
+        content: 'Can you come back next Monday? We can meet in the zone. Zinc mines are vacant. Move the van back, man. Commas, periods, and slashes. / bin / ban / bun. The zebra can zoom near the moon. My name is Max. Come back soon to the cab.',
         difficulty: 'Beginner',
         category: 'Fundamentals',
         description: 'Strengthen your reach to the bottom row keys.',
@@ -132,7 +358,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'b5',
         title: 'Simple Sentences',
-        content: 'I can see you. We are all here. This is our home.',
+        content: 'I can see you. We are all here. This is our home. They are with us. What is that there? Use the new one. Make time for good things. Look at the little light. Find the first form. Give them great group games. Help him hold his hat.',
         difficulty: 'Beginner',
         category: 'Words',
         description: 'Type the most common words in the English language.',
@@ -161,7 +387,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'b6',
         title: 'Left Hand Focus',
-        content: 'We are fast. Test the best. Rest at the west gate.',
+        content: 'We are fast. Test the best. Rest at the west gate. Create a great crate. Tread water after tea. Fear the bear gear. Read the deed freed. A vast cast at the feast. We crave brave waves. Save the date for the gate. The red car was far.',
         difficulty: 'Beginner',
         category: 'Hand Isolation',
         description: 'Isolate and strengthen your left hand typing.',
@@ -190,7 +416,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'b7',
         title: 'Right Hand Focus',
-        content: 'Look at the moon. Jump in the pool. Only milk for you.',
+        content: 'Look at the moon. Jump in the pool. Only milk for you. I will kill the hill. You pull the pill. Join the union opinion. Hula hoop loop. John, look up the hook. In my opinion, you look ill. Mill millions of minimal mini mills.',
         difficulty: 'Beginner',
         category: 'Hand Isolation',
         description: 'Build right hand independence and accuracy.',
@@ -219,7 +445,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'b8',
         title: 'Vowel Mastery',
-        content: 'I have an idea about the audio. It is unique and equal.',
+        content: 'I have an idea about the audio. It is unique and equal. Areas of outer aura. Queue up the units. An eerie audio area. Our era is auto. I see a sea of ease. Adieu to the beau. A quiet quote is quite quaint. Use usual users.',
         difficulty: 'Beginner',
         category: 'Letters',
         description: 'Perfect your vowel key placement and rhythm.',
@@ -248,7 +474,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'b9',
         title: 'Number Row Introduction',
-        content: 'Call me at 555-0123. My code is 4567. Room 890 is open.',
+        content: 'Call me at 555-0123. My code is 4567. Room 890 is open. Order 100 items. Need 50 to 55 units. 1990 was 30 years ago. 2 + 2 = 4. 1st place prize is $500. Call 911 in case of 0 emergencies. Item #284 is 12% off today.',
         difficulty: 'Beginner',
         category: 'Numbers',
         description: 'Learn to type numbers without looking down.',
@@ -277,7 +503,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'b10',
         title: 'Basic Punctuation',
-        content: 'Hello! How are you? I am fine, thank you. Have a great day.',
+        content: 'Hello! How are you? I am fine, thank you. Have a great day. "Yes," she said. Wait; did you see that? No: it was gone. Who? What? Where? When? Stop! Go. Help. Run! The end. A comma, a pause. A period, a stop. A semi-colon; a bridge.',
         difficulty: 'Beginner',
         category: 'Punctuation',
         description: 'Incorporate periods, commas, and question marks smoothly.',
@@ -308,7 +534,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'i1',
         title: 'Advanced Bigrams',
-        content: 'The quick brown fox jumps over the lazy dog near the river.',
+        content: 'The quick brown fox jumps over the lazy dog near the river. The sun was setting behind the distant hills, casting long shadows across the valley. A gentle breeze rustled the leaves of the old oak tree. Birds chirped their final songs of the evening. It was a peaceful end to a busy day in the countryside.',
         difficulty: 'Intermediate',
         category: 'Bigrams',
         description: 'Master complex two-letter patterns for speed.',
@@ -337,7 +563,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'i2',
         title: 'Common Phrases',
-        content: 'Thank you for your time. I appreciate your help. Looking forward to hearing from you.',
+        content: 'Thank you for your time. I appreciate your help. Looking forward to hearing from you. Please let me know if you have any questions. I will get back to you as soon as possible. It was a pleasure meeting you yesterday. Have a wonderful weekend. Best regards to the whole team. Let\'s keep in touch.',
         difficulty: 'Intermediate',
         category: 'Trigrams',
         description: 'Build muscle memory for three-letter sequences.',
@@ -366,7 +592,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'i3',
         title: 'Business Vocabulary',
-        content: 'Please review the project proposal and send your feedback by the deadline.',
+        content: 'Please review the project proposal and send your feedback by the deadline. The budget allocation for Q3 needs to be finalized before the board meeting. We are targeting a 15% increase in operational efficiency. The marketing team will launch the new campaign next month. Ensure all stakeholders are aligned.',
         difficulty: 'Intermediate',
         category: 'Professional',
         description: 'Practice common business and corporate terms.',
@@ -395,7 +621,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'i4',
         title: 'Technical Terms',
-        content: 'The database server requires a network protocol update to improve system performance.',
+        content: 'The database server requires a network protocol update to improve system performance. Please schedule maintenance during the off-peak window to minimize downtime. Ensure all backups are verified before proceeding. The firewall rules must also be updated to allow traffic on port 8080. Check the logs for any errors.',
         difficulty: 'Intermediate',
         category: 'Technical',
         description: 'Type programming and IT terminology with precision.',
@@ -424,7 +650,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'i5',
         title: 'Mixed Case Practice',
-        content: 'JavaScript and Python are popular languages. HTML and CSS create websites.',
+        content: 'JavaScript and Python are popular languages. HTML and CSS create websites. React vs Angular is a common debate. Node.js allows JavaScript on the server. SQL is used for database management. Git is essential for version control. DevOps combines development and operations. API integration is key for modern apps.',
         difficulty: 'Intermediate',
         category: 'Technical',
         description: 'Handle capital letters in technical contexts.',
@@ -453,7 +679,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'i6',
         title: 'Email Formatting',
-        content: 'Dear Team, I hope this message finds you well. Please find the attached report. Best regards, John',
+        content: 'Dear Team, I hope this message finds you well. Please find the attached report regarding the Q4 sales performance. We have exceeded our targets by 10%. I would like to schedule a meeting to discuss the roadmap for next year. Let me know your availability. Best regards, John Smith, Regional Director.',
         difficulty: 'Intermediate',
         category: 'Professional',
         description: 'Practice professional email writing patterns.',
@@ -482,7 +708,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'i7',
         title: 'Numeric Data Entry',
-        content: 'The meeting is on 2024-02-15 at 3:30 PM. Budget: $12,500.00',
+        content: 'The meeting is on 2024-02-15 at 3:30 PM. Budget: $12,500.00. Invoice #9982 was paid on 01/20/2024. The total revenue for the period was $45,230.50. We processed 1,250 transactions with a success rate of 99.8%. The server load peaked at 85% capacity at 12:00 PM. Account balance: $5,400.25.',
         difficulty: 'Intermediate',
         category: 'Numbers',
         description: 'Type dates, currency, and formatted numbers accurately.',
@@ -511,7 +737,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'i8',
         title: 'Symbol Combinations',
-        content: 'Email me at john@company.com or visit https://website.com for more info.',
+        content: 'Email me at john@company.com or visit https://website.com for more info. Use protocols like ssh://user@host:22 or ftp://files.server.net. Check the path /var/www/html/index.php. The API endpoint is https://api.service.io/v1/users?id=100&sort=asc. Don\'t forget to escape characters like \\n and \\t.',
         difficulty: 'Intermediate',
         category: 'Symbols',
         description: 'Master special characters used in coding and web.',
@@ -540,7 +766,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'i9',
         title: 'Long Words',
-        content: 'The administration will implement the communication strategy with international collaboration.',
+        content: 'The administration will implement the communication strategy with international collaboration. Comprehensive infrastructure development is essential for sustainable organizational growth. The revitalization of the transportation sector requires multidimensional coordination. Uncharacteristically, the representative remained silent.',
         difficulty: 'Intermediate',
         category: 'Words',
         description: 'Build endurance with lengthy vocabulary.',
@@ -569,7 +795,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'i10',
         title: 'Sentence Flow',
-        content: 'Pack my box with five dozen liquor jugs. The quick brown fox jumps over the lazy dog.',
+        content: 'Pack my box with five dozen liquor jugs. The quick brown fox jumps over the lazy dog. Sphinx of black quartz, judge my vow. Two driven jocks help fax my big quiz. The five boxing wizards jump quickly. Waltz, bad nymph, for quick jigs vex. Blowzy night-frumps vex\'d Jack Q. Glum Schwartzkopf was vex\'d by NJ pig.',
         difficulty: 'Intermediate',
         category: 'Sentences',
         description: 'Maintain speed across complete pangram sentences.',
@@ -600,7 +826,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'p1',
         title: 'Code Snippets',
-        content: 'const handleClick = (event) => { event.preventDefault(); setState(prevState => !prevState); };',
+        content: 'const handleClick = (event) => { event.preventDefault(); setState(prevState => !prevState); console.log("State toggled", prevState); if (isValid) { submitData(); } else { setError("Invalid input"); } };',
         difficulty: 'Professional',
         category: 'Programming',
         description: 'Type real JavaScript code with perfect syntax.',
@@ -629,7 +855,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'p2',
         title: 'Medical Terminology',
-        content: 'The patient requires cardiovascular assessment and gastrointestinal examination for accurate diagnosis.',
+        content: 'The patient requires cardiovascular assessment and gastrointestinal examination for accurate diagnosis. History of hypertension and hyperlipidemia. Recommend EKG and lipid profile. Follow up in two weeks to review results and adjust medication if necessary.',
         difficulty: 'Professional',
         category: 'Medical',
         description: 'Master complex medical vocabulary for healthcare professionals.',
@@ -658,7 +884,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'p3',
         title: 'Legal Language',
-        content: 'Pursuant to the agreement, notwithstanding any provisions, the plaintiff shall proceed with litigation.',
+        content: 'Pursuant to the agreement, notwithstanding any provisions, the plaintiff shall proceed with litigation. The defendant acknowledges that any breach of this contract will result in immediate termination. All parties agree to submit to binding arbitration in the event of a dispute.',
         difficulty: 'Professional',
         category: 'Legal',
         description: 'Practice formal legal terminology and phrasing.',
@@ -687,7 +913,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'p4',
         title: 'Data Analysis Terms',
-        content: 'The correlation analysis reveals significant variance in the distribution across sample populations.',
+        content: 'The correlation analysis reveals significant variance in the distribution across sample populations. Regression models indicate a strong positive relationship between variable A and variable B (r = 0.85, p < 0.001). Further study is required to rule out confounding variables.',
         difficulty: 'Professional',
         category: 'Scientific',
         description: 'Master statistical and data science terminology.',
@@ -716,7 +942,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'p5',
         title: 'Financial Reports',
-        content: 'Q4 EBITDA increased 23% YoY to $4.7M with gross margin expansion of 340 bps to 68.2%.',
+        content: 'Q4 EBITDA increased 23% YoY to $4.7M with gross margin expansion of 340 bps to 68.2%. Net income attributable to common shareholders was $1.2M, or $0.15 per diluted share. Cash flow from operations remained strong at $2.5M. We expect Q1 revenue to grow by 10-12%.',
         difficulty: 'Professional',
         category: 'Finance',
         description: 'Handle complex financial data and abbreviations.',
@@ -745,7 +971,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'p6',
         title: 'Command Line',
-        content: 'git commit -m "feat: implement user authentication" && git push origin main --force',
+        content: 'git commit -m "feat: implement user authentication" && git push origin main --force; npm install && npm run build; docker build -t my-app . && docker run -p 3000:3000 -d my-app; echo "Deployment complete" >> deploy.log',
         difficulty: 'Professional',
         category: 'Programming',
         description: 'Type terminal commands with speed and precision.',
@@ -774,7 +1000,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'p7',
         title: 'Academic Writing',
-        content: 'Furthermore, the empirical evidence substantiates the hypothesis that socioeconomic factors significantly influence outcomes.',
+        content: 'Furthermore, the empirical evidence substantiates the hypothesis that socioeconomic factors significantly influence outcomes. The data suggests a direct correlation between education level and economic mobility. This finding challenges previous assumptions about social stratification.',
         difficulty: 'Professional',
         category: 'Academic',
         description: 'Practice scholarly language and complex sentence structures.',
@@ -803,7 +1029,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'p8',
         title: 'Regex Patterns',
-        content: 'const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/;',
+        content: 'const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/; const isValid = emailRegex.test("user+tagged@example.co.uk"); if (!isValid) throw new Error("Invalid format"); const match = "text@domain.com".match(emailRegex);',
         difficulty: 'Professional',
         category: 'Programming',
         description: 'Master regular expressions and escape sequences.',
@@ -832,7 +1058,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'p9',
         title: 'JSON Structure',
-        content: '{"userId": 12345, "name": "John Doe", "email": "john@example.com", "active": true}',
+        content: '{"userId": 12345, "name": "John Doe", "email": "john@example.com", "active": true, "roles": ["admin", "editor"], "settings": {"theme": "dark", "notifications": false}, "lastLogin": "2024-01-01T12:00:00Z"}',
         difficulty: 'Professional',
         category: 'Programming',
         description: 'Type structured data formats with perfect syntax.',
@@ -861,7 +1087,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'p10',
         title: 'Professional Paragraph',
-        content: 'In the rapidly evolving landscape of modern technology, professionals must continuously adapt their skill sets to remain competitive in virtually every industry.',
+        content: 'In the rapidly evolving landscape of modern technology, professionals must continuously adapt their skill sets to remain competitive in virtually every industry. Lifelong learning is no longer optional but a necessity. The integration of AI and automation requires a workforce appearing versatile and resilient.',
         difficulty: 'Professional',
         category: 'Professional',
         description: 'Ultimate speed test with professional-grade content.',
@@ -890,7 +1116,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'm1',
         title: 'Clinical SOAP Standard',
-        content: 'SUBJECTIVE: Pt presents with persistent 8/10 headaches. OBJECTIVE: BP 130/90. PE: Mild temporal tenderness. ASSESSMENT: Tension-type headache. PLAN: Naproxen 500 mg po bid.',
+        content: 'SUBJECTIVE: Pt presents with persistent 8/10 headaches and photophobia. Reports nausea but no vomiting. OBJECTIVE: BP 130/90, HR 88, Temp 98.6F. PE: Mild temporal tenderness bilaterally. Neuro exam intact. ASSESSMENT: Tension-type headache vs Migraine without aura. PLAN: Naproxen 500 mg po bid prn. Follow up in 3 days if symptoms persist.',
         difficulty: 'Specialist',
         category: 'Medical',
         description: 'Master the standard structure of professional medical reports.',
@@ -912,7 +1138,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'm2',
         title: 'Pharmacology Precision',
-        content: 'Prescribe Lisinopril 10 mg daily. Trial of Gabapentin 300 mg t.i.d. for neuropathy. Administer Ceftriaxone 1g IV once.',
+        content: 'Prescribe Lisinopril 10 mg daily for BP control. Trial of Gabapentin 300 mg t.i.d. for peripheral neuropathy. Administer Ceftriaxone 1g IV once for potential infection. Monitor renal function and electrolytes. Discontinue Ibuprofen due to GI upset.',
         difficulty: 'Specialist',
         category: 'Medical',
         description: 'Focus on high-stakes accuracy for drug names and dosing.',
@@ -934,7 +1160,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'm3',
         title: 'Anatomical Greek & Latin',
-        content: 'The musculoskeletal exam shows no signs of sternocleidomastoid strain or gastrocnemius atrophy.',
+        content: 'The musculoskeletal exam shows no signs of sternocleidomastoid strain or gastrocnemius atrophy. Range of motion is full in the glenohumeral joint. Palpation of the metacarpophalangeal joints reveals mild swelling. Exploring the costovertebral angle for tenderness.',
         difficulty: 'Specialist',
         category: 'Medical',
         description: 'Master long-form Latinate anatomical terminology.',
@@ -956,7 +1182,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'm4',
         title: 'Surgical Logic',
-        content: 'The patient had a previous cholecystectomy and appendectomy. Scheduled for elective arthroplasty and rhinoplasty.',
+        content: 'The patient had a previous cholecystectomy and appendectomy in 2018. Scheduled for elective arthroplasty and rhinoplasty next month. Pre-operative clearance required. Review history of anesthesia complications. Consent obtained for exploratory laparotomy if needed.',
         difficulty: 'Specialist',
         category: 'Medical',
         description: 'Focus on surgical procedure suffixes and instrument logic.',
@@ -978,7 +1204,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'm5',
         title: 'High-Stakes Consultation',
-        content: 'The consultation confirms acute myocardial infarction. Differential diagnosis includes pulmonary embolism and aortic dissection. STAT EKG required.',
+        content: 'The consultation confirms acute myocardial infarction requiring immediate intervention. Differential diagnosis includes pulmonary embolism and aortic dissection. STAT EKG required. Activate Cath Lab protocol. Administer Aspirin 325 mg and Nitroglycerin 0.4 mg SL immediately.',
         difficulty: 'Specialist',
         category: 'Medical',
         description: 'Full-length consultation report with zero-error threshold.',
@@ -1000,7 +1226,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'l1',
         title: 'Legal: Deposition Dynamics',
-        content: 'Q. State your name for the record. A. Jonathan Vance. Q. Are you familiar with the defendant? A. Via professional association only.',
+        content: 'Q. State your name for the record. A. Jonathan Vance. Q. Are you familiar with the defendant? A. Via professional association only. Q. Describe the nature of this association. A. We worked at the same firm from 2010 to 2015. Q. Did you socialize outside of work? A. No, never.',
         difficulty: 'Specialist',
         category: 'Legal',
         description: 'Master the Q&A markers and speaker identifiers of formal depositions.',
@@ -1022,7 +1248,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'l2',
         title: 'Legal: Latin Jurisprudence',
-        content: 'The court noted the writ of habeas corpus was filed pro se. Prima facie evidence suggests a breach of fiduciary duty and res ipsa loquitur.',
+        content: 'The court noted the writ of habeas corpus was filed pro se. Prima facie evidence suggests a breach of fiduciary duty and res ipsa loquitur. The defendant invoked nolo contendere regarding the traffic violation. Amicus curiae briefs must be submitted by the deadline.',
         difficulty: 'Specialist',
         category: 'Legal',
         description: 'Master high-frequency Latin legal terms with complex spelling.',
@@ -1044,7 +1270,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'l3',
         title: 'Legal: Procedural Velocity',
-        content: 'IT IS HEREBY ORDERED that the motion for summary judgment is DENIED. Plaintiff shall submit the affidavit of service heretofore mentioned within ten (10) days.',
+        content: 'IT IS HEREBY ORDERED that the motion for summary judgment is DENIED. Plaintiff shall submit the affidavit of service heretofore mentioned within ten (10) days. Failure to comply will result in sanctions. The Clerk is directed to CLOSE this case administratively pending further review.',
         difficulty: 'Specialist',
         category: 'Legal',
         description: 'Focus on uppercase court orders and procedural logic.',
@@ -1066,7 +1292,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'l4',
         title: 'Legal: Contractual Precision',
-        content: '1.1 DEFINITIONS. "Assets" shall mean all tangible property excluding those items listed in Schedule B. 2.5 LIMITATION OF LIABILITY. Notwithstanding anything to the contrary...',
+        content: '1.1 DEFINITIONS. "Assets" shall mean all tangible property excluding those items listed in Schedule B. 2.5 LIMITATION OF LIABILITY. Notwithstanding anything to the contrary, the Provider\'s liability shall not exceed the total fees paid. 3.4 FORCE MAJEURE. Neither party shall be liable for delays caused by acts of God.',
         difficulty: 'Specialist',
         category: 'Legal',
         description: 'Practice the dense punctuation and numbering of commercial contracts.',
@@ -1088,7 +1314,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'l5',
         title: 'Legal: Courtroom Velocity',
-        content: 'Sustained. The objection to the testimony regarding the hearsay exception is consistent with Rule 803. Counsel, please direct your witness to focus on the aforementioned incident.',
+        content: 'Sustained. The objection to the testimony regarding the hearsay exception is consistent with Rule 803. Counsel, please direct your witness to focus on the aforementioned incident. Overruled. The witness will answer the question. Please approach the bench for a sidebar conference.',
         difficulty: 'Specialist',
         category: 'Legal',
         description: 'Simulate high-speed courtroom interactions and evidence rulings.',
@@ -1108,9 +1334,9 @@ export const drillLibrary: Drill[] = [
         ]
     },
     {
-        id: 'c1',
+        id: 'sc1',
         title: 'Coding: Functional Architecture',
-        content: 'const processData = (items) => items.filter(i => i.active).map(i => ({ ...i, lastSync: new Date().toISOString() })); export default processData;',
+        content: 'const processData = (items) => items.filter(i => i.active).map(i => ({ ...i, lastSync: new Date().toISOString() })).reduce((acc, curr) => acc + curr.value, 0); export default processData; const memoized = useMemo(() => processData(data), [data]);',
         difficulty: 'Specialist',
         category: 'Coding',
         description: 'Master arrow functions, spread operators, and method chaining.',
@@ -1130,9 +1356,9 @@ export const drillLibrary: Drill[] = [
         ]
     },
     {
-        id: 'c2',
+        id: 'sc2',
         title: 'Coding: Async Handshakes',
-        content: 'async function fetchData(url) { try { const response = await axios.get(url); return response.data; } catch (e) { throw new Error(`Fetch failed: ${e.message}`); } }',
+        content: 'async function fetchData(url) { try { const response = await axios.get(url); if (!response.ok) throw new Error("Network response was not ok"); return response.data; } catch (e) { console.error(`Fetch failed: ${e.message}`); throw e; } finally { setLoading(false); } }',
         difficulty: 'Specialist',
         category: 'Coding',
         description: 'Focus on try/catch blocks, await logic, and template literals.',
@@ -1152,9 +1378,9 @@ export const drillLibrary: Drill[] = [
         ]
     },
     {
-        id: 'c3',
+        id: 'sc3',
         title: 'Coding: Regex Validation',
-        content: 'const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/; const test = emailRegex.test("user@example.com"); console.log(test);',
+        content: 'const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/; const test = emailRegex.test("user@example.com"); console.log(test); const urlRegex = /https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)/;',
         difficulty: 'Specialist',
         category: 'Coding',
         description: 'Master complex escape sequences and quantifier syntax.',
@@ -1174,9 +1400,9 @@ export const drillLibrary: Drill[] = [
         ]
     },
     {
-        id: 'c4',
+        id: 'sc4',
         title: 'Coding: Deep Navigation',
-        content: 'const config = data?.settings?.profile?.preferences?.theme || "dark"; const activeUsers = users.flatMap(u => u.sessions).filter(s => s.status === "active").length;',
+        content: 'const config = data?.settings?.profile?.preferences?.theme || "dark"; const activeUsers = users.flatMap(u => u.sessions).filter(s => s.status === "active").length; const mainColor = theme?.colors?.primary ?? "#000000"; const hasFeature = user?.permissions?.includes("beta") ?? false;',
         difficulty: 'Specialist',
         category: 'Coding',
         description: 'Focus on optional chaining, nullish coalescing, and flatMaps.',
@@ -1196,9 +1422,9 @@ export const drillLibrary: Drill[] = [
         ]
     },
     {
-        id: 'c5',
+        id: 'sc5',
         title: 'Coding: System Interface',
-        content: 'interface UserProfile { id: string; settings: { notifications: boolean; theme: "light" | "dark" | "system"; }; lastActive: number; } class SystemController implements IController { ... }',
+        content: 'interface UserProfile { id: string; settings: { notifications: boolean; theme: "light" | "dark" | "system"; }; lastActive: number; } class SystemController implements IController { constructor(private service: Service) {} async init() { await this.service.connect(); } }',
         difficulty: 'Specialist',
         category: 'Coding',
         description: 'Practice TypeScript interfaces and class implementations.',
@@ -1220,7 +1446,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'j1',
         title: 'Journalism: The Newsroom Pulse',
-        content: 'LONDON, UK — The Prime Minister issued a statement regarding the unilateral ceasefire. "We remain committed to peace," the spokesperson confirmed at 10:00 PM GMT.',
+        content: 'LONDON, UK — The Prime Minister issued a statement regarding the unilateral ceasefire. "We remain committed to peace," the spokesperson confirmed at 10:00 PM GMT. Opposition leaders, however, demand immediate clarification on the terms of the agreement. Global markets reacted cautiously as trading opened this morning.',
         difficulty: 'Specialist',
         category: 'Journalism',
         description: 'Master datelines, attribution, and time/location markers.',
@@ -1242,7 +1468,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'j2',
         title: 'Journalism: Headline Velocity',
-        content: 'BREAKING: BREAKDOWN IN NEGOTIATIONS AS CRISIS DEEPENS. INTERNAL MEMO LEAKED; OFFICIALS DENY ANY WRONGDOING. INVESTIGATION PENDING.',
+        content: 'BREAKING: BREAKDOWN IN NEGOTIATIONS AS CRISIS DEEPENS. INTERNAL MEMO LEAKED; OFFICIALS DENY ANY WRONGDOING. INVESTIGATION PENDING. STOCK MARKET PLUNGES 500 POINTS AMID UNCERTAINTY. CITIZENS URGED TO REMAIN CALM DURING EMERGENCY PROTOCOLS.',
         difficulty: 'Specialist',
         category: 'Journalism',
         description: 'Practice high-pressure all-caps headlines and subheaders.',
@@ -1264,7 +1490,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'j3',
         title: 'Journalism: Narrative Flow',
-        content: 'Witnesses described the scene as "chaotic but controlled." Under the heavy rain, the crowd gathered outside the courthouse, awaiting the verdict that would define a generation.',
+        content: 'Witnesses described the scene as "chaotic but controlled." Under the heavy rain, the crowd gathered outside the courthouse, awaiting the verdict that would define a generation. Reporters stood ready, microphones in hand, as the heavy oak doors slowly creaked open. A hush fell over the square.',
         difficulty: 'Specialist',
         category: 'Journalism',
         description: 'Focus on descriptive prose and complex sentence structures.',
@@ -1286,7 +1512,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'j4',
         title: 'Journalism: Statistical Precision',
-        content: 'The 12.5% increase in GDP surprised analysts, who had predicted a mere 0.3% growth. Meanwhile, the $1.2B surplus will be allocated to infrastructure projects.',
+        content: 'The 12.5% increase in GDP surprised analysts, who had predicted a mere 0.3% growth. Meanwhile, the $1.2B surplus will be allocated to infrastructure projects. Consumer spending rose by 4.2% in Q3, while inflation stabilized at 2.1%. The unemployment rate dropped to a historic low of 3.5%.',
         difficulty: 'Specialist',
         category: 'Journalism',
         description: 'Practice dense financial reporting data.',
@@ -1308,7 +1534,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'j5',
         title: 'Journalism: Interview Cadence',
-        content: 'Q: How do you respond to the allegations? A: They are baseless. Q: Baseless? We have the documents. A: Then the documents are forgeries.',
+        content: 'Q: How do you respond to the allegations? A: They are baseless. Q: Baseless? We have the documents. A: Then the documents are forgeries. Q: Are you accusing the whistleblower of lying? A: I am stating that the evidence is fabricated. Q: Will you resign? A: Absolutely not.',
         difficulty: 'Specialist',
         category: 'Journalism',
         description: 'Practice the rapid back-and-forth of hard-hitting interviews.',
@@ -1330,7 +1556,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'd1',
         title: 'DevOps: Pipeline Command',
-        content: 'docker build -t app:v1 . && docker push registry.internal/app:v1; kubectl apply -f ./k8s/deployment.yaml --namespace=production',
+        content: 'docker build -t app:v1 . && docker push registry.internal/app:v1; kubectl apply -f ./k8s/deployment.yaml --namespace=production --validate=false; helm upgrade --install my-release ./charts/my-chart --set replicaCount=3; echo "Deploy Success" | mail -s "Status" admin@corp.com',
         difficulty: 'Specialist',
         category: 'DevOps',
         description: 'Master containerization and orchestration commands.',
@@ -1352,7 +1578,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'd2',
         title: 'DevOps: Infrastructure as Code',
-        content: 'resource "aws_instance" "web" { ami = "ami-0c55b159cbfafe1f0" instance_type = "t2.micro" tags = { Name = "ProdServer" } }',
+        content: 'resource "aws_instance" "web" { ami = "ami-0c55b159cbfafe1f0" instance_type = "t2.micro" tags = { Name = "ProdServer" } vpc_security_group_ids = ["sg-12345678"] subnet_id = "subnet-87654321" key_name = "deploy-key" root_block_device { volume_size = 20 } }',
         difficulty: 'Specialist',
         category: 'DevOps',
         description: 'Focus on HCL (HashiCorp Configuration Language) syntax.',
@@ -1374,7 +1600,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'd3',
         title: 'DevOps: Terminal Gymnastics',
-        content: 'find /var/log -name "*.log" -mtime +30 -exec rm -rf {} \\; | awk \'{print $9}\' | sort | uniq -c | head -n 5',
+        content: 'find /var/log -name "*.log" -mtime +30 -exec rm -rf {} \\; | awk \'{print $9}\' | sort | uniq -c | head -n 5; ps aux | grep "node" | awk \'{print $2}\' | xargs kill -9; du -sh /home/* | sort -rh | grep "G" | tee large_folders.txt',
         difficulty: 'Specialist',
         category: 'DevOps',
         description: 'Master complex Unix pipelines and file manipulations.',
@@ -1396,7 +1622,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'd4',
         title: 'DevOps: Scripting Logic',
-        content: 'if [[ $? -eq 0 ]]; then echo "Deployment Successful!"; else echo "Deployment Failed!" >&2; exit 1; fi',
+        content: 'if [[ $? -eq 0 ]]; then echo "Deployment Successful!"; else echo "Deployment Failed!" >&2; exit 1; fi; for i in {1..5}; do curl -I http://localhost:8080 || sleep 1; done; export NODE_ENV=production && npm start',
         difficulty: 'Specialist',
         category: 'DevOps',
         description: 'Focus on Bash conditional logic and status codes.',
@@ -1418,7 +1644,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'd5',
         title: 'DevOps: Config YAML',
-        content: 'apiVersion: v1\nkind: Service\nmetadata:\n  name: api-gateway\nspec:\n  selector:\n    app: gateway\n  ports:\n    - protocol: TCP\n      port: 80\n      targetPort: 8080',
+        content: 'apiVersion: v1\nkind: Service\nmetadata:\n  name: api-gateway\nspec:\n  selector:\n    app: gateway\n  ports:\n    - protocol: TCP\n      port: 80\n      targetPort: 8080\n  type: LoadBalancer\n  sessionAffinity: ClientIP',
         difficulty: 'Specialist',
         category: 'DevOps',
         description: 'Practice the strict indentation and key-value mapping of YAML.',
@@ -1440,7 +1666,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'g1',
         title: 'Gaming: Tactical Comms',
-        content: 'Enemy spotted at Long A! Flashbang going out. Bomb has been planted at B Site. Rotation incoming, watch the flank!',
+        content: 'Enemy spotted at Long A! Flashbang going out. Bomb has been planted at B Site. Rotation incoming, watch the flank! Sniper in the window. Smoke the cross. One enemy remaining in the pit. Defusing now, cover me! GG well played.',
         difficulty: 'Specialist',
         category: 'Gaming',
         description: 'Master the high-speed jargon of tactical shooters.',
@@ -1462,7 +1688,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'g2',
         title: 'Gaming: Raid Coordinates',
-        content: 'Tank swap at 50%. Focus the adds at West door. Boss transitioning to Phase 2. Stack on the marker (Red Circle) for the AoE!',
+        content: 'Tank swap at 50%. Focus the adds at West door. Boss transitioning to Phase 2. Stack on the marker (Red Circle) for the AoE! Healers pop cooldowns now. Spread out for the meteor. Interrupt the cast! Battle res the tank.',
         difficulty: 'Specialist',
         category: 'Gaming',
         description: 'Practice the complex coordination of MMO raid messaging.',
@@ -1484,7 +1710,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'g3',
         title: 'Gaming: Pro eSports Jargon',
-        content: 'That\'s a huge GG! The meta is shifting toward aggressive rotations. Clutch play at the tie-breaker. MVP performance from the carry.',
+        content: 'That\'s a huge GG! The meta is shifting toward aggressive rotations. Clutch play at the tie-breaker. MVP performance from the carry. The crowd goes wild as the underdogs take the trophy. Unbelievable mechanical skill on display.',
         difficulty: 'Specialist',
         category: 'Gaming',
         description: 'Master the specialized vocabulary of competitive gaming.',
@@ -1506,7 +1732,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'g4',
         title: 'Gaming: System & Bindings',
-        content: '/bind k "say Rush B!". sensitivity 2.5; cl_interp 0; voice_enable 1. bind mwheelup +jump; fps_max 144.',
+        content: '/bind k "say Rush B!". sensitivity 2.5; cl_interp 0; voice_enable 1. bind mwheelup +jump; fps_max 144. rate 128000; cl_cmdrate 128; cl_updaterate 128; net_graph 1. alias +jumpthrow "+jump;-attack"; bind v +jumpthrow',
         difficulty: 'Specialist',
         category: 'Gaming',
         description: 'Practice console commands and keybinding syntax.',
@@ -1528,7 +1754,7 @@ export const drillLibrary: Drill[] = [
     {
         id: 'g5',
         title: 'Gaming: Velocity Cast',
-        content: 'He\'s around the corner, he\'s low, he\'s absolutely one-shot! The flank is real! Can he find the opening? Yes! Unbelievable reactions!',
+        content: 'He\'s around the corner, he\'s low, he\'s absolutely one-shot! The flank is real! Can he find the opening? Yes! Unbelievable reactions! The map control is completely in their favor. It all comes down to this final round.',
         difficulty: 'Specialist',
         category: 'Gaming',
         description: 'Simulate the frenetic pace of live shoutcasting.',

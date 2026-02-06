@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { PlacementEngine, DifficultyLevel } from '@shared/placement';
 import { Curriculum, UserProgress, LessonResult } from '@shared/curriculum';
 import { TypingMetrics } from '@shared/types';
-import { getDb } from '../lib/db';
+import prisma from '../lib/db';
 import { drillLibrary } from '@shared/drillLibrary';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -10,13 +10,10 @@ const router = Router();
 
 // Helper to reconstruct UserProgress from DB
 async function getUserProgress(userId: string): Promise<UserProgress | null> {
-    const db = await getDb();
-
-    // Explicitly casting or using any to avoid implicit any errors if type inference fails
-    const user = db.data.users.find((u: any) => u.id === userId);
+    const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) return null;
 
-    const results = db.data.drillResults.filter((r: any) => r.userId === userId);
+    const results = await prisma.drillResult.findMany({ where: { userId } });
 
     const completedLessons: string[] = [];
     const lessonScores: Record<string, TypingMetrics> = {};
@@ -28,7 +25,7 @@ async function getUserProgress(userId: string): Promise<UserProgress | null> {
             accuracy: result.accuracy,
             charsTyped: 0,
             errors: 0,
-            durationMs: result.durationMs || 0,
+            durationMs: result.durationMs,
             errorMap: {}
         };
 
@@ -43,9 +40,7 @@ async function getUserProgress(userId: string): Promise<UserProgress | null> {
         }
     }
 
-    const unlockedLevels = user.id === 'guest'
-        ? ['Beginner', 'Intermediate', 'Professional', 'Specialist'] as DifficultyLevel[]
-        : user.unlockedLevels.split(',') as DifficultyLevel[];
+    const unlockedLevels = user.unlockedLevels.split(',') as DifficultyLevel[];
 
     return {
         userId: user.id,
@@ -63,24 +58,29 @@ router.post('/assessment', async (req, res) => {
 
     const placement = PlacementEngine.calculatePlacement(metrics);
 
-    const db = await getDb();
-    let user = db.data.users.find((u: any) => u.id === userId);
+    let user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (user) {
-        user.assignedLevel = placement.level;
-        user.unlockedLevels = placement.level;
-        user.currentLessonId = placement.recommendedStartLesson;
+        user = await prisma.user.update({
+            where: { id: userId },
+            data: {
+                assignedLevel: placement.level,
+                unlockedLevels: placement.level,
+                currentLessonId: placement.recommendedStartLesson
+            }
+        });
     } else {
-        user = {
-            id: userId,
-            assignedLevel: placement.level,
-            unlockedLevels: placement.level,
-            currentLessonId: placement.recommendedStartLesson,
-            createdAt: new Date().toISOString()
-        };
-        db.data.users.push(user);
+        user = await prisma.user.create({
+            data: {
+                id: userId,
+                email: `temp_${userId}@example.com`,
+                assignedLevel: placement.level,
+                unlockedLevels: placement.level,
+                currentLessonId: placement.recommendedStartLesson,
+                createdAt: new Date()
+            }
+        });
     }
-    await db.write();
 
     const progress = await getUserProgress(userId);
 
@@ -107,25 +107,22 @@ router.post('/:userId/lesson/:lessonId/complete', async (req, res) => {
     const { userId, lessonId } = req.params;
     const { metrics, lesson } = req.body as { metrics: TypingMetrics; lesson: any };
 
-    const db = await getDb();
-
     // 1. Ensure user exists
-    let user = db.data.users.find((u: any) => u.id === userId);
+    const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) return res.status(404).json({ error: 'User not found' });
 
     // 2. Save Result
-    db.data.drillResults.push({
-        id: uuidv4(),
-        userId,
-        drillId: lessonId,
-        grossWPM: metrics.grossWPM,
-        netWPM: metrics.netWPM,
-        accuracy: metrics.accuracy,
-        durationMs: metrics.durationMs || 0,
-        timestamp: new Date().toISOString()
+    await prisma.drillResult.create({
+        data: {
+            userId,
+            drillId: lessonId,
+            grossWPM: metrics.grossWPM,
+            netWPM: metrics.netWPM,
+            accuracy: metrics.accuracy,
+            durationMs: metrics.durationMs || 0,
+            timestamp: new Date()
+        }
     });
-
-    await db.write();
 
     // 3. Check Mastery
     const passed = Curriculum.checkMastery(lesson, metrics);
@@ -151,11 +148,14 @@ router.post('/:userId/lesson/:lessonId/complete', async (req, res) => {
             const levelPrefixes: Record<string, string> = { 'Beginner': 'b', 'Intermediate': 'i', 'Professional': 'p', 'Specialist': 'm' };
             const nextLessonId = `${levelPrefixes[newLevel] || 'm'}1`;
 
-            user.assignedLevel = newLevel;
-            user.unlockedLevels = newUnlocked.join(',');
-            user.currentLessonId = nextLessonId;
-
-            await db.write();
+            await prisma.user.update({
+                where: { id: userId },
+                data: {
+                    assignedLevel: newLevel,
+                    unlockedLevels: newUnlocked.join(','),
+                    currentLessonId: nextLessonId
+                }
+            });
 
             leveledUp = true;
             levelUpMessage = levelUpCheck.reason;

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
-import { getDb } from '../lib/db';
+import prisma from '../lib/db';
 
 const router = Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'super_secret_jwt_key_dev_only';
@@ -16,26 +16,27 @@ router.post('/signup', async (req, res) => {
             return res.status(400).json({ error: 'Email and password are required' });
         }
 
-        const db = await getDb();
-        const existingUser = db.data.users.find((u: any) => u.email === email);
+        const existingUser = await prisma.user.findUnique({
+            where: { email }
+        });
 
         if (existingUser) {
             return res.status(400).json({ error: 'Email already exists' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = {
-            id: uuidv4(),
-            email,
-            passwordHash: hashedPassword,
-            assignedLevel: 'Beginner',
-            unlockedLevels: 'Beginner',
-            currentLessonId: 'b1',
-            createdAt: new Date().toISOString()
-        };
 
-        db.data.users.push(newUser);
-        await db.write();
+        const newUser = await prisma.user.create({
+            data: {
+                id: uuidv4(),
+                email,
+                passwordHash: hashedPassword,
+                assignedLevel: 'Beginner',
+                unlockedLevels: 'Beginner',
+                currentLessonId: 'b1',
+                createdAt: new Date()
+            }
+        });
 
         const token = jwt.sign(
             { id: newUser.id, email: newUser.email },
@@ -67,8 +68,9 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ error: 'Email and password are required' });
         }
 
-        const db = await getDb();
-        const user = db.data.users.find((u: any) => u.email === email);
+        const user = await prisma.user.findUnique({
+            where: { email }
+        });
 
         if (!user || !user.passwordHash) {
             return res.status(401).json({ error: 'Invalid email or password' });
@@ -109,14 +111,16 @@ router.get('/me', async (req, res) => {
 
     try {
         const decoded: any = jwt.verify(token, JWT_SECRET);
-        const db = await getDb();
-        const user = db.data.users.find((u: any) => u.id === decoded.id);
+        const user = await prisma.user.findUnique({
+            where: { id: decoded.id }
+        });
 
         if (!user) return res.status(404).json({ error: 'User not found' });
 
         res.json({
             id: user.id,
             email: user.email,
+            name: (user as any).name || null,
             assignedLevel: user.assignedLevel,
             currentLessonId: user.currentLessonId
         });

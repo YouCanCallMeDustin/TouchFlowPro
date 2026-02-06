@@ -14,7 +14,7 @@ const Dashboard: React.FC<DashboardProps> = ({ metrics, onStartDrill, onStartAss
 
     useEffect(() => {
         // Fetch drills from backend
-        fetch(`http://localhost:4000/api/drills/difficulty/${selectedDifficulty}`)
+        fetch(`/api/drills/difficulty/${selectedDifficulty}`)
             .then(res => res.json())
             .then(data => setDrills(data))
             .catch(err => console.error('Failed to fetch drills:', err));

@@ -12,7 +12,7 @@ const Analytics: React.FC<AnalyticsProps> = ({ userId, onClose }) => {
 
     useEffect(() => {
         // Fetch analytics data from backend
-        fetch(`http://localhost:4000/api/analytics/${userId}`)
+        fetch(`/api/analytics/${userId}`)
             .then(res => res.json())
             .then(data => setAnalytics(data))
             .catch(err => console.error('Failed to fetch analytics:', err));

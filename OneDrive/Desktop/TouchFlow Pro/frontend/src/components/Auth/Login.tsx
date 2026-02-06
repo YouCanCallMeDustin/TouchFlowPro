@@ -18,7 +18,7 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup }) => {
         setLoading(true);
 
         try {
-            const response = await fetch('http://localhost:4000/api/auth/login', {
+            const response = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
@@ -41,7 +41,16 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup }) => {
     return (
         <div className="min-h-[80vh] flex items-center justify-center p-6 sm:p-10">
             <div className="max-w-md w-full bg-white/70 backdrop-blur-xl border border-white/50 rounded-3xl shadow-2xl p-8 sm:p-12 text-center transition-all hover:shadow-3xl">
-                <h1 className="text-4xl sm:text-5xl font-heading font-extrabold mb-2 bg-gradient-to-br from-primary-blue to-secondary-teal bg-clip-text text-transparent">
+                {/* Logo */}
+                <div className="flex justify-center mb-8">
+                    <img
+                        src="/assets/logo.png"
+                        alt="TouchFlow Pro"
+                        className="h-24 sm:h-28 w-auto"
+                    />
+                </div>
+
+                <h1 className="text-4xl sm:text-5xl font-heading font-extrabold mb-2 bg-gradient-brand bg-clip-text text-transparent">
                     Welcome Back
                 </h1>
                 <p className="text-text-muted text-lg mb-8">Sign in to continue your mastery journey</p>

@@ -6,12 +6,22 @@ import LessonView from './components/LessonView'
 import HeatMap from './components/HeatMap'
 import Login from './components/Auth/Login'
 import Signup from './components/Auth/Signup'
+import AnalyticsDashboard from './pages/AnalyticsDashboard'
+import SessionHistory from './pages/SessionHistory'
+import AchievementsPanel from './pages/AchievementsPanel'
+import CustomDrillBuilder from './pages/CustomDrillBuilder'
+import GoalsDashboard from './pages/GoalsDashboard'
+import Dashboard from './pages/Dashboard'
+import Profile from './pages/Profile'
+import Practice from './pages/Practice'
+import BiblePractice from './pages/BiblePractice'
+import ErrorBoundary from './components/ErrorBoundary'
 import { useAuth } from './context/AuthContext'
 import type { TypingMetrics } from '@shared/types'
 import type { UserProgress, Lesson } from '@shared/curriculum'
 import type { DifficultyLevel, PlacementResult } from '@shared/placement'
 
-type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup'
+type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice'
 
 function App() {
   const { user, loading, logout } = useAuth()
@@ -28,11 +38,11 @@ function App() {
   const fetchProgress = useCallback(async (id: string) => {
     setIsFetchingProgress(true)
     try {
-      const response = await fetch(`http://localhost:4000/api/progress/${id}`)
+      const response = await fetch(`/api/progress/${id}`)
       if (response.ok) {
         const data = await response.json()
         setUserProgress(data)
-        setStage('curriculum')
+        setStage('dashboard')
       } else {
         // If not found, user might need assessment
         setStage('welcome')
@@ -59,7 +69,7 @@ function App() {
     setAssessmentMetrics(metrics)
 
     try {
-      const response = await fetch('http://localhost:4000/api/progress/assessment', {
+      const response = await fetch('/api/progress/assessment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user.id, metrics })
@@ -83,7 +93,7 @@ function App() {
     if (!currentLesson || !userProgress || !user) return
 
     try {
-      const response = await fetch(`http://localhost:4000/api/progress/${user.id}/lesson/${currentLesson.id}/complete`, {
+      const response = await fetch(`/api/progress/${user.id}/lesson/${currentLesson.id}/complete`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ metrics, lesson: currentLesson })
@@ -121,149 +131,276 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-bg-main selection:bg-secondary-teal/20">
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-white/50 border-b border-slate-200/50 px-6 sm:px-12 py-4 flex justify-between items-center transition-all">
-        <div className="flex flex-col">
-          <h1
-            className="text-2xl sm:text-3xl font-heading font-extrabold tracking-tighter cursor-pointer bg-gradient-to-br from-primary-blue to-secondary-teal bg-clip-text text-transparent active:scale-95 transition-transform"
-            onClick={() => userProgress && setStage('curriculum')}
-          >
-            TouchFlow
-          </h1>
-          <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] text-accent-orange leading-none -mt-1">
-            Pro Mastery
-          </span>
-        </div>
-
-        {user && (
-          <div className="flex items-center gap-4 sm:gap-6">
-            <div className="hidden sm:flex flex-col items-end">
-              <span className="text-xs font-bold text-text-muted uppercase tracking-tighter">Session Active</span>
-              <span className="text-sm font-semibold text-text-main leading-none">{user.email}</span>
+    <ErrorBoundary>
+      <div className="min-h-screen bg-bg-main selection:bg-secondary-teal/20">
+        <header className="sticky top-0 z-50 backdrop-blur-md bg-white/50 border-b border-slate-200/50 px-6 sm:px-12 py-4 transition-all">
+          {/* Top row: Logo and User Info */}
+          <div className="flex justify-between items-center mb-2">
+            <div className="flex-1" />
+            <img
+              src="/assets/logo.png"
+              alt="TouchFlow Pro"
+              className="h-12 sm:h-14 w-auto cursor-pointer active:scale-95 transition-transform"
+              onClick={() => userProgress && setStage('dashboard')}
+            />
+            <div className="flex-1 flex justify-end">
+              {user && (
+                <div className="flex items-center gap-4 sm:gap-6">
+                  <div className="hidden sm:flex flex-col items-end">
+                    <span className="text-xs font-bold text-text-muted uppercase tracking-tighter">Session Active</span>
+                    <span className="text-sm font-semibold text-text-main leading-none">{user.email}</span>
+                  </div>
+                  <button
+                    onClick={logout}
+                    className="px-4 py-2 text-xs font-bold text-text-muted border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-red-600 hover:border-red-100 transition-all active:scale-95 uppercase tracking-wider"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              )}
             </div>
-            <button
-              onClick={logout}
-              className="px-4 py-2 text-xs font-bold text-text-muted border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-red-600 hover:border-red-100 transition-all active:scale-95 uppercase tracking-wider"
-            >
-              Sign Out
-            </button>
           </div>
-        )}
-      </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12 flex justify-center w-full">
-        {stage === 'auth_login' && <Login onSwitchToSignup={() => setStage('auth_signup')} />}
-        {stage === 'auth_signup' && <Signup onSwitchToLogin={() => setStage('auth_login')} />}
-
-        {stage === 'welcome' && (
-          <div className="max-w-2xl w-full bg-white/70 backdrop-blur-xl border border-white/50 rounded-3xl shadow-2xl p-8 sm:p-12 text-center">
-            <div className="w-20 h-20 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-8 text-4xl">📚</div>
-            <h2 className="text-3xl sm:text-4xl font-heading font-extrabold mb-4 text-text-main">Ready to Personalize Your Training?</h2>
-            <p className="text-text-muted text-lg mb-10 leading-relaxed">
-              To establish your custom curriculum, we first need to establish a baseline. This assessment will measure your speed and accuracy on professional-grade content.
-            </p>
-            <button
-              className="w-full sm:w-auto bg-gradient-to-r from-primary-blue to-blue-800 text-white px-10 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0 transition-all"
-              onClick={() => setStage('assessment')}
-            >
-              Start Baseline Assessment
-            </button>
-          </div>
-        )}
-
-        {stage === 'assessment' && (
-          <div className="w-full">
-            <TypingTest text={baselineText} onComplete={handleAssessmentComplete} />
-          </div>
-        )}
-
-        {stage === 'placement' && placementResult && assessmentMetrics && (
-          <div className="max-w-4xl w-full">
-            <div className="bg-white/70 backdrop-blur-xl border border-white/50 rounded-3xl shadow-2xl p-8 sm:p-14 text-center">
-              <div className="text-6xl mb-6 drop-shadow-sm">🎯</div>
-              <h2 className="text-4xl sm:text-5xl font-heading font-extrabold mb-8 tracking-tight">Assessment Complete!</h2>
-
-              <div className="grid grid-cols-2 gap-6 mb-12">
-                <div className="bg-slate-50/50 p-6 rounded-2xl border border-slate-100">
-                  <div className="text-4xl sm:text-5xl font-heading font-extrabold bg-gradient-to-br from-primary-blue to-blue-800 bg-clip-text text-transparent">
-                    {assessmentMetrics.netWPM}
-                  </div>
-                  <div className="text-xs font-bold text-text-muted uppercase tracking-[0.2em] mt-2">Net WPM</div>
-                </div>
-                <div className="bg-slate-50/50 p-6 rounded-2xl border border-slate-100">
-                  <div className="text-4xl sm:text-5xl font-heading font-extrabold bg-gradient-to-br from-secondary-teal to-teal-800 bg-clip-text text-transparent">
-                    {assessmentMetrics.accuracy}%
-                  </div>
-                  <div className="text-xs font-bold text-text-muted uppercase tracking-[0.2em] mt-2">Accuracy</div>
-                </div>
-              </div>
-
-              <div className="mb-12">
-                <HeatMap errorMap={assessmentMetrics.errorMap} />
-              </div>
-
-              <div className="p-8 rounded-2xl bg-gradient-to-br from-primary-blue to-secondary-teal text-white shadow-xl mb-12">
-                <h3 className="text-white text-2xl font-bold mb-3 flex items-center justify-center gap-3">
-                  <span className="bg-white/20 px-3 py-1 rounded-lg text-sm uppercase tracking-widest font-black">Level</span>
-                  {placementResult.level}
-                </h3>
-                <p className="text-white/90 text-lg leading-relaxed">{placementResult.reason}</p>
-              </div>
-
+          {/* Navigation Menu */}
+          {user && userProgress && stage !== 'auth_login' && stage !== 'auth_signup' && stage !== 'welcome' && (
+            <nav className="mt-4 flex flex-wrap gap-2">
               <button
-                className="w-full sm:w-auto bg-white text-primary-blue border-2 border-primary-blue px-12 py-4 rounded-xl font-bold text-xl hover:bg-primary-blue hover:text-white shadow-lg hover:shadow-xl transition-all"
-                onClick={() => setStage('curriculum')}
+                onClick={() => setStage('dashboard')}
+                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${stage === 'dashboard' ? 'bg-primary-blue text-white' : 'bg-white border border-slate-200 text-text-muted hover:border-primary-blue'}`}
               >
-                Start Learning Journey
+                🏠 Dashboard
+              </button>
+              <button
+                onClick={() => setStage('curriculum')}
+                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${stage === 'curriculum' || stage === 'lesson' || stage === 'levelup' ? 'bg-primary-blue text-white' : 'bg-white border border-slate-200 text-text-muted hover:border-primary-blue'}`}
+              >
+                📚 Lessons
+              </button>
+              <button
+                onClick={() => setStage('practice')}
+                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${stage === 'practice' ? 'bg-primary-blue text-white' : 'bg-white border border-slate-200 text-text-muted hover:border-primary-blue'}`}
+              >
+                🎯 Practice
+              </button>
+              <button
+                onClick={() => setStage('bible_practice')}
+                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${stage === 'bible_practice' ? 'bg-primary-blue text-white' : 'bg-white border border-slate-200 text-text-muted hover:border-primary-blue'}`}
+              >
+                📖 Bible
+              </button>
+              <button
+                onClick={() => setStage('analytics')}
+                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${stage === 'analytics' ? 'bg-primary-blue text-white' : 'bg-white border border-slate-200 text-text-muted hover:border-primary-blue'}`}
+              >
+                📊 Analytics
+              </button>
+              <button
+                onClick={() => setStage('history')}
+                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${stage === 'history' ? 'bg-primary-blue text-white' : 'bg-white border border-slate-200 text-text-muted hover:border-primary-blue'}`}
+              >
+                📚 History
+              </button>
+              <button
+                onClick={() => setStage('achievements')}
+                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${stage === 'achievements' ? 'bg-primary-blue text-white' : 'bg-white border border-slate-200 text-text-muted hover:border-primary-blue'}`}
+              >
+                🏆 Achievements
+              </button>
+              <button
+                onClick={() => setStage('custom_drills')}
+                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${stage === 'custom_drills' ? 'bg-primary-blue text-white' : 'bg-white border border-slate-200 text-text-muted hover:border-primary-blue'}`}
+              >
+                ✏️ Custom Drills
+              </button>
+              <button
+                onClick={() => setStage('goals')}
+                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${stage === 'goals' ? 'bg-primary-blue text-white' : 'bg-white border border-slate-200 text-text-muted hover:border-primary-blue'}`}
+              >
+                🎯 Goals
+              </button>
+              <button
+                onClick={() => setStage('profile')}
+                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${stage === 'profile' ? 'bg-primary-blue text-white' : 'bg-white border border-slate-200 text-text-muted hover:border-primary-blue'}`}
+              >
+                👤 Profile
+              </button>
+            </nav>
+          )}
+        </header>
+
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12 flex justify-center w-full">
+          {stage === 'auth_login' && <Login onSwitchToSignup={() => setStage('auth_signup')} />}
+          {stage === 'auth_signup' && <Signup onSwitchToLogin={() => setStage('auth_login')} />}
+
+          {stage === 'welcome' && (
+            <div className="max-w-2xl w-full bg-white/70 backdrop-blur-xl border border-white/50 rounded-3xl shadow-2xl p-8 sm:p-12 text-center">
+              <div className="w-20 h-20 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-8 text-4xl">📚</div>
+              <h2 className="text-3xl sm:text-4xl font-heading font-extrabold mb-4 text-text-main">Ready to Personalize Your Training?</h2>
+              <p className="text-text-muted text-lg mb-10 leading-relaxed">
+                To establish your custom curriculum, we first need to establish a baseline. This assessment will measure your speed and accuracy on professional-grade content.
+              </p>
+              <button
+                className="w-full sm:w-auto bg-gradient-to-r from-primary-blue to-blue-800 text-white px-10 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0 transition-all"
+                onClick={() => setStage('assessment')}
+              >
+                Start Baseline Assessment
               </button>
             </div>
-          </div>
-        )}
+          )}
 
-        {stage === 'curriculum' && userProgress && user && (
-          <div className="w-full">
-            <Curriculum
-              userId={user.id}
-              progress={userProgress}
-              onStartLesson={handleStartLesson}
-              onLevelChange={() => { }}
-            />
-          </div>
-        )}
+          {stage === 'assessment' && (
+            <div className="w-full">
+              <TypingTest text={baselineText} onComplete={handleAssessmentComplete} />
+            </div>
+          )}
 
-        {stage === 'lesson' && currentLesson && user && (
-          <div className="w-full">
-            <LessonView
-              lesson={currentLesson}
-              userId={user.id}
-              onComplete={handleLessonComplete}
-              onCancel={() => setStage('curriculum')}
-            />
-          </div>
-        )}
+          {stage === 'placement' && placementResult && assessmentMetrics && (
+            <div className="max-w-4xl w-full">
+              <div className="bg-white/70 backdrop-blur-xl border border-white/50 rounded-3xl shadow-2xl p-8 sm:p-14 text-center">
+                <div className="text-6xl mb-6 drop-shadow-sm">🎯</div>
+                <h2 className="text-4xl sm:text-5xl font-heading font-extrabold mb-8 tracking-tight">Assessment Complete!</h2>
 
-        {stage === 'levelup' && levelUpInfo && (
-          <div className="max-w-2xl w-full bg-white/70 backdrop-blur-xl border border-white/50 rounded-3xl shadow-2xl p-8 sm:p-16 text-center">
-            <div className="text-7xl mb-8 animate-bounce">🚀</div>
-            <h2 className="text-4xl sm:text-6xl font-heading font-extrabold mb-6 text-secondary-teal tracking-tighter">
-              Level Up!
-            </h2>
-            <p className="text-2xl sm:text-3xl font-medium mb-4 text-text-main">
-              You've unlocked <strong className="font-extrabold text-blue-600">{levelUpInfo.newLevel}</strong> level!
-            </p>
-            <p className="text-text-muted text-lg mb-12 leading-relaxed">
-              {levelUpInfo.message}
-            </p>
-            <button
-              className="w-full bg-secondary-teal text-white px-10 py-5 rounded-2xl font-bold text-xl shadow-xl hover:shadow-2xl hover:bg-teal-700 transition-all hover:-translate-y-1 active:translate-y-0"
-              onClick={() => setStage('curriculum')}
-            >
-              Continue to {levelUpInfo.newLevel} Curriculum
-            </button>
-          </div>
-        )}
-      </main>
-    </div>
+                <div className="grid grid-cols-2 gap-6 mb-12">
+                  <div className="bg-slate-50/50 p-6 rounded-2xl border border-slate-100">
+                    <div className="text-4xl sm:text-5xl font-heading font-extrabold bg-gradient-to-br from-primary-blue to-blue-800 bg-clip-text text-transparent">
+                      {assessmentMetrics.netWPM}
+                    </div>
+                    <div className="text-xs font-bold text-text-muted uppercase tracking-[0.2em] mt-2">Net WPM</div>
+                  </div>
+                  <div className="bg-slate-50/50 p-6 rounded-2xl border border-slate-100">
+                    <div className="text-4xl sm:text-5xl font-heading font-extrabold bg-gradient-to-br from-secondary-teal to-teal-800 bg-clip-text text-transparent">
+                      {assessmentMetrics.accuracy}%
+                    </div>
+                    <div className="text-xs font-bold text-text-muted uppercase tracking-[0.2em] mt-2">Accuracy</div>
+                  </div>
+                </div>
+
+                <div className="mb-12">
+                  <HeatMap errorMap={assessmentMetrics.errorMap} />
+                </div>
+
+                <div className="p-8 rounded-2xl bg-gradient-to-br from-primary-blue to-secondary-teal text-white shadow-xl mb-12">
+                  <h3 className="text-white text-2xl font-bold mb-3 flex items-center justify-center gap-3">
+                    <span className="bg-white/20 px-3 py-1 rounded-lg text-sm uppercase tracking-widest font-black">Level</span>
+                    {placementResult.level}
+                  </h3>
+                  <p className="text-white/90 text-lg leading-relaxed">{placementResult.reason}</p>
+                </div>
+
+                <button
+                  className="w-full sm:w-auto bg-white text-primary-blue border-2 border-primary-blue px-12 py-4 rounded-xl font-bold text-xl hover:bg-primary-blue hover:text-white shadow-lg hover:shadow-xl transition-all"
+                  onClick={() => setStage('curriculum')}
+                >
+                  Start Learning Journey
+                </button>
+              </div>
+            </div>
+          )}
+
+          {stage === 'curriculum' && userProgress && user && (
+            <div className="w-full">
+              <Curriculum
+                userId={user.id}
+                progress={userProgress}
+                onStartLesson={handleStartLesson}
+                onLevelChange={() => { }}
+              />
+            </div>
+          )}
+
+          {stage === 'lesson' && currentLesson && user && (
+            <div className="w-full">
+              <LessonView
+                lesson={currentLesson}
+                userId={user.id}
+                onComplete={handleLessonComplete}
+                onCancel={() => setStage('curriculum')}
+              />
+            </div>
+          )}
+
+          {stage === 'dashboard' && user && (
+            <div className="w-full">
+              <Dashboard
+                userId={user.id}
+                onNavigate={(destination) => setStage(destination as Stage)}
+                userEmail={user.email}
+                userName={user.name}
+              />
+            </div>
+          )}
+
+          {stage === 'analytics' && user && (
+            <div className="w-full">
+              <AnalyticsDashboard userId={user.id} />
+            </div>
+          )}
+
+          {stage === 'history' && user && (
+            <div className="w-full">
+              <SessionHistory userId={user.id} />
+            </div>
+          )}
+
+          {stage === 'achievements' && user && (
+            <div className="w-full">
+              <AchievementsPanel userId={user.id} />
+            </div>
+          )}
+
+          {stage === 'custom_drills' && user && (
+            <div className="w-full">
+              <CustomDrillBuilder userId={user.id} />
+            </div>
+          )}
+
+          {stage === 'goals' && user && (
+            <div className="w-full">
+              <GoalsDashboard userId={user.id} />
+            </div>
+          )}
+
+          {stage === 'profile' && user && (
+            <div className="w-full">
+              <Profile userId={user.id} userEmail={user.email} />
+            </div>
+          )}
+
+          {stage === 'practice' && user && (
+            <div className="w-full">
+              <Practice userId={user.id} />
+            </div>
+          )}
+
+          {stage === 'bible_practice' && user && (
+            <div className="w-full">
+              <BiblePractice userId={user.id} />
+            </div>
+          )}
+
+          {stage === 'levelup' && levelUpInfo && (
+            <div className="max-w-2xl w-full bg-white/70 backdrop-blur-xl border border-white/50 rounded-3xl shadow-2xl p-8 sm:p-16 text-center">
+              <div className="text-7xl mb-8 animate-bounce">🚀</div>
+              <h2 className="text-4xl sm:text-6xl font-heading font-extrabold mb-6 text-secondary-teal tracking-tighter">
+                Level Up!
+              </h2>
+              <p className="text-2xl sm:text-3xl font-medium mb-4 text-text-main">
+                You've unlocked <strong className="font-extrabold text-blue-600">{levelUpInfo.newLevel}</strong> level!
+              </p>
+              <p className="text-text-muted text-lg mb-12 leading-relaxed">
+                {levelUpInfo.message}
+              </p>
+              <button
+                className="w-full bg-secondary-teal text-white px-10 py-5 rounded-2xl font-bold text-xl shadow-xl hover:shadow-2xl hover:bg-teal-700 transition-all hover:-translate-y-1 active:translate-y-0"
+                onClick={() => setStage('curriculum')}
+              >
+                Continue to {levelUpInfo.newLevel} Curriculum
+              </button>
+            </div>
+          )}
+        </main>
+      </div>
+    </ErrorBoundary>
   )
 }
 

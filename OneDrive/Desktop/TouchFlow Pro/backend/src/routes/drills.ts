@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { drillLibrary } from '@shared/drillLibrary';
 import { SpacedScheduler } from '@shared/scheduler';
-import { getDb, SpacedItem } from '../lib/db';
+import prisma from '../lib/db';
 import { v4 as uuidv4 } from 'uuid';
 
 const router = Router();
@@ -34,43 +34,49 @@ router.post('/:id/complete', async (req, res) => {
     const { id: drillId } = req.params;
     const { metrics, userId } = req.body;
 
-    const db = await getDb();
+    // Ensure User exists (UPSERT logic equivalent)
+    let user = await prisma.user.findUnique({ where: { id: userId } });
 
-    // Ensure User exists
-    let user = db.data.users.find((u: any) => u.id === userId);
     if (!user) {
-        user = {
-            id: userId,
-            assignedLevel: 'Beginner',
-            unlockedLevels: 'Beginner',
-            currentLessonId: null,
-            createdAt: new Date().toISOString()
-        };
-        db.data.users.push(user);
+        user = await prisma.user.create({
+            data: {
+                id: userId,
+                assignedLevel: 'Beginner',
+                unlockedLevels: 'Beginner',
+                currentLessonId: null,
+                createdAt: new Date(),
+                email: `placeholder_${userId}@example.com` // Temporary email for anonymous/auto-created users if allowed
+            }
+        });
     }
 
     // Save Result
-    db.data.drillResults.push({
-        id: uuidv4(),
-        userId,
-        drillId,
-        grossWPM: metrics.grossWPM,
-        netWPM: metrics.netWPM,
-        accuracy: metrics.accuracy,
-        durationMs: metrics.durationMs || 0,
-        timestamp: new Date().toISOString()
+    await prisma.drillResult.create({
+        data: {
+            userId,
+            drillId,
+            grossWPM: metrics.grossWPM,
+            netWPM: metrics.netWPM,
+            accuracy: metrics.accuracy,
+            durationMs: metrics.durationMs || 0,
+            timestamp: new Date()
+        }
     });
 
-    // Get existing spaced item or create default
-    let spacedItemIndex = db.data.spacedItems.findIndex((i: any) => i.userId === userId && i.drillId === drillId);
-    let spacedItem = spacedItemIndex >= 0 ? db.data.spacedItems[spacedItemIndex] : null;
+    // Get existing spaced item
+    let spacedItem = await prisma.spacedItem.findFirst({
+        where: {
+            userId,
+            drillId
+        }
+    });
 
     const currentItem = spacedItem ? {
         id: spacedItem.drillId,
         interval: spacedItem.interval,
         repetition: spacedItem.repetition,
         efactor: spacedItem.efactor,
-        nextReview: new Date(spacedItem.nextReview)
+        nextReview: spacedItem.nextReview
     } : {
         id: drillId,
         interval: 0,
@@ -82,23 +88,29 @@ router.post('/:id/complete', async (req, res) => {
     const quality = SpacedScheduler.calculateQuality(metrics.accuracy, metrics.netWPM, 60);
     const updatedItemCalc = SpacedScheduler.review(currentItem, quality);
 
-    const newItem: SpacedItem = {
-        id: spacedItem ? spacedItem.id : uuidv4(),
-        userId,
-        drillId,
-        interval: updatedItemCalc.interval,
-        repetition: updatedItemCalc.repetition,
-        efactor: updatedItemCalc.efactor,
-        nextReview: updatedItemCalc.nextReview.toISOString()
-    };
-
-    if (spacedItemIndex >= 0) {
-        db.data.spacedItems[spacedItemIndex] = newItem;
+    // Upsert SpacedItem
+    if (spacedItem) {
+        await prisma.spacedItem.update({
+            where: { id: spacedItem.id },
+            data: {
+                interval: updatedItemCalc.interval,
+                repetition: updatedItemCalc.repetition,
+                efactor: updatedItemCalc.efactor,
+                nextReview: updatedItemCalc.nextReview
+            }
+        });
     } else {
-        db.data.spacedItems.push(newItem);
+        await prisma.spacedItem.create({
+            data: {
+                userId,
+                drillId,
+                interval: updatedItemCalc.interval,
+                repetition: updatedItemCalc.repetition,
+                efactor: updatedItemCalc.efactor,
+                nextReview: updatedItemCalc.nextReview
+            }
+        });
     }
-
-    await db.write();
 
     res.json({
         message: 'Drill completed',

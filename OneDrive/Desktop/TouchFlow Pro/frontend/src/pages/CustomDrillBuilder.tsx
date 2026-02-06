@@ -1,0 +1,257 @@
+import React, { useState, useEffect } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
+
+interface CustomDrillBuilderProps {
+    userId: string;
+}
+
+interface CustomDrill {
+    id: string;
+    userId: string;
+    title: string;
+    content: string;
+    difficulty: string;
+    createdAt: Date;
+    timesUsed: number;
+}
+
+const CustomDrillBuilder: React.FC<CustomDrillBuilderProps> = ({ userId }) => {
+    const [drills, setDrills] = useState<CustomDrill[]>([]);
+    const [showForm, setShowForm] = useState(false);
+    const [editingId, setEditingId] = useState<string | null>(null);
+    const [formData, setFormData] = useState({
+        title: '',
+        content: '',
+        difficulty: 'Beginner'
+    });
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetchDrills();
+    }, [userId]);
+
+    const fetchDrills = async () => {
+        try {
+            const response = await fetch(`/api/custom-drills/${userId}`);
+            const data = await response.json();
+            setDrills(data.drills || []);
+        } catch (error) {
+            console.error('Failed to fetch drills:', error);
+            toast.error('Failed to load custom drills');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!formData.title || !formData.content) {
+            toast.error('Title and content are required');
+            return;
+        }
+
+        try {
+            if (editingId) {
+                // Update existing drill
+                const response = await fetch(`/api/custom-drills/${editingId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                const updated = await response.json();
+                setDrills(drills.map(d => d.id === editingId ? updated : d));
+                toast.success('Drill updated successfully!');
+            } else {
+                // Create new drill
+                const response = await fetch(`/api/custom-drills/${userId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+                const newDrill = await response.json();
+                setDrills([newDrill, ...drills]);
+                toast.success('Drill created successfully!');
+            }
+
+            // Reset form
+            setFormData({ title: '', content: '', difficulty: 'Beginner' });
+            setShowForm(false);
+            setEditingId(null);
+        } catch (error) {
+            console.error('Failed to save drill:', error);
+            toast.error('Failed to save drill');
+        }
+    };
+
+    const handleEdit = (drill: CustomDrill) => {
+        setFormData({
+            title: drill.title,
+            content: drill.content,
+            difficulty: drill.difficulty
+        });
+        setEditingId(drill.id);
+        setShowForm(true);
+    };
+
+    const handleDelete = async (id: string) => {
+        if (!confirm('Are you sure you want to delete this drill?')) return;
+
+        try {
+            await fetch(`/api/custom-drills/${id}`, { method: 'DELETE' });
+            setDrills(drills.filter(d => d.id !== id));
+            toast.success('Drill deleted');
+        } catch (error) {
+            console.error('Failed to delete drill:', error);
+            toast.error('Failed to delete drill');
+        }
+    };
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <div className="text-2xl font-bold text-primary-blue">Loading...</div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="max-w-7xl mx-auto p-6 space-y-6">
+            <Toaster position="top-right" />
+
+            {/* Header */}
+            <div className="flex items-center justify-between">
+                <div>
+                    <h1 className="text-4xl font-heading font-black text-text-main">✏️ Custom Drill Builder</h1>
+                    <p className="text-text-muted mt-2">Create personalized practice content</p>
+                </div>
+                <button
+                    onClick={() => {
+                        setShowForm(!showForm);
+                        setEditingId(null);
+                        setFormData({ title: '', content: '', difficulty: 'Beginner' });
+                    }}
+                    className="px-6 py-3 bg-primary-blue text-white rounded-xl font-bold shadow-lg hover:bg-blue-700 hover:-translate-y-0.5 transition-all active:scale-95"
+                >
+                    {showForm ? '✕ Cancel' : '+ New Drill'}
+                </button>
+            </div>
+
+            {/* Creation Form */}
+            {showForm && (
+                <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-8 shadow-lg border border-slate-100 space-y-6">
+                    <h2 className="text-2xl font-black text-text-main">
+                        {editingId ? 'Edit Drill' : 'Create New Drill'}
+                    </h2>
+
+                    <div>
+                        <label className="block text-sm font-bold text-text-main mb-2">
+                            Drill Title
+                        </label>
+                        <input
+                            type="text"
+                            value={formData.title}
+                            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                            placeholder="e.g., Python Function Practice"
+                            className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-primary-blue focus:outline-none font-medium"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-bold text-text-main mb-2">
+                            Content
+                        </label>
+                        <textarea
+                            value={formData.content}
+                            onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                            placeholder="Enter the text you want to practice..."
+                            rows={10}
+                            className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-primary-blue focus:outline-none font-mono text-sm"
+                        />
+                        <div className="text-xs text-text-muted mt-1">
+                            {formData.content.length} characters
+                        </div>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-bold text-text-main mb-2">
+                            Difficulty Level
+                        </label>
+                        <div className="flex gap-3">
+                            {['Beginner', 'Intermediate', 'Advanced'].map((level) => (
+                                <button
+                                    key={level}
+                                    type="button"
+                                    onClick={() => setFormData({ ...formData, difficulty: level })}
+                                    className={`px-6 py-3 rounded-xl font-bold transition-all ${formData.difficulty === level
+                                            ? 'bg-primary-blue text-white'
+                                            : 'bg-white border-2 border-slate-200 text-text-muted hover:border-primary-blue'
+                                        }`}
+                                >
+                                    {level}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="w-full px-6 py-4 bg-emerald-600 text-white rounded-xl font-black text-lg shadow-lg hover:bg-emerald-700 hover:-translate-y-0.5 transition-all active:scale-95"
+                    >
+                        {editingId ? '💾 Update Drill' : '✨ Create Drill'}
+                    </button>
+                </form>
+            )}
+
+            {/* Drills List */}
+            <div className="space-y-4">
+                {drills.length > 0 ? (
+                    drills.map((drill) => (
+                        <div
+                            key={drill.id}
+                            className="bg-white rounded-2xl p-6 shadow-lg border border-slate-100 hover:shadow-xl transition-all"
+                        >
+                            <div className="flex items-start justify-between mb-4">
+                                <div>
+                                    <h3 className="text-xl font-black text-text-main">{drill.title}</h3>
+                                    <div className="flex items-center gap-3 mt-2 text-sm text-text-muted">
+                                        <span className="font-bold">{drill.difficulty}</span>
+                                        <span>•</span>
+                                        <span>{drill.timesUsed} uses</span>
+                                        <span>•</span>
+                                        <span>{drill.content.length} chars</span>
+                                    </div>
+                                </div>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => handleEdit(drill)}
+                                        className="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-bold text-sm hover:bg-blue-200 transition-all"
+                                    >
+                                        ✏️ Edit
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(drill.id)}
+                                        className="px-4 py-2 bg-red-100 text-red-700 rounded-lg font-bold text-sm hover:bg-red-200 transition-all"
+                                    >
+                                        🗑️ Delete
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="bg-slate-50 rounded-xl p-4 font-mono text-sm text-text-main whitespace-pre-wrap max-h-48 overflow-y-auto">
+                                {drill.content}
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <div className="bg-white rounded-2xl p-12 text-center shadow-lg border border-slate-100">
+                        <div className="text-6xl mb-4">✏️</div>
+                        <h3 className="text-xl font-bold text-text-main mb-2">No custom drills yet</h3>
+                        <p className="text-text-muted">Create your first custom drill to get started!</p>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+export default CustomDrillBuilder;

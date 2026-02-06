@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TypingTest from './TypingTest';
 import VisualKeyboard from './VisualKeyboard';
 import type { Lesson } from '@shared/curriculum';
 import type { TypingMetrics } from '@shared/types';
+import AchievementCelebration from './AchievementCelebration';
 
 interface LessonViewProps {
     lesson: Lesson;
@@ -25,6 +26,8 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
     const [isAdaptiveResult, setIsAdaptiveResult] = useState(false);
     const [suddenDeathEnabled, setSuddenDeathEnabled] = useState(true);
     const [dictationEnabled, setDictationEnabled] = useState(false);
+    const [showCelebration, setShowCelebration] = useState(false);
+    const [newAchievement, setNewAchievement] = useState<{ name: string; icon: string; description: string } | null>(null);
 
     const activeWarmupSteps = lesson.warmupSteps || [
         { text: lesson.content.split(' ').slice(0, 3).join(' '), insight: 'Let\'s start with a quick calibration to find your center.' }
@@ -102,11 +105,81 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
         setMode('results');
     };
 
-    const handleFinish = () => {
+    const handleFinish = async () => {
         if (testMetrics && mode === 'results') {
+            // Check for new achievements
+            try {
+                const achievementRes = await fetch(`/api/achievements/${_userId}/check`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const achievementData = await achievementRes.json();
+
+                // Show celebration for new achievements
+                if (achievementData.newAchievements && achievementData.newAchievements.length > 0) {
+                    const ACHIEVEMENT_TYPES: Record<string, { name: string; description: string; icon: string }> = {
+                        'first_drill': { name: 'First Steps', description: 'Complete your first drill', icon: '🎯' },
+                        'week_warrior': { name: 'Week Warrior', description: 'Practice for 7 consecutive days', icon: '🔥' },
+                        '100_wpm_club': { name: '100 WPM Club', description: 'Achieve 100+ WPM', icon: '⚡' },
+                        'precision_pro': { name: 'Precision Pro', description: '98%+ accuracy', icon: '🎯' },
+                        'marathon_runner': { name: 'Marathon Runner', description: 'Complete 50 drills', icon: '🏃' },
+                        'early_bird': { name: 'Early Bird', description: 'Practice before 9 AM', icon: '🌅' },
+                        'night_owl': { name: 'Night Owl', description: 'Practice after 10 PM', icon: '🦉' },
+                        'perfect_week': { name: 'Perfect Week', description: '7 days, 95%+ accuracy', icon: '💎' },
+                        'speed_demon': { name: 'Speed Demon', description: '120+ WPM achieved', icon: '🚀' },
+                        'completionist': { name: 'Completionist', description: 'Earn all badges', icon: '👑' },
+                    };
+
+                    const firstNew = achievementData.newAchievements[0];
+                    const badgeInfo = ACHIEVEMENT_TYPES[firstNew.badgeType];
+                    if (badgeInfo) {
+                        setNewAchievement(badgeInfo);
+                        setShowCelebration(true);
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to check achievements:', error);
+            }
+
+            // Record daily streak
+            try {
+                await fetch(`/api/streaks/${_userId}/record`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+            } catch (error) {
+                console.error('Failed to record streak:', error);
+            }
+
             onComplete(testMetrics, passed);
         }
     };
+
+    // Listen for Enter key on warmup insight screen
+    useEffect(() => {
+        if (mode === 'warmup' && showWarmupStepInsight) {
+            const handleKeyPress = (e: KeyboardEvent) => {
+                if (e.key === 'Enter') {
+                    nextWarmupStep();
+                }
+            };
+            window.addEventListener('keydown', handleKeyPress);
+            return () => window.removeEventListener('keydown', handleKeyPress);
+        }
+    }, [mode, showWarmupStepInsight, warmupStepIndex]);
+
+    // Listen for Enter key on results screen (when passed)
+    useEffect(() => {
+        if (mode === 'results' && passed && testMetrics) {
+            const handleKeyPress = (e: KeyboardEvent) => {
+                if (e.key === 'Enter') {
+                    handleFinish();
+                }
+            };
+            window.addEventListener('keydown', handleKeyPress);
+            return () => window.removeEventListener('keydown', handleKeyPress);
+        }
+    }, [mode, passed, testMetrics]);
 
     return (
         <div className="max-w-5xl mx-auto w-full">
@@ -269,6 +342,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                                 className="px-12 py-5 bg-primary-blue text-white rounded-2xl font-black text-lg shadow-xl shadow-blue-200 hover:bg-blue-800 transition-all active:scale-95 flex items-center justify-center gap-3 mx-auto"
                             >
                                 {warmupStepIndex < activeWarmupSteps.length - 1 ? 'Next Calibration Step →' : 'Complete Preparation'}
+                                <span className="text-xs opacity-60 ml-2">(Press Enter)</span>
                             </button>
                         </div>
                     )}
@@ -408,7 +482,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                                     onClick={handleFinish}
                                     className="px-12 py-5 bg-primary-blue text-white rounded-2xl font-black text-lg shadow-xl shadow-blue-200 hover:bg-blue-800 hover:-translate-y-1 transition-all active:translate-y-0 active:scale-95"
                                 >
-                                    Commit Progress & Advance
+                                    Commit Progress & Advance <span className="text-xs opacity-60 ml-2">(Press Enter)</span>
                                 </button>
                                 {adaptiveText && (
                                     <button
@@ -467,6 +541,13 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                     </div>
                 </div>
             )}
+
+            {/* Achievement Celebration */}
+            <AchievementCelebration
+                show={showCelebration}
+                achievement={newAchievement}
+                onClose={() => setShowCelebration(false)}
+            />
         </div>
     );
 };

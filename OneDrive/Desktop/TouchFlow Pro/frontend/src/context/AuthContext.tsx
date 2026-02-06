@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 interface User {
     id: string;
     email: string;
+    name?: string | null;
     assignedLevel: string;
     currentLessonId: string | null;
 }
@@ -31,7 +32,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 }
 
                 try {
-                    const response = await fetch('http://localhost:4000/api/auth/me', {
+                    const response = await fetch('/api/auth/me', {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }

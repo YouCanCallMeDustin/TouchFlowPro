@@ -1,0 +1,116 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id              String   @id @default(uuid())
+  email           String   @unique
+  passwordHash    String?
+  assignedLevel   String
+  unlockedLevels  String   // Comma separated list of levels
+  currentLessonId String?
+  totalPracticeTime Int    @default(0) // in seconds
+  createdAt       DateTime @default(now())
+  
+  // Profile fields
+  name            String?
+  city            String?
+  state           String?
+  age             Int?
+  photoUrl        String?
+  
+  // Relations
+  drillResults    DrillResult[]
+  spacedItems     SpacedItem[]
+  achievements    Achievement[]
+  dailyStreak     DailyStreak?
+  customDrills    CustomDrill[]
+  goals           UserGoal[]
+  preferences     UserPreferences?
+}
+
+model DrillResult {
+  id         String   @id @default(uuid())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  drillId    String
+  grossWPM   Float
+  netWPM     Float
+  accuracy   Float
+  durationMs Int
+  timestamp  DateTime @default(now())
+}
+
+model SpacedItem {
+  id         String   @id @default(uuid())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  drillId    String
+  interval   Int
+  repetition Int
+  efactor    Float
+  nextReview DateTime
+}
+
+model Achievement {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  badgeType    String   // "first_drill", "week_streak", "100wpm_club", etc.
+  earnedAt     DateTime @default(now())
+  metadata     String?  // JSON string for additional data
+  
+  @@unique([userId, badgeType])
+}
+
+model DailyStreak {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id])
+  currentStreak   Int      @default(0)
+  longestStreak   Int      @default(0)
+  lastPracticeDate DateTime?
+  streakProtections Int    @default(0)
+}
+
+model CustomDrill {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  title       String
+  content     String
+  difficulty  String
+  createdAt   DateTime @default(now())
+  timesUsed   Int      @default(0)
+}
+
+model UserGoal {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  goalType     String   // "wpm_target", "accuracy_target", "daily_practice"
+  targetValue  Float
+  currentValue Float    @default(0)
+  deadline     DateTime?
+  completed    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+}
+
+model UserPreferences {
+  id                String  @id @default(uuid())
+  userId            String  @unique
+  user              User    @relation(fields: [userId], references: [id])
+  theme             String  @default("default")
+  soundEnabled      Boolean @default(true)
+  keyboardLayout    String  @default("qwerty")
+  practiceReminders Boolean @default(false)
+  reminderTime      String? // "09:00"
+}
