@@ -17,6 +17,15 @@ import goalsRoutes from './routes/goals';
 import preferencesRoutes from './routes/preferences';
 import profileRoutes from './routes/profile';
 import bibleRoutes from './routes/bible';
+// Phase 0 routes
+import keystrokeTrackingRoutes from './routes/keystrokeTracking';
+import userProgressRoutes from './routes/userProgress';
+import dailyChallengeRoutes from './routes/dailyChallenge';
+// Phase 3 routes
+import recommendationsRoutes from './routes/recommendations';
+// Phase 4 routes
+import sessionsRoutes from './routes/sessions';
+import leaderboardRoutes from './routes/leaderboard';
 
 const app = express();
 
@@ -40,9 +49,18 @@ app.use('/api/history', historyRoutes);
 app.use('/api/custom-drills', customDrillsRoutes);
 app.use('/api/goals', goalsRoutes);
 app.use('/api/profile', profileRoutes);
-app.use('/api/bible', bibleRoutes); // Register bible route
+app.use('/api/bible', bibleRoutes);
 app.use('/api/preferences', preferencesRoutes);
-app.use('/api/upload', uploadRoutes); // Register upload route
+app.use('/api/upload', uploadRoutes);
+// Phase 0 routes
+app.use('/api/keystroke-tracking', keystrokeTrackingRoutes);
+app.use('/api/user-progress', userProgressRoutes);
+app.use('/api/daily-challenge', dailyChallengeRoutes);
+// Phase 3 routes
+app.use('/api/recommendations', recommendationsRoutes);
+// Phase 4 routes
+app.use('/api/sessions', sessionsRoutes);
+app.use('/api/leaderboard', leaderboardRoutes);
 
 
 // Serve uploaded files statically

@@ -5,19 +5,19 @@ import type { TypingMetrics } from '@shared/types';
 
 interface BibleLessonViewProps {
     verses: BibleVerse[];
-    userId: string;
-    onComplete: (metrics: TypingMetrics[]) => void;
+    onComplete: (metrics: TypingMetrics[], keystrokesByVerse?: any[][]) => void;
     onCancel: () => void;
 }
 
 type Mode = 'practice' | 'test' | 'complete';
 
-const BibleLessonView: React.FC<BibleLessonViewProps> = ({ verses, userId, onComplete, onCancel }) => {
+const BibleLessonView: React.FC<BibleLessonViewProps> = ({ verses, onComplete, onCancel }) => {
     const [mode, setMode] = useState<Mode>('practice');
     const [currentVerseIndex, setCurrentVerseIndex] = useState(0);
     const [input, setInput] = useState('');
+    const [keystrokes, setKeystrokes] = useState<any[]>([]);
     const [startTime, setStartTime] = useState<number | null>(null);
-    const [completedVerses, setCompletedVerses] = useState<TypingMetrics[]>([]);
+    const [completedVerses, setCompletedVerses] = useState<{ metrics: TypingMetrics, keystrokes: any[] }[]>([]);
     const [showCompletion, setShowCompletion] = useState(false);
     const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -72,6 +72,16 @@ const BibleLessonView: React.FC<BibleLessonViewProps> = ({ verses, userId, onCom
 
     const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const value = e.target.value;
+        const lastChar = value[value.length - 1];
+
+        // Basic keystroke tracking
+        const event = {
+            key: lastChar || 'Backspace',
+            timestamp: Date.now(),
+            eventType: 'keydown'
+        };
+        setKeystrokes(prev => [...prev, event]);
+
         setInput(value);
 
         // Check if completed
@@ -86,7 +96,7 @@ const BibleLessonView: React.FC<BibleLessonViewProps> = ({ verses, userId, onCom
         const timeMs = Date.now() - startTime;
         const metrics = calculateMetrics(input, currentVerse.text, timeMs);
 
-        const newCompletedVerses = [...completedVerses, metrics];
+        const newCompletedVerses = [...completedVerses, { metrics, keystrokes }];
         setCompletedVerses(newCompletedVerses);
         setShowCompletion(true);
     };
@@ -116,7 +126,9 @@ const BibleLessonView: React.FC<BibleLessonViewProps> = ({ verses, userId, onCom
     };
 
     const handleFinish = () => {
-        onComplete(completedVerses);
+        // Map back to just metrics for the onComplete prop, 
+        // but we'll need to update the prop signature if we want keystrokes in the parent.
+        onComplete(completedVerses.map(v => v.metrics), completedVerses.map(v => v.keystrokes));
     };
 
     // Render character-by-character comparison
@@ -148,10 +160,10 @@ const BibleLessonView: React.FC<BibleLessonViewProps> = ({ verses, userId, onCom
 
     if (mode === 'complete') {
         const avgAccuracy = Math.round(
-            completedVerses.reduce((sum, m) => sum + m.accuracy, 0) / completedVerses.length
+            completedVerses.reduce((sum, v) => sum + v.metrics.accuracy, 0) / completedVerses.length
         );
         const avgWPM = Math.round(
-            completedVerses.reduce((sum, m) => sum + m.netWPM, 0) / completedVerses.length
+            completedVerses.reduce((sum, v) => sum + v.metrics.netWPM, 0) / completedVerses.length
         );
 
         return (
@@ -194,7 +206,8 @@ const BibleLessonView: React.FC<BibleLessonViewProps> = ({ verses, userId, onCom
     }
 
     if (showCompletion) {
-        const lastMetrics = completedVerses[completedVerses.length - 1];
+        const lastEntry = completedVerses[completedVerses.length - 1];
+        const lastMetrics = lastEntry.metrics;
 
         return (
             <div className="max-w-4xl mx-auto p-8">

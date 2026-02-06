@@ -1,4 +1,4 @@
-import type { KeystrokeEvent, TypingMetrics, EnhancedKeystrokeEvent, LiveMetrics, PerKeyStats, SequenceStat } from './types';
+import type { KeystrokeEvent, TypingMetrics, EnhancedKeystrokeEvent, LiveMetrics, PerKeyStats } from './types';
 import { getCorrectFinger } from './keyboardLayout';
 
 export class TypingEngine {
@@ -272,45 +272,5 @@ export class TypingEngine {
         }
 
         return Math.round(peakWPM * 10) / 10;
-    }
-    /**
-     * Calculate sequence statistics (bigrams and trigrams)
-     */
-    static calculateSequenceStats(keystrokes: KeystrokeEvent[]): SequenceStat[] {
-        const stats: SequenceStat[] = [];
-        const keydowns = keystrokes.filter(k => k.eventType === 'keydown' && k.key.length === 1);
-
-        if (keydowns.length < 2) return stats;
-
-        // Bigrams
-        for (let i = 1; i < keydowns.length; i++) {
-            const seq = (keydowns[i - 1].key + keydowns[i].key).toLowerCase();
-            const delay = keydowns[i].timestamp - keydowns[i - 1].timestamp;
-
-            // Only count if within reasonable threshold (e.g. 1.5s) to avoid idle time
-            if (delay < 1500) {
-                stats.push({
-                    sequence: seq,
-                    type: 'bigram',
-                    speed: delay
-                });
-            }
-        }
-
-        // Trigrams
-        for (let i = 2; i < keydowns.length; i++) {
-            const seq = (keydowns[i - 2].key + keydowns[i - 1].key + keydowns[i].key).toLowerCase();
-            const delay = keydowns[i].timestamp - keydowns[i - 2].timestamp;
-
-            if (delay < 3000) {
-                stats.push({
-                    sequence: seq,
-                    type: 'trigram',
-                    speed: delay
-                });
-            }
-        }
-
-        return stats;
     }
 }

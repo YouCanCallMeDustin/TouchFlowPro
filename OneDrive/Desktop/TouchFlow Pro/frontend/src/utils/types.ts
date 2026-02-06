@@ -100,9 +100,3 @@ export interface Certificate {
     testDate: Date;
     certificateUrl?: string;
 }
-
-export interface SequenceStat {
-    sequence: string;
-    type: 'bigram' | 'trigram';
-    speed: number; // ms delay
-}

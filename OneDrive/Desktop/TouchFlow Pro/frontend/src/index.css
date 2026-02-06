@@ -1,12 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary-blue: #1e3a8a;
-  --color-secondary-teal: #14b8a6;
-  --color-accent-orange: #f49f0a;
-
-  --color-text-main: #0f172a;
-  --color-text-muted: #475569;
+  --color-primary-blue: var(--primary);
+  --color-secondary-teal: var(--secondary);
+  --color-accent-orange: var(--accent);
+  --color-bg-main: var(--bg-main);
+  --color-bg-card: var(--bg-card);
+  --color-text-main: var(--text-main);
+  --color-text-muted: var(--text-muted);
 
   --font-heading: "Outfit", sans-serif;
   --font-body: "Inter", sans-serif;
@@ -16,13 +17,34 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800;900&family=JetBrains+Mono:wght@400;700&display=swap');
 
 :root {
-  background-color: #f8fafc;
-  color: #0f172a;
+  --bg-main: #f8fafc;
+  --bg-card: rgba(255, 255, 255, 0.6);
+  --text-main: #020617;
+  --text-muted: #64748b;
+  --primary: #2563eb;
+  --secondary: #0d9488;
+  --accent: #f59e0b;
+  --border-subtle: rgba(0, 0, 0, 0.05);
 
   /* Glassmorphism */
   --glass-bg: rgba(255, 255, 255, 0.4);
   --glass-border: rgba(255, 255, 255, 0.5);
   --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+}
+
+.dark {
+  --bg-main: #020617;
+  --bg-card: rgba(15, 23, 42, 0.6);
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --primary: #3b82f6;
+  --secondary: #14b8a6;
+  --accent: #fbbf24;
+  --border-subtle: rgba(255, 255, 255, 0.1);
+
+  --glass-bg: rgba(15, 23, 42, 0.4);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
 }
 
 * {
@@ -321,5 +343,20 @@ h2 {
   color: var(--primary-blue);
   animation: pulse 1s infinite alternate;
 }
-@keyframes audio-bar { 0%, 100% { transform: scaleY(0.5); } 50% { transform: scaleY(1); } }
-.animate-audio-bar { animation: audio-bar 1s infinite ease-in-out; transform-origin: bottom; }
+
+@keyframes audio-bar {
+
+  0%,
+  100% {
+    transform: scaleY(0.5);
+  }
+
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.animate-audio-bar {
+  animation: audio-bar 1s infinite ease-in-out;
+  transform-origin: bottom;
+}

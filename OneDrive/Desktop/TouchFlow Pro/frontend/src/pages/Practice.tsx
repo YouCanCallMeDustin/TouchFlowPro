@@ -7,9 +7,10 @@ import type { TypingMetrics } from '@shared/types';
 
 interface PracticeProps {
     userId: string;
+    onSessionComplete?: (metrics: TypingMetrics, type: string, drillId: string, keystrokes?: any[], liveMetrics?: any[]) => Promise<any>;
 }
 
-const Practice: React.FC<PracticeProps> = ({ userId }) => {
+const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
     const [selectedDifficulty, setSelectedDifficulty] = useState<string>('All');
     const [activeDrill, setActiveDrill] = useState<Lesson | null>(null);
@@ -37,15 +38,19 @@ const Practice: React.FC<PracticeProps> = ({ userId }) => {
         setActiveDrill(practiceLesson);
     };
 
-    const handleDrillComplete = async (metrics: TypingMetrics) => {
+    const handleDrillComplete = async (metrics: TypingMetrics, _passed: boolean, keystrokes?: any[]) => {
         try {
             // Save practice result
             if (activeDrill) {
-                await fetch(`/api/drills/${activeDrill.id}/complete`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ metrics, userId })
-                });
+                if (onSessionComplete) {
+                    await onSessionComplete(metrics, 'practice', activeDrill.id, keystrokes);
+                } else {
+                    await fetch(`/api/drills/${activeDrill.id}/complete`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ metrics, userId })
+                    });
+                }
             }
         } catch (error) {
             console.error('Failed to save practice result:', error);

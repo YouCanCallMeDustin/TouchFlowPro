@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { TypingEngine } from '@shared/typingEngine';
-import type { KeystrokeEvent, TypingMetrics } from '@shared/types';
+import type { KeystrokeEvent, TypingMetrics, LiveMetrics } from '@shared/types';
 import DictationEngine, { DictationUI } from './DictationMode';
+import { LiveMetricsBar } from './LiveMetricsBar';
+import { VirtualKeyboard } from './VirtualKeyboard';
 
 interface Props {
     text: string;
@@ -9,9 +11,19 @@ interface Props {
     suddenDeath?: boolean;
     onSuddenDeathFailure?: () => void;
     dictationMode?: boolean;
+    showLiveMetrics?: boolean; // Show enhanced live metrics bar
+    showVirtualKeyboard?: boolean; // Show virtual keyboard guide
 }
 
-const TypingTest: React.FC<Props> = ({ text, onComplete, suddenDeath, onSuddenDeathFailure, dictationMode }) => {
+const TypingTest: React.FC<Props> = ({
+    text,
+    onComplete,
+    suddenDeath,
+    onSuddenDeathFailure,
+    dictationMode,
+    showLiveMetrics = false,
+    showVirtualKeyboard = false
+}) => {
     const [userInput, setUserInput] = useState('');
     const [keystrokes, setKeystrokes] = useState<KeystrokeEvent[]>([]);
     const [metrics, setMetrics] = useState<TypingMetrics>({
@@ -27,6 +39,13 @@ const TypingTest: React.FC<Props> = ({ text, onComplete, suddenDeath, onSuddenDe
     const [isFailed, setIsFailed] = useState(false);
     const [liveWPM, setLiveWPM] = useState(0);
     const [dictationSpeed, setDictationSpeed] = useState(1);
+    const [liveMetrics, setLiveMetrics] = useState<LiveMetrics>({
+        currentWPM: 0,
+        currentAccuracy: 100,
+        keystrokesPerMinute: 0,
+        averageKeyDelay: 0,
+        timeElapsed: 0
+    });
     const startTimeRef = useRef<number | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -63,6 +82,18 @@ const TypingTest: React.FC<Props> = ({ text, onComplete, suddenDeath, onSuddenDe
             return () => clearInterval(interval);
         }
     }, [isStarted, userInput, isFailed]);
+
+    // Calculate enhanced live metrics if enabled
+    useEffect(() => {
+        if (showLiveMetrics && isStarted && keystrokes.length > 0 && !isFailed) {
+            const interval = setInterval(() => {
+                const metrics = TypingEngine.calculateLiveMetrics(keystrokes, text);
+                setLiveMetrics(metrics);
+            }, 500); // Update every 500ms
+
+            return () => clearInterval(interval);
+        }
+    }, [showLiveMetrics, isStarted, keystrokes, text, isFailed]);
 
     useEffect(() => {
         if (userInput.length === text.length && text.length > 0 && !isFailed) {
@@ -159,27 +190,42 @@ const TypingTest: React.FC<Props> = ({ text, onComplete, suddenDeath, onSuddenDe
                 </div>
             )}
 
-            {/* Advanced Metrics Dashboard */}
-            <div className="grid grid-cols-3 gap-4 sm:gap-8 mb-10 p-6 bg-slate-900/5 rounded-3xl border border-slate-200/50">
-                <div className="text-center group">
-                    <div className="text-4xl sm:text-5xl font-heading font-black text-primary-blue transition-transform group-hover:scale-110 duration-300">
-                        {liveWPM}
-                    </div>
-                    <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">Live Velocity</div>
+            {/* Enhanced Live Metrics (if enabled) */}
+            {showLiveMetrics && isStarted && (
+                <div className="mb-6">
+                    <LiveMetricsBar
+                        currentWPM={liveMetrics.currentWPM}
+                        currentAccuracy={liveMetrics.currentAccuracy}
+                        timeElapsed={liveMetrics.timeElapsed}
+                        keystrokesPerMinute={liveMetrics.keystrokesPerMinute}
+                        averageKeyDelay={liveMetrics.averageKeyDelay}
+                    />
                 </div>
-                <div className="text-center group text-slate-900 border-x border-slate-200">
-                    <div className={`text-4xl sm:text-5xl font-heading font-black transition-transform group-hover:scale-110 duration-300 ${metrics.accuracy >= 95 ? 'text-secondary-teal' : 'text-accent-orange'}`}>
-                        {metrics.accuracy}%
+            )}
+
+            {/* Basic Metrics Dashboard (when enhanced metrics not shown) */}
+            {!showLiveMetrics && (
+                <div className="grid grid-cols-3 gap-4 sm:gap-8 mb-10 p-6 bg-slate-900/5 rounded-3xl border border-slate-200/50">
+                    <div className="text-center group">
+                        <div className="text-4xl sm:text-5xl font-heading font-black text-primary-blue transition-transform group-hover:scale-110 duration-300">
+                            {liveWPM}
+                        </div>
+                        <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">Live Velocity</div>
                     </div>
-                    <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">Accuracy</div>
-                </div>
-                <div className="text-center group text-slate-900">
-                    <div className="text-4xl sm:text-5xl font-heading font-black opacity-90 transition-transform group-hover:scale-110 duration-300 text-primary-blue">
-                        {Math.round((userInput.length / text.length) * 100)}%
+                    <div className="text-center group text-slate-900 border-x border-slate-200">
+                        <div className={`text-4xl sm:text-5xl font-heading font-black transition-transform group-hover:scale-110 duration-300 ${metrics.accuracy >= 95 ? 'text-secondary-teal' : 'text-accent-orange'}`}>
+                            {metrics.accuracy}%
+                        </div>
+                        <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">Accuracy</div>
                     </div>
-                    <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">Progression</div>
+                    <div className="text-center group text-slate-900">
+                        <div className="text-4xl sm:text-5xl font-heading font-black opacity-90 transition-transform group-hover:scale-110 duration-300 text-primary-blue">
+                            {Math.round((userInput.length / text.length) * 100)}%
+                        </div>
+                        <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">Progression</div>
+                    </div>
                 </div>
-            </div>
+            )}
 
             {/* Performance Bar */}
             <div className="w-full h-2 bg-slate-100 rounded-full mb-12 overflow-hidden shadow-inner">
@@ -245,6 +291,17 @@ const TypingTest: React.FC<Props> = ({ text, onComplete, suddenDeath, onSuddenDe
             {!isStarted && (
                 <div className="mt-8 flex items-center justify-center gap-2 text-slate-400 font-bold text-xs uppercase tracking-widest animate-bounce-slow">
                     <span>💡 Precision over Velocity</span>
+                </div>
+            )}
+
+            {/* Virtual Keyboard (if enabled) */}
+            {showVirtualKeyboard && (
+                <div className="mt-8">
+                    <VirtualKeyboard
+                        nextKey={text[userInput.length]}
+                        showFingerGuide={true}
+                        compact={true}
+                    />
                 </div>
             )}
         </div>

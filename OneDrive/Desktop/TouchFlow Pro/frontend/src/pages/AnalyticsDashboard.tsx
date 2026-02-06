@@ -5,6 +5,10 @@ import { motion } from 'framer-motion';
 import PageTransition from '../components/PageTransition';
 import AnimatedStatCard from '../components/AnimatedStatCard';
 import LoadingSkeleton from '../components/LoadingSkeleton';
+import { KeyHeatmap } from '../components/KeyHeatmap';
+import { ErrorAnalysis } from '../components/ErrorAnalysis';
+import { FingerHeatmap } from '../components/FingerHeatmap';
+import { SequenceAnalysis } from '../components/SequenceAnalysis';
 
 interface AnalyticsProps {
     userId: string;
@@ -71,10 +75,12 @@ const AnalyticsDashboard: React.FC<AnalyticsProps> = ({ userId }) => {
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
-                    className="flex items-center justify-between"
+                    className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
                 >
-                    <h1 className="text-4xl font-heading font-black text-text-main">📊 Performance Analytics</h1>
-                    <div className="flex gap-2">
+                    <h1 className="text-3xl sm:text-4xl font-heading font-black text-text-main">
+                        📊 Performance Analytics
+                    </h1>
+                    <div className="flex flex-wrap gap-2">
                         <button
                             onClick={() => setDays(7)}
                             className={`px-4 py-2 rounded-lg font-bold text-sm transition-all hover:scale-105 ${days === 7 ? 'bg-primary-blue text-white shadow-lg' : 'bg-white text-text-muted border border-slate-200 hover:border-primary-blue'}`}
@@ -299,6 +305,42 @@ const AnalyticsDashboard: React.FC<AnalyticsProps> = ({ userId }) => {
                             No data available for selected period
                         </div>
                     )}
+                </motion.div>
+
+                {/* Key Heatmap */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 1.1 }}
+                >
+                    <KeyHeatmap userId={userId} />
+                </motion.div>
+
+                {/* Advanced Diagnostics: Finger Heatmap and Sequence Analysis */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5, delay: 1.2 }}
+                    >
+                        <FingerHeatmap userId={userId} />
+                    </motion.div>
+                    <motion.div
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5, delay: 1.3 }}
+                    >
+                        <SequenceAnalysis userId={userId} />
+                    </motion.div>
+                </div>
+
+                {/* Error Analysis */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 1.4 }}
+                >
+                    <ErrorAnalysis userId={userId} />
                 </motion.div>
             </div>
         </PageTransition>

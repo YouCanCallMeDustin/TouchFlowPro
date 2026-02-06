@@ -4,6 +4,8 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { format } from 'date-fns';
 import PageTransition from '../components/PageTransition';
 import AnimatedStatCard from '../components/AnimatedStatCard';
+import { LevelProgressBar } from '../components/LevelProgressBar';
+import { RecommendationsWidget } from '../components/RecommendationsWidget';
 
 interface DashboardProps {
     userId: string;
@@ -143,6 +145,13 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
     const nextMilestone = streak ? Math.ceil((streak.currentStreak + 1) / 10) * 10 : 10;
     const streakProgress = streak ? (streak.currentStreak / nextMilestone) * 100 : 0;
 
+    // Handler for starting practice from widget
+    const handleStartPractice = () => {
+        // Navigate to adaptive practice
+        // The AdaptivePractice component will fetch the high-priority drill automatically
+        onNavigate('adaptive_practice');
+    };
+
     if (loading) {
         return (
             <PageTransition>
@@ -185,6 +194,24 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                     ) : (
                         <p className="text-lg text-text-muted">Ready to start your typing mastery journey?</p>
                     )}
+                </motion.div>
+
+                {/* Level Progress */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
+                >
+                    <LevelProgressBar userId={userId} />
+                </motion.div>
+
+                {/* Recommendations */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.35 }}
+                >
+                    <RecommendationsWidget userId={userId} onStartPractice={handleStartPractice} />
                 </motion.div>
 
                 {/* Today's Stats */}
@@ -310,7 +337,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                     className="bg-white rounded-3xl p-6 shadow-lg border border-slate-200"
                 >
                     <h2 className="text-2xl font-bold text-text-main mb-4">⚡ Quick Actions</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                         <button
                             onClick={() => onNavigate('curriculum')}
                             className="bg-white border-2 border-black text-black px-6 py-4 rounded-xl font-bold shadow-md hover:shadow-xl hover:scale-105 hover:bg-gray-50 transition-all flex items-center justify-center gap-2"

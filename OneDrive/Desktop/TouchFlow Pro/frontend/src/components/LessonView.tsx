@@ -3,12 +3,13 @@ import TypingTest from './TypingTest';
 import VisualKeyboard from './VisualKeyboard';
 import type { Lesson } from '@shared/curriculum';
 import type { TypingMetrics } from '@shared/types';
+import type { KeystrokeEvent } from '@shared/types';
 import AchievementCelebration from './AchievementCelebration';
 
 interface LessonViewProps {
     lesson: Lesson;
     userId: string;
-    onComplete: (metrics: TypingMetrics, passed: boolean) => void;
+    onComplete: (metrics: TypingMetrics, passed: boolean, keystrokes?: KeystrokeEvent[]) => void;
     onCancel: () => void;
 }
 
@@ -20,12 +21,14 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
     const [passed, setPassed] = useState(false);
     const [practiceText, setPracticeText] = useState<string>('');
     const [adaptiveText, setAdaptiveText] = useState<string>('');
+    const [keystrokes, setKeystrokes] = useState<KeystrokeEvent[]>([]);
     const [warmupStepIndex, setWarmupStepIndex] = useState(0);
     const [showWarmupStepInsight, setShowWarmupStepInsight] = useState(false);
     const [warmupStepMetrics, setWarmupStepMetrics] = useState<TypingMetrics | null>(null);
     const [isAdaptiveResult, setIsAdaptiveResult] = useState(false);
     const [suddenDeathEnabled, setSuddenDeathEnabled] = useState(true);
     const [dictationEnabled, setDictationEnabled] = useState(false);
+    const [enhancedModeEnabled, setEnhancedModeEnabled] = useState(true); // Enable enhanced mode by default
     const [showCelebration, setShowCelebration] = useState(false);
     const [newAchievement, setNewAchievement] = useState<{ name: string; icon: string; description: string } | null>(null);
 
@@ -71,15 +74,17 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
         }
     };
 
-    const handlePracticeComplete = (metrics: TypingMetrics) => {
+    const handlePracticeComplete = (metrics: TypingMetrics, ks: KeystrokeEvent[]) => {
         setTestMetrics(metrics);
+        setKeystrokes(ks);
         setIsAdaptiveResult(false);
         setMode('results');
     };
 
-    const handleTestComplete = (metrics: TypingMetrics) => {
+    const handleTestComplete = (metrics: TypingMetrics, ks: KeystrokeEvent[]) => {
         const didPass = metrics.accuracy >= lesson.masteryThreshold;
         setTestMetrics(metrics);
+        setKeystrokes(ks);
         setPassed(didPass);
         setIsAdaptiveResult(false);
 
@@ -151,7 +156,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                 console.error('Failed to record streak:', error);
             }
 
-            onComplete(testMetrics, passed);
+            onComplete(testMetrics, passed, keystrokes);
         }
     };
 
@@ -311,7 +316,12 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
 
                     {!showWarmupStepInsight ? (
                         <>
-                            <TypingTest text={currentWarmup.text} onComplete={handleWarmupComplete} />
+                            <TypingTest
+                                text={currentWarmup.text}
+                                onComplete={handleWarmupComplete}
+                                showLiveMetrics={enhancedModeEnabled}
+                                showVirtualKeyboard={enhancedModeEnabled}
+                            />
                             <div className="mt-8">
                                 <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 text-center">Reference Keyboard</div>
                                 <VisualKeyboard highlightKeys={lesson.focusKeys} />
@@ -380,6 +390,19 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                                     Casual
                                 </button>
                             </div>
+
+                            {/* Enhanced Mode Toggle */}
+                            <div className="flex items-center gap-2">
+                                <button
+                                    onClick={() => setEnhancedModeEnabled(!enhancedModeEnabled)}
+                                    className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${enhancedModeEnabled
+                                        ? 'bg-purple-500 text-white shadow-lg'
+                                        : 'bg-white/10 text-slate-400 hover:text-white border border-white/10'
+                                        }`}
+                                >
+                                    {enhancedModeEnabled ? '✨ Enhanced' : 'Basic'}
+                                </button>
+                            </div>
                         </div>
                         <button onClick={() => setMode('intro')} className="text-[10px] font-black uppercase tracking-widest bg-white/10 px-4 py-2 rounded-lg hover:bg-white/20 transition-all border border-white/10">Abort Drill</button>
                     </div>
@@ -388,6 +411,8 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                         onComplete={handlePracticeComplete}
                         suddenDeath={suddenDeathEnabled}
                         dictationMode={dictationEnabled}
+                        showLiveMetrics={enhancedModeEnabled}
+                        showVirtualKeyboard={enhancedModeEnabled}
                     />
                 </div>
             )}
@@ -408,6 +433,8 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                         text={lesson.content}
                         onComplete={handleTestComplete}
                         dictationMode={dictationEnabled}
+                        showLiveMetrics={enhancedModeEnabled}
+                        showVirtualKeyboard={enhancedModeEnabled}
                     />
                 </div>
             )}

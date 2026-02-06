@@ -35,6 +35,7 @@ model User {
   customDrills    CustomDrill[]
   goals           UserGoal[]
   preferences     UserPreferences?
+  progress        UserProgress?
 }
 
 model DrillResult {
@@ -113,4 +114,98 @@ model UserPreferences {
   keyboardLayout    String  @default("qwerty")
   practiceReminders Boolean @default(false)
   reminderTime      String? // "09:00"
+}
+
+// ===== PHASE 0: Enhanced Tracking Tables =====
+
+model KeyStats {
+  id            String   @id @default(uuid())
+  userId        String
+  key           String   // The character (e.g., "a", "B", "1")
+  attempts      Int      @default(0)
+  correct       Int      @default(0)
+  avgSpeed      Float    @default(0) // Average ms per keystroke
+  lastPracticed DateTime @updatedAt
+  
+  @@unique([userId, key])
+  @@index([userId])
+}
+
+model SequenceStats {
+  id            String   @id @default(uuid())
+  userId        String
+  sequence      String   // The bigram or trigram (e.g., "th", "ion")
+  type          String   // "bigram" or "trigram"
+  attempts      Int      @default(0)
+  avgSpeed      Float    @default(0) // Average ms between keys in sequence
+  lastPracticed DateTime @updatedAt
+  
+  @@unique([userId, sequence])
+  @@index([userId, type])
+}
+
+model SessionDetails {
+  id          String   @id @default(uuid())
+  sessionId   String
+  keystrokes  String   // JSON array of EnhancedKeystrokeEvent
+  liveMetrics String   // JSON LiveMetrics snapshots
+  createdAt   DateTime @default(now())
+  
+  @@index([sessionId])
+}
+
+model UserProgress {
+  id               String    @id @default(uuid())
+  userId           String    @unique
+  user             User      @relation(fields: [userId], references: [id])
+  level            Int       @default(1)
+  xp               Int       @default(0)
+  totalPracticeTime Int      @default(0) // seconds
+  dailyStreak      Int       @default(0)
+  lastPracticeDate DateTime?
+  
+  // Adaptive learning fields
+  averageWPM       Float     @default(0)
+  averageAccuracy  Float     @default(100)
+  totalDrills      Int       @default(0)
+  
+  @@index([userId])
+}
+
+model Recommendation {
+  id          String   @id @default(uuid())
+  userId      String
+  type        String   // 'drill' | 'lesson' | 'custom'
+  title       String
+  reason      String
+  priority    Int
+  content     String?
+  dismissed   Boolean  @default(false)
+  completed   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  
+  @@index([userId, dismissed, completed])
+}
+
+model DailyChallenge {
+  id             String   @id @default(uuid())
+  date           DateTime @unique
+  type           String   // "speed", "accuracy", "endurance"
+  content        String
+  targetWPM      Int?
+  targetAccuracy Int?
+  targetTime     Int?     // seconds
+  xpReward       Int      @default(100)
+}
+
+model Certificate {
+  id             String   @id @default(uuid())
+  userId         String
+  type           String   // "60wpm", "80wpm", "100wpm"
+  wpm            Int
+  accuracy       Int
+  testDate       DateTime @default(now())
+  certificateUrl String?
+  
+  @@index([userId])
 }

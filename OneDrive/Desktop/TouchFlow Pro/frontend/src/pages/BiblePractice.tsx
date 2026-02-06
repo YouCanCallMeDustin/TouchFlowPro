@@ -6,6 +6,7 @@ import type { BibleVerse } from '@shared/bibleVerses';
 
 interface BiblePracticeProps {
     userId: string;
+    onSessionComplete?: (metrics: TypingMetrics, type: string, drillId: string, keystrokes?: any[], liveMetrics?: any[]) => Promise<any>;
 }
 
 interface BibleBook {
@@ -17,7 +18,7 @@ interface BibleBook {
 
 type ViewMode = 'books' | 'chapters' | 'practice';
 
-const BiblePractice: React.FC<BiblePracticeProps> = ({ userId }) => {
+const BiblePractice: React.FC<BiblePracticeProps> = ({ userId, onSessionComplete }) => {
     const [viewMode, setViewMode] = useState<ViewMode>('books');
     const [books, setBooks] = useState<BibleBook[]>([]);
     const [selectedBook, setSelectedBook] = useState<BibleBook | null>(null);
@@ -82,15 +83,22 @@ const BiblePractice: React.FC<BiblePracticeProps> = ({ userId }) => {
         }
     };
 
-    const handlePracticeComplete = async (metrics: TypingMetrics[]) => {
+    const handlePracticeComplete = async (metrics: TypingMetrics[], keystrokesByVerse?: any[][]) => {
         try {
             // Save practice results for all verses
-            for (const metric of metrics) {
-                await fetch(`/api/drills/bible_practice/complete`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ metrics: metric, userId })
-                });
+            for (let i = 0; i < metrics.length; i++) {
+                const metric = metrics[i];
+                const keystrokes = keystrokesByVerse ? keystrokesByVerse[i] : undefined;
+
+                if (onSessionComplete) {
+                    await onSessionComplete(metric, 'bible', `bible-${selectedBook?.name}-${selectedChapter}`, keystrokes);
+                } else {
+                    await fetch(`/api/drills/bible_practice/complete`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ metrics: metric, userId, keystrokes })
+                    });
+                }
             }
         } catch (error) {
             console.error('Failed to save Bible practice results:', error);
@@ -121,7 +129,6 @@ const BiblePractice: React.FC<BiblePracticeProps> = ({ userId }) => {
         return (
             <BibleLessonView
                 verses={chapterVerses}
-                userId={userId}
                 onComplete={handlePracticeComplete}
                 onCancel={handleBackToChapters}
             />
