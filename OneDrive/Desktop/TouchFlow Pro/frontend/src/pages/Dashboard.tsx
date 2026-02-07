@@ -1,6 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import {
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    ResponsiveContainer,
+    Cell
+} from 'recharts';
+import {
+    Zap,
+    Target,
+    Clock,
+    Flame,
+    Trophy,
+    TrendingUp,
+    History,
+    Activity,
+    ArrowUpRight,
+    Award,
+    Edit3
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import PageTransition from '../components/PageTransition';
 import AnimatedStatCard from '../components/AnimatedStatCard';
@@ -37,16 +60,16 @@ interface WeekActivity {
     count: number;
 }
 
-const ACHIEVEMENT_INFO: Record<string, { name: string; icon: string; description: string }> = {
-    'first_drill': { name: 'First Steps', icon: '🎯', description: 'Complete your first drill' },
-    'week_warrior': { name: 'Week Warrior', icon: '🔥', description: '7 consecutive days' },
-    '100_wpm_club': { name: '100 WPM Club', icon: '⚡', description: 'Achieve 100+ WPM' },
-    'precision_pro': { name: 'Precision Pro', icon: '🎯', description: '98%+ accuracy' },
-    'marathon_runner': { name: 'Marathon Runner', icon: '🏃', description: 'Complete 50 drills' },
-    'early_bird': { name: 'Early Bird', icon: '🌅', description: 'Practice before 9 AM' },
-    'night_owl': { name: 'Night Owl', icon: '🦉', description: 'Practice after 10 PM' },
-    'perfect_week': { name: 'Perfect Week', icon: '💎', description: '7 days, 95%+ accuracy' },
-    'speed_demon': { name: 'Speed Demon', icon: '🚀', description: '120+ WPM achieved' },
+const ACHIEVEMENT_INFO: Record<string, { name: string; icon: LucideIcon; color: string }> = {
+    'first_drill': { name: 'Initiation', icon: Target, color: 'text-blue-500' },
+    'week_warrior': { name: 'Relentless', icon: Flame, color: 'text-orange-500' },
+    '100_wpm_club': { name: 'Centurion', icon: Zap, color: 'text-yellow-500' },
+    'precision_pro': { name: 'Marksman', icon: Activity, color: 'text-emerald-500' },
+    'marathon_runner': { name: 'Endurance', icon: Activity, color: 'text-purple-500' },
+    'early_bird': { name: 'Dawn Patrol', icon: Clock, color: 'text-amber-500' },
+    'night_owl': { name: 'Dark Ops', icon: TrendingUp, color: 'text-indigo-500' },
+    'perfect_week': { name: 'Flawless', icon: Trophy, color: 'text-primary' },
+    'speed_demon': { name: 'Sonic Bloom', icon: Zap, color: 'text-rose-500' },
 };
 
 const getGreeting = () => {
@@ -63,12 +86,11 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
     const [weekActivity, setWeekActivity] = useState<WeekActivity[]>([]);
     const [loading, setLoading] = useState(true);
 
-    // Extract username from email or use fallback
     const displayName = propUserName || (userEmail
         ? userEmail.includes('@')
             ? userEmail.split('@')[0].charAt(0).toUpperCase() + userEmail.split('@')[0].slice(1)
-            : 'User'
-        : 'User');
+            : 'Operational Unit'
+        : 'Operational Unit');
 
     useEffect(() => {
         fetchDashboardData();
@@ -77,8 +99,6 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
     const fetchDashboardData = async () => {
         try {
             setLoading(true);
-
-            // Fetch all data in parallel
             const [summaryRes, streakRes, achievementsRes, trendsRes] = await Promise.all([
                 fetch(`/api/analytics/${userId}/summary`),
                 fetch(`/api/streaks/${userId}`),
@@ -91,17 +111,14 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
             const achievementsData = await achievementsRes.json();
             const trendsData = await trendsRes.json();
 
-            // Calculate today's stats (filter from summary or recent results)
-            // For now, using placeholder logic - would need to filter by today's date
             setTodayStats({
-                drillsToday: 0, // Would calculate from results today
+                drillsToday: 0,
                 avgWPM: summaryData.averageWPM || 0,
                 practiceTimeMinutes: Math.round(summaryData.totalPracticeTime || 0)
             });
 
             setStreak(streakData);
 
-            // Get most recent 3 achievements
             if (achievementsData.earned) {
                 const recent = achievementsData.earned
                     .sort((a: Achievement, b: Achievement) =>
@@ -111,7 +128,6 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                 setRecentAchievements(recent);
             }
 
-            // Format week activity data
             if (trendsData.trends) {
                 const formatted = trendsData.trends.map((day: any) => ({
                     day: format(new Date(day.date), 'EEE'),
@@ -119,7 +135,6 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                 }));
                 setWeekActivity(formatted);
             }
-
         } catch (error) {
             console.error('Failed to fetch dashboard data:', error);
         } finally {
@@ -127,288 +142,264 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
         }
     };
 
-    const getStreakStatus = () => {
-        if (!streak) return { text: 'Start practicing!', color: 'text-gray-500', icon: '📚' };
-
-        if (streak.currentStreak === 0) {
-            return { text: 'Start a new streak!', color: 'text-gray-500', icon: '🚀' };
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: { staggerChildren: 0.1 }
         }
-
-        if (streak.currentStreak >= 7) {
-            return { text: 'On fire!', color: 'text-orange-500', icon: '🔥' };
-        }
-
-        return { text: 'Keep it up!', color: 'text-green-500', icon: '✅' };
     };
 
-    const streakStatus = getStreakStatus();
-    const nextMilestone = streak ? Math.ceil((streak.currentStreak + 1) / 10) * 10 : 10;
-    const streakProgress = streak ? (streak.currentStreak / nextMilestone) * 100 : 0;
-
-    // Handler for starting practice from widget
-    const handleStartPractice = () => {
-        // Navigate to adaptive practice
-        // The AdaptivePractice component will fetch the high-priority drill automatically
-        onNavigate('adaptive_practice');
+    const itemVariants = {
+        hidden: { opacity: 0, y: 30 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { type: 'spring' as const, stiffness: 100, damping: 20 }
+        }
     };
 
     if (loading) {
         return (
-            <PageTransition>
-                <div className="max-w-6xl mx-auto p-6 space-y-6">
-                    <div className="animate-pulse space-y-6">
-                        <div className="h-24 bg-gray-200 rounded-3xl" />
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div className="h-32 bg-gray-200 rounded-2xl" />
-                            <div className="h-32 bg-gray-200 rounded-2xl" />
-                            <div className="h-32 bg-gray-200 rounded-2xl" />
-                        </div>
+            <div className="max-w-7xl mx-auto p-6 flex items-center justify-center min-h-[70vh]">
+                <div className="flex flex-col items-center gap-6">
+                    <div className="relative w-16 h-16">
+                        <div className="absolute inset-0 border-4 border-primary/10 rounded-full" />
+                        <div className="absolute inset-0 border-4 border-primary border-t-transparent rounded-full animate-spin shadow-[0_0_15px_var(--primary)]" />
                     </div>
+                    <span className="text-text-muted font-black uppercase tracking-[0.4em] text-[10px]">Assembling Dashboard</span>
                 </div>
-            </PageTransition>
+            </div>
         );
     }
 
     return (
         <PageTransition>
-            <div className="max-w-6xl mx-auto p-6 space-y-8">
-                {/* Welcome Header */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="bg-gradient-to-br from-white to-blue-50 rounded-3xl p-8 shadow-lg border border-blue-100"
-                >
-                    <h1 className="text-3xl sm:text-4xl font-black mb-2">
-                        👋 {getGreeting()}, <span className="text-black">{displayName}</span>!
-                    </h1>
-                    {streak && streak.currentStreak > 0 ? (
-                        <div className="flex items-center gap-2">
-                            <span className="text-xl font-bold text-orange-500">
-                                🔥 {streak.currentStreak}-day streak
+            <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                className="max-w-7xl mx-auto p-4 sm:p-10 space-y-16"
+            >
+                {/* Hero section */}
+                <motion.div variants={itemVariants} className="relative overflow-hidden card group min-h-[220px] flex items-center bg-gradient-to-br from-primary/[0.03] to-secondary/[0.03] border border-white/10">
+                    <div className="relative z-10 w-full md:w-2/3">
+                        <div className="flex items-center gap-3 mb-6">
+                            <span className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/30">
+                                <Activity size={18} className="text-primary" />
                             </span>
-                            <span className={`text-sm font-semibold ${streakStatus.color}`}>
-                                {streakStatus.icon} {streakStatus.text}
-                            </span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">System Ready</span>
                         </div>
-                    ) : (
-                        <p className="text-lg text-text-muted">Ready to start your typing mastery journey?</p>
-                    )}
+                        <h1 className="text-6xl mb-4 tracking-tight leading-[1.1]">
+                            <span className="text-text-muted block mb-2">{getGreeting()},</span>
+                            <span className="text-gradient drop-shadow-sm">{displayName}.</span>
+                        </h1>
+                        <p className="text-xl text-text-muted max-w-xl font-medium leading-relaxed opacity-70">
+                            Your neural-motor pathways are optimized.
+                            <span className="text-text-main font-bold"> Calibration session </span> is recommended for peak flow.
+                        </p>
+                    </div>
+
+                    {/* Decorative Abstract Mesh */}
+                    <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none overflow-hidden hidden md:block">
+                        <svg width="400" height="400" viewBox="0 0 400 400" className="translate-x-20 -translate-y-20 animate-[spin_60s_linear_infinite]">
+                            <defs>
+                                <linearGradient id="meshGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stopColor="var(--primary)" />
+                                    <stop offset="100%" stopColor="var(--secondary)" />
+                                </linearGradient>
+                            </defs>
+                            <path d="M 0,200 Q 100,100 200,200 T 400,200" fill="none" stroke="url(#meshGrad)" strokeWidth="0.5" />
+                            <path d="M 0,100 Q 100,0 200,100 T 400,100" fill="none" stroke="url(#meshGrad)" strokeWidth="0.5" />
+                            <path d="M 0,300 Q 100,200 200,300 T 400,300" fill="none" stroke="url(#meshGrad)" strokeWidth="0.5" />
+                        </svg>
+                    </div>
                 </motion.div>
 
-                {/* Level Progress */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                >
-                    <LevelProgressBar userId={userId} />
-                </motion.div>
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                    {/* Main Content Column */}
+                    <div className="lg:col-span-8 space-y-12">
+                        <motion.div variants={itemVariants}>
+                            <LevelProgressBar userId={userId} />
+                        </motion.div>
 
-                {/* Recommendations */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.35 }}
-                >
-                    <RecommendationsWidget userId={userId} onStartPractice={handleStartPractice} />
-                </motion.div>
+                        <motion.div variants={itemVariants}>
+                            <RecommendationsWidget userId={userId} onStartPractice={() => onNavigate('adaptive_practice')} />
+                        </motion.div>
 
-                {/* Today's Stats */}
-                <div>
-                    <h2 className="text-2xl font-bold text-text-main mb-4">📊 Today's Progress</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <AnimatedStatCard
-                            title="Drills Completed"
-                            value={todayStats.drillsToday}
-                            icon="🎯"
-                            color="bg-blue-50 border-blue-200"
-                            delay={0}
-                        />
-                        <AnimatedStatCard
-                            title="Average WPM"
-                            value={todayStats.avgWPM}
-                            icon="⚡"
-                            color="bg-cyan-50 border-cyan-200"
-                            suffix=" WPM"
-                            decimals={1}
-                            delay={0.1}
-                        />
-                        <AnimatedStatCard
-                            title="Practice Time"
-                            value={todayStats.practiceTimeMinutes}
-                            icon="⏱️"
-                            color="bg-purple-50 border-purple-200"
-                            suffix=" min"
-                            delay={0.2}
-                        />
+                        <motion.div variants={itemVariants} className="space-y-6">
+                            <div className="flex items-center justify-between px-2">
+                                <h2 className="flex items-center gap-4 text-2xl tracking-tighter">
+                                    Activity Overview
+                                </h2>
+                                <span className="text-[10px] font-black text-text-muted uppercase tracking-widest">Live Metrics</span>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <AnimatedStatCard
+                                    title="Drills Done"
+                                    value={todayStats.drillsToday}
+                                    icon={<Target size={20} />}
+                                    delay={0}
+                                />
+                                <AnimatedStatCard
+                                    title="Velocity"
+                                    value={todayStats.avgWPM}
+                                    icon={<Zap size={20} />}
+                                    suffix=" WPM"
+                                    decimals={1}
+                                    delay={0.1}
+                                />
+                                <AnimatedStatCard
+                                    title="Engagement"
+                                    value={todayStats.practiceTimeMinutes}
+                                    icon={<Clock size={20} />}
+                                    suffix=" min"
+                                    delay={0.2}
+                                />
+                            </div>
+                        </motion.div>
+
+                        <motion.div variants={itemVariants} className="card p-8 border border-white/5">
+                            <div className="flex justify-between items-center mb-10">
+                                <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-text-muted">Temporal Performance</h3>
+                                <TrendingUp size={16} className="text-secondary opacity-50" />
+                            </div>
+                            <div className="h-[280px] w-full">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart data={weekActivity} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+                                        <defs>
+                                            <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="0%" stopColor="var(--primary)" stopOpacity={1} />
+                                                <stop offset="100%" stopColor="var(--primary)" stopOpacity={0.3} />
+                                            </linearGradient>
+                                        </defs>
+                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.03)" />
+                                        <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 9, fontWeight: 900, fill: 'var(--text-muted)', letterSpacing: '0.1em' }} />
+                                        <YAxis hide />
+                                        <Tooltip
+                                            cursor={{ fill: 'rgba(255,255,255,0.03)' }}
+                                            contentStyle={{
+                                                backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                                                backdropFilter: 'blur(16px)',
+                                                borderRadius: '20px',
+                                                border: '1px solid rgba(255,255,255,0.1)',
+                                                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+                                                padding: '16px',
+                                                fontSize: '11px',
+                                                fontWeight: '900',
+                                                textTransform: 'uppercase',
+                                                letterSpacing: '0.1em'
+                                            }}
+                                        />
+                                        <Bar
+                                            dataKey="count"
+                                            radius={[8, 8, 8, 8]}
+                                            animationDuration={1500}
+                                        >
+                                            {weekActivity.map((_entry, index) => (
+                                                <Cell key={`cell-${index}`} fill="url(#barGradient)" />
+                                            ))}
+                                        </Bar>
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
+                        </motion.div>
+                    </div>
+
+                    {/* Sidebar Column */}
+                    <div className="lg:col-span-4 space-y-12">
+                        {streak && (
+                            <motion.div variants={itemVariants} className="card relative overflow-hidden group border border-orange-500/10 dark:border-orange-500/5 bg-gradient-to-br from-orange-500/[0.02] to-transparent">
+                                <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:scale-110 group-hover:opacity-10 transition-all duration-700">
+                                    <Flame size={80} strokeWidth={1} />
+                                </div>
+                                <div className="flex items-center gap-3 mb-6">
+                                    <Flame size={14} className="text-orange-500" />
+                                    <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-text-muted">Streak Consistency</h3>
+                                </div>
+                                <div className="text-6xl font-black mb-2 tracking-tighter">
+                                    {streak.currentStreak} <span className="text-xl font-bold opacity-30 tracking-normal">Days</span>
+                                </div>
+                                <div className="text-[10px] font-black text-text-muted uppercase tracking-widest mb-10 opacity-60">Record Elevation: {streak.longestStreak}</div>
+
+                                <div className="space-y-3">
+                                    <div className="flex justify-between text-[9px] font-black uppercase tracking-widest text-text-muted opacity-40">
+                                        <span>Next Milestone</span>
+                                        <span>{Math.ceil((streak.currentStreak + 1) / 5) * 5} Days</span>
+                                    </div>
+                                    <div className="h-1.5 w-full bg-slate-100 dark:bg-white/5 rounded-full overflow-hidden">
+                                        <motion.div
+                                            initial={{ width: 0 }}
+                                            animate={{ width: `${(streak.currentStreak % 5) * 20}%` }}
+                                            className="h-full bg-gradient-to-r from-orange-400 to-red-500 rounded-full shadow-[0_0_15px_rgba(249,115,22,0.4)]"
+                                        />
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
+
+                        <motion.div variants={itemVariants} className="card border border-white/5">
+                            <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-6">
+                                <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-text-muted">Unlocks</h3>
+                                <button
+                                    onClick={() => onNavigate('achievements')}
+                                    className="text-[9px] font-black text-primary px-3 py-1.5 rounded-lg bg-primary/5 hover:bg-primary/10 transition-colors uppercase tracking-widest"
+                                >
+                                    Inventory
+                                </button>
+                            </div>
+                            <div className="space-y-3">
+                                {recentAchievements.length > 0 ? recentAchievements.map((achievement) => {
+                                    const info = ACHIEVEMENT_INFO[achievement.badgeType];
+                                    if (!info) return null;
+                                    return (
+                                        <div key={achievement.id} className="flex items-center gap-5 p-4 rounded-2xl bg-white/5 border border-white/5 group hover:border-primary/20 transition-all">
+                                            <div className={`p-3 rounded-xl bg-white/5 ${info.color} group-hover:scale-110 transition-transform`}>
+                                                <info.icon size={22} strokeWidth={2.5} />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <div className="text-[13px] font-bold text-text-main truncate uppercase tracking-tight">{info.name}</div>
+                                                <div className="text-[9px] font-black text-text-muted uppercase tracking-widest mt-1 opacity-40">{format(new Date(achievement.earnedAt), 'MMM d, yyyy')}</div>
+                                            </div>
+                                            <ArrowUpRight size={14} className="text-text-muted opacity-0 group-hover:opacity-10 transition-opacity" />
+                                        </div>
+                                    );
+                                }) : (
+                                    <div className="py-10 text-center opacity-30 select-none">
+                                        <div className="relative inline-block mb-4">
+                                            <Award size={40} strokeWidth={1} />
+                                            <div className="absolute inset-0 blur-lg bg-primary/20" />
+                                        </div>
+                                        <p className="text-[10px] font-black uppercase tracking-[0.2em]">Pending Initiation</p>
+                                    </div>
+                                )}
+                            </div>
+                        </motion.div>
+
+                        <motion.div variants={itemVariants} className="space-y-6">
+                            <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-text-muted px-4">Fast Access Nodes</h3>
+                            <div className="grid grid-cols-2 gap-4">
+                                {[
+                                    { id: 'practice', label: 'Sessions', icon: Target },
+                                    { id: 'bible_practice', label: 'Legacy', icon: History },
+                                    { id: 'analytics', label: 'Insights', icon: TrendingUp },
+                                    { id: 'custom_drills', label: 'Forge', icon: Edit3 }
+                                ].map((item) => (
+                                    <button
+                                        key={item.id}
+                                        onClick={() => onNavigate(item.id)}
+                                        className="p-6 rounded-3xl bg-white/5 border border-white/5 hover:border-primary/20 transition-all text-center group relative overflow-hidden flex flex-col items-center justify-center gap-3"
+                                    >
+                                        <item.icon size={24} className="text-text-muted group-hover:text-primary group-hover:scale-125 transition-all duration-500" strokeWidth={1.5} />
+                                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted group-hover:text-text-main transition-colors">{item.label}</div>
+                                        <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                                    </button>
+                                ))}
+                            </div>
+                        </motion.div>
                     </div>
                 </div>
-
-                {/* Streak Tracker */}
-                {streak && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.4 }}
-                        className="bg-white rounded-3xl p-6 shadow-lg border border-slate-200"
-                    >
-                        <h2 className="text-2xl font-bold text-text-main mb-4">🔥 Your Streak</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <div className="text-5xl font-black text-orange-500 mb-2">
-                                    {streak.currentStreak} days
-                                </div>
-                                <p className="text-sm text-text-muted">Current Streak</p>
-                            </div>
-                            <div>
-                                <div className="text-3xl font-bold text-text-main mb-2">
-                                    👑 {streak.longestStreak} days
-                                </div>
-                                <p className="text-sm text-text-muted">Personal Best</p>
-                            </div>
-                        </div>
-
-                        {/* Progress to next milestone */}
-                        <div className="mt-6">
-                            <div className="flex justify-between text-sm mb-2">
-                                <span className="font-semibold text-text-main">Next milestone: {nextMilestone} days</span>
-                                <span className="text-text-muted">{streak.currentStreak}/{nextMilestone}</span>
-                            </div>
-                            <div className="w-full bg-gray-200 rounded-full h-3">
-                                <motion.div
-                                    initial={{ width: 0 }}
-                                    animate={{ width: `${streakProgress}%` }}
-                                    transition={{ duration: 1, delay: 0.6 }}
-                                    className="bg-gradient-to-r from-orange-400 to-orange-600 h-3 rounded-full"
-                                />
-                            </div>
-                        </div>
-                    </motion.div>
-                )}
-
-                {/* Recent Achievements */}
-                {recentAchievements.length > 0 && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.5 }}
-                        className="bg-white rounded-3xl p-6 shadow-lg border border-slate-200"
-                    >
-                        <div className="flex justify-between items-center mb-4">
-                            <h2 className="text-2xl font-bold text-text-main">🏆 Recent Achievements</h2>
-                            <button
-                                onClick={() => onNavigate('achievements')}
-                                className="text-sm font-semibold text-brand-blue hover:text-brand-magenta transition-colors"
-                            >
-                                View all →
-                            </button>
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            {recentAchievements.map((achievement, index) => {
-                                const info = ACHIEVEMENT_INFO[achievement.badgeType];
-                                if (!info) return null;
-
-                                return (
-                                    <motion.div
-                                        key={achievement.id}
-                                        initial={{ opacity: 0, scale: 0.8 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        transition={{ duration: 0.3, delay: 0.6 + index * 0.1 }}
-                                        className="bg-gradient-to-br from-yellow-50 to-orange-50 border-2 border-yellow-200 rounded-2xl p-4 text-center"
-                                    >
-                                        <div className="text-4xl mb-2">{info.icon}</div>
-                                        <div className="font-bold text-text-main text-sm">{info.name}</div>
-                                        <div className="text-xs text-text-muted mt-1">
-                                            {format(new Date(achievement.earnedAt), 'MMM d')}
-                                        </div>
-                                    </motion.div>
-                                );
-                            })}
-                        </div>
-                    </motion.div>
-                )}
-
-                {/* Quick Actions */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.6 }}
-                    className="bg-white rounded-3xl p-6 shadow-lg border border-slate-200"
-                >
-                    <h2 className="text-2xl font-bold text-text-main mb-4">⚡ Quick Actions</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                        <button
-                            onClick={() => onNavigate('curriculum')}
-                            className="bg-white border-2 border-black text-black px-6 py-4 rounded-xl font-bold shadow-md hover:shadow-xl hover:scale-105 hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
-                        >
-                            <span>📚</span>
-                            <span>Continue Learning</span>
-                        </button>
-                        <button
-                            onClick={() => onNavigate('custom_drills')}
-                            className="bg-white border-2 border-black text-black px-6 py-4 rounded-xl font-bold shadow-md hover:shadow-xl hover:scale-105 hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
-                        >
-                            <span>✏️</span>
-                            <span>Custom Drill</span>
-                        </button>
-                        <button
-                            onClick={() => onNavigate('analytics')}
-                            className="bg-white border-2 border-black text-black px-6 py-4 rounded-xl font-bold shadow-md hover:shadow-xl hover:scale-105 hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
-                        >
-                            <span>📈</span>
-                            <span>Analytics</span>
-                        </button>
-                        <button
-                            onClick={() => onNavigate('goals')}
-                            className="bg-white border-2 border-black text-black px-6 py-4 rounded-xl font-bold shadow-md hover:shadow-xl hover:scale-105 hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
-                        >
-                            <span>🎯</span>
-                            <span>Track Goals</span>
-                        </button>
-                        <button
-                            onClick={() => onNavigate('bible_practice')}
-                            className="bg-gradient-to-br from-blue-50 to-purple-50 border-2 border-purple-300 text-purple-900 px-6 py-4 rounded-xl font-bold shadow-md hover:shadow-xl hover:scale-105 hover:from-purple-100 hover:to-blue-100 transition-all flex items-center justify-center gap-2"
-                        >
-                            <span>📖</span>
-                            <span>Bible Practice</span>
-                        </button>
-                    </div>
-                </motion.div>
-
-                {/* Weekly Activity */}
-                {weekActivity.length > 0 && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.7 }}
-                        className="bg-white rounded-3xl p-6 shadow-lg border border-slate-200"
-                    >
-                        <h2 className="text-2xl font-bold text-text-main mb-4">📅 This Week's Activity</h2>
-                        <ResponsiveContainer width="100%" height={200}>
-                            <BarChart data={weekActivity}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                                <XAxis dataKey="day" stroke="#64748b" />
-                                <YAxis stroke="#64748b" />
-                                <Tooltip
-                                    contentStyle={{
-                                        backgroundColor: '#fff',
-                                        border: '1px solid #e2e8f0',
-                                        borderRadius: '12px',
-                                        padding: '12px'
-                                    }}
-                                />
-                                <Bar
-                                    dataKey="count"
-                                    fill="#8B5CF6"
-                                    radius={[8, 8, 0, 0]}
-                                    animationDuration={1500}
-                                />
-                            </BarChart>
-                        </ResponsiveContainer>
-                    </motion.div>
-                )}
-            </div>
+            </motion.div>
         </PageTransition>
     );
 };

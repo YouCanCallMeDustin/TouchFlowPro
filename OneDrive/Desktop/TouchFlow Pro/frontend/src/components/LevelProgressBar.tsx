@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { Sprout, Flame, Zap, Crown, Target, Activity } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface UserLevel {
     level: number;
@@ -36,88 +38,86 @@ export const LevelProgressBar: React.FC<Props> = ({ userId }) => {
 
     if (loading || !levelInfo) {
         return (
-            <div className="bg-white/70 backdrop-blur-xl border border-white/50 rounded-2xl p-6 shadow-lg">
-                <div className="animate-pulse space-y-3">
-                    <div className="h-4 bg-slate-200 rounded w-1/4"></div>
-                    <div className="h-8 bg-slate-200 rounded"></div>
+            <div className="card animate-pulse">
+                <div className="space-y-4">
+                    <div className="h-4 bg-white/5 rounded w-1/4"></div>
+                    <div className="h-10 bg-white/5 rounded w-3/4"></div>
                 </div>
             </div>
         );
     }
 
-    const getLevelColor = (level: number): string => {
-        if (level <= 3) return 'from-blue-500 to-blue-600';
-        if (level <= 6) return 'from-purple-500 to-purple-600';
-        if (level <= 9) return 'from-orange-500 to-orange-600';
-        return 'from-yellow-500 to-yellow-600';
+    const getLevelConfig = (level: number) => {
+        if (level <= 3) return { icon: Sprout, color: 'text-blue-400', bg: 'bg-blue-500/10' };
+        if (level <= 6) return { icon: Flame, color: 'text-orange-400', bg: 'bg-orange-500/10' };
+        if (level <= 9) return { icon: Zap, color: 'text-yellow-400', bg: 'bg-yellow-500/10' };
+        return { icon: Crown, color: 'text-primary', bg: 'bg-primary/10' };
     };
 
-    const getLevelEmoji = (level: number): string => {
-        if (level <= 3) return '🌱';
-        if (level <= 6) return '🔥';
-        if (level <= 9) return '⚡';
-        return '👑';
-    };
+    const config = getLevelConfig(levelInfo.level);
 
     return (
-        <div className="bg-white/70 backdrop-blur-xl border border-white/50 rounded-2xl p-6 shadow-lg">
-            <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                    <div className={`w-12 h-12 bg-gradient-to-br ${getLevelColor(levelInfo.level)} rounded-xl flex items-center justify-center text-2xl shadow-lg`}>
-                        {getLevelEmoji(levelInfo.level)}
+        <div className="card relative overflow-hidden group border border-white/5">
+            <div className="flex items-center justify-between mb-8 relative z-10">
+                <div className="flex items-center gap-5">
+                    <div className={`w-14 h-14 ${config.bg} rounded-2xl flex items-center justify-center border border-white/5 group-hover:scale-110 transition-transform duration-500`}>
+                        <config.icon className={config.color} size={28} strokeWidth={2.5} />
                     </div>
                     <div>
-                        <div className="text-sm font-bold text-slate-500 uppercase tracking-wider">Your Level</div>
-                        <div className="text-2xl font-heading font-black text-slate-900">
-                            {levelInfo.levelName} <span className="text-slate-400">Lv.{levelInfo.level}</span>
+                        <div className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-1">Functional Tier</div>
+                        <div className="text-3xl font-black text-text-main tracking-tighter">
+                            {levelInfo.levelName} <span className="opacity-30">Lvl.{levelInfo.level}</span>
                         </div>
                     </div>
                 </div>
 
                 <div className="text-right">
-                    <div className="text-sm font-bold text-slate-500 uppercase tracking-wider">Progress</div>
-                    <div className="text-2xl font-heading font-black text-primary-blue">
+                    <div className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-1">Sync Progress</div>
+                    <div className="text-3xl font-black text-primary tracking-tighter">
                         {Math.round(levelInfo.progress)}%
                     </div>
                 </div>
             </div>
 
             {/* Progress Bar */}
-            <div className="relative">
-                <div className="w-full h-4 bg-slate-100 rounded-full overflow-hidden shadow-inner">
-                    <div
-                        className={`h-full bg-gradient-to-r ${getLevelColor(levelInfo.level)} transition-all duration-500 ease-out shadow-lg`}
-                        style={{ width: `${levelInfo.progress}%` }}
-                    >
-                        <div className="w-full h-full bg-white/20 animate-pulse"></div>
-                    </div>
+            <div className="relative mb-8 z-10">
+                <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
+                    <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: `${levelInfo.progress}%` }}
+                        transition={{ duration: 1.5, ease: "easeOut" }}
+                        className="h-full bg-gradient-to-r from-primary/80 to-primary shadow-[0_0_20px_rgba(var(--primary-rgb),0.3)]"
+                    />
                 </div>
             </div>
 
             {/* Next Level Requirements */}
-            {levelInfo.level < 10 && (
-                <div className="mt-4 flex items-center justify-between text-sm">
-                    <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2">
-                            <span className="text-slate-500 font-bold">Next Level:</span>
-                            <span className="font-black text-primary-blue">{levelInfo.nextLevelRequirements.wpm} WPM</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <span className="text-slate-500 font-bold">•</span>
-                            <span className="font-black text-secondary-teal">{levelInfo.nextLevelRequirements.accuracy}% Accuracy</span>
-                        </div>
+            {levelInfo.level < 10 ? (
+                <div className="flex items-center gap-6 relative z-10 px-1 text-text-muted">
+                    <div className="flex items-center gap-2">
+                        <Target size={14} className="opacity-40" />
+                        <span className="text-[10px] font-black uppercase tracking-widest leading-none">
+                            Required: <span className="text-text-main">{levelInfo.nextLevelRequirements.wpm} WPM</span>
+                        </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Activity size={14} className="opacity-40" />
+                        <span className="text-[10px] font-black uppercase tracking-widest leading-none">
+                            Precision: <span className="text-text-main">{levelInfo.nextLevelRequirements.accuracy}%</span>
+                        </span>
+                    </div>
+                </div>
+            ) : (
+                <div className="relative z-10 py-2">
+                    <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-primary/5 rounded-xl border border-primary/20">
+                        <Crown size={18} className="text-primary animate-pulse" />
+                        <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">Peak Performance Unlocked</span>
                     </div>
                 </div>
             )}
 
-            {levelInfo.level === 10 && (
-                <div className="mt-4 text-center">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-100 to-orange-100 border border-yellow-300 rounded-full">
-                        <span className="text-2xl">👑</span>
-                        <span className="font-black text-orange-700 uppercase tracking-wider text-sm">Maximum Level Achieved!</span>
-                    </div>
-                </div>
-            )}
+            {/* Background Accent Glow */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[80px] -translate-y-1/2 translate-x-1/2 rounded-full pointer-events-none" />
         </div>
     );
 };

@@ -139,17 +139,27 @@ export const ProgressGraph: React.FC<ProgressGraphProps> = ({
                         style={{ fontSize: '12px' }}
                     />
                     <YAxis
-                        stroke="#6B7280"
-                        style={{ fontSize: '12px' }}
-                        label={{ value: config.yAxisLabel, angle: -90, position: 'insideLeft', style: { fontSize: '12px' } }}
+                        stroke="currentColor"
+                        className="text-text-muted opacity-40"
+                        style={{ fontSize: '10px', fontWeight: '900' }}
+                        tickLine={false}
+                        axisLine={false}
+                        tickFormatter={(value) => `${value}${metric === 'accuracy' ? '%' : metric === 'wpm' ? ' WPM' : ''}`}
                     />
                     <Tooltip
+                        cursor={{ stroke: 'var(--primary)', strokeWidth: 2, strokeDasharray: '5 5' }}
                         contentStyle={{
-                            backgroundColor: '#1F2937',
-                            border: 'none',
-                            borderRadius: '8px',
-                            color: '#fff'
+                            backgroundColor: 'var(--bg-card)',
+                            backdropFilter: 'blur(20px)',
+                            border: '1px solid var(--glass-border)',
+                            borderRadius: '16px',
+                            padding: '12px',
+                            color: 'var(--text-main)',
+                            fontSize: '11px',
+                            fontWeight: 'bold',
+                            boxShadow: '0 20px 40px -10px rgba(0,0,0,0.1)'
                         }}
+                        formatter={(value: any) => [`${Number(value || 0).toFixed(1)}${metric === 'accuracy' ? '%' : metric === 'wpm' ? ' WPM' : ''}`, config.name]}
                     />
                     <Legend />
                     <Line

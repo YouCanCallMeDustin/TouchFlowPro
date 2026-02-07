@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FINGER_MAP, getFingerName } from '../utils/fingerMapping';
 import type { Finger } from '../utils/fingerMapping';
+import { useAuth } from '../context/AuthContext';
 
 interface KeyStats {
     key: string;
@@ -24,6 +25,7 @@ interface FingerHeatmapProps {
 }
 
 export const FingerHeatmap: React.FC<FingerHeatmapProps> = ({ userId }) => {
+    const { token } = useAuth();
     const [fingerStats, setFingerStats] = useState<FingerStats[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -32,13 +34,17 @@ export const FingerHeatmap: React.FC<FingerHeatmapProps> = ({ userId }) => {
     }, [userId]);
 
     const fetchStats = async () => {
+        if (!userId || !token) return;
+
         try {
             setLoading(true);
-            const response = await fetch(`/api/keystroke-tracking/stats/${userId}`);
+            const response = await fetch(`/api/keystroke-tracking/stats/${userId}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             if (response.ok) {
                 const stats: KeyStats[] = await response.json();
 
-                // Aggregate by finger
+                // ... (rest of the aggregation logic stays the same)
                 const aggregation: Record<Finger, { correct: number, total: number, speeds: number[], troubleKeys: Set<string> }> = {
                     left_pinky: { correct: 0, total: 0, speeds: [], troubleKeys: new Set() },
                     left_ring: { correct: 0, total: 0, speeds: [], troubleKeys: new Set() },
@@ -88,11 +94,11 @@ export const FingerHeatmap: React.FC<FingerHeatmapProps> = ({ userId }) => {
     };
 
     const getFingerColor = (accuracy: number, total: number) => {
-        if (total < 10) return 'bg-slate-200 text-slate-500';
-        if (accuracy >= 97) return 'bg-emerald-100 text-emerald-700 border-emerald-200';
-        if (accuracy >= 94) return 'bg-blue-100 text-blue-700 border-blue-200';
-        if (accuracy >= 90) return 'bg-amber-100 text-amber-700 border-amber-200';
-        return 'bg-rose-100 text-rose-700 border-rose-200';
+        if (total < 10) return 'bg-text-main/10 text-text-muted border-transparent';
+        if (accuracy >= 97) return 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30';
+        if (accuracy >= 94) return 'bg-primary/20 text-primary border-primary/30';
+        if (accuracy >= 90) return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
+        return 'bg-rose-500/20 text-rose-400 border-rose-500/30';
     };
 
     if (loading) return null;
@@ -101,41 +107,49 @@ export const FingerHeatmap: React.FC<FingerHeatmapProps> = ({ userId }) => {
     const rightHand = fingerStats.filter(s => s.finger.startsWith('right')).reverse(); // reverse for visual symmetry
 
     return (
-        <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
-            <h2 className="text-2xl font-bold text-text-main mb-6 flex items-center gap-2">
-                ✋ Finger Accuracy Distribution
+        <div className="card p-8">
+            <h2 className="text-2xl font-black text-text-main mb-8 flex items-center gap-3 tracking-tight">
+                <span className="p-2 rounded-xl bg-primary/10 text-primary">✋</span>
+                Finger Accuracy Distribution
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                {/* Visual Representation (Simplified) */}
-                <div className="flex justify-center items-end gap-8 h-64 bg-slate-50 rounded-3xl p-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                {/* Visual Representation */}
+                <div className="flex justify-center items-end gap-12 h-[28rem] bg-slate-500/5 dark:bg-text-main/5 rounded-[2.5rem] p-12 border border-slate-200/50 dark:border-white/5 relative overflow-hidden group/chart">
+                    <div className="absolute inset-0 bg-primary/5 blur-[100px] opacity-10" />
                     {/* Left Hand */}
-                    <div className="flex gap-2 items-end">
+                    <div className="flex gap-4 items-end relative z-10 transition-transform duration-500 group-hover/chart:translate-x-[-10px]">
                         {leftHand.map(s => (
-                            <div key={s.finger} className="flex flex-col items-center gap-2">
+                            <div key={s.finger} className="flex flex-col items-center gap-4">
                                 <motion.div
                                     initial={{ height: 0 }}
                                     animate={{ height: `${Math.max(20, s.accuracy)}%` }}
-                                    className={`w-8 rounded-t-lg border-t-2 ${getFingerColor(s.accuracy, s.totalAttempts)} transition-all`}
-                                />
-                                <span className="text-[10px] font-bold text-slate-400 rotate-45 mt-2">
-                                    {s.finger.split('_')[1].toUpperCase()}
+                                    className={`w-12 rounded-t-2xl border-t-2 shadow-2xl ${getFingerColor(s.accuracy, s.totalAttempts)} transition-all duration-500 relative group`}
+                                >
+                                    <div className="absolute inset-0 bg-white/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-t-2xl" />
+                                </motion.div>
+                                <span className="text-[9px] font-black text-text-muted/60 uppercase tracking-widest">
+                                    {s.finger.split('_')[1].substring(0, 3)}
                                 </span>
                             </div>
                         ))}
                     </div>
 
+                    <div className="w-px h-48 bg-slate-200 dark:bg-text-main/10 mx-6 opacity-40" />
+
                     {/* Right Hand */}
-                    <div className="flex gap-2 items-end">
+                    <div className="flex gap-4 items-end relative z-10 transition-transform duration-500 group-hover/chart:translate-x-[10px]">
                         {rightHand.map(s => (
-                            <div key={s.finger} className="flex flex-col items-center gap-2">
+                            <div key={s.finger} className="flex flex-col items-center gap-4">
                                 <motion.div
                                     initial={{ height: 0 }}
                                     animate={{ height: `${Math.max(20, s.accuracy)}%` }}
-                                    className={`w-8 rounded-t-lg border-t-2 ${getFingerColor(s.accuracy, s.totalAttempts)} transition-all`}
-                                />
-                                <span className="text-[10px] font-bold text-slate-400 -rotate-45 mt-2">
-                                    {s.finger.split('_')[1].toUpperCase()}
+                                    className={`w-12 rounded-t-2xl border-t-2 shadow-2xl ${getFingerColor(s.accuracy, s.totalAttempts)} transition-all duration-500 relative group`}
+                                >
+                                    <div className="absolute inset-0 bg-white/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-t-2xl" />
+                                </motion.div>
+                                <span className="text-[9px] font-black text-text-muted/60 uppercase tracking-widest">
+                                    {s.finger.split('_')[1].substring(0, 3)}
                                 </span>
                             </div>
                         ))}
@@ -144,20 +158,20 @@ export const FingerHeatmap: React.FC<FingerHeatmapProps> = ({ userId }) => {
 
                 {/* Detailed Breakdown */}
                 <div className="space-y-4">
-                    <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-4">Diagnostic Details</h3>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-6 opacity-40">Diagnostic Matrix</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {fingerStats.filter(s => s.totalAttempts > 0).map(s => (
-                            <div key={s.finger} className="p-3 rounded-xl border border-slate-100 bg-white shadow-sm">
-                                <div className="flex justify-between items-center mb-1">
-                                    <span className="text-xs font-bold text-slate-600">{getFingerName(s.finger)}</span>
-                                    <span className={`text-xs font-black ${s.accuracy >= 95 ? 'text-emerald-600' : 'text-rose-600'}`}>
+                            <div key={s.finger} className="p-4 rounded-2xl border border-white/5 bg-text-main/5 hover:bg-text-main/10 transition-colors">
+                                <div className="flex justify-between items-center mb-2">
+                                    <span className="text-xs font-black text-text-muted uppercase tracking-wider">{getFingerName(s.finger)}</span>
+                                    <span className={`text-sm font-black ${s.accuracy >= 95 ? 'text-emerald-500' : 'text-rose-500'}`}>
                                         {s.accuracy.toFixed(1)}%
                                     </span>
                                 </div>
                                 {s.troubleKeys.length > 0 && (
-                                    <div className="flex gap-1 mt-2">
+                                    <div className="flex gap-2 mt-3">
                                         {s.troubleKeys.map(k => (
-                                            <span key={k} className="px-1.5 py-0.5 bg-slate-100 rounded text-[10px] font-mono text-slate-500">
+                                            <span key={k} className="px-2 py-1 bg-white/5 rounded-lg text-[10px] font-mono text-text-muted border border-white/5">
                                                 {k === ' ' ? 'SPC' : k.toUpperCase()}
                                             </span>
                                         ))}

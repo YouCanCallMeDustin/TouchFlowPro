@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Zap } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 interface SequenceStat {
     id: string;
@@ -14,22 +16,27 @@ interface SequenceAnalysisProps {
 }
 
 export const SequenceAnalysis: React.FC<SequenceAnalysisProps> = ({ userId }) => {
+    const { token } = useAuth();
     const [bigrams, setBigrams] = useState<SequenceStat[]>([]);
     const [trigrams, setTrigrams] = useState<SequenceStat[]>([]);
     const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState<'bigram' | 'trigram'>('bigram');
+    const [tab, setTab] = useState<'bigrams' | 'trigrams'>('bigrams');
 
     useEffect(() => {
         fetchSequences();
-    }, [userId, activeTab]);
+    }, [userId, tab]); // Dependency changed to 'tab'
 
     const fetchSequences = async () => {
+        if (!userId || !token) return;
+
         try {
             setLoading(true);
-            const response = await fetch(`/api/keystroke-tracking/sequences/${userId}?type=${activeTab}&limit=8`);
+            const response = await fetch(`/api/keystroke-tracking/sequences/${userId}?type=${tab.slice(0, -1)}&limit=8`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             if (response.ok) {
                 const data = await response.json();
-                if (activeTab === 'bigram') setBigrams(data);
+                if (tab === 'bigrams') setBigrams(data);
                 else setTrigrams(data);
             }
         } catch (error) {
@@ -39,67 +46,68 @@ export const SequenceAnalysis: React.FC<SequenceAnalysisProps> = ({ userId }) =>
         }
     };
 
-    const stats = activeTab === 'bigram' ? bigrams : trigrams;
+    const data = tab === 'bigrams' ? bigrams : trigrams; // Renamed from stats to data
+    const maxTime = Math.max(...data.map(s => s.avgSpeed), 1); // Calculate max speed for bar width
 
     return (
-        <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-100 h-full">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-                <div>
-                    <h2 className="text-2xl font-bold text-text-main flex items-center gap-2">
-                        🐢 Speed Bottlenecks
-                    </h2>
-                    <p className="text-sm text-text-muted mt-1">Slowest character sequences</p>
-                </div>
-
-                <div className="flex bg-slate-100 p-1 rounded-xl">
-                    <button
-                        onClick={() => setActiveTab('bigram')}
-                        className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${activeTab === 'bigram' ? 'bg-white shadow-sm text-primary-blue' : 'text-slate-500 hover:text-slate-700'}`}
-                    >
-                        Bigrams
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('trigram')}
-                        className={`px-4 py-1.5 rounded-lg text-sm font-bold transition-all ${activeTab === 'trigram' ? 'bg-white shadow-sm text-primary-blue' : 'text-slate-500 hover:text-slate-700'}`}
-                    >
-                        Trigrams
-                    </button>
+        <div className="card p-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-12">
+                <h2 className="text-2xl font-black text-text-main flex items-center gap-3 tracking-tight">
+                    <span className="p-2 rounded-xl bg-primary/10 text-primary">⚡</span>
+                    Sequence Latency Analysis
+                </h2>
+                <div className="flex flex-wrap bg-slate-500/5 dark:bg-text-main/5 p-1 rounded-xl border border-slate-200/50 dark:border-white/5 backdrop-blur-sm gap-1">
+                    {(['bigrams', 'trigrams'] as const).map((t) => (
+                        <button
+                            key={t}
+                            onClick={() => setTab(t)}
+                            className={`px-6 py-2 rounded-lg font-black text-[10px] uppercase tracking-[0.2em] transition-all flex-1 min-w-[80px] ${tab === t ? 'bg-primary text-white shadow-lg shadow-primary/20 scale-105' : 'text-text-muted hover:text-text-main'}`}
+                        >
+                            {t}
+                        </button>
+                    ))}
                 </div>
             </div>
 
             {loading ? (
-                <div className="space-y-4 animate-pulse">
-                    {[1, 2, 3, 4, 5].map(i => (
-                        <div key={i} className="h-10 bg-slate-50 rounded-xl" />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {[...Array(8)].map((_, i) => (
+                        <div key={i} className="h-20 bg-text-main/5 rounded-2xl animate-pulse"></div>
                     ))}
                 </div>
-            ) : stats.length > 0 ? (
-                <div className="space-y-4">
-                    {stats.map((s, index) => (
-                        <div key={s.id} className="group relative">
-                            <div className="flex justify-between items-center mb-1 px-1">
-                                <span className="text-lg font-mono font-black text-slate-700 tracking-widest bg-slate-50 px-2 py-1 rounded">
-                                    "{s.sequence}"
-                                </span>
-                                <span className="text-xs font-bold text-rose-500">
-                                    {s.avgSpeed.toFixed(0)} ms
-                                </span>
-                            </div>
-                            <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                                <motion.div
-                                    initial={{ width: 0 }}
-                                    animate={{ width: `${Math.min(100, (s.avgSpeed / 1000) * 100)}%` }}
-                                    className="bg-gradient-to-r from-rose-400 to-rose-600 h-full rounded-full"
-                                    transition={{ duration: 0.8, delay: index * 0.1 }}
-                                />
-                            </div>
-                        </div>
-                    ))}
-                    <div className="mt-8 p-4 bg-amber-50 rounded-2xl border border-amber-100">
-                        <p className="text-xs text-amber-800 leading-relaxed">
-                            <span className="font-black">PRO TIP:</span> These sequences are slowing you down. Practice typing these specific character combinations in isolation to build muscle memory.
-                        </p>
-                    </div>
+            ) : data.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <AnimatePresence mode="wait">
+                        {data.map((item, idx) => (
+                            <motion.div
+                                key={item.id} // Changed from item.sequence to item.id for unique key
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: 20 }}
+                                transition={{ delay: idx * 0.1 }}
+                                className="p-6 rounded-2xl border border-white/5 bg-text-main/5 hover:bg-text-main/10 transition-colors group"
+                            >
+                                <div className="flex justify-between items-center mb-4">
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-2xl font-mono font-black text-primary group-hover:scale-110 transition-transform">
+                                            {item.sequence.toUpperCase()}
+                                        </span>
+                                        {idx === 0 && <Zap size={14} className="text-amber-500 animate-pulse" />}
+                                    </div>
+                                    <span className="text-xs font-mono font-black text-text-muted opacity-40">
+                                        {(item.avgSpeed / 1000).toFixed(3)}s
+                                    </span>
+                                </div>
+                                <div className="h-2 bg-text-main/5 rounded-full overflow-hidden border border-white/5">
+                                    <motion.div
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${(item.avgSpeed / maxTime) * 100}%` }} // Adjusted calculation
+                                        className="h-full bg-gradient-to-r from-primary to-secondary"
+                                    />
+                                </div>
+                            </motion.div>
+                        ))}
+                    </AnimatePresence>
                 </div>
             ) : (
                 <div className="flex flex-col items-center justify-center py-12 text-center">

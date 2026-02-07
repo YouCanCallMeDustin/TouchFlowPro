@@ -21,11 +21,11 @@ interface Props {
     isOpen: boolean;
     onClose: () => void;
     achievementType?: string;
-    isLevelUp?: boolean;
-    level?: number;
+    isLeveledUp?: boolean;
+    newLevel?: number;
 }
 
-const AchievementModal: React.FC<Props> = ({ isOpen, onClose, achievementType, isLevelUp, level }) => {
+const AchievementModal: React.FC<Props> = ({ isOpen, onClose, achievementType, isLeveledUp, newLevel }) => {
     const info = achievementType ? ACHIEVEMENT_INFO[achievementType] : null;
 
     return (
@@ -61,18 +61,18 @@ const AchievementModal: React.FC<Props> = ({ isOpen, onClose, achievementType, i
                                 transition={{ type: 'spring', damping: 10 }}
                                 className="text-8xl mb-2 drop-shadow-xl"
                             >
-                                {isLevelUp ? '🚀' : (info?.icon || '🏆')}
+                                {isLeveledUp ? '🚀' : (info?.icon || '🏆')}
                             </motion.div>
 
                             <div className="space-y-2">
-                                <h3 className="text-sm font-black text-primary-blue uppercase tracking-[0.2em]">
-                                    {isLevelUp ? 'New Milestone!' : 'Achievement Unlocked!'}
+                                <h3 className="text-sm font-black text-primary uppercase tracking-[0.2em]">
+                                    {isLeveledUp ? 'New Milestone!' : 'Achievement Unlocked!'}
                                 </h3>
                                 <h2 className="text-3xl font-black text-text-main leading-tight">
-                                    {isLevelUp ? `Level ${level} Reached` : (info?.name || 'Grand Master')}
+                                    {isLeveledUp ? `Level ${newLevel} Reached` : (info?.name || 'Grand Master')}
                                 </h2>
                                 <p className="text-text-muted">
-                                    {isLevelUp ? 'Your typing potential is soaring!' : (info?.description || 'You are making incredible progress.')}
+                                    {isLeveledUp ? 'Your typing potential is soaring!' : (info?.description || 'You are making incredible progress.')}
                                 </p>
                             </div>
 

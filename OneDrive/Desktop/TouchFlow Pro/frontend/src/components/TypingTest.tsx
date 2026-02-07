@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { TypingEngine } from '@shared/typingEngine';
 import type { KeystrokeEvent, TypingMetrics, LiveMetrics } from '@shared/types';
-import DictationEngine, { DictationUI } from './DictationMode';
-import { LiveMetricsBar } from './LiveMetricsBar';
+import { DictationUI } from './DictationMode';
 import { VirtualKeyboard } from './VirtualKeyboard';
 
 interface Props {
@@ -11,8 +11,10 @@ interface Props {
     suddenDeath?: boolean;
     onSuddenDeathFailure?: () => void;
     dictationMode?: boolean;
-    showLiveMetrics?: boolean; // Show enhanced live metrics bar
-    showVirtualKeyboard?: boolean; // Show virtual keyboard guide
+    showLiveMetrics?: boolean;
+    showVirtualKeyboard?: boolean;
+    mode?: string;
+    onReset?: () => void;
 }
 
 const TypingTest: React.FC<Props> = ({
@@ -46,8 +48,10 @@ const TypingTest: React.FC<Props> = ({
         averageKeyDelay: 0,
         timeElapsed: 0
     });
+
     const startTimeRef = useRef<number | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const resetTest = () => {
         setUserInput('');
@@ -68,29 +72,25 @@ const TypingTest: React.FC<Props> = ({
         inputRef.current?.focus();
     };
 
-    // Calculate live WPM as user types
     useEffect(() => {
         if (isStarted && startTimeRef.current && !isFailed) {
             const interval = setInterval(() => {
-                const elapsed = (Date.now() - startTimeRef.current!) / 1000 / 60; // minutes
+                const elapsed = (Date.now() - startTimeRef.current!) / 1000 / 60;
                 if (elapsed > 0) {
-                    const words = userInput.length / 5; // Standard: 5 chars = 1 word
+                    const words = userInput.length / 5;
                     setLiveWPM(Math.round(words / elapsed));
                 }
-            }, 100); // Update every 100ms
-
+            }, 100);
             return () => clearInterval(interval);
         }
     }, [isStarted, userInput, isFailed]);
 
-    // Calculate enhanced live metrics if enabled
     useEffect(() => {
         if (showLiveMetrics && isStarted && keystrokes.length > 0 && !isFailed) {
             const interval = setInterval(() => {
                 const metrics = TypingEngine.calculateLiveMetrics(keystrokes, text);
                 setLiveMetrics(metrics);
-            }, 500); // Update every 500ms
-
+            }, 500);
             return () => clearInterval(interval);
         }
     }, [showLiveMetrics, isStarted, keystrokes, text, isFailed]);
@@ -101,7 +101,6 @@ const TypingTest: React.FC<Props> = ({
         }
     }, [userInput, text, metrics, keystrokes, onComplete, isFailed]);
 
-    // Auto-focus input on mount
     useEffect(() => {
         inputRef.current?.focus();
     }, []);
@@ -147,166 +146,193 @@ const TypingTest: React.FC<Props> = ({
         }
     };
 
-    // Render text with character-by-character highlighting
     const renderText = () => {
         return text.split('').map((char, index) => {
-            let className = 'text-2xl p-[1px] transition-all duration-75 inline-block';
-
-            if (index < userInput.length) {
-                // Already typed
-                if (userInput[index] === char) {
-                    // Correct
-                    className += ' text-emerald-700 bg-emerald-50 rounded-sm';
-                } else {
-                    // Incorrect
-                    className += ' text-rose-700 bg-rose-50 underline decoration-rose-400 decoration-wavy underline-offset-4 rounded-sm';
-                }
-            } else if (index === userInput.length) {
-                // Current character
-                className += ' bg-accent-orange text-slate-900 font-black rounded-md shadow-lg animate-pulse-fast relative z-10 ring-2 ring-white';
-            } else {
-                // Not yet typed
-                className += ' text-slate-400';
-            }
+            const isTyped = index < userInput.length;
+            const isCurrent = index === userInput.length;
+            const isCorrect = isTyped && userInput[index] === char;
+            const isError = isTyped && !isCorrect;
 
             return (
-                <span key={index} className={className}>
+                <motion.span
+                    key={index}
+                    initial={false}
+                    animate={{
+                        color: isError ? 'var(--accent)' : isCorrect ? 'var(--primary)' : 'var(--text-muted)',
+                        opacity: isTyped ? 1 : 0.4,
+                        scale: isCurrent ? 1.1 : 1,
+                    }}
+                    className={`inline-block font-mono text-3xl transition-all relative ${isCurrent ? 'font-black' : 'font-medium'}`}
+                >
                     {char === ' ' ? '\u00A0' : char}
-                </span>
+                    {isCurrent && (
+                        <motion.div
+                            layoutId="cursor"
+                            className="absolute -bottom-1 left-0 w-full h-1 bg-primary rounded-full"
+                            transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                        />
+                    )}
+                </motion.span>
             );
         });
     };
 
+    const accuracyGlow = metrics.accuracy >= 98 ? 'shadow-primary/10 border-primary/20' : metrics.accuracy >= 90 ? 'shadow-secondary/10 border-secondary/20' : 'shadow-accent/10 border-accent/20';
+
     return (
-        <div className={`relative bg-white/70 backdrop-blur-xl border rounded-[2.5rem] shadow-2xl p-8 sm:p-12 w-full max-w-4xl mx-auto transition-all duration-300 ${isFailed ? 'border-rose-500 ring-4 ring-rose-500/20' : 'border-white/50'}`}>
-            {/* Sudden Death Failure Overlay */}
-            {isFailed && (
-                <div className="absolute inset-0 bg-rose-600/20 backdrop-blur-[2px] rounded-[2.5rem] z-50 flex items-center justify-center animate-in fade-in duration-300">
-                    <div className="bg-white px-8 py-4 rounded-2xl shadow-2xl border-2 border-rose-500 scale-110 animate-in zoom-in-95">
-                        <span className="text-rose-600 font-black uppercase tracking-widest text-xl flex items-center gap-3">
-                            <span className="animate-pulse">💀</span> PRECISION FAILURE <span className="animate-pulse">💀</span>
-                        </span>
-                    </div>
-                </div>
-            )}
-
-            {/* Enhanced Live Metrics (if enabled) */}
-            {showLiveMetrics && isStarted && (
-                <div className="mb-6">
-                    <LiveMetricsBar
-                        currentWPM={liveMetrics.currentWPM}
-                        currentAccuracy={liveMetrics.currentAccuracy}
-                        timeElapsed={liveMetrics.timeElapsed}
-                        keystrokesPerMinute={liveMetrics.keystrokesPerMinute}
-                        averageKeyDelay={liveMetrics.averageKeyDelay}
-                    />
-                </div>
-            )}
-
-            {/* Basic Metrics Dashboard (when enhanced metrics not shown) */}
-            {!showLiveMetrics && (
-                <div className="grid grid-cols-3 gap-4 sm:gap-8 mb-10 p-6 bg-slate-900/5 rounded-3xl border border-slate-200/50">
-                    <div className="text-center group">
-                        <div className="text-4xl sm:text-5xl font-heading font-black text-primary-blue transition-transform group-hover:scale-110 duration-300">
-                            {liveWPM}
+        <div className="w-full max-w-5xl mx-auto space-y-8">
+            {/* Header Metrics */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                {[
+                    { label: 'Velocity', value: liveWPM, unit: 'WPM', color: 'text-primary' },
+                    { label: 'Precision', value: metrics.accuracy, unit: '%', color: 'text-secondary' },
+                    { label: 'Progress', value: Math.round((userInput.length / text.length) * 100), unit: '%', color: 'text-accent' },
+                    { label: 'Key Delay', value: liveMetrics.averageKeyDelay, unit: 'ms', color: 'text-text-main' }
+                ].map((stat, i) => (
+                    <motion.div
+                        key={i}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.1 }}
+                        className="card p-6 flex flex-col items-center justify-center space-y-1"
+                    >
+                        <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">{stat.label}</span>
+                        <div className={`text-3xl font-black ${stat.color}`}>
+                            {stat.value}<span className="text-xs ml-1 opacity-50">{stat.unit}</span>
                         </div>
-                        <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">Live Velocity</div>
-                    </div>
-                    <div className="text-center group text-slate-900 border-x border-slate-200">
-                        <div className={`text-4xl sm:text-5xl font-heading font-black transition-transform group-hover:scale-110 duration-300 ${metrics.accuracy >= 95 ? 'text-secondary-teal' : 'text-accent-orange'}`}>
-                            {metrics.accuracy}%
-                        </div>
-                        <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">Accuracy</div>
-                    </div>
-                    <div className="text-center group text-slate-900">
-                        <div className="text-4xl sm:text-5xl font-heading font-black opacity-90 transition-transform group-hover:scale-110 duration-300 text-primary-blue">
-                            {Math.round((userInput.length / text.length) * 100)}%
-                        </div>
-                        <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">Progression</div>
-                    </div>
-                </div>
-            )}
-
-            {/* Performance Bar */}
-            <div className="w-full h-2 bg-slate-100 rounded-full mb-12 overflow-hidden shadow-inner">
-                <div
-                    className="h-full bg-gradient-to-r from-primary-blue via-secondary-teal to-accent-orange transition-all duration-300 ease-out shadow-[0_0_10px_rgba(30,168,168,0.4)]"
-                    style={{ width: `${(userInput.length / text.length) * 100}%` }}
-                />
+                    </motion.div>
+                ))}
             </div>
 
-            <div className="relative mb-10 overflow-hidden group">
-                {dictationMode ? (
-                    <DictationUI
-                        text={text}
-                        isStarted={isStarted}
-                        userInput={userInput}
-                        onSpeedChange={setDictationSpeed}
-                        currentSpeed={dictationSpeed}
+            {/* Main Arena */}
+            <div
+                ref={containerRef}
+                className={`relative card p-12 transition-all duration-500 overflow-hidden ${accuracyGlow}`}
+            >
+                {/* Sudden Death Effects */}
+                <AnimatePresence>
+                    {isFailed && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="absolute inset-0 z-50 bg-accent/20 backdrop-blur-md flex items-center justify-center"
+                        >
+                            <motion.div
+                                initial={{ scale: 0.8 }}
+                                animate={{ scale: 1 }}
+                                className="bg-white dark:bg-slate-900 px-12 py-8 rounded-[2rem] shadow-2xl border-4 border-accent text-center"
+                            >
+                                <span className="block text-4xl mb-4">💀</span>
+                                <h1 className="text-accent text-2xl mb-0">SEQUENCE ABORTED</h1>
+                                <p className="text-[10px] font-black uppercase tracking-widest opacity-50">Sudden Death Triggered</p>
+                            </motion.div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                {/* Progress Ring Background */}
+                <div className="absolute top-0 left-0 w-full h-1 bg-slate-100 dark:bg-white/5">
+                    <motion.div
+                        className="h-full bg-gradient-to-r from-primary to-secondary shadow-[0_0_20px_rgba(var(--primary-rgb),0.3)]"
+                        animate={{ width: `${(userInput.length / text.length) * 100}%` }}
+                        transition={{ type: 'spring', stiffness: 100, damping: 20 }}
                     />
-                ) : (
-                    <>
-                        <div className="absolute -inset-4 bg-gradient-to-br from-blue-50 to-teal-50 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        <div className="relative p-8 px-10 bg-slate-100/50 border border-slate-200 rounded-3xl min-h-[160px] font-mono leading-[3] select-none text-2xl tracking-tight transition-all text-slate-900">
+                </div>
+
+                <div className="relative z-10 space-y-12">
+                    {dictationMode ? (
+                        <DictationUI
+                            text={text}
+                            isStarted={isStarted}
+                            userInput={userInput}
+                            onSpeedChange={setDictationSpeed}
+                            currentSpeed={dictationSpeed}
+                        />
+                    ) : (
+                        <div className="min-h-[160px] flex flex-wrap gap-x-0.5 gap-y-6 leading-relaxed select-none">
                             {renderText()}
                         </div>
-                    </>
-                )}
+                    )}
+
+                    <div className="relative group">
+                        <input
+                            ref={inputRef}
+                            type="text"
+                            value={userInput}
+                            onChange={handleChange}
+                            onKeyDown={handleKeyDown}
+                            className="absolute inset-0 w-full h-full opacity-0 cursor-default"
+                            autoComplete="off"
+                            autoCorrect="off"
+                            autoCapitalize="off"
+                            spellCheck="false"
+                        />
+                        <div className={`
+                            w-full p-6 text-center rounded-2xl border-2 transition-all duration-300
+                            ${isStarted ? 'bg-primary/5 border-primary/30 shadow-inner' : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-white/10'}
+                        `}>
+                            <span className={`text-sm font-black uppercase tracking-[0.2em] ${isStarted ? 'text-primary' : 'text-text-muted opacity-50 animate-pulse'}`}>
+                                {isStarted ? 'Sequence in Progress...' : 'Press any key to begin session'}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Tactical Stats Overlay (Floating when typing) */}
+                <AnimatePresence>
+                    {isStarted && !isFailed && (
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: 20 }}
+                            className="absolute top-8 right-8 flex flex-col gap-2"
+                        >
+                            <div className="bg-slate-900/80 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 flex items-center gap-3">
+                                <span className="text-[9px] font-black uppercase tracking-tighter text-white/50">Stability</span>
+                                <div className="w-16 h-1 bg-white/10 rounded-full overflow-hidden">
+                                    <motion.div
+                                        className="h-full bg-secondary"
+                                        animate={{ width: `${metrics.accuracy}%` }}
+                                    />
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
 
-            {dictationMode && (
-                <DictationEngine
-                    text={text}
-                    isActive={isStarted}
-                    speed={dictationSpeed}
-                    onComplete={() => { }}
-                />
-            )}
-
-            {/* Command Interface */}
-            <div className="relative">
-                <input
-                    ref={inputRef}
-                    type="text"
-                    value={userInput}
-                    onChange={handleChange}
-                    onKeyDown={handleKeyDown}
-                    placeholder={isStarted ? '' : 'Capture the sequence...'}
-                    className={`
-                        w-full py-6 pr-14 pl-8 text-xl font-mono bg-white border-2 rounded-2xl outline-none transition-all shadow-lg
-                        ${isStarted ? 'border-primary-blue shadow-primary-blue/10 ring-8 ring-primary-blue/5' : 'border-slate-200 hover:border-slate-300'}
-                    `}
-                    autoComplete="off"
-                    autoCorrect="off"
-                    autoCapitalize="off"
-                    spellCheck="false"
-                />
-
-                <div className="absolute right-6 top-1/2 -translate-y-1/2">
-                    <div className={`w-3 h-3 rounded-full ${isStarted ? 'bg-secondary-teal animate-ping' : 'bg-slate-300'}`}></div>
-                </div>
-            </div>
-
-            {/* Tactical Hint */}
-            {!isStarted && (
-                <div className="mt-8 flex items-center justify-center gap-2 text-slate-400 font-bold text-xs uppercase tracking-widest animate-bounce-slow">
-                    <span>💡 Precision over Velocity</span>
-                </div>
-            )}
-
-            {/* Virtual Keyboard (if enabled) */}
+            {/* Virtual Keyboard Bridge */}
             {showVirtualKeyboard && (
-                <div className="mt-8">
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="card p-8 bg-slate-900/[0.02] dark:bg-white/[0.02]"
+                >
                     <VirtualKeyboard
                         nextKey={text[userInput.length]}
                         showFingerGuide={true}
                         compact={true}
                     />
+                </motion.div>
+            )}
+
+            {!isStarted && !isFailed && (
+                <div className="flex justify-center gap-8">
+                    {[
+                        { icon: '🎯', text: 'FOCUS MODE ON' },
+                        { icon: '⌨️', text: 'DYNAMIC FEEDBACK' },
+                        { icon: '⚡', text: 'LOW LATENCY ENGINE' }
+                    ].map((item, i) => (
+                        <div key={i} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-text-muted opacity-40">
+                            <span>{item.icon}</span>
+                            <span>{item.text}</span>
+                        </div>
+                    ))}
                 </div>
             )}
         </div>
     );
 };
-
 
 export default TypingTest;

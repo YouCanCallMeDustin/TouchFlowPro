@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { Mail, Lock, Shield, Zap, Rocket } from 'lucide-react';
 
 interface SignupProps {
     onSwitchToLogin: () => void;
@@ -18,7 +19,7 @@ const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
         setError('');
 
         if (password !== confirmPassword) {
-            setError('Passwords do not match');
+            setError('Neural Ciphers Do Not Match');
             return;
         }
 
@@ -36,71 +37,95 @@ const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
             if (response.ok) {
                 login(data.token, data.user);
             } else {
-                setError(data.error || 'Signup failed');
+                setError(data.error || 'Initialization Sequence Failed');
             }
         } catch (err) {
-            setError('Could not connect to server');
+            setError('Neural Link Connection Failure');
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="min-h-[80vh] flex items-center justify-center p-6 sm:p-10">
-            <div className="max-w-md w-full bg-white/70 backdrop-blur-xl border border-white/50 rounded-3xl shadow-2xl p-8 sm:p-12 text-center transition-all hover:shadow-3xl">
-                {/* Logo */}
-                <div className="flex justify-center mb-8">
-                    <img
-                        src="/assets/logo.png"
-                        alt="TouchFlow Pro"
-                        className="h-24 sm:h-28 w-auto"
-                    />
+        <div className="min-h-[90vh] flex items-center justify-center p-6 relative overflow-hidden">
+            {/* Background Decor */}
+            <div className="absolute top-1/4 -right-20 w-80 h-80 bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute bottom-1/4 -left-20 w-80 h-80 bg-secondary/10 rounded-full blur-[120px] pointer-events-none" />
+
+            <div className="card max-w-lg w-full p-10 sm:p-16 text-center animate-in fade-in slide-in-from-bottom-8 duration-1000">
+                <div className="flex justify-center mb-12">
+                    <div className="relative group">
+                        <div className="absolute inset-0 bg-primary blur-2xl opacity-20 group-hover:opacity-40 transition-opacity" />
+                        <img
+                            src="/assets/logo.png"
+                            alt="TouchFlow Pro"
+                            className="h-24 w-auto relative z-10 brightness-110 drop-shadow-2xl"
+                        />
+                    </div>
                 </div>
 
-                <h1 className="text-4xl sm:text-5xl font-heading font-extrabold mb-2 bg-gradient-brand bg-clip-text text-transparent">
-                    Join TouchFlow Pro
-                </h1>
-                <p className="text-text-muted text-lg mb-8">Begin your typing mastery journey</p>
+                <div className="mb-12">
+                    <h1 className="text-4xl sm:text-5xl font-black mb-4 text-text-main tracking-tighter uppercase">
+                        Initialize Link
+                    </h1>
+                    <p className="text-text-muted text-sm font-black uppercase tracking-[0.3em] opacity-40">Registering New Neural Signature</p>
+                </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6 text-left">
-                    <div>
-                        <label className="block text-sm font-semibold mb-2 text-text-main uppercase tracking-wider">Email Address</label>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="you@example.com"
-                            className="w-full px-5 py-4 rounded-xl border-2 border-slate-200 focus:outline-none focus:border-secondary-teal focus:ring-4 focus:ring-secondary-teal/10 transition-all font-body text-base"
-                            required
-                        />
+                    <div className="space-y-3">
+                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.4em] ml-1">Universal Identifier</label>
+                        <div className="relative group">
+                            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-text-muted/40 group-focus-within:text-primary transition-colors">
+                                <Mail size={18} />
+                            </div>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="OPERATOR@TOUCHFLOW.SYSTEM"
+                                className="w-full pl-14 pr-6 py-5 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all font-black text-xs uppercase tracking-widest text-text-main placeholder:text-text-muted/20"
+                                required
+                            />
+                        </div>
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-semibold mb-2 text-text-main uppercase tracking-wider">Password</label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="••••••••"
-                            className="w-full px-5 py-4 rounded-xl border-2 border-slate-200 focus:outline-none focus:border-secondary-teal focus:ring-4 focus:ring-secondary-teal/10 transition-all font-body text-base"
-                            required
-                        />
+                    <div className="space-y-3">
+                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.4em] ml-1">Security Cipher</label>
+                        <div className="relative group">
+                            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-text-muted/40 group-focus-within:text-primary transition-colors">
+                                <Lock size={18} />
+                            </div>
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="••••••••"
+                                className="w-full pl-14 pr-6 py-5 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all font-black text-xs uppercase tracking-widest text-text-main placeholder:text-text-muted/20"
+                                required
+                            />
+                        </div>
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-semibold mb-2 text-text-main uppercase tracking-wider">Confirm Password</label>
-                        <input
-                            type="password"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            placeholder="••••••••"
-                            className="w-full px-5 py-4 rounded-xl border-2 border-slate-200 focus:outline-none focus:border-secondary-teal focus:ring-4 focus:ring-secondary-teal/10 transition-all font-body text-base"
-                            required
-                        />
+                    <div className="space-y-3">
+                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.4em] ml-1">Confirm Cipher</label>
+                        <div className="relative group">
+                            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-text-muted/40 group-focus-within:text-primary transition-colors">
+                                <Shield size={18} />
+                            </div>
+                            <input
+                                type="password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                placeholder="••••••••"
+                                className="w-full pl-14 pr-6 py-5 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all font-black text-xs uppercase tracking-widest text-text-main placeholder:text-text-muted/20"
+                                required
+                            />
+                        </div>
                     </div>
 
                     {error && (
-                        <div className="bg-red-50 text-red-700 p-4 rounded-lg text-sm border border-red-100 animate-pulse">
+                        <div className="bg-rose-500/10 text-rose-500 p-5 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-rose-500/20 animate-in shake duration-500 flex items-center gap-3">
+                            <Shield size={16} />
                             {error}
                         </div>
                     )}
@@ -108,13 +133,14 @@ const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-gradient-to-r from-primary-blue to-blue-800 text-white py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+                        className="w-full bg-primary text-white py-6 rounded-2xl font-black text-xs uppercase tracking-[0.4em] shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-4 group mt-4"
                     >
-                        {loading ? 'Creating Account...' : 'Sign Up'}
+                        {loading ? 'Initializing...' : 'Construct Account'}
+                        <Rocket size={18} className="group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
                     </button>
                 </form>
 
-                <div className="mt-8 pt-8 border-t border-slate-100 flex flex-col gap-4">
+                <div className="mt-12 pt-10 border-t border-white/5 flex flex-col gap-6">
                     <button
                         onClick={() => login('dev-bypass-token', {
                             id: 'guest',
@@ -122,17 +148,18 @@ const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
                             assignedLevel: 'Beginner',
                             currentLessonId: 'b1'
                         })}
-                        className="w-full bg-slate-50 text-slate-600 py-3 rounded-xl font-bold text-sm border-2 border-slate-100 hover:bg-slate-100 transition-all"
+                        className="w-full bg-white/5 text-text-muted py-4 rounded-xl font-black text-[10px] uppercase tracking-[0.3em] border border-white/5 hover:bg-white/10 hover:text-text-main transition-all flex items-center justify-center gap-3"
                     >
-                        ⚡ Developer Bypass (Guest Access)
+                        <Zap size={14} className="text-primary" />
+                        Neural Bypass (Guest)
                     </button>
 
-                    <div className="text-sm text-text-muted">
-                        Already have an account? <span
+                    <div className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted/40">
+                        Existing Operator? <span
                             onClick={onSwitchToLogin}
-                            className="text-primary-blue font-bold cursor-pointer hover:text-secondary-teal hover:underline transition-colors ml-1"
+                            className="text-primary cursor-pointer hover:text-primary/80 transition-colors ml-2 border-b border-primary/20"
                         >
-                            Sign in
+                            Establish Link
                         </span>
                     </div>
                 </div>

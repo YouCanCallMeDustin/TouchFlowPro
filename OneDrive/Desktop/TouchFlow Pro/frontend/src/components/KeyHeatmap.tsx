@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { KEYBOARD_LAYOUT } from '../utils/keyboardLayout';
+import { useAuth } from '../context/AuthContext';
 
 
 interface KeyStats {
@@ -22,6 +23,7 @@ export const KeyHeatmap: React.FC<KeyHeatmapProps> = ({
     timeFilter = 'all',
     compact = false
 }) => {
+    const { token } = useAuth();
     const [keyStats, setKeyStats] = useState<Map<string, KeyStats>>(new Map());
     const [loading, setLoading] = useState(true);
     const [hoveredKey, setHoveredKey] = useState<string | null>(null);
@@ -31,9 +33,13 @@ export const KeyHeatmap: React.FC<KeyHeatmapProps> = ({
     }, [userId, timeFilter]);
 
     const fetchKeyStats = async () => {
+        if (!userId || !token) return;
+
         try {
             setLoading(true);
-            const response = await fetch(`/api/keystroke-tracking/stats/${userId}`);
+            const response = await fetch(`/api/keystroke-tracking/stats/${userId}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             if (response.ok) {
                 const stats: KeyStats[] = await response.json();
                 const statsMap = new Map(stats.map(s => [s.key, s]));
@@ -50,15 +56,15 @@ export const KeyHeatmap: React.FC<KeyHeatmapProps> = ({
         const stat = keyStats.get(key) || keyStats.get(key.toLowerCase());
 
         if (!stat || stat.totalAttempts < 3) {
-            return '#4B5563'; // Gray-600 (not enough data)
+            return 'var(--bg-card)';
         }
 
         const accuracy = stat.accuracy;
 
-        if (accuracy >= 95) return '#10B981'; // Green-500 (excellent)
-        if (accuracy >= 90) return '#3B82F6'; // Blue-500 (good)
-        if (accuracy >= 85) return '#F59E0B'; // Yellow-500 (okay)
-        return '#EF4444'; // Red-500 (needs work)
+        if (accuracy >= 95) return 'oklch(65% 0.15 160 / 0.3)'; // Emerald
+        if (accuracy >= 90) return 'oklch(65% 0.15 250 / 0.3)';  // Blue
+        if (accuracy >= 85) return 'oklch(75% 0.15 80 / 0.3)';   // Amber
+        return 'oklch(65% 0.20 20 / 0.3)'; // Rose
     };
 
     const getKeyStyle = (key: string): React.CSSProperties => {
@@ -81,7 +87,7 @@ export const KeyHeatmap: React.FC<KeyHeatmapProps> = ({
         return (
             <motion.div
                 key={key}
-                className={`${width} ${compact ? 'h-10' : 'h-12'} rounded-lg flex items-center justify-center text-white font-bold text-sm border border-gray-700 cursor-pointer relative`}
+                className={`${width} ${compact ? 'h-10' : 'h-12'} rounded-xl flex items-center justify-center text-text-main font-black text-xs border border-slate-200/50 dark:border-white/10 cursor-pointer relative transition-all duration-300`}
                 style={getKeyStyle(key)}
                 onMouseEnter={() => setHoveredKey(key)}
                 onMouseLeave={() => setHoveredKey(null)}
@@ -94,7 +100,7 @@ export const KeyHeatmap: React.FC<KeyHeatmapProps> = ({
                     <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="absolute bottom-full mb-2 bg-gray-900 text-white px-3 py-2 rounded-lg shadow-xl text-xs whitespace-nowrap z-50"
+                        className="absolute bottom-full mb-2 bg-bg-card border border-glass-border text-text-main px-3 py-2 rounded-lg shadow-xl text-xs whitespace-nowrap z-50 backdrop-blur-md"
                     >
                         <div className="font-bold mb-1">{key === ' ' ? 'Space' : key.toUpperCase()}</div>
                         <div>Accuracy: {stat!.accuracy.toFixed(1)}%</div>
@@ -108,44 +114,43 @@ export const KeyHeatmap: React.FC<KeyHeatmapProps> = ({
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center p-8">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+            <div className="flex items-center justify-center p-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
             </div>
         );
     }
 
     return (
         <div className={`${compact ? 'scale-90' : ''} origin-top`}>
-            <div className="bg-gray-800 rounded-2xl p-6 shadow-2xl border border-gray-700">
+            <div className="card p-8 scale-90">
                 {/* Header */}
-                <div className="mb-6">
-                    <h3 className="text-2xl font-bold text-white mb-2">Keyboard Heatmap</h3>
-                    <p className="text-gray-400 text-sm">
-                        Hover over keys to see detailed stats. Colors indicate accuracy.
+                <div className="mb-12">
+                    <h3 className="text-2xl font-black text-text-main mb-3 tracking-tight">Spectral Heatmap</h3>
+                    <p className="text-text-muted text-sm opacity-40 uppercase font-black tracking-widest text-[9px]">
+                        Hover over keys to see spectral analysis signals.
                     </p>
                 </div>
 
-                {/* Legend */}
-                <div className="mb-4 flex flex-wrap gap-4 justify-center text-xs">
+                <div className="mb-4 flex flex-wrap gap-6 justify-center text-[10px] font-black uppercase tracking-widest opacity-60">
                     <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 rounded" style={{ backgroundColor: '#10B981' }} />
-                        <span className="text-gray-300">Excellent (95%+)</span>
+                        <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: 'rgba(16, 185, 129, 0.6)' }} />
+                        <span>Excellent (95%+)</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 rounded" style={{ backgroundColor: '#3B82F6' }} />
-                        <span className="text-gray-300">Good (90-95%)</span>
+                        <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: 'rgba(59, 130, 246, 0.6)' }} />
+                        <span>Good (90-95%)</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 rounded" style={{ backgroundColor: '#F59E0B' }} />
-                        <span className="text-gray-300">Okay (85-90%)</span>
+                        <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: 'rgba(245, 158, 11, 0.6)' }} />
+                        <span>Okay (85-90%)</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 rounded" style={{ backgroundColor: '#EF4444' }} />
-                        <span className="text-gray-300">Needs Work (&lt;85%)</span>
+                        <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: 'rgba(239, 68, 68, 0.6)' }} />
+                        <span>Needs Work (&lt;85%)</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="w-4 h-4 rounded" style={{ backgroundColor: '#4B5563' }} />
-                        <span className="text-gray-300">No Data</span>
+                        <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }} />
+                        <span>No Data</span>
                     </div>
                 </div>
 
@@ -179,23 +184,23 @@ export const KeyHeatmap: React.FC<KeyHeatmapProps> = ({
 
                 {/* Summary Stats */}
                 <div className="mt-6 grid grid-cols-3 gap-4 text-center">
-                    <div className="bg-gray-900 rounded-lg p-3">
-                        <div className="text-2xl font-bold text-green-500">
+                    <div className="bg-slate-500/5 dark:bg-text-main/5 rounded-2xl p-4 border border-slate-200/50 dark:border-white/10 group hover:border-primary/20 transition-all">
+                        <div className="text-2xl font-black text-primary tracking-tighter">
                             {Array.from(keyStats.values()).filter(s => s.accuracy >= 95 && s.totalAttempts >= 3).length}
                         </div>
-                        <div className="text-xs text-gray-400">Mastered Keys</div>
+                        <div className="text-[9px] font-black text-text-muted uppercase tracking-widest mt-1">Mastered Keys</div>
                     </div>
-                    <div className="bg-gray-900 rounded-lg p-3">
-                        <div className="text-2xl font-bold text-yellow-500">
+                    <div className="bg-slate-500/5 dark:bg-text-main/5 rounded-2xl p-4 border border-slate-200/50 dark:border-white/10 group hover:border-amber-500/20 transition-all">
+                        <div className="text-2xl font-black text-amber-500 tracking-tighter">
                             {Array.from(keyStats.values()).filter(s => s.accuracy >= 85 && s.accuracy < 95 && s.totalAttempts >= 3).length}
                         </div>
-                        <div className="text-xs text-gray-400">Improving Keys</div>
+                        <div className="text-[9px] font-black text-text-muted uppercase tracking-widest mt-1">Improving Keys</div>
                     </div>
-                    <div className="bg-gray-900 rounded-lg p-3">
-                        <div className="text-2xl font-bold text-red-500">
+                    <div className="bg-slate-500/5 dark:bg-text-main/5 rounded-2xl p-4 border border-slate-200/50 dark:border-white/10 group hover:border-rose-500/20 transition-all">
+                        <div className="text-2xl font-black text-rose-500 tracking-tighter">
                             {Array.from(keyStats.values()).filter(s => s.accuracy < 85 && s.totalAttempts >= 3).length}
                         </div>
-                        <div className="text-xs text-gray-400">Trouble Keys</div>
+                        <div className="text-[9px] font-black text-text-muted uppercase tracking-widest mt-1">Trouble Keys</div>
                     </div>
                 </div>
             </div>

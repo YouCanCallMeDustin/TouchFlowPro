@@ -1,9 +1,11 @@
 import { TypingEngine } from '@shared/typingEngine'
 import { useState, useEffect, useCallback } from 'react'
-import { AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import './App.css'
 import TypingTest from './components/TypingTest'
+import { Breadcrumbs } from './components/Breadcrumbs'
 import PageTransition from './components/PageTransition'
+import { ThemeToggle } from './components/ThemeToggle'
 import Curriculum from './components/Curriculum'
 import LessonView from './components/LessonView'
 import HeatMap from './components/HeatMap'
@@ -26,6 +28,17 @@ import { useAuth } from './context/AuthContext'
 import type { TypingMetrics } from '@shared/types'
 import type { UserProgress, Lesson } from '@shared/curriculum'
 import type { DifficultyLevel, PlacementResult } from '@shared/placement'
+import {
+  LayoutDashboard,
+  BookOpen,
+  Zap,
+  History,
+  BarChart3,
+  Trophy,
+  User,
+  Compass,
+  ArrowRight
+} from 'lucide-react'
 
 type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'adaptive_practice' | 'leaderboard'
 
@@ -41,6 +54,18 @@ function App() {
   const [showAchievement, setShowAchievement] = useState<{ type?: string, isLevel?: boolean, level?: number } | null>(null)
 
   const baselineText = "Precision. Speed. Confidence. These are the hallmarks of a professional typist. Your journey starts with this baseline assessment to measure your current performance."
+
+  useEffect(() => {
+    // Initialize theme from localStorage or system preference
+    const savedTheme = localStorage.getItem('theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, []);
 
   const fetchProgress = useCallback(async (id: string) => {
     setIsFetchingProgress(true)
@@ -124,7 +149,6 @@ function App() {
     }
   }
 
-
   const handleSessionComplete = async (metrics: TypingMetrics, type: string, drillId: string, keystrokes?: any[], liveMetrics?: any[]) => {
     if (!user) return
 
@@ -178,10 +202,10 @@ function App() {
     return (
       <div className="min-h-screen bg-bg-main flex items-center justify-center">
         <div className="text-center">
-          <div className="text-4xl font-heading font-extrabold animate-pulse bg-gradient-to-r from-primary-blue to-secondary-teal bg-clip-text text-transparent mb-4">
+          <div className="text-4xl font-heading font-extrabold animate-pulse bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-4">
             TouchFlow Pro
           </div>
-          <div className="text-text-muted tracking-widest uppercase text-xs font-bold">Initializing Mastery...</div>
+          <div className="text-text-muted tracking-[0.4em] uppercase text-[10px] font-black">Syncing Credentials...</div>
         </div>
       </div>
     )
@@ -189,111 +213,78 @@ function App() {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-bg-main selection:bg-secondary-teal/20">
-        <header className="sticky top-0 z-50 backdrop-blur-md bg-white/50 border-b border-slate-200/50 px-6 sm:px-12 py-4 transition-all">
-          {/* Top row: Logo and User Info */}
-          <div className="flex justify-between items-center mb-2">
-            <div className="flex-1" />
-            <img
-              src="/assets/logo.png"
-              alt="TouchFlow Pro"
-              className="h-12 sm:h-14 w-auto cursor-pointer active:scale-95 transition-transform"
-              onClick={() => userProgress && setStage('dashboard')}
-            />
-            <div className="flex-1 flex justify-end">
+      <div className="min-h-screen bg-bg-main selection:bg-primary/20">
+        <header className="sticky top-0 z-50 glass-header px-6 sm:px-12 py-4">
+          <div className="max-w-7xl mx-auto flex justify-between items-center gap-4">
+            <div className="flex items-center gap-8">
+              <img
+                src="/assets/logo.png"
+                alt="TouchFlow Pro"
+                className="h-10 w-auto cursor-pointer active:scale-95 transition-all hover:brightness-110"
+                onClick={() => userProgress && setStage('dashboard')}
+              />
+              <div className="h-6 w-px bg-slate-200 dark:bg-white/10 hidden sm:block" />
+              <ThemeToggle />
+            </div>
+
+            <div className="flex items-center gap-4 sm:gap-8">
               {user && (
-                <div className="flex items-center gap-4 sm:gap-6">
-                  <div className="hidden sm:flex flex-col items-end">
-                    <span className="text-xs font-bold text-text-muted uppercase tracking-tighter">Session Active</span>
-                    <span className="text-sm font-semibold text-text-main leading-none">{user.email}</span>
+                <>
+                  <div className="hidden md:flex flex-col items-end gap-1">
+                    <span className="text-[8px] font-black text-primary uppercase tracking-[0.4em] mb-0.5">Operator ID</span>
+                    <span className="text-xs font-bold text-text-main leading-none">{user.email}</span>
                   </div>
                   <button
                     onClick={logout}
-                    className="px-4 py-2 text-xs font-bold text-text-muted border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-red-600 hover:border-red-100 transition-all active:scale-95 uppercase tracking-wider"
+                    className="group relative px-5 py-2.5 rounded-xl bg-red-500/5 border border-red-500/10 transition-all hover:bg-red-500 hover:text-white active:scale-95"
                   >
-                    Sign Out
+                    <span className="relative z-10 text-[9px] font-black uppercase tracking-[0.2em]">End Session</span>
                   </button>
-                </div>
+                </>
               )}
             </div>
           </div>
 
-          {/* Navigation Menu */}
           {user && userProgress && stage !== 'auth_login' && stage !== 'auth_signup' && stage !== 'welcome' && (
-            <nav className="mt-4 flex flex-wrap gap-2">
-              <button
-                onClick={() => setStage('dashboard')}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${stage === 'dashboard' ? 'bg-primary-blue text-white' : 'bg-white border border-slate-200 text-text-muted hover:border-primary-blue'}`}
-              >
-                🏠 Dashboard
-              </button>
-              <button
-                onClick={() => setStage('curriculum')}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${stage === 'curriculum' || stage === 'lesson' || stage === 'levelup' ? 'bg-primary-blue text-white' : 'bg-white border border-slate-200 text-text-muted hover:border-primary-blue'}`}
-              >
-                📚 Lessons
-              </button>
-              <button
-                onClick={() => setStage('practice')}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${stage === 'practice' ? 'bg-primary-blue text-white' : 'bg-white border border-slate-200 text-text-muted hover:border-primary-blue'}`}
-              >
-                🎯 Practice
-              </button>
-              <button
-                onClick={() => setStage('bible_practice')}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${stage === 'bible_practice' ? 'bg-primary-blue text-white' : 'bg-white border border-slate-200 text-text-muted hover:border-primary-blue'}`}
-              >
-                📖 Bible
-              </button>
-              <button
-                onClick={() => setStage('adaptive_practice')}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${stage === 'adaptive_practice' ? 'bg-primary-blue text-white' : 'bg-white border border-slate-200 text-text-muted hover:border-primary-blue'}`}
-              >
-                🧠 Adaptive
-              </button>
-              <button
-                onClick={() => setStage('analytics')}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${stage === 'analytics' ? 'bg-primary-blue text-white' : 'bg-white border border-slate-200 text-text-muted hover:border-primary-blue'}`}
-              >
-                📊 Analytics
-              </button>
-              <button
-                onClick={() => setStage('history')}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${stage === 'history' ? 'bg-primary-blue text-white' : 'bg-white border border-slate-200 text-text-muted hover:border-primary-blue'}`}
-              >
-                📚 History
-              </button>
-              <button
-                onClick={() => setStage('achievements')}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${stage === 'achievements' ? 'bg-primary-blue text-white' : 'bg-white border border-slate-200 text-text-muted hover:border-primary-blue'}`}
-              >
-                🏆 Achievements
-              </button>
-              <button
-                onClick={() => setStage('custom_drills')}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${stage === 'custom_drills' ? 'bg-primary-blue text-white' : 'bg-white border border-slate-200 text-text-muted hover:border-primary-blue'}`}
-              >
-                ✏️ Custom Drills
-              </button>
-              <button
-                onClick={() => setStage('goals')}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${stage === 'goals' ? 'bg-primary-blue text-white' : 'bg-white border border-slate-200 text-text-muted hover:border-primary-blue'}`}
-              >
-                🎯 Goals
-              </button>
-              <button
-                onClick={() => setStage('leaderboard')}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${stage === 'leaderboard' ? 'bg-primary-blue text-white' : 'bg-white border border-slate-200 text-text-muted hover:border-primary-blue'}`}
-              >
-                🏆 Leaderboard
-              </button>
-              <button
-                onClick={() => setStage('profile')}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${stage === 'profile' ? 'bg-primary-blue text-white' : 'bg-white border border-slate-200 text-text-muted hover:border-primary-blue'}`}
-              >
-                👤 Profile
-              </button>
-            </nav>
+            <div className="max-w-7xl mx-auto mt-6">
+              <nav className="flex items-center gap-1 nav-container overflow-x-auto scrollbar-none">
+                {[
+                  { id: 'dashboard' as Stage, label: 'Control', icon: LayoutDashboard },
+                  { id: 'curriculum' as Stage, label: 'Curriculum', icon: BookOpen },
+                  { id: 'practice' as Stage, label: 'Sessions', icon: Zap },
+                  { id: 'bible_practice' as Stage, label: 'Legacy', icon: History },
+                  { id: 'adaptive_practice' as Stage, label: 'Adaptive', icon: Compass },
+                  { id: 'analytics' as Stage, label: 'Insights', icon: BarChart3 },
+                  { id: 'leaderboard' as Stage, label: 'Standings', icon: Trophy },
+                  { id: 'profile' as Stage, label: 'Identity', icon: User },
+                ].map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => setStage(item.id)}
+                    className={`flex items-center gap-3 px-6 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-500 relative group overflow-hidden ${stage === item.id || (item.id === 'curriculum' && (stage === 'lesson' || stage === 'levelup'))
+                      ? 'bg-primary text-white shadow-2xl shadow-primary/40 scale-105 active:scale-95'
+                      : 'bg-slate-500/10 dark:bg-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-500/20 dark:hover:bg-white/20 hover:text-text-main hover:translate-y-[-2px] border border-slate-200/20 dark:border-transparent'}`}
+                  >
+                    <item.icon size={14} strokeWidth={2.5} className={`${stage === item.id ? 'opacity-100' : 'opacity-40 group-hover:opacity-100'} transition-all`} />
+                    <span className="relative z-10">{item.label}</span>
+                  </button>
+                ))}
+              </nav>
+
+              <div className="px-2 border-t border-white/5 pt-4">
+                <Breadcrumbs
+                  items={[
+                    { label: 'System', onClick: () => setStage('dashboard') },
+                    {
+                      label: stage === 'lesson' ? 'Curriculum' : stage.replace('_', ' '),
+                      onClick: stage === 'lesson' ? () => setStage('curriculum') : undefined,
+                      active: stage !== 'lesson'
+                    },
+                    stage === 'lesson' ? { label: currentLesson?.title || 'Active Session', active: true } : null
+                  ].filter((i): i is any => !!i)}
+                />
+              </div>
+            </div>
           )}
         </header>
 
@@ -312,17 +303,19 @@ function App() {
 
             {stage === 'welcome' && (
               <PageTransition key="welcome">
-                <div className="max-w-2xl w-full bg-white/70 backdrop-blur-xl border border-white/50 rounded-3xl shadow-2xl p-8 sm:p-12 text-center">
-                  <div className="w-20 h-20 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-8 text-4xl">📚</div>
-                  <h2 className="text-3xl sm:text-4xl font-heading font-extrabold mb-4 text-text-main">Ready to Personalize Your Training?</h2>
-                  <p className="text-text-muted text-lg mb-10 leading-relaxed">
-                    To establish your custom curriculum, we first need to establish a baseline. This assessment will measure your speed and accuracy on professional-grade content.
-                  </p>
+                <div className="max-w-2xl w-full card text-center">
+                  <div className="w-20 h-20 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto mb-10 text-4xl shadow-lg border border-white/10">🚀</div>
+                  <h1 className="mb-6 leading-tight">Elevate Your Performance.</h1>
+                  <p className="text-text-muted text-xl mb-12 leading-relaxed font-medium">Ready to transition from typing to pure flow? Let's calibrate your starting point.</p>
+
                   <button
-                    className="w-full sm:w-auto bg-gradient-to-r from-primary-blue to-blue-800 text-white px-10 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0 transition-all"
                     onClick={() => setStage('assessment')}
+                    className="w-full bg-primary text-white py-5 rounded-2xl font-black uppercase tracking-[0.3em] text-[12px] shadow-2xl shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all group overflow-hidden relative"
                   >
-                    Start Baseline Assessment
+                    <span className="relative z-10 flex items-center justify-center gap-3">
+                      Begin Assessment <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
+                    </span>
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
                   </button>
                 </div>
               </PageTransition>
@@ -330,99 +323,88 @@ function App() {
 
             {stage === 'assessment' && (
               <PageTransition key="assessment">
-                <div className="w-full">
-                  <TypingTest text={baselineText} onComplete={handleAssessmentComplete} />
+                <div className="w-full max-w-4xl space-y-8">
+                  <TypingTest
+                    text={baselineText}
+                    onComplete={handleAssessmentComplete}
+                    mode="baseline"
+                    onReset={() => { }}
+                  />
                 </div>
               </PageTransition>
             )}
 
-            {stage === 'placement' && placementResult && assessmentMetrics && (
+            {stage === 'placement' && placementResult && userProgress && (
               <PageTransition key="placement">
-                <div className="max-w-4xl w-full">
-                  <div className="bg-white/70 backdrop-blur-xl border border-white/50 rounded-3xl shadow-2xl p-8 sm:p-14 text-center">
-                    <div className="text-6xl mb-6 drop-shadow-sm">🎯</div>
-                    <h2 className="text-4xl sm:text-5xl font-heading font-extrabold mb-8 tracking-tight">Assessment Complete!</h2>
-
-                    <div className="grid grid-cols-2 gap-6 mb-12">
-                      <div className="bg-slate-50/50 p-6 rounded-2xl border border-slate-100">
-                        <div className="text-4xl sm:text-5xl font-heading font-extrabold bg-gradient-to-br from-primary-blue to-blue-800 bg-clip-text text-transparent">
-                          {assessmentMetrics.netWPM}
-                        </div>
-                        <div className="text-xs font-bold text-text-muted uppercase tracking-[0.2em] mt-2">Net WPM</div>
-                      </div>
-                      <div className="bg-slate-50/50 p-6 rounded-2xl border border-slate-100">
-                        <div className="text-4xl sm:text-5xl font-heading font-extrabold bg-gradient-to-br from-secondary-teal to-teal-800 bg-clip-text text-transparent">
-                          {assessmentMetrics.accuracy}%
-                        </div>
-                        <div className="text-xs font-bold text-text-muted uppercase tracking-[0.2em] mt-2">Accuracy</div>
-                      </div>
-                    </div>
-
-                    <div className="mb-12">
-                      <HeatMap errorMap={assessmentMetrics.errorMap} />
-                    </div>
-
-                    <div className="p-8 rounded-2xl bg-gradient-to-br from-primary-blue to-secondary-teal text-white shadow-xl mb-12">
-                      <h3 className="text-white text-2xl font-bold mb-3 flex items-center justify-center gap-3">
-                        <span className="bg-white/20 px-3 py-1 rounded-lg text-sm uppercase tracking-widest font-black">Level</span>
-                        {placementResult.level}
-                      </h3>
-                      <p className="text-white/90 text-lg leading-relaxed">{placementResult.reason}</p>
-                    </div>
-
-                    <button
-                      className="w-full sm:w-auto bg-white text-primary-blue border-2 border-primary-blue px-12 py-4 rounded-xl font-bold text-xl hover:bg-primary-blue hover:text-white shadow-lg hover:shadow-xl transition-all"
-                      onClick={() => setStage('curriculum')}
-                    >
-                      Start Learning Journey
-                    </button>
+                <div className="max-w-2xl w-full card text-center">
+                  <div className="text-6xl mb-8 animate-[bounce_2s_infinite]">🎯</div>
+                  <h1 className="mb-4">Calibration Complete.</h1>
+                  <div className="bg-primary/5 rounded-3xl p-8 mb-10 border border-white/10">
+                    <p className="text-text-muted uppercase tracking-[0.2em] text-[10px] font-black mb-4">Starting Tier</p>
+                    <h2 className="text-5xl font-black text-primary mb-2">{placementResult.level}</h2>
+                    <p className="text-text-main font-bold">Speed: {Math.round(assessmentMetrics?.netWPM || 0)} WPM • Accuracy: {Math.round(assessmentMetrics?.accuracy || 0)}%</p>
                   </div>
-                </div>
-              </PageTransition>
-            )}
-
-            {stage === 'curriculum' && userProgress && user && (
-              <PageTransition key="curriculum">
-                <div className="w-full">
-                  <Curriculum
-                    userId={user.id}
-                    progress={userProgress}
-                    onStartLesson={handleStartLesson}
-                    onLevelChange={() => { }}
-                  />
-                </div>
-              </PageTransition>
-            )}
-
-            {stage === 'lesson' && currentLesson && user && (
-              <PageTransition key="lesson">
-                <div className="w-full">
-                  <LessonView
-                    lesson={currentLesson}
-                    userId={user.id}
-                    onComplete={handleLessonComplete}
-                    onCancel={() => setStage('curriculum')}
-                  />
+                  <button
+                    onClick={() => setStage('dashboard')}
+                    className="w-full bg-primary text-white py-5 rounded-2xl font-black uppercase tracking-[0.3em] text-[12px] shadow-2xl shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                  >
+                    Access Command Center
+                  </button>
                 </div>
               </PageTransition>
             )}
 
             {stage === 'dashboard' && user && (
-              <PageTransition key="dashboard">
-                <div className="w-full">
-                  <Dashboard
-                    userId={user.id}
-                    onNavigate={(destination) => setStage(destination as Stage)}
-                    userEmail={user.email}
-                    userName={user.name}
-                  />
+              <Dashboard
+                userId={user.id}
+                onNavigate={(s) => setStage(s as Stage)}
+                userEmail={user.email}
+                userName={user.name}
+              />
+            )}
+
+            {stage === 'curriculum' && userProgress && user && (
+              <PageTransition key="curriculum">
+                <Curriculum
+                  userId={user.id}
+                  progress={userProgress}
+                  onStartLesson={handleStartLesson}
+                  onLevelChange={() => { }}
+                />
+              </PageTransition>
+            )}
+
+            {stage === 'lesson' && currentLesson && user && (
+              <PageTransition key="lesson">
+                <LessonView
+                  lesson={currentLesson}
+                  userId={user.id}
+                  onComplete={handleLessonComplete}
+                  onCancel={() => setStage('curriculum')}
+                />
+              </PageTransition>
+            )}
+
+            {stage === 'levelup' && levelUpInfo && (
+              <PageTransition key="levelup">
+                <div className="max-w-2xl w-full card text-center bg-gradient-to-br from-primary/10 via-transparent to-secondary/10">
+                  <div className="text-7xl mb-8">🏆</div>
+                  <h1 className="mb-4">Tier Ascent.</h1>
+                  <h2 className="text-4xl text-primary mb-6">New Level: {levelUpInfo.newLevel}</h2>
+                  <p className="text-text-main text-xl mb-12 font-medium leading-relaxed">{levelUpInfo.message}</p>
+                  <button
+                    onClick={() => setStage('curriculum')}
+                    className="w-full bg-primary text-white py-5 rounded-2xl font-black uppercase tracking-[0.3em] text-[12px] shadow-2xl shadow-primary/30 hover:scale-[1.02] transition-all"
+                  >
+                    Continue Path
+                  </button>
                 </div>
               </PageTransition>
             )}
 
             {stage === 'analytics' && user && (
               <PageTransition key="analytics">
-                <div className="w-full">
+                <div className="w-full space-y-12">
                   <AnalyticsDashboard userId={user.id} />
                 </div>
               </PageTransition>
@@ -430,108 +412,74 @@ function App() {
 
             {stage === 'history' && user && (
               <PageTransition key="history">
-                <div className="w-full">
-                  <SessionHistory userId={user.id} />
-                </div>
+                <SessionHistory userId={user.id} />
               </PageTransition>
             )}
 
             {stage === 'achievements' && user && (
               <PageTransition key="achievements">
-                <div className="w-full">
-                  <AchievementsPanel userId={user.id} />
-                </div>
+                <AchievementsPanel userId={user.id} />
               </PageTransition>
             )}
 
             {stage === 'custom_drills' && user && (
               <PageTransition key="custom_drills">
-                <div className="w-full">
-                  <CustomDrillBuilder userId={user.id} />
-                </div>
+                <CustomDrillBuilder userId={user.id} />
               </PageTransition>
             )}
 
             {stage === 'goals' && user && (
               <PageTransition key="goals">
-                <div className="w-full">
-                  <GoalsDashboard userId={user.id} />
-                </div>
+                <GoalsDashboard userId={user.id} />
               </PageTransition>
             )}
 
             {stage === 'profile' && user && (
               <PageTransition key="profile">
-                <div className="w-full">
-                  <Profile userId={user.id} userEmail={user.email} />
-                </div>
+                <Profile userId={user.id} userEmail={user.email} />
               </PageTransition>
             )}
 
             {stage === 'practice' && user && (
               <PageTransition key="practice">
-                <div className="w-full">
-                  <Practice userId={user.id} onSessionComplete={handleSessionComplete} />
-                </div>
+                <Practice userId={user.id} onSessionComplete={handleSessionComplete} />
               </PageTransition>
             )}
 
             {stage === 'bible_practice' && user && (
               <PageTransition key="bible_practice">
-                <div className="w-full">
-                  <BiblePractice userId={user.id} onSessionComplete={handleSessionComplete} />
-                </div>
+                <BiblePractice userId={user.id} onSessionComplete={handleSessionComplete} />
               </PageTransition>
             )}
 
             {stage === 'adaptive_practice' && user && (
               <PageTransition key="adaptive_practice">
-                <div className="w-full">
-                  <AdaptivePractice userId={user.id} onSessionComplete={handleSessionComplete} />
-                </div>
+                <AdaptivePractice userId={user.id} onSessionComplete={handleSessionComplete} />
               </PageTransition>
             )}
 
             {stage === 'leaderboard' && user && (
               <PageTransition key="leaderboard">
-                <div className="w-full">
-                  <Leaderboard userId={user.id} />
-                </div>
-              </PageTransition>
-            )}
-
-            {stage === 'levelup' && levelUpInfo && (
-              <PageTransition key="levelup">
-                <div className="max-w-2xl w-full bg-white/70 backdrop-blur-xl border border-white/50 rounded-3xl shadow-2xl p-8 sm:p-16 text-center">
-                  <div className="text-7xl mb-8 animate-bounce">🚀</div>
-                  <h2 className="text-4xl sm:text-6xl font-heading font-extrabold mb-6 text-secondary-teal tracking-tighter">
-                    Level Up!
-                  </h2>
-                  <p className="text-2xl sm:text-3xl font-medium mb-4 text-text-main">
-                    You've unlocked <strong className="font-extrabold text-blue-600">{levelUpInfo.newLevel}</strong> level!
-                  </p>
-                  <p className="text-text-muted text-lg mb-12 leading-relaxed">
-                    {levelUpInfo.message}
-                  </p>
-                  <button
-                    className="w-full bg-secondary-teal text-white px-10 py-5 rounded-2xl font-bold text-xl shadow-xl hover:shadow-2xl hover:bg-teal-700 transition-all hover:-translate-y-1 active:translate-y-0"
-                    onClick={() => setStage('curriculum')}
-                  >
-                    Continue to {levelUpInfo.newLevel} Curriculum
-                  </button>
-                </div>
+                <Leaderboard userId={user.id} />
               </PageTransition>
             )}
           </AnimatePresence>
-
-          <AchievementModal
-            isOpen={!!showAchievement}
-            onClose={() => setShowAchievement(null)}
-            achievementType={showAchievement?.type}
-            isLevelUp={showAchievement?.isLevel}
-            level={showAchievement?.level}
-          />
         </main>
+
+        <AchievementModal
+          isOpen={!!showAchievement}
+          onClose={() => setShowAchievement(null)}
+          achievementType={showAchievement?.type}
+          isLeveledUp={showAchievement?.isLevel}
+          newLevel={showAchievement?.level}
+        />
+
+        <style>{`
+          @keyframes shine {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(200%); }
+          }
+        `}</style>
       </div>
     </ErrorBoundary>
   )

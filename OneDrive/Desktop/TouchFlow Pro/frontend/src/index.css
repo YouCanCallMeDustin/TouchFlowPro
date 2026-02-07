@@ -16,40 +16,76 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800;900&family=JetBrains+Mono:wght@400;700&display=swap');
 
+/* OKLCH Premium Design System (OKLCH prevents "dead zones" in gradients) */
 :root {
-  --bg-main: #f8fafc;
-  --bg-card: rgba(255, 255, 255, 0.6);
-  --text-main: #020617;
-  --text-muted: #64748b;
-  --primary: #2563eb;
-  --secondary: #0d9488;
-  --accent: #f59e0b;
-  --border-subtle: rgba(0, 0, 0, 0.05);
+  --bg-main: oklch(99.5% 0.005 240);
+  --bg-card: oklch(100% 0 0 / 0.9);
+  /* Sharper, less transparent for light mode depth */
+  --text-main: oklch(25% 0.015 240);
+  --text-muted: oklch(50% 0.02 240);
 
-  /* Glassmorphism */
-  --glass-bg: rgba(255, 255, 255, 0.4);
-  --glass-border: rgba(255, 255, 255, 0.5);
-  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  --primary: oklch(65% 0.22 250);
+  --secondary: oklch(75% 0.18 180);
+  --accent: oklch(75% 0.25 60);
+
+  /* Deep Soft Sapphire Shadows for Light Mode */
+  --shadow-sm: 0 2px 8px oklch(20% 0.1 250 / 0.04);
+  --shadow-md: 0 12px 24px -4px oklch(20% 0.1 250 / 0.08);
+  --shadow-lg: 0 32px 64px -12px oklch(20% 0.1 250 / 0.12);
+  --shadow-premium:
+    0 20px 40px -8px oklch(20% 0.1 250 / 0.08),
+    0 0 0 1px oklch(20% 0.1 250 / 0.03);
+
+  --glass-bg: oklch(100% 0 0 / 0.85);
+  --glass-border: oklch(20% 0.1 250 / 0.1);
 }
 
 .dark {
-  --bg-main: #020617;
-  --bg-card: rgba(15, 23, 42, 0.6);
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --primary: #3b82f6;
-  --secondary: #14b8a6;
-  --accent: #fbbf24;
-  --border-subtle: rgba(255, 255, 255, 0.1);
+  --bg-main: oklch(10% 0.02 240);
+  --bg-card: oklch(20% 0.03 240 / 0.4);
+  --text-main: oklch(95% 0.01 240);
+  --text-muted: oklch(75% 0.03 240);
 
-  --glass-bg: rgba(15, 23, 42, 0.4);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  --primary: oklch(70% 0.14 250);
+  --secondary: oklch(80% 0.12 180);
+
+  --glass-bg: oklch(20% 0.03 240 / 0.55);
+  --glass-border: oklch(100% 0 0 / 0.06);
+  --shadow-premium:
+    0 25px 50px -12px oklch(0% 0 0 / 0.5),
+    0 0 0 1px oklch(100% 0 0 / 0.05);
 }
 
 * {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Sub-pixel text rendering overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3FeventTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.02;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Minimal Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: oklch(50% 0 0 / 0.1);
+  border-radius: 10px;
 }
 
 body {
@@ -57,47 +93,99 @@ body {
   min-height: 100vh;
   background-color: var(--bg-main);
   background-image:
-    radial-gradient(at 0% 0%, hsla(209, 100%, 28%, 0.05) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, hsla(180, 100%, 33%, 0.05) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, color-mix(in oklch, var(--primary), transparent 97%) 0px, transparent 40%),
+    radial-gradient(at 100% 100%, color-mix(in oklch, var(--secondary), transparent 97%) 0px, transparent 40%);
   color: var(--text-main);
   font-family: var(--font-body);
 }
 
-/* Glass Card Component */
+/* High-Refractive Glass Card */
 .card {
+  position: relative;
   background: var(--bg-card);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px) saturate(120%);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
   border: 1px solid var(--glass-border);
-  border-radius: 20px;
-  box-shadow: var(--glass-shadow);
+  border-radius: 32px;
+  box-shadow: var(--shadow-premium);
   padding: 2.5rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  isolation: isolate;
+}
+
+/* Inner Glow Effect for Light mode */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, oklch(100% 0 0 / 0.5), oklch(20% 0.1 250 / 0.05));
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.1);
+  transform: translateY(-8px) scale(1.005);
+  background: oklch(100% 0 0 / 1);
+  border-color: oklch(20% 0.1 250 / 0.1);
+  box-shadow: var(--shadow-lg);
 }
 
-/* Typography Enhancements */
+.dark .card:hover {
+  background: oklch(25% 0.03 240 / 0.7);
+  border-color: oklch(100% 0 0 / 0.15);
+  box-shadow: 0 40px 80px -20px oklch(0% 0 0 / 0.6);
+}
+
+/* Typography Overhaul */
 h1,
 h2,
-h3 {
+h3,
+h4 {
   font-family: var(--font-heading);
-  letter-spacing: -0.025em;
-  margin-bottom: 1rem;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+  margin: 0;
 }
 
-h1 {
-  font-size: 3.5rem;
-  font-weight: 800;
-  color: var(--primary-blue);
+.text-gradient {
+  background: linear-gradient(135deg, var(--text-main) 10%, var(--primary) 90%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glass-header {
+  background: oklch(100% 0 0 / 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid oklch(20% 0.1 250 / 0.08);
+}
+
+.dark .glass-header {
+  background: oklch(20% 0.05 240 / 0.8);
+  border-bottom: 1px solid oklch(100% 0 0 / 0.05);
+}
+
+.nav-container {
+  background: oklch(20% 0.1 250 / 0.03);
+  padding: 0.5rem;
+  border-radius: 20px;
+  border: 1px solid oklch(20% 0.1 250 / 0.05);
+}
+
+.dark .nav-container {
+  background: oklch(100% 0 0 / 0.03);
+  border: 1px solid oklch(100% 0 0 / 0.05);
 }
 
 h2 {
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: clamp(2rem, 6vw, 2.75rem);
+  font-weight: 800;
   color: var(--text-main);
 }
 

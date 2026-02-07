@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Fingerprint } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 
 interface ProfileProps {
@@ -24,7 +25,6 @@ const Profile: React.FC<ProfileProps> = ({ userId, userEmail }) => {
     const [saving, setSaving] = useState(false);
     const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-    // Form state
     const [name, setName] = useState('');
     const [city, setCity] = useState('');
     const [state, setState] = useState('');
@@ -72,15 +72,11 @@ const Profile: React.FC<ProfileProps> = ({ userId, userEmail }) => {
                 })
             });
 
-            if (!response.ok) {
-                throw new Error('Failed to update profile');
-            }
+            if (!response.ok) throw new Error('Failed to update profile');
 
             const updatedProfile = await response.json();
             setProfile(updatedProfile);
             setMessage({ type: 'success', text: 'Profile updated successfully!' });
-
-            // Clear success message after 3 seconds
             setTimeout(() => setMessage(null), 3000);
         } catch (error) {
             console.error('Failed to update profile:', error);
@@ -90,278 +86,177 @@ const Profile: React.FC<ProfileProps> = ({ userId, userEmail }) => {
         }
     };
 
-    const handleCancel = () => {
-        if (profile) {
-            setName(profile.name || '');
-            setCity(profile.city || '');
-            setState(profile.state || '');
-            setAge(profile.age ? profile.age.toString() : '');
-            setPhotoUrl(profile.photoUrl || '');
-            setMessage(null);
-        }
-    };
-
-    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-
-        if (file.size > 5 * 1024 * 1024) {
-            setMessage({ type: 'error', text: 'File size exceeds 5MB limit' });
-            return;
-        }
-
-        try {
-            // Don't set global loading, just show uploading message
-            setMessage({ type: 'success', text: 'Uploading photo...' });
-
-            const formData = new FormData();
-            formData.append('photo', file);
-
-            const response = await fetch('/api/upload', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (!response.ok) throw new Error('Upload failed');
-
-            const data = await response.json();
-            // Assuming the backend returns relative URL, we might need to prepend base URL if not proxied correctly
-            // But since we serve static files from /api/uploads, the returned url should be good
-            setPhotoUrl(data.url);
-            setMessage({ type: 'success', text: 'Photo uploaded successfully!' });
-
-            // Clear success message
-            setTimeout(() => setMessage(null), 3000);
-        } catch (error) {
-            console.error('Upload error:', error);
-            setMessage({ type: 'error', text: 'Failed to upload photo' });
-        }
-    };
-
     if (loading) {
         return (
-            <PageTransition>
-                <div className="max-w-4xl mx-auto p-6">
-                    <div className="animate-pulse space-y-6">
-                        <div className="h-12 bg-gray-200 rounded-2xl w-1/3" />
-                        <div className="h-64 bg-gray-200 rounded-3xl" />
-                    </div>
-                </div>
-            </PageTransition>
+            <div className="max-w-4xl mx-auto p-6 flex flex-col items-center justify-center min-h-[50vh]">
+                <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin mb-4" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">Loading Profile</span>
+            </div>
         );
     }
 
     return (
         <PageTransition>
-            <div className="max-w-4xl mx-auto p-6">
+            <div className="max-w-4xl mx-auto p-4 sm:p-8 space-y-8">
                 {/* Header */}
-                {/* Header */}
-                <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="mb-8 flex items-center gap-6"
-                >
-                    {profile?.photoUrl && (
-                        <img
-                            src={profile.photoUrl}
-                            alt="Profile"
-                            className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-lg"
-                            onError={(e) => {
-                                e.currentTarget.style.display = 'none';
-                            }}
-                        />
-                    )}
-                    <div>
-                        <h1 className="text-4xl font-black text-text-main mb-2">My Profile</h1>
-                        <p className="text-text-muted">Manage your personal information</p>
+                <div className="relative overflow-hidden card group min-h-[220px] flex items-center bg-gradient-to-br from-primary/[0.03] to-secondary/[0.03] border border-white/10 p-8 sm:p-12">
+                    <div className="relative z-10 w-full md:w-2/3">
+                        <div className="flex items-center gap-3 mb-6">
+                            <span className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/30">
+                                <Fingerprint size={18} className="text-primary" />
+                            </span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Identity Matrix</span>
+                        </div>
+                        <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-text-main mb-6 uppercase leading-[0.9]">
+                            User Profile
+                        </h1>
+                        <p className="text-text-muted text-lg max-w-2xl leading-relaxed opacity-70">
+                            Manage your digital signature. Update your <span className="text-primary font-black uppercase tracking-wider">Public Identity</span> and personal settings.
+                        </p>
                     </div>
-                </motion.div>
 
-                {/* Success/Error Message */}
-                {message && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className={`mb-6 p-4 rounded-xl ${message.type === 'success'
-                            ? 'bg-green-50 border-2 border-green-200 text-green-800'
-                            : 'bg-red-50 border-2 border-red-200 text-red-800'
-                            }`}
-                    >
-                        {message.text}
-                    </motion.div>
-                )}
+                    {/* Decorative Abstract Mesh */}
+                    <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none overflow-hidden hidden md:block">
+                        <svg width="400" height="400" viewBox="0 0 400 400" className="translate-x-20 -translate-y-20 animate-[spin_60s_linear_infinite]">
+                            <defs>
+                                <linearGradient id="meshGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stopColor="var(--primary)" />
+                                    <stop offset="100%" stopColor="var(--secondary)" />
+                                </linearGradient>
+                            </defs>
+                            <path d="M 0,200 Q 100,100 200,200 T 400,200" fill="none" stroke="url(#meshGrad)" strokeWidth="0.5" />
+                            <path d="M 0,100 Q 100,0 200,100 T 400,100" fill="none" stroke="url(#meshGrad)" strokeWidth="0.5" />
+                            <path d="M 0,300 Q 100,200 200,300 T 400,300" fill="none" stroke="url(#meshGrad)" strokeWidth="0.5" />
+                        </svg>
+                    </div>
+                </div>
 
-                {/* Profile Form */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.1 }}
-                    className="bg-white rounded-3xl p-8 shadow-lg border border-slate-200"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="card relative overflow-hidden border border-slate-200/60 dark:border-white/5"
                 >
-                    <div className="space-y-6">
-                        {/* Email (Read-only) */}
-                        <div>
-                            <label className="block text-sm font-bold text-text-main mb-2">
-                                Email Address
-                            </label>
-                            <input
-                                type="email"
-                                value={userEmail}
-                                disabled
-                                className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 bg-gray-50 text-text-muted cursor-not-allowed"
-                            />
-                            <p className="text-xs text-text-muted mt-1">Email cannot be changed</p>
-                        </div>
+                    {/* Background decoration */}
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-32 -mt-32" />
 
-                        {/* Name */}
-                        <div>
-                            <label className="block text-sm font-bold text-text-main mb-2">
-                                Full Name
-                            </label>
-                            <input
-                                type="text"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                placeholder="Enter your full name"
-                                className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-brand-blue focus:outline-none transition-colors"
-                            />
-                        </div>
-
-                        {/* City & State */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label className="block text-sm font-bold text-text-main mb-2">
-                                    City
-                                </label>
-                                <input
-                                    type="text"
-                                    value={city}
-                                    onChange={(e) => setCity(e.target.value)}
-                                    placeholder="Enter your city"
-                                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-brand-blue focus:outline-none transition-colors"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-bold text-text-main mb-2">
-                                    State
-                                </label>
-                                <input
-                                    type="text"
-                                    value={state}
-                                    onChange={(e) => setState(e.target.value)}
-                                    placeholder="Enter your state"
-                                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-brand-blue focus:outline-none transition-colors"
-                                />
-                            </div>
-                        </div>
-
-                        {/* Age */}
-                        <div>
-                            <label className="block text-sm font-bold text-text-main mb-2">
-                                Age
-                            </label>
-                            <input
-                                type="number"
-                                value={age}
-                                onChange={(e) => setAge(e.target.value)}
-                                placeholder="Enter your age"
-                                min="1"
-                                max="150"
-                                className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-brand-blue focus:outline-none transition-colors"
-                            />
-                        </div>
-
-                        {/* Photo URL */}
-                        <div>
-                            <label className="block text-sm font-bold text-text-main mb-2">
-                                Profile Photo
-                            </label>
-
-                            <div className="flex flex-col gap-4">
-                                {/* Upload Button */}
-                                <div className="flex items-center gap-4">
-                                    <label className="flex items-center gap-2 px-4 py-2 border-2 border-gray-200 rounded-xl cursor-pointer hover:border-brand-blue hover:text-brand-blue transition-all bg-gray-50">
-                                        <span>📁 Upload from Computer</span>
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            onChange={handleFileUpload}
-                                            className="hidden"
-                                        />
-                                    </label>
-                                    <span className="text-sm text-text-muted">or</span>
+                    <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-12">
+                        {/* Sidebar: Avatar and Quick Stats */}
+                        <div className="flex flex-col items-center text-center space-y-6">
+                            <div className="relative group">
+                                <div className="absolute -inset-1 bg-gradient-to-r from-primary to-secondary rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200" />
+                                <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-white dark:border-slate-800 bg-slate-100 dark:bg-slate-700 shadow-xl border-slate-200/50 dark:border-white/10">
+                                    {photoUrl ? (
+                                        <img src={photoUrl} alt="Profile" className="w-full h-full object-cover" />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center text-4xl">👤</div>
+                                    )}
                                 </div>
+                            </div>
 
-                                {/* URL Input */}
-                                <div>
+                            <div className="space-y-1">
+                                <h2 className="text-xl font-black">{name || 'Guest User'}</h2>
+                                <p className="text-xs font-bold text-text-muted uppercase tracking-widest">{userEmail}</p>
+                            </div>
+
+                            <div className="w-full pt-6 border-t border-slate-100 dark:border-white/5 space-y-4 text-left">
+                                <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-wider text-text-muted">
+                                    <span>Joined</span>
+                                    <span className="text-text-main">{profile ? new Date(profile.createdAt).toLocaleDateString() : 'N/A'}</span>
+                                </div>
+                                <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-wider text-text-muted">
+                                    <span>Location</span>
+                                    <span className="text-text-main">{city ? `${city}, ${state}` : 'Unknown'}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Main Form */}
+                        <div className="md:col-span-2 space-y-8">
+                            <div className="space-y-1">
+                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">Personal Details</span>
+                                <h3 className="text-2xl font-black">Edit Your Identity</h3>
+                            </div>
+
+                            {message && (
+                                <motion.div
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    className={`p-4 rounded-xl text-xs font-bold ${message.type === 'success' ? 'bg-green-500/10 text-green-600 border border-green-500/20' : 'bg-red-500/10 text-red-600 border border-red-500/20'}`}
+                                >
+                                    {message.text}
+                                </motion.div>
+                            )}
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-text-muted px-1">Full Name</label>
+                                    <input
+                                        type="text"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        className="w-full bg-slate-500/5 dark:bg-slate-900/50 border border-slate-200/80 dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-text-muted/40"
+                                        placeholder="John Doe"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-text-muted px-1">Age</label>
+                                    <input
+                                        type="number"
+                                        value={age}
+                                        onChange={(e) => setAge(e.target.value)}
+                                        className="w-full bg-slate-500/5 dark:bg-slate-900/50 border border-slate-200/80 dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-text-muted/40"
+                                        placeholder="25"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-text-muted px-1">City</label>
+                                    <input
+                                        type="text"
+                                        value={city}
+                                        onChange={(e) => setCity(e.target.value)}
+                                        className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                                        placeholder="Spokane"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-text-muted px-1">State</label>
+                                    <input
+                                        type="text"
+                                        value={state}
+                                        onChange={(e) => setState(e.target.value)}
+                                        className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                                        placeholder="WA"
+                                    />
+                                </div>
+                                <div className="md:col-span-2 space-y-2">
+                                    <label className="text-[10px] font-black uppercase tracking-widest text-text-muted px-1">Photo URL</label>
                                     <input
                                         type="url"
                                         value={photoUrl}
                                         onChange={(e) => setPhotoUrl(e.target.value)}
-                                        placeholder="https://example.com/photo.jpg"
-                                        className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-brand-blue focus:outline-none transition-colors"
+                                        className="w-full bg-slate-500/5 dark:bg-slate-900/50 border border-slate-200/80 dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-text-muted/40"
+                                        placeholder="https://example.com/avatar.jpg"
                                     />
-                                    <p className="text-xs text-text-muted mt-1">
-                                        Enter a URL to your profile photo
-                                    </p>
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Photo Preview */}
-                        {photoUrl && (
-                            <div>
-                                <label className="block text-sm font-bold text-text-main mb-2">
-                                    Photo Preview
-                                </label>
-                                <div className="flex items-center gap-4">
-                                    <img
-                                        src={photoUrl}
-                                        alt="Profile preview"
-                                        className="w-24 h-24 rounded-full object-cover border-4 border-gray-200"
-                                        onError={(e) => {
-                                            e.currentTarget.src = 'https://via.placeholder.com/96?text=Invalid';
-                                        }}
-                                    />
-                                    <p className="text-sm text-text-muted">
-                                        This is how your photo will appear
-                                    </p>
-                                </div>
+                            <div className="flex gap-4 pt-6">
+                                <button
+                                    onClick={handleSave}
+                                    disabled={saving}
+                                    className="flex-1 bg-primary hover:bg-primary-dark text-white rounded-xl py-3 text-sm font-black uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
+                                >
+                                    {saving ? 'Processing...' : 'Save Settings'}
+                                </button>
+                                <button
+                                    onClick={() => fetchProfile()}
+                                    className="px-6 bg-slate-100 dark:bg-slate-800 text-text-muted rounded-xl py-3 text-sm font-black uppercase tracking-widest hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
+                                >
+                                    Reset
+                                </button>
                             </div>
-                        )}
-
-                        {/* Action Buttons */}
-                        <div className="flex gap-4 pt-4">
-                            <button
-                                onClick={handleSave}
-                                disabled={saving}
-                                className="flex-1 bg-white border-2 border-black text-black px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                            >
-                                {saving ? '⏳ Saving...' : '💾 Save Changes'}
-                            </button>
-                            <button
-                                onClick={handleCancel}
-                                disabled={saving}
-                                className="flex-1 bg-white border-2 border-black text-black px-8 py-4 rounded-xl font-bold shadow-md hover:shadow-xl hover:scale-105 hover:bg-gray-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                            >
-                                ↩️ Cancel
-                            </button>
                         </div>
                     </div>
-                </motion.div>
-
-                {/* Account Info */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="mt-6 bg-gray-50 rounded-2xl p-6 border border-gray-200"
-                >
-                    <h3 className="text-sm font-bold text-text-main mb-2">Account Information</h3>
-                    <p className="text-xs text-text-muted">
-                        Account created: {profile ? new Date(profile.createdAt).toLocaleDateString() : 'N/A'}
-                    </p>
                 </motion.div>
             </div>
         </PageTransition>

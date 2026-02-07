@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
+import { Award } from 'lucide-react';
 
 interface AchievementsProps {
     userId: string;
@@ -69,11 +70,37 @@ const AchievementsPanel: React.FC<AchievementsProps> = ({ userId }) => {
     return (
         <div className="max-w-7xl mx-auto p-6 space-y-8">
             {/* Header */}
-            <div>
-                <h1 className="text-4xl font-heading font-black text-text-main">🏆 Achievements</h1>
-                <p className="text-text-muted mt-2">
-                    {earned.length} of {available.length} badges earned
-                </p>
+            {/* Header */}
+            <div className="relative overflow-hidden card group min-h-[220px] flex items-center bg-gradient-to-br from-primary/[0.03] to-secondary/[0.03] border border-white/10 p-8 sm:p-12 mb-8">
+                <div className="relative z-10 w-full md:w-2/3">
+                    <div className="flex items-center gap-3 mb-6">
+                        <span className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/30">
+                            <Award size={18} className="text-primary" />
+                        </span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Hall of Valor</span>
+                    </div>
+                    <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-text-main mb-6 uppercase leading-[0.9]">
+                        Achievements
+                    </h1>
+                    <p className="text-text-muted text-lg max-w-2xl leading-relaxed opacity-70">
+                        Track your milestones. You have earned <span className="text-primary font-black uppercase tracking-wider">{earned.length} of {available.length}</span> available badges.
+                    </p>
+                </div>
+
+                {/* Decorative Abstract Mesh */}
+                <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none overflow-hidden hidden md:block">
+                    <svg width="400" height="400" viewBox="0 0 400 400" className="translate-x-20 -translate-y-20 animate-[spin_60s_linear_infinite]">
+                        <defs>
+                            <linearGradient id="meshGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stopColor="var(--primary)" />
+                                <stop offset="100%" stopColor="var(--secondary)" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M 0,200 Q 100,100 200,200 T 400,200" fill="none" stroke="url(#meshGrad)" strokeWidth="0.5" />
+                        <path d="M 0,100 Q 100,0 200,100 T 400,100" fill="none" stroke="url(#meshGrad)" strokeWidth="0.5" />
+                        <path d="M 0,300 Q 100,200 200,300 T 400,300" fill="none" stroke="url(#meshGrad)" strokeWidth="0.5" />
+                    </svg>
+                </div>
             </div>
 
             {/* Progress Bar */}
@@ -102,8 +129,8 @@ const AchievementsPanel: React.FC<AchievementsProps> = ({ userId }) => {
                         <div
                             key={achievement.type}
                             className={`relative rounded-3xl p-8 border-2 transition-all ${earned
-                                    ? 'bg-gradient-to-br from-blue-50 to-purple-50 border-blue-200 shadow-lg hover:shadow-xl hover:-translate-y-1'
-                                    : 'bg-white border-slate-200 opacity-60 hover:opacity-100'
+                                ? 'bg-gradient-to-br from-blue-50 to-purple-50 border-blue-200 shadow-lg hover:shadow-xl hover:-translate-y-1'
+                                : 'bg-white border-slate-200 opacity-60 hover:opacity-100'
                                 }`}
                         >
                             {/* Badge Icon */}

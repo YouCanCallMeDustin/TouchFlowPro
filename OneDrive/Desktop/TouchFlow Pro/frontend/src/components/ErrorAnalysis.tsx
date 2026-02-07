@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import {
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    ResponsiveContainer,
+    Cell
+} from 'recharts';
+import { motion, AnimatePresence } from 'framer-motion';
+import LoadingSkeleton from './LoadingSkeleton';
+import { Target, AlertCircle, TrendingDown } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 interface KeyStats {
     key: string;
-    totalAttempts: number;
-    correctAttempts: number;
+    attempts: number;
     accuracy: number;
-    averageSpeed: number;
-}
-
-interface ConfusionPair {
-    intended: string;
-    typed: string;
-    count: number;
+    errors: number;
 }
 
 interface ErrorAnalysisProps {
@@ -21,212 +26,167 @@ interface ErrorAnalysisProps {
 }
 
 export const ErrorAnalysis: React.FC<ErrorAnalysisProps> = ({ userId }) => {
-    const [troubleKeys, setTroubleKeys] = useState<KeyStats[]>([]);
-    const [confusionPairs, setConfusionPairs] = useState<ConfusionPair[]>([]);
+    const { token } = useAuth();
+    const [errorData, setErrorData] = useState<KeyStats[]>([]);
     const [loading, setLoading] = useState(true);
+    const [view, setView] = useState<'chart' | 'list'>('chart');
 
     useEffect(() => {
+        const fetchErrorData = async () => {
+            if (!userId || !token) return;
+
+            try {
+                setLoading(true);
+                const troubleResponse = await fetch(`/api/keystroke-tracking/trouble-keys/${userId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (troubleResponse.ok) {
+                    const keys: any[] = await troubleResponse.json();
+                    const processedKeys: KeyStats[] = keys.map(stat => ({
+                        key: stat.key,
+                        attempts: stat.attempts || 0,
+                        accuracy: stat.accuracy || 0,
+                        errors: Math.round((stat.attempts || 0) * (1 - (stat.accuracy || 0) / 100))
+                    })).sort((a, b) => b.errors - a.errors);
+                    setErrorData(processedKeys.slice(0, 10));
+                }
+            } catch (error) {
+                console.error('Failed to fetch error data:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
         fetchErrorData();
-    }, [userId]);
+    }, [userId, token]); // Added token to dependency array
 
-    const fetchErrorData = async () => {
-        try {
-            setLoading(true);
-
-            // Fetch trouble keys
-            const troubleResponse = await fetch(`/api/keystroke-tracking/trouble-keys/${userId}`);
-            if (troubleResponse.ok) {
-                const keys = await troubleResponse.json();
-                setTroubleKeys(keys.slice(0, 10)); // Top 10
-            }
-
-            // Fetch all key stats to calculate confusion pairs
-            const statsResponse = await fetch(`/api/keystroke-tracking/stats/${userId}`);
-            if (statsResponse.ok) {
-                // For now, we'll show a placeholder for confusion pairs
-                // In a real implementation, we'd need to track actual mistyped keys
-                setConfusionPairs([]);
-            }
-        } catch (error) {
-            console.error('Failed to fetch error data:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    if (loading) {
-        return (
-            <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200">
-                <div className="flex items-center justify-center h-64">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-                </div>
-            </div>
-        );
-    }
-
-    // Prepare data for bar chart
-    const chartData = troubleKeys.map(stat => ({
-        key: stat.key,
-        accuracy: stat.accuracy,
-        attempts: stat.totalAttempts
-    }));
+    if (loading) return <LoadingSkeleton />;
 
     return (
-        <div className="space-y-6">
-            {/* Most Missed Keys */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200"
-            >
-                <div className="flex justify-between items-center mb-6">
-                    <div>
-                        <h3 className="text-xl font-bold text-gray-900">Most Missed Keys</h3>
-                        <p className="text-sm text-gray-500">Keys with lowest accuracy</p>
-                    </div>
-                    <div className="text-3xl">⚠️</div>
+        <div className="card p-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-12">
+                <h2 className="text-2xl font-black text-text-main flex items-center gap-3 tracking-tight">
+                    <span className="p-2 rounded-xl bg-primary/10 text-primary transition-transform duration-300 hover:scale-110 pointer-events-none">
+                        <Target size={20} />
+                    </span>
+                    Keystroke Error Analysis
+                </h2>
+                <div className="flex flex-wrap bg-slate-500/5 dark:bg-text-main/5 p-1 rounded-xl border border-slate-200/50 dark:border-white/5 backdrop-blur-sm gap-1">
+                    {(['chart', 'list'] as const).map((v) => (
+                        <button
+                            key={v}
+                            onClick={() => setView(v)}
+                            className={`px-6 py-2 rounded-lg font-black text-[10px] uppercase tracking-[0.2em] transition-all flex-1 min-w-[80px] ${view === v ? 'bg-primary text-white shadow-lg shadow-primary/20 scale-105' : 'text-text-muted hover:text-text-main'}`}
+                        >
+                            {v}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <div className="lg:col-span-2">
+                    {errorData.length === 0 ? (
+                        <div className="h-[400px] w-full bg-text-main/5 rounded-3xl p-8 border border-white/5 flex items-center justify-center text-text-muted italic opacity-40 uppercase font-black text-[10px] tracking-widest">
+                            No error signals detected
+                        </div>
+                    ) : (
+                        <AnimatePresence mode="wait">
+                            {view === 'chart' ? (
+                                <motion.div
+                                    key="chart"
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.95 }}
+                                    className="h-[400px] w-full bg-text-main/5 rounded-3xl p-8 border border-white/5 relative overflow-hidden"
+                                >
+                                    <div className="absolute inset-0 bg-primary/5 blur-3xl opacity-20" />
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <BarChart data={errorData}>
+                                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="currentColor" opacity={0.1} />
+                                            <XAxis
+                                                dataKey="key"
+                                                stroke="currentColor"
+                                                opacity={0.4}
+                                                fontSize={12}
+                                                tickLine={false}
+                                                axisLine={false}
+                                                tickFormatter={(t) => t.toUpperCase()}
+                                            />
+                                            <YAxis
+                                                stroke="currentColor"
+                                                opacity={0.4}
+                                                fontSize={10}
+                                                tickLine={false}
+                                                axisLine={false}
+                                            />
+                                            <Tooltip
+                                                cursor={{ fill: 'var(--text-main)', opacity: 0.05 }}
+                                                contentStyle={{
+                                                    backgroundColor: 'var(--bg-card)',
+                                                    backdropFilter: 'blur(20px)',
+                                                    border: '1px solid var(--glass-border)',
+                                                    borderRadius: '16px',
+                                                    padding: '12px',
+                                                    color: 'var(--text-main)'
+                                                }}
+                                            />
+                                            <Bar dataKey="errors" radius={[6, 6, 0, 0]}>
+                                                {errorData.map((entry, index) => (
+                                                    <Cell
+                                                        key={`cell-${entry.key}`}
+                                                        fill={index === 0 ? 'var(--primary)' : 'var(--text-muted)'}
+                                                        opacity={index === 0 ? 1 : 0.3}
+                                                    />
+                                                ))}
+                                            </Bar>
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </motion.div>
+                            ) : (
+                                <motion.div
+                                    key="list"
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -20 }}
+                                    className="space-y-4"
+                                >
+                                    {errorData.map((item) => (
+                                        <div key={item.key} className="flex items-center justify-between p-6 rounded-2xl border border-white/5 bg-text-main/5 hover:bg-text-main/10 transition-colors group">
+                                            <div className="flex items-center gap-6">
+                                                <span className="text-3xl font-mono font-black text-text-main group-hover:text-primary transition-colors">
+                                                    {item.key.toUpperCase()}
+                                                </span>
+                                                <div className="flex flex-col">
+                                                    <span className="text-xs font-black text-rose-500 uppercase tracking-widest">{item.errors} ERRORS</span>
+                                                    <span className="text-[10px] text-text-muted opacity-40 uppercase font-black">Accuracy: {(item.accuracy || 0).toFixed(1)}%</span>
+                                                </div>
+                                            </div>
+                                            <TrendingDown size={20} className="text-text-muted opacity-20 group-hover:opacity-100 transition-opacity" />
+                                        </div>
+                                    ))}
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    )}
                 </div>
 
-                {troubleKeys.length === 0 ? (
-                    <div className="text-center py-8 text-gray-500">
-                        Great job! No trouble keys found. Keep practicing!
-                    </div>
-                ) : (
-                    <>
-                        {/* Bar Chart */}
-                        <ResponsiveContainer width="100%" height={250}>
-                            <BarChart data={chartData}>
-                                <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                                <XAxis
-                                    dataKey="key"
-                                    stroke="#6B7280"
-                                    style={{ fontSize: '14px', fontWeight: 'bold' }}
-                                />
-                                <YAxis
-                                    stroke="#6B7280"
-                                    style={{ fontSize: '12px' }}
-                                    label={{ value: 'Accuracy (%)', angle: -90, position: 'insideLeft' }}
-                                />
-                                <Tooltip
-                                    contentStyle={{
-                                        backgroundColor: '#1F2937',
-                                        border: 'none',
-                                        borderRadius: '8px',
-                                        color: '#fff'
-                                    }}
-                                />
-                                <Bar
-                                    dataKey="accuracy"
-                                    fill="#EF4444"
-                                    radius={[8, 8, 0, 0]}
-                                />
-                            </BarChart>
-                        </ResponsiveContainer>
-
-                        {/* Key List */}
-                        <div className="mt-6 grid grid-cols-2 md:grid-cols-5 gap-3">
-                            {troubleKeys.map((stat, index) => (
-                                <motion.div
-                                    key={stat.key}
-                                    initial={{ opacity: 0, scale: 0.8 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ delay: index * 0.05 }}
-                                    className="bg-red-50 border-2 border-red-200 rounded-xl p-4 text-center"
-                                >
-                                    <div className="text-3xl font-bold font-mono text-red-600 mb-1">
-                                        {stat.key}
-                                    </div>
-                                    <div className="text-sm text-red-700 font-bold">
-                                        {stat.accuracy.toFixed(1)}%
-                                    </div>
-                                    <div className="text-xs text-gray-500 mt-1">
-                                        {stat.totalAttempts} attempts
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div>
-                    </>
-                )}
-            </motion.div>
-
-            {/* Targeted Practice Recommendations */}
-            {troubleKeys.length > 0 && (
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6 shadow-lg border-2 border-blue-200"
-                >
-                    <div className="flex items-start gap-4">
-                        <div className="text-4xl">💡</div>
-                        <div className="flex-1">
-                            <h3 className="text-xl font-bold text-gray-900 mb-2">
-                                Recommended Practice
-                            </h3>
-                            <p className="text-gray-700 mb-4">
-                                Focus on these keys to improve your overall accuracy:
+                <div className="space-y-6">
+                    <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] opacity-40">Tactical Recommendations</h3>
+                    {errorData.slice(0, 3).map((item, idx) => (
+                        <div key={item.key} className="p-6 rounded-2xl border border-white/5 bg-text-main/5 relative overflow-hidden group">
+                            <div className={`absolute top-0 left-0 w-1 h-full ${idx === 0 ? 'bg-rose-500' : 'bg-primary/40'}`} />
+                            <div className="flex items-center gap-3 mb-4">
+                                <AlertCircle size={16} className={idx === 0 ? 'text-rose-500' : 'text-primary'} />
+                                <span className="text-xs font-black text-text-main uppercase tracking-widest">Focus: {item.key.toUpperCase()}</span>
+                            </div>
+                            <p className="text-xs text-text-muted leading-relaxed opacity-60 italic">
+                                High error frequency detected on '{item.key.toUpperCase()}'. Recommend isolation practice with neighboring keys to reinforce muscle memory.
                             </p>
-                            <div className="flex flex-wrap gap-2 mb-4">
-                                {troubleKeys.slice(0, 5).map(stat => (
-                                    <span
-                                        key={stat.key}
-                                        className="bg-white px-4 py-2 rounded-lg font-mono font-bold text-lg border-2 border-blue-300 text-blue-700"
-                                    >
-                                        {stat.key}
-                                    </span>
-                                ))}
-                            </div>
-                            <div className="bg-white rounded-lg p-4 border border-blue-200">
-                                <div className="font-bold text-gray-900 mb-2">Practice Tip:</div>
-                                <p className="text-sm text-gray-700">
-                                    Try typing words that contain these letters repeatedly.
-                                    Focus on accuracy over speed. Use the correct finger for each key.
-                                </p>
-                            </div>
                         </div>
-                    </div>
-                </motion.div>
-            )}
-
-            {/* Confusion Pairs (Placeholder) */}
-            {confusionPairs.length > 0 && (
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200"
-                >
-                    <div className="flex justify-between items-center mb-6">
-                        <div>
-                            <h3 className="text-xl font-bold text-gray-900">Confusion Pairs</h3>
-                            <p className="text-sm text-gray-500">Keys often mistyped for each other</p>
-                        </div>
-                        <div className="text-3xl">🔄</div>
-                    </div>
-
-                    <div className="space-y-3">
-                        {confusionPairs.map((pair, index) => (
-                            <div
-                                key={index}
-                                className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
-                            >
-                                <div className="flex items-center gap-4">
-                                    <span className="font-mono font-bold text-2xl text-gray-900">
-                                        {pair.intended}
-                                    </span>
-                                    <span className="text-gray-400">→</span>
-                                    <span className="font-mono font-bold text-2xl text-red-600">
-                                        {pair.typed}
-                                    </span>
-                                </div>
-                                <div className="text-sm text-gray-500">
-                                    {pair.count} times
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </motion.div>
-            )}
+                    ))}
+                </div>
+            </div>
         </div>
     );
 };
