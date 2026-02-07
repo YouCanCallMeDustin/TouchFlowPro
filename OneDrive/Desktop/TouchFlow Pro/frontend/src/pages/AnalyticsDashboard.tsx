@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Card } from '../components/ui/Card';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
@@ -9,7 +10,17 @@ import { KeyHeatmap } from '../components/KeyHeatmap';
 import { ErrorAnalysis } from '../components/ErrorAnalysis';
 import { FingerHeatmap } from '../components/FingerHeatmap';
 import { SequenceAnalysis } from '../components/SequenceAnalysis';
-import { BarChart2, TrendingUp, Calendar, Zap, Target, Rocket, Clock, Flame, Award, AlertCircle } from 'lucide-react';
+import {
+    BarChart2,
+    TrendingUp,
+    Target,
+    Rocket,
+    Zap,
+    Award,
+    AlertCircle,
+    Clock,
+    Flame
+} from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const AbstractMesh = () => (
@@ -108,12 +119,14 @@ const AnalyticsDashboard: React.FC = () => {
     return (
         <PageTransition>
             <div className="max-w-7xl mx-auto px-4 py-12 space-y-12">
+
                 {/* Header */}
-                <motion.div
+                <Card
+                    variant="glass"
+                    className="relative overflow-hidden group min-h-[220px] flex items-center bg-gradient-to-br from-primary/[0.03] to-secondary/[0.03] border-white/10 p-8 sm:p-12 mb-6"
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
-                    className="relative overflow-hidden card group min-h-[220px] flex items-center bg-gradient-to-br from-primary/[0.03] to-secondary/[0.03] border border-white/10 p-8 sm:p-12 mb-6"
                 >
                     <div className="relative z-10 w-full md:w-2/3">
                         <div className="flex items-center gap-3 mb-6">
@@ -126,7 +139,7 @@ const AnalyticsDashboard: React.FC = () => {
                             Insights & Analysis
                         </h1>
                         <p className="text-text-muted text-lg max-w-2xl leading-relaxed opacity-70">
-                            Deep dive into your neural <span className="text-primary font-black uppercase tracking-wider">Metric Trends</span>. Analyze velocity curves and accuracy heatmaps.
+                            Deep dive into your performance <span className="text-primary font-black uppercase tracking-wider">Metric Trends</span>. Analyze velocity curves and accuracy heatmaps.
                         </p>
                     </div>
 
@@ -145,7 +158,7 @@ const AnalyticsDashboard: React.FC = () => {
                     </div>
 
                     <AbstractMesh />
-                </motion.div>
+                </Card>
 
                 {/* Stat Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -182,11 +195,11 @@ const AnalyticsDashboard: React.FC = () => {
                 {/* Main Section */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* WPM Trend Chart */}
-                    <motion.div
+                    <Card
+                        className="p-8 lg:col-span-2"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.4 }}
-                        className="card p-8 lg:col-span-2"
                     >
                         <h2 className="text-xl font-black text-text-main mb-8 flex items-center gap-3">
                             <TrendingUp size={20} className="text-primary" />
@@ -233,14 +246,14 @@ const AnalyticsDashboard: React.FC = () => {
                                 </LineChart>
                             </ResponsiveContainer>
                         </div>
-                    </motion.div>
+                    </Card>
 
                     {/* Stats Summary */}
-                    <motion.div
+                    <Card
+                        className="p-8"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.5 }}
-                        className="card p-8"
                     >
                         <h2 className="text-xl font-black text-text-main mb-8 flex items-center gap-3">
                             <Clock size={20} className="text-primary" />
@@ -269,7 +282,7 @@ const AnalyticsDashboard: React.FC = () => {
                                 <span className="text-xl font-black text-text-main">{summary.currentStreak || 0} Days</span>
                             </div>
                         </div>
-                    </motion.div>
+                    </Card>
                 </div>
 
                 {/* Heatmaps & Diagnostics */}

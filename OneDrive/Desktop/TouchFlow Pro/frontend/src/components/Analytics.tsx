@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import type { AnalyticsData, ProgressEntry } from '@shared/analytics';
+import { Card, CardTitle } from './ui/Card';
+import { Button } from './ui/Button';
+import { StatTile } from './ui/StatTile';
+import { SectionTitle } from './ui/SectionTitle';
 
 interface AnalyticsProps {
     userId: string;
@@ -20,10 +24,10 @@ const Analytics: React.FC<AnalyticsProps> = ({ userId, onClose }) => {
 
     if (!analytics) {
         return (
-            <div className="card" style={{ padding: '3rem', textAlign: 'center' }}>
-                <div style={{ fontSize: '2rem', marginBottom: '1rem' }}>📊</div>
-                <p>Loading your progress...</p>
-            </div>
+            <Card className="flex flex-col items-center justify-center p-12 text-center h-96">
+                <div className="text-4xl mb-4 animate-bounce">📊</div>
+                <p className="text-text-muted font-medium">Loading your progress...</p>
+            </Card>
         );
     }
 
@@ -58,36 +62,31 @@ const Analytics: React.FC<AnalyticsProps> = ({ userId, onClose }) => {
     const improvement = lastWPM - firstWPM;
 
     return (
-        <div style={{ maxWidth: '1200px', width: '100%', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+        <div className="w-full max-w-7xl mx-auto flex flex-col gap-8 px-6 py-8">
             {/* Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                    <h2 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>📊 Your Progress</h2>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>
-                        Track your typing journey and celebrate your improvements!
-                    </p>
-                </div>
-                <button className="btn-primary" onClick={onClose} style={{ background: '#666' }}>
+            <div className="flex justify-between items-center bg-surface p-6 rounded-3xl border border-border shadow-sm">
+                <SectionTitle
+                    title="📊 Your Progress"
+                    subtitle="Track your typing journey and celebrate your improvements!"
+                    className="mb-0"
+                />
+                <Button variant="ghost" onClick={onClose} size="sm">
                     Close
-                </button>
+                </Button>
             </div>
 
             {/* Time Range Selector */}
-            <div style={{ display: 'flex', gap: '1rem' }}>
+            <div className="flex justify-center md:justify-start gap-2">
                 {(['week', 'month', 'all'] as const).map(range => (
                     <button
                         key={range}
                         onClick={() => setTimeRange(range)}
-                        style={{
-                            padding: '10px 20px',
-                            borderRadius: '8px',
-                            border: timeRange === range ? '2px solid var(--primary-blue)' : '2px solid #ddd',
-                            background: timeRange === range ? 'var(--primary-blue)' : 'white',
-                            color: timeRange === range ? 'white' : 'var(--text-main)',
-                            fontWeight: '600',
-                            cursor: 'pointer',
-                            textTransform: 'capitalize'
-                        }}
+                        className={`
+                            px-6 py-2 rounded-xl text-sm font-bold capitalize transition-all
+                            ${timeRange === range
+                                ? 'bg-primary text-white shadow-lg shadow-primary/25'
+                                : 'bg-surface text-text-muted border border-border hover:bg-surface-2 hover:text-text-main'}
+                        `}
                     >
                         {range === 'all' ? 'All Time' : `Last ${range}`}
                     </button>
@@ -95,237 +94,162 @@ const Analytics: React.FC<AnalyticsProps> = ({ userId, onClose }) => {
             </div>
 
             {/* Stats Grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
-                <div className="card" style={{ padding: '1.5rem', textAlign: 'center' }}>
-                    <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>🎯</div>
-                    <div style={{ fontSize: '2.5rem', fontWeight: '700', color: 'var(--primary-blue)' }}>
-                        {analytics.totalLessonsCompleted}
-                    </div>
-                    <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
-                        Lessons Completed
-                    </div>
-                </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <StatTile
+                    icon="🎯"
+                    value={analytics.totalLessonsCompleted}
+                    label="Lessons"
+                    color="primary"
+                />
+                <StatTile
+                    icon="⚡"
+                    value={analytics.averageWPM}
+                    label="Avg WPM"
+                    color="secondary"
+                />
+                <StatTile
+                    icon="🏆"
+                    value={analytics.bestWPM}
+                    label="Best WPM"
+                    color="accent"
+                />
+                <StatTile
+                    icon="🔥"
+                    value={analytics.currentStreak}
+                    label="Streak"
+                />
+                <StatTile
+                    icon="✅"
+                    value={`${analytics.averageAccuracy}%`}
+                    label="Avg Acc"
+                    color="secondary"
+                />
 
-                <div className="card" style={{ padding: '1.5rem', textAlign: 'center' }}>
-                    <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>⚡</div>
-                    <div style={{ fontSize: '2.5rem', fontWeight: '700', color: 'var(--secondary-teal)' }}>
-                        {analytics.averageWPM}
-                    </div>
-                    <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
-                        Average WPM
-                    </div>
-                </div>
-
-                <div className="card" style={{ padding: '1.5rem', textAlign: 'center' }}>
-                    <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>🏆</div>
-                    <div style={{ fontSize: '2.5rem', fontWeight: '700', color: 'var(--accent-orange)' }}>
-                        {analytics.bestWPM}
-                    </div>
-                    <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
-                        Best WPM
-                    </div>
-                </div>
-
-                <div className="card" style={{ padding: '1.5rem', textAlign: 'center' }}>
-                    <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>🔥</div>
-                    <div style={{ fontSize: '2.5rem', fontWeight: '700', color: '#f59e0b' }}>
-                        {analytics.currentStreak}
-                    </div>
-                    <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
-                        Day Streak
-                    </div>
-                </div>
-
-                <div className="card" style={{ padding: '1.5rem', textAlign: 'center' }}>
-                    <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>✅</div>
-                    <div style={{ fontSize: '2.5rem', fontWeight: '700', color: 'var(--secondary-teal)' }}>
-                        {analytics.averageAccuracy}%
-                    </div>
-                    <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
-                        Average Accuracy
-                    </div>
-                </div>
-
-                <div className="card" style={{ padding: '1.5rem', textAlign: 'center' }}>
-                    <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>
+                <Card className="flex flex-col items-center justify-center p-4 text-center">
+                    <div className="text-3xl mb-2">
                         {improvement > 0 ? '📈' : improvement < 0 ? '📉' : '➡️'}
                     </div>
-                    <div style={{
-                        fontSize: '2.5rem',
-                        fontWeight: '700',
-                        color: improvement > 0 ? 'var(--secondary-teal)' : improvement < 0 ? '#ef4444' : '#6b7280'
-                    }}>
+                    <div className={`text-2xl font-bold mb-1 ${improvement > 0 ? 'text-secondary' : improvement < 0 ? 'text-red-500' : 'text-gray-500'
+                        }`}>
                         {improvement > 0 ? '+' : ''}{improvement}
                     </div>
-                    <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
-                        WPM Improvement
+                    <div className="text-xs font-bold text-text-muted uppercase tracking-widest">
+                        Improvement
                     </div>
-                </div>
+                </Card>
             </div>
 
             {/* WPM Progress Chart */}
-            <div className="card" style={{ padding: '2rem' }}>
-                <h3 style={{ marginBottom: '1.5rem' }}>WPM Progress Over Time</h3>
-                <div style={{
-                    display: 'flex',
-                    alignItems: 'flex-end',
-                    gap: '8px',
-                    height: '300px',
-                    padding: '1rem',
-                    borderBottom: '2px solid #e5e7eb',
-                    borderLeft: '2px solid #e5e7eb'
-                }}>
+            <Card className="p-8">
+                <CardTitle className="mb-6">WPM Progress Over Time</CardTitle>
+                <div className="flex items-end gap-2 h-64 p-4 border-b border-border border-l bg-surface-2/20 rounded-lg">
                     {wpmTrend.length > 0 ? wpmTrend.map((entry, index) => {
                         const maxWPM = Math.max(...wpmTrend.map(e => e.wpm));
                         const height = (entry.wpm / maxWPM) * 100;
 
                         return (
-                            <div
-                                key={index}
-                                style={{
-                                    flex: 1,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    gap: '8px'
-                                }}
-                            >
-                                <div style={{
-                                    fontSize: '0.8rem',
-                                    fontWeight: '600',
-                                    color: 'var(--primary-blue)'
-                                }}>
-                                    {entry.wpm}
+                            <div key={index} className="flex-1 flex flex-col items-center gap-2 group relative">
+                                {/* Tooltip */}
+                                <div className="hidden group-hover:block absolute bottom-full mb-2 bg-gray-900 text-white text-xs py-1 px-2 rounded shadow-lg whitespace-nowrap z-10">
+                                    {entry.date}: {entry.wpm} WPM
                                 </div>
-                                <div
-                                    style={{
-                                        width: '100%',
-                                        height: `${height}%`,
-                                        background: 'linear-gradient(180deg, var(--primary-blue), var(--secondary-teal))',
-                                        borderRadius: '4px 4px 0 0',
-                                        transition: 'height 0.3s ease',
-                                        minHeight: '20px'
-                                    }}
-                                    title={`${entry.date}: ${entry.wpm} WPM`}
-                                />
-                                <div style={{
-                                    fontSize: '0.7rem',
-                                    color: 'var(--text-muted)',
-                                    transform: 'rotate(-45deg)',
-                                    whiteSpace: 'nowrap',
-                                    marginTop: '1rem'
-                                }}>
-                                    {entry.date}
+
+                                <div className="w-full relative flex items-end h-full">
+                                    <div
+                                        className="w-full bg-gradient-to-t from-secondary to-primary rounded-t-sm transition-all duration-500 group-hover:opacity-80"
+                                        style={{ height: `${height}%`, minHeight: '4px' }}
+                                    />
                                 </div>
                             </div>
                         );
                     }) : (
-                        <div style={{ width: '100%', textAlign: 'center', color: 'var(--text-muted)' }}>
+                        <div className="w-full h-full flex items-center justify-center text-text-muted">
                             No data available for this time range
                         </div>
                     )}
                 </div>
-            </div>
+            </Card>
 
-            {/* Weak Keys Analysis */}
-            <div className="card" style={{ padding: '2rem' }}>
-                <h3 style={{ marginBottom: '1.5rem' }}>🎯 Keys to Practice</h3>
-                <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
-                    Focus on these keys to improve your accuracy
-                </p>
-                {weakKeysArray.length > 0 ? (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                        {weakKeysArray.map(([key, count]) => {
-                            const maxErrors = weakKeysArray[0][1];
-                            const percentage = (count / maxErrors) * 100;
-
-                            return (
-                                <div key={key}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                                        <span style={{
-                                            fontFamily: 'var(--font-mono)',
-                                            fontWeight: '700',
-                                            fontSize: '1.2rem',
-                                            padding: '4px 12px',
-                                            background: 'rgba(239, 68, 68, 0.1)',
-                                            borderRadius: '6px'
-                                        }}>
-                                            {key}
-                                        </span>
-                                        <span style={{ color: 'var(--text-muted)' }}>
-                                            {count} errors
-                                        </span>
-                                    </div>
-                                    <div style={{
-                                        width: '100%',
-                                        height: '12px',
-                                        background: 'rgba(0,0,0,0.05)',
-                                        borderRadius: '6px',
-                                        overflow: 'hidden'
-                                    }}>
-                                        <div style={{
-                                            width: `${percentage}%`,
-                                            height: '100%',
-                                            background: 'linear-gradient(90deg, #ef4444, #f59e0b)',
-                                            transition: 'width 0.3s ease'
-                                        }} />
-                                    </div>
-                                </div>
-                            );
-                        })}
-                    </div>
-                ) : (
-                    <p style={{ color: 'var(--text-muted)', textAlign: 'center' }}>
-                        Great job! No significant weak points detected.
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Weak Keys Analysis */}
+                <Card className="p-8">
+                    <CardTitle className="mb-2">🎯 Keys to Practice</CardTitle>
+                    <p className="text-text-muted mb-6 text-sm">
+                        Focus on these keys during your next session.
                     </p>
-                )}
-            </div>
+                    {weakKeysArray.length > 0 ? (
+                        <div className="flex flex-col gap-4">
+                            {weakKeysArray.map(([key, count]) => {
+                                const maxErrors = weakKeysArray[0][1];
+                                const percentage = (count / maxErrors) * 100;
 
-            {/* Recent Activity */}
-            <div className="card" style={{ padding: '2rem' }}>
-                <h3 style={{ marginBottom: '1.5rem' }}>📝 Recent Activity</h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    {filteredHistory.slice(-10).reverse().map((entry, index) => (
-                        <div
-                            key={index}
-                            style={{
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                padding: '1rem',
-                                background: entry.passed ? 'rgba(16, 185, 129, 0.05)' : 'rgba(239, 68, 68, 0.05)',
-                                borderRadius: '8px',
-                                borderLeft: `4px solid ${entry.passed ? 'var(--secondary-teal)' : '#ef4444'}`
-                            }}
-                        >
-                            <div>
-                                <div style={{ fontWeight: '600', marginBottom: '0.25rem' }}>
-                                    {entry.lessonTitle}
-                                </div>
-                                <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-                                    {new Date(entry.timestamp).toLocaleString()}
-                                </div>
-                            </div>
-                            <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-                                <div style={{ textAlign: 'center' }}>
-                                    <div style={{ fontSize: '1.5rem', fontWeight: '700', color: 'var(--primary-blue)' }}>
-                                        {entry.wpm}
+                                return (
+                                    <div key={key}>
+                                        <div className="flex justify-between mb-2 text-sm font-semibold">
+                                            <span className="font-mono bg-red-500/10 text-red-500 px-3 py-1 rounded-md">
+                                                {key}
+                                            </span>
+                                            <span className="text-text-muted">
+                                                {count} errors
+                                            </span>
+                                        </div>
+                                        <div className="w-full h-2 bg-surface-2 rounded-full overflow-hidden">
+                                            <div
+                                                className="h-full bg-gradient-to-r from-red-500 to-orange-400"
+                                                style={{ width: `${percentage}%` }}
+                                            />
+                                        </div>
                                     </div>
-                                    <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>WPM</div>
-                                </div>
-                                <div style={{ textAlign: 'center' }}>
-                                    <div style={{ fontSize: '1.5rem', fontWeight: '700', color: entry.passed ? 'var(--secondary-teal)' : '#ef4444' }}>
-                                        {entry.accuracy}%
-                                    </div>
-                                    <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Accuracy</div>
-                                </div>
-                                <div style={{ fontSize: '1.5rem' }}>
-                                    {entry.passed ? '✅' : '❌'}
-                                </div>
-                            </div>
+                                );
+                            })}
                         </div>
-                    ))}
-                </div>
+                    ) : (
+                        <p className="text-text-muted text-center py-8">
+                            Great job! No significant weak points detected.
+                        </p>
+                    )}
+                </Card>
+
+                {/* Recent Activity */}
+                <Card className="p-8">
+                    <CardTitle className="mb-6">📝 Recent Activity</CardTitle>
+                    <div className="flex flex-col gap-3">
+                        {filteredHistory.slice(-5).reverse().map((entry, index) => (
+                            <div
+                                key={index}
+                                className={`
+                                    flex justify-between items-center p-4 rounded-xl border-l-4 transition-colors
+                                    ${entry.passed
+                                        ? 'bg-green-500/5 border-green-500 hover:bg-green-500/10'
+                                        : 'bg-red-500/5 border-red-500 hover:bg-red-500/10'}
+                                `}
+                            >
+                                <div>
+                                    <div className="font-bold text-text-main mb-1">
+                                        {entry.lessonTitle}
+                                    </div>
+                                    <div className="text-xs text-text-muted">
+                                        {new Date(entry.timestamp).toLocaleDateString()}
+                                    </div>
+                                </div>
+                                <div className="flex gap-6 items-center">
+                                    <div className="text-center">
+                                        <div className="text-xl font-bold text-primary">
+                                            {entry.wpm}
+                                        </div>
+                                        <div className="text-[10px] text-text-muted uppercase font-bold">WPM</div>
+                                    </div>
+                                    <div className="text-center">
+                                        <div className={`text-xl font-bold ${entry.passed ? 'text-secondary' : 'text-red-500'}`}>
+                                            {entry.accuracy}%
+                                        </div>
+                                        <div className="text-[10px] text-text-muted uppercase font-bold">ACC</div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
             </div>
         </div>
     );

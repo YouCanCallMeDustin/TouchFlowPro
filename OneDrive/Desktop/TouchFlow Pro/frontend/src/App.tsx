@@ -1,19 +1,19 @@
 import { TypingEngine } from '@shared/typingEngine'
 import { useState, useEffect, useCallback } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence } from 'framer-motion'
+import { Card } from './components/ui/Card'
+import { Button } from './components/ui/Button'
 import './App.css'
-import TypingTest from './components/TypingTest'
 import { Breadcrumbs } from './components/Breadcrumbs'
 import PageTransition from './components/PageTransition'
 import { ThemeToggle } from './components/ThemeToggle'
-import Curriculum from './components/Curriculum'
+import { Curriculum } from './components/Curriculum'
 import LessonView from './components/LessonView'
-import HeatMap from './components/HeatMap'
 import Login from './components/Auth/Login'
 import Signup from './components/Auth/Signup'
 import AnalyticsDashboard from './pages/AnalyticsDashboard'
 import SessionHistory from './pages/SessionHistory'
-import AchievementsPanel from './pages/AchievementsPanel'
+import { AchievementsPanel } from './pages/AchievementsPanel'
 import CustomDrillBuilder from './pages/CustomDrillBuilder'
 import GoalsDashboard from './pages/GoalsDashboard'
 import Dashboard from './pages/Dashboard'
@@ -24,6 +24,7 @@ import AdaptivePractice from './pages/AdaptivePractice'
 import Leaderboard from './pages/Leaderboard'
 import AchievementModal from './components/AchievementModal'
 import ErrorBoundary from './components/ErrorBoundary'
+import { HeroFlow } from './components/HeroFlow'
 import { useAuth } from './context/AuthContext'
 import type { TypingMetrics } from '@shared/types'
 import type { UserProgress, Lesson } from '@shared/curriculum'
@@ -53,7 +54,7 @@ function App() {
   const [isFetchingProgress, setIsFetchingProgress] = useState(false)
   const [showAchievement, setShowAchievement] = useState<{ type?: string, isLevel?: boolean, level?: number } | null>(null)
 
-  const baselineText = "Precision. Speed. Confidence. These are the hallmarks of a professional typist. Your journey starts with this baseline assessment to measure your current performance."
+
 
   useEffect(() => {
     // Initialize theme from localStorage or system preference
@@ -91,7 +92,7 @@ function App() {
       if (user) {
         fetchProgress(user.id)
       } else {
-        setStage('auth_login')
+        setStage('welcome')
       }
     }
   }, [user, loading, fetchProgress])
@@ -205,7 +206,7 @@ function App() {
           <div className="text-4xl font-heading font-extrabold animate-pulse bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-4">
             TouchFlow Pro
           </div>
-          <div className="text-text-muted tracking-[0.4em] uppercase text-[10px] font-black">Syncing Credentials...</div>
+          <div className="text-text-muted tracking-[0.4em] uppercase text-[10px] font-black">Syncing Profile...</div>
         </div>
       </div>
     )
@@ -231,14 +232,14 @@ function App() {
               {user && (
                 <>
                   <div className="hidden md:flex flex-col items-end gap-1">
-                    <span className="text-[8px] font-black text-primary uppercase tracking-[0.4em] mb-0.5">Operator ID</span>
+                    <span className="text-[8px] font-black text-primary uppercase tracking-[0.4em] mb-0.5">Professional ID</span>
                     <span className="text-xs font-bold text-text-main leading-none">{user.email}</span>
                   </div>
                   <button
                     onClick={logout}
                     className="group relative px-5 py-2.5 rounded-xl bg-red-500/5 border border-red-500/10 transition-all hover:bg-red-500 hover:text-white active:scale-95"
                   >
-                    <span className="relative z-10 text-[9px] font-black uppercase tracking-[0.2em]">End Session</span>
+                    <span className="relative z-10 text-[9px] font-black uppercase tracking-[0.2em]">Exit Session</span>
                   </button>
                 </>
               )}
@@ -301,66 +302,99 @@ function App() {
               </PageTransition>
             )}
 
-            {stage === 'welcome' && (
-              <PageTransition key="welcome">
-                <div className="max-w-2xl w-full card text-center">
-                  <div className="w-20 h-20 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto mb-10 text-4xl shadow-lg border border-white/10">🚀</div>
-                  <h1 className="mb-6 leading-tight">Elevate Your Performance.</h1>
-                  <p className="text-text-muted text-xl mb-12 leading-relaxed font-medium">Ready to transition from typing to pure flow? Let's calibrate your starting point.</p>
 
-                  <button
-                    onClick={() => setStage('assessment')}
-                    className="w-full bg-primary text-white py-5 rounded-2xl font-black uppercase tracking-[0.3em] text-[12px] shadow-2xl shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all group overflow-hidden relative"
-                  >
-                    <span className="relative z-10 flex items-center justify-center gap-3">
-                      Begin Assessment <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
-                    </span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
-                  </button>
-                </div>
+
+
+            {stage === 'dashboard' && user && (
+              <PageTransition key="dashboard">
+                <Dashboard
+                  userId={user.id}
+                  onNavigate={(s) => setStage(s as any)}
+                  userEmail={user.email}
+                  userName={(user as any).user_metadata?.full_name}
+                />
               </PageTransition>
             )}
 
-            {stage === 'assessment' && (
-              <PageTransition key="assessment">
-                <div className="w-full max-w-4xl space-y-8">
-                  <TypingTest
-                    text={baselineText}
-                    onComplete={handleAssessmentComplete}
-                    mode="baseline"
-                    onReset={() => { }}
-                  />
+            {stage === 'welcome' && (
+              <PageTransition key="welcome">
+                <div className="relative min-h-[80vh] w-full flex items-center justify-center">
+                  <HeroFlow />
+
+                  <Card className="max-w-2xl w-full text-center p-12 relative z-10 bg-white/5 backdrop-blur-xl border-white/10 shadow-2xl">
+                    <div className="w-24 h-24 bg-primary/10 rounded-[2rem] flex items-center justify-center mx-auto mb-10 text-5xl shadow-lg border border-white/10 animate-pulse-slow">
+                      <Zap className="text-primary fill-primary/20" size={40} />
+                    </div>
+                    <h1 className="text-5xl sm:text-6xl font-black mb-8 leading-[0.9] tracking-tighter uppercase italic">
+                      Peak Your <br />
+                      <span className="text-primary">Performance.</span>
+                    </h1>
+                    <p className="text-text-muted text-lg mb-12 leading-relaxed font-bold uppercase tracking-[0.2em] opacity-60">
+                      Ready to elevate your performance <br /> to elite levels?
+                    </p>
+
+                    <Button
+                      onClick={() => setStage('assessment')}
+                      className="w-full py-6 rounded-2xl font-black uppercase tracking-[0.4em] text-[14px] shadow-2xl shadow-primary/30 group overflow-hidden relative"
+                      rightIcon={<ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />}
+                    >
+                      Start Assessment
+                    </Button>
+
+                    <div className="mt-8 flex items-center justify-center gap-4">
+                      <div className="h-px w-12 bg-white/5" />
+                      <span className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] opacity-40">Or</span>
+                      <div className="h-px w-12 bg-white/5" />
+                    </div>
+
+                    <button
+                      onClick={() => setStage('auth_login')}
+                      className="mt-6 text-[10px] font-black text-text-main uppercase tracking-[0.3em] hover:text-primary transition-colors border-b border-white/10 pb-1"
+                    >
+                      Sign In to Profile
+                    </button>
+                  </Card>
                 </div>
               </PageTransition>
             )}
 
             {stage === 'placement' && placementResult && userProgress && (
               <PageTransition key="placement">
-                <div className="max-w-2xl w-full card text-center">
+                <Card className="max-w-2xl w-full text-center p-8">
                   <div className="text-6xl mb-8 animate-[bounce_2s_infinite]">🎯</div>
-                  <h1 className="mb-4">Calibration Complete.</h1>
+                  <h1 className="mb-4">Assessment Complete.</h1>
                   <div className="bg-primary/5 rounded-3xl p-8 mb-10 border border-white/10">
                     <p className="text-text-muted uppercase tracking-[0.2em] text-[10px] font-black mb-4">Starting Tier</p>
                     <h2 className="text-5xl font-black text-primary mb-2">{placementResult.level}</h2>
                     <p className="text-text-main font-bold">Speed: {Math.round(assessmentMetrics?.netWPM || 0)} WPM • Accuracy: {Math.round(assessmentMetrics?.accuracy || 0)}%</p>
                   </div>
-                  <button
+                  <Button
                     onClick={() => setStage('dashboard')}
-                    className="w-full bg-primary text-white py-5 rounded-2xl font-black uppercase tracking-[0.3em] text-[12px] shadow-2xl shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                    className="w-full py-5 rounded-2xl font-black uppercase tracking-[0.3em] text-[12px] shadow-2xl shadow-primary/30"
                   >
-                    Access Command Center
-                  </button>
-                </div>
+                    Access Dashboard
+                  </Button>
+                </Card>
               </PageTransition>
             )}
 
-            {stage === 'dashboard' && user && (
-              <Dashboard
-                userId={user.id}
-                onNavigate={(s) => setStage(s as Stage)}
-                userEmail={user.email}
-                userName={user.name}
-              />
+            {/* ... other stages ... */}
+
+            {stage === 'levelup' && levelUpInfo && (
+              <PageTransition key="levelup">
+                <Card className="max-w-2xl w-full text-center bg-gradient-to-br from-primary/10 via-transparent to-secondary/10 p-8">
+                  <div className="text-7xl mb-8">🏆</div>
+                  <h1 className="mb-4">Tier Ascent.</h1>
+                  <h2 className="text-4xl text-primary mb-6">New Level: {levelUpInfo.newLevel}</h2>
+                  <p className="text-text-main text-xl mb-12 font-medium leading-relaxed">{levelUpInfo.message}</p>
+                  <Button
+                    onClick={() => setStage('curriculum')}
+                    className="w-full py-5 rounded-2xl font-black uppercase tracking-[0.3em] text-[12px] shadow-2xl shadow-primary/30"
+                  >
+                    Continue Path
+                  </Button>
+                </Card>
+              </PageTransition>
             )}
 
             {stage === 'curriculum' && userProgress && user && (
@@ -369,7 +403,7 @@ function App() {
                   userId={user.id}
                   progress={userProgress}
                   onStartLesson={handleStartLesson}
-                  onLevelChange={() => { }}
+                  onLevelChange={(level) => console.log('Level change requested:', level)}
                 />
               </PageTransition>
             )}
@@ -385,27 +419,10 @@ function App() {
               </PageTransition>
             )}
 
-            {stage === 'levelup' && levelUpInfo && (
-              <PageTransition key="levelup">
-                <div className="max-w-2xl w-full card text-center bg-gradient-to-br from-primary/10 via-transparent to-secondary/10">
-                  <div className="text-7xl mb-8">🏆</div>
-                  <h1 className="mb-4">Tier Ascent.</h1>
-                  <h2 className="text-4xl text-primary mb-6">New Level: {levelUpInfo.newLevel}</h2>
-                  <p className="text-text-main text-xl mb-12 font-medium leading-relaxed">{levelUpInfo.message}</p>
-                  <button
-                    onClick={() => setStage('curriculum')}
-                    className="w-full bg-primary text-white py-5 rounded-2xl font-black uppercase tracking-[0.3em] text-[12px] shadow-2xl shadow-primary/30 hover:scale-[1.02] transition-all"
-                  >
-                    Continue Path
-                  </button>
-                </div>
-              </PageTransition>
-            )}
-
             {stage === 'analytics' && user && (
               <PageTransition key="analytics">
                 <div className="w-full space-y-12">
-                  <AnalyticsDashboard userId={user.id} />
+                  <AnalyticsDashboard />
                 </div>
               </PageTransition>
             )}

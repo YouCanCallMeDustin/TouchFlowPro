@@ -21,7 +21,9 @@ interface AvailableAchievement {
     icon: string;
 }
 
-const AchievementsPanel: React.FC<AchievementsProps> = ({ userId }) => {
+export const AchievementsPanel: React.FC<AchievementsProps> = ({ userId }) => {
+    // ...
+
     const [earned, setEarned] = useState<Achievement[]>([]);
     const [available, setAvailable] = useState<AvailableAchievement[]>([]);
     const [loading, setLoading] = useState(true);
@@ -206,4 +208,4 @@ const AchievementsPanel: React.FC<AchievementsProps> = ({ userId }) => {
     );
 };
 
-export default AchievementsPanel;
+

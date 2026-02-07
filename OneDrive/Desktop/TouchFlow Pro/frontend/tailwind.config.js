@@ -7,6 +7,37 @@ export default {
     theme: {
         extend: {
             colors: {
+                // Semantic Tokens
+                bg: {
+                    main: 'var(--bg-main)',
+                    card: 'var(--bg-card)',
+                },
+                surface: {
+                    DEFAULT: 'var(--bg-card)',
+                    2: 'var(--surface-2)', // We'll add this to index.css
+                },
+                text: {
+                    main: 'var(--text-main)',
+                    muted: 'var(--text-muted)',
+                },
+                border: {
+                    DEFAULT: 'var(--glass-border)',
+                },
+                // Brand Colors (mapped to CSS vars for runtime flexibility)
+                primary: {
+                    DEFAULT: 'var(--primary)',
+                    foreground: '#ffffff',
+                },
+                secondary: {
+                    DEFAULT: 'var(--secondary)',
+                    foreground: '#ffffff',
+                },
+                accent: {
+                    DEFAULT: 'var(--accent)',
+                    foreground: '#ffffff',
+                },
+                // Keep legacy brand object for backward compatibility if needed, 
+                // but prefer the semantic ones above.
                 brand: {
                     blue: {
                         DEFAULT: '#1E40AF',
@@ -29,30 +60,19 @@ export default {
                         violet: '#A855F7',
                     },
                 },
-                // Keep existing colors
-                'primary-blue': '#3b82f6',
-                'secondary-teal': '#14b8a6',
-                'accent-orange': '#f97316',
-                'bg-main': '#f8fafc',
-                'text-main': '#0f172a',
-                'text-muted': '#64748b',
-                primary: {
-                    blue: 'hsl(209, 100%, 28%)',
-                },
-                secondary: {
-                    teal: 'hsl(180, 100%, 33%)',
-                },
-                accent: {
-                    orange: 'hsl(38, 92%, 51%)',
-                },
-                bg: {
-                    main: 'hsl(220, 20%, 97%)',
-                }
             },
             fontFamily: {
-                heading: ['Inter', 'system-ui', 'sans-serif'],
-                body: ['Inter', 'sans-serif'],
-                mono: ['Fira Code', 'monospace'],
+                heading: ['var(--font-heading)', 'Inter', 'system-ui', 'sans-serif'],
+                body: ['var(--font-body)', 'Inter', 'sans-serif'],
+                mono: ['var(--font-mono)', 'Fira Code', 'monospace'],
+            },
+            boxShadow: {
+                'sm': 'var(--shadow-sm)',
+                'md': 'var(--shadow-md)',
+                'lg': 'var(--shadow-lg)',
+                'premium': 'var(--shadow-premium)',
+                '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
             },
             backgroundImage: {
                 'gradient-brand': 'linear-gradient(135deg, #1E40AF 0%, #8B5CF6 50%, #EC4899 100%)',
@@ -61,7 +81,10 @@ export default {
             },
             backdropBlur: {
                 xs: '2px',
-            }
+            },
+            animation: {
+                'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            },
         },
     },
     plugins: [],

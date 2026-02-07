@@ -89,8 +89,8 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
     const displayName = propUserName || (userEmail
         ? userEmail.includes('@')
             ? userEmail.split('@')[0].charAt(0).toUpperCase() + userEmail.split('@')[0].slice(1)
-            : 'Operational Unit'
-        : 'Operational Unit');
+            : 'Professional'
+        : 'Professional');
 
     useEffect(() => {
         fetchDashboardData();
@@ -167,7 +167,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                         <div className="absolute inset-0 border-4 border-primary/10 rounded-full" />
                         <div className="absolute inset-0 border-4 border-primary border-t-transparent rounded-full animate-spin shadow-[0_0_15px_var(--primary)]" />
                     </div>
-                    <span className="text-text-muted font-black uppercase tracking-[0.4em] text-[10px]">Assembling Dashboard</span>
+                    <span className="text-text-muted font-black uppercase tracking-[0.4em] text-[10px]">Loading Dashboard</span>
                 </div>
             </div>
         );
@@ -188,15 +188,15 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                             <span className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/30">
                                 <Activity size={18} className="text-primary" />
                             </span>
-                            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">System Ready</span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">System Operational</span>
                         </div>
                         <h1 className="text-6xl mb-4 tracking-tight leading-[1.1]">
                             <span className="text-text-muted block mb-2">{getGreeting()},</span>
                             <span className="text-gradient drop-shadow-sm">{displayName}.</span>
                         </h1>
                         <p className="text-xl text-text-muted max-w-xl font-medium leading-relaxed opacity-70">
-                            Your neural-motor pathways are optimized.
-                            <span className="text-text-main font-bold"> Calibration session </span> is recommended for peak flow.
+                            Your skills are optimized.
+                            <span className="text-text-main font-bold"> Skill Assessment </span> is recommended for top speed.
                         </p>
                     </div>
 
@@ -261,7 +261,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
 
                         <motion.div variants={itemVariants} className="card p-8 border border-white/5">
                             <div className="flex justify-between items-center mb-10">
-                                <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-text-muted">Temporal Performance</h3>
+                                <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-text-muted">Performance Trends</h3>
                                 <TrendingUp size={16} className="text-secondary opacity-50" />
                             </div>
                             <div className="h-[280px] w-full">
@@ -345,7 +345,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                                     onClick={() => onNavigate('achievements')}
                                     className="text-[9px] font-black text-primary px-3 py-1.5 rounded-lg bg-primary/5 hover:bg-primary/10 transition-colors uppercase tracking-widest"
                                 >
-                                    Inventory
+                                    Milestones
                                 </button>
                             </div>
                             <div className="space-y-3">
@@ -370,14 +370,14 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                                             <Award size={40} strokeWidth={1} />
                                             <div className="absolute inset-0 blur-lg bg-primary/20" />
                                         </div>
-                                        <p className="text-[10px] font-black uppercase tracking-[0.2em]">Pending Initiation</p>
+                                        <p className="text-[10px] font-black uppercase tracking-[0.2em]">Unlock Milestones</p>
                                     </div>
                                 )}
                             </div>
                         </motion.div>
 
                         <motion.div variants={itemVariants} className="space-y-6">
-                            <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-text-muted px-4">Fast Access Nodes</h3>
+                            <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-text-muted px-4">Quick Access</h3>
                             <div className="grid grid-cols-2 gap-4">
                                 {[
                                     { id: 'practice', label: 'Sessions', icon: Target },

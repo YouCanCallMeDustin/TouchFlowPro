@@ -25,7 +25,7 @@ interface CurriculumProps {
     onLevelChange: (level: DifficultyLevel) => void;
 }
 
-const Curriculum: React.FC<CurriculumProps> = ({ userId, progress, onStartLesson, onLevelChange: _onLevelChange }) => {
+export const Curriculum: React.FC<CurriculumProps> = ({ userId, progress, onStartLesson, onLevelChange: _onLevelChange }) => {
     const [lessons, setLessons] = useState<Lesson[]>([]);
     const [selectedLevel, setSelectedLevel] = useState<DifficultyLevel>(progress.assignedLevel);
     const [selectedSpecialization, setSelectedSpecialization] = useState<'Medical' | 'Legal' | 'Coding' | 'Journalism' | 'DevOps' | 'Gaming'>('Medical');
@@ -82,13 +82,13 @@ const Curriculum: React.FC<CurriculumProps> = ({ userId, progress, onStartLesson
                         <span className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/30">
                             <TrendingUp size={18} className="text-primary" />
                         </span>
-                        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Neural Progression Path</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Performance Path</span>
                     </div>
                     <h2 className="text-5xl md:text-7xl font-black tracking-tighter text-text-main mb-6 uppercase leading-[0.9]">
                         Tactical Curriculum
                     </h2>
                     <p className="text-text-muted text-lg max-w-2xl leading-relaxed opacity-70">
-                        Systematic operational expansion. Maintain <span className="text-primary font-black uppercase tracking-wider">95%+ Precision</span> across objective modules to achieve elite tier certification.
+                        Systematic operational expansion. Maintain <span className="text-primary font-black uppercase tracking-wider">95%+ Accuracy</span> across objective modules to achieve elite tier certification.
                     </p>
                 </div>
 
@@ -217,7 +217,7 @@ const Curriculum: React.FC<CurriculumProps> = ({ userId, progress, onStartLesson
                     </div>
                     <p className="text-text-muted mb-10 leading-relaxed font-black uppercase tracking-[0.2em] text-[11px] opacity-40">
                         Operational nodes verified: <span className="text-text-main opacity-100">{progress.completedLessons.length}</span>.
-                        Sync protocol maintaining expected density. Proceed to higher tier sectors.
+                        Consistency protocol maintaining expected density. Proceed to higher tier sectors.
                     </p>
                     <div className="w-full h-2 bg-slate-500/5 dark:bg-white/5 rounded-full overflow-hidden border border-slate-200/50 dark:border-white/5">
                         <div
@@ -291,9 +291,9 @@ const Curriculum: React.FC<CurriculumProps> = ({ userId, progress, onStartLesson
                                             <div className="text-[8px] font-bold uppercase text-primary/60">WPM</div>
                                         </div>
                                         <div className="p-4 bg-slate-500/5 dark:bg-white/5 rounded-2xl border border-slate-200/50 dark:border-white/5 group-hover:bg-primary/5 transition-all text-center">
-                                            <div className="text-[9px] font-black text-text-muted/40 uppercase tracking-[0.2em] mb-1">Precision</div>
+                                            <div className="text-[9px] font-black text-text-muted/40 uppercase tracking-[0.2em] mb-1">Accuracy</div>
                                             <div className="text-2xl font-black text-text-main tracking-tighter">{score.accuracy}%</div>
-                                            <div className="text-[8px] font-bold uppercase text-primary/60">Logic Signal</div>
+                                            <div className="text-[8px] font-bold uppercase text-primary/60">Accuracy Level</div>
                                         </div>
                                     </div>
                                 ) : (
@@ -318,11 +318,11 @@ const Curriculum: React.FC<CurriculumProps> = ({ userId, progress, onStartLesson
                                     {status === 'completed' ? (
                                         <>Re-Engage Path <Zap size={14} /></>
                                     ) : status === 'current' ? (
-                                        <>Resume Linkage <ArrowRight size={14} /></>
+                                        <>Resume Session <ArrowRight size={14} /></>
                                     ) : isLocked ? (
                                         'Sector Locked'
                                     ) : (
-                                        <>Establish Link <ArrowRight size={14} /></>
+                                        <>Begin Session <ArrowRight size={14} /></>
                                     )}
                                 </button>
                             </div>
@@ -334,4 +334,4 @@ const Curriculum: React.FC<CurriculumProps> = ({ userId, progress, onStartLesson
     );
 };
 
-export default Curriculum;
+

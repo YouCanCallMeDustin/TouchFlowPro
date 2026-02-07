@@ -111,7 +111,7 @@ export const LevelProgressBar: React.FC<Props> = ({ userId }) => {
                 <div className="relative z-10 py-2">
                     <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-primary/5 rounded-xl border border-primary/20">
                         <Crown size={18} className="text-primary animate-pulse" />
-                        <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">Peak Performance Unlocked</span>
+                        <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">Top Speed Unlocked</span>
                     </div>
                 </div>
             )}

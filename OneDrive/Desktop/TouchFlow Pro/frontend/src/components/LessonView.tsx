@@ -50,7 +50,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
     const [newAchievement, setNewAchievement] = useState<{ name: string; icon: string; description: string } | null>(null);
 
     const activeWarmupSteps = lesson.warmupSteps || [
-        { text: lesson.content.split(' ').slice(0, 3).join(' '), insight: 'Let\'s start with a quick calibration to find your center.' }
+        { text: lesson.content.split(' ').slice(0, 3).join(' '), insight: 'Let\'s start with a quick warmup to find your rhythm.' }
     ];
 
     const currentWarmup = activeWarmupSteps[warmupStepIndex];
@@ -232,7 +232,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                             onClick={() => setMode('theory')}
                             className="px-10 py-6 bg-primary text-white rounded-2xl font-black text-xs uppercase tracking-[0.34em] shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-4 group"
                         >
-                            Establish Linkage
+                            Begin Session
                             <Rocket size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                         </button>
 
@@ -245,7 +245,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                                 className="flex-1 py-4 bg-slate-500/5 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 text-text-muted rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-500/10 dark:hover:bg-white/10 hover:text-text-main transition-all flex items-center justify-center gap-2"
                             >
                                 <Waves size={14} />
-                                Calibration
+                                Warmup
                             </button>
                             <button
                                 onClick={() => setMode('test')}
@@ -263,8 +263,8 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                                         <Mic size={18} />
                                     </div>
                                     <div className="text-left">
-                                        <div className="text-[9px] font-black text-text-muted uppercase tracking-[0.2em] mb-1">Operational Variant</div>
-                                        <div className="text-sm font-bold text-text-main">Neural-Audio Interface</div>
+                                        <div className="text-[9px] font-black text-text-muted uppercase tracking-[0.2em] mb-1">Session Variant</div>
+                                        <div className="text-sm font-bold text-text-main">Advanced Audio Mode</div>
                                     </div>
                                 </div>
                                 <button
@@ -281,7 +281,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                         onClick={onCancel}
                         className="mt-12 text-text-muted font-black text-[10px] uppercase tracking-[0.4em] hover:text-primary transition-colors border-b border-slate-200/50 dark:border-white/5 hover:border-primary pb-2 opacity-40 hover:opacity-100"
                     >
-                        Exit to Command Hub
+                        Exit to Dashboard
                     </button>
                 </div>
             )}
@@ -290,10 +290,10 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                 <div className="card text-center border border-slate-200/60 dark:border-white/5 animate-in fade-in slide-in-from-bottom-6 duration-700">
                     <div className="inline-flex items-center gap-3 px-4 py-2 bg-primary/5 text-primary rounded-full text-[10px] font-black uppercase tracking-[0.3em] mb-10 border border-primary/20">
                         <BookOpen size={14} />
-                        Doctrine Protocol
+                        Session Info
                     </div>
 
-                    <h3 className="text-4xl font-black text-text-main mb-12 tracking-tighter uppercase">Conceptual Directive</h3>
+                    <h3 className="text-4xl font-black text-text-main mb-12 tracking-tighter uppercase">Key Objectives</h3>
 
                     <div className="max-w-3xl mx-auto mb-16 space-y-12">
                         <div className="relative">
@@ -319,7 +319,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                             onClick={initiateWarmup}
                             className="px-16 py-6 bg-primary text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-4"
                         >
-                            Initiate Linkage
+                            Begin Session
                             <ArrowRight size={18} />
                         </button>
                     </div>
@@ -334,11 +334,11 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                                 <Activity size={28} className="text-primary group-hover:animate-pulse" />
                             </div>
                             <div>
-                                <h3 className="text-2xl font-black uppercase tracking-tighter">Calibration Phase</h3>
-                                <p className="text-[10px] text-text-muted font-black uppercase tracking-[0.3em] opacity-40">Sync Level {warmupStepIndex + 1} of {activeWarmupSteps.length}</p>
+                                <h3 className="text-2xl font-black uppercase tracking-tighter">Warmup Phase</h3>
+                                <p className="text-[10px] text-text-muted font-black uppercase tracking-[0.3em] opacity-40">Step {warmupStepIndex + 1} of {activeWarmupSteps.length}</p>
                             </div>
                         </div>
-                        <button onClick={() => setMode('theory')} className="text-[10px] font-black uppercase tracking-[0.2em] bg-slate-500/5 dark:bg-white/5 px-6 py-3 rounded-xl hover:bg-slate-500/10 dark:hover:bg-white/10 transition-all border border-slate-200/50 dark:border-white/10 text-text-muted hover:text-text-main">Back to doctrine</button>
+                        <button onClick={() => setMode('theory')} className="text-[10px] font-black uppercase tracking-[0.2em] bg-slate-500/5 dark:bg-white/5 px-6 py-3 rounded-xl hover:bg-slate-500/10 dark:hover:bg-white/10 transition-all border border-slate-200/50 dark:border-white/10 text-text-muted hover:text-text-main">Back to intro</button>
                         <div className="absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-primary/5 to-transparent pointer-events-none" />
                     </div>
 
@@ -351,7 +351,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                                 showVirtualKeyboard={enhancedModeEnabled}
                             />
                             <div className="mt-12">
-                                <div className="text-[10px] font-black text-text-muted uppercase tracking-[0.4em] mb-8 text-center opacity-40">Neural Anchor Map</div>
+                                <div className="text-[10px] font-black text-text-muted uppercase tracking-[0.4em] mb-8 text-center opacity-40">Focus Key Map</div>
                                 <VisualKeyboard highlightKeys={lesson.focusKeys} />
                             </div>
                         </>
@@ -381,7 +381,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                                 onClick={nextWarmupStep}
                                 className="px-16 py-6 bg-primary text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-4 mx-auto"
                             >
-                                {warmupStepIndex < activeWarmupSteps.length - 1 ? 'Advance Calibration Array' : 'Establish Synthesis'}
+                                {warmupStepIndex < activeWarmupSteps.length - 1 ? 'Next Step' : 'Finish Warmup'}
                                 <span className="text-[10px] opacity-40 ml-4 font-black tracking-widest">Enter_key</span>
                             </button>
                             <div className="absolute top-0 left-0 w-32 h-32 bg-primary/5 blur-[60px] -translate-y-1/2 -translate-x-1/2 pointer-events-none" />
@@ -399,7 +399,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                                     {suddenDeathEnabled ? <AlertOctagon size={28} className="text-white animate-pulse" /> : <Settings size={28} className="text-text-muted group-hover:rotate-90 transition-transform duration-700" />}
                                 </div>
                                 <div className="min-w-0">
-                                    <h3 className="text-2xl font-black uppercase tracking-tighter text-text-main">Neural Optimization</h3>
+                                    <h3 className="text-2xl font-black uppercase tracking-tighter text-text-main">Performance Optimization</h3>
                                     <p className="text-[10px] text-text-muted font-black uppercase tracking-[0.3em] opacity-40">
                                         {suddenDeathEnabled ? 'Sudden Death: Fail condition active' : 'Fluidic Mode: Persistence enabled'}
                                     </p>
@@ -432,7 +432,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                                 {enhancedModeEnabled ? 'Hifi Metrics' : 'Sub-Baseline'}
                             </button>
                         </div>
-                        <button onClick={() => setMode('intro')} className="text-[10px] font-black uppercase tracking-widest bg-slate-500/5 dark:bg-white/5 px-6 py-3 rounded-xl hover:bg-slate-500/10 dark:hover:bg-white/10 transition-all border border-slate-200/50 dark:border-white/10 text-text-muted hover:text-text-main relative z-10">Abort linkage</button>
+                        <button onClick={() => setMode('intro')} className="text-[10px] font-black uppercase tracking-widest bg-slate-500/5 dark:bg-white/5 px-6 py-3 rounded-xl hover:bg-slate-500/10 dark:hover:bg-white/10 transition-all border border-slate-200/50 dark:border-white/10 text-text-muted hover:text-text-main relative z-10">Abort Session</button>
                     </div>
                     <TypingTest
                         text={practiceText}
@@ -453,8 +453,8 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                                 <Trophy size={28} className="text-white" />
                             </div>
                             <div>
-                                <h3 className="text-2xl font-black uppercase tracking-tighter">Strategic Challenge</h3>
-                                <p className="text-[10px] text-white/60 font-black uppercase tracking-[0.3em] opacity-80">Sync Threshold: {lesson.masteryThreshold}% Precision</p>
+                                <h3 className="text-2xl font-black uppercase tracking-tighter">Final Assessment</h3>
+                                <p className="text-[10px] text-white/60 font-black uppercase tracking-[0.3em] opacity-80">Accuracy Threshold: {lesson.masteryThreshold}% Precision</p>
                             </div>
                         </div>
                         <button onClick={() => setMode('intro')} className="text-[10px] font-black uppercase tracking-widest bg-white/10 px-6 py-3 rounded-xl hover:bg-white/20 transition-all border border-white/10 relative z-10">Abort Mission</button>
@@ -478,13 +478,13 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                         <div className="text-center mb-20 animate-in zoom-in-95 duration-700">
                             <div className="inline-flex items-center gap-3 px-5 py-2 bg-orange-500/10 text-orange-400 text-[10px] font-black uppercase tracking-[0.4em] rounded-full mb-10 border border-orange-500/20">
                                 <RefreshCcw size={12} className="animate-spin-slow" />
-                                Calibration Recovery Successful
+                                Practice Recovery Successful
                             </div>
                             <h2 className="text-6xl font-black text-text-main mb-6 tracking-tighter uppercase">
                                 Sprint Refined
                             </h2>
                             <p className="text-xl text-text-muted mb-16 font-black uppercase tracking-widest opacity-40">
-                                Neural corrections established. Re-engaging main assessment vector.
+                                Form corrections established. Re-engaging main assessment vector.
                             </p>
                         </div>
                     ) : passed ? (
@@ -493,10 +493,10 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                                 <Award size={48} className="text-primary" />
                             </div>
                             <h2 className="text-5xl sm:text-7xl font-black text-text-main mb-4 tracking-tighter uppercase">
-                                Assessment Verified
+                                Session Complete
                             </h2>
                             <p className="text-xl text-text-muted mb-16 font-black uppercase tracking-widest opacity-40">
-                                Mastery criteria reached. Functional tier status upgraded.
+                                Mastery criteria reached. Performance level updated.
                             </p>
                         </div>
                     ) : (
@@ -505,36 +505,36 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                                 <AlertOctagon size={48} className="text-rose-500" />
                             </div>
                             <h2 className="text-5xl sm:text-7xl font-black text-text-main mb-4 tracking-tighter uppercase">
-                                Sync Failed
+                                Session Failed
                             </h2>
                             <p className="text-xl text-text-muted mb-16 font-black uppercase tracking-widest opacity-40">
-                                Threshold mismatch detected. Recalibration of kinematic paths required.
+                                Threshold mismatch detected. Further practice recommended.
                             </p>
                         </div>
                     )}
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-16 px-4">
                         <div className="bg-slate-500/5 dark:bg-white/5 border border-slate-200/50 dark:border-white/5 p-10 rounded-[2rem] group hover:border-primary/20 transition-all relative overflow-hidden">
-                            <div className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-6 opacity-40 relative z-10">Net Sync Velocity</div>
+                            <div className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-6 opacity-40 relative z-10">Net Speed</div>
                             <div className="text-6xl font-black text-text-main mb-2 group-hover:scale-110 transition-transform relative z-10 tracking-tighter">{testMetrics.netWPM}</div>
                             <div className="text-[10px] font-black text-primary uppercase tracking-widest relative z-10">WPM Units</div>
                             <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
 
                         <div className={`p-10 rounded-[2rem] border group transition-all relative overflow-hidden ${testMetrics.accuracy >= lesson.masteryThreshold ? 'bg-primary/5 border-primary/20 hover:border-primary/40' : 'bg-rose-500/5 border-rose-500/20 hover:border-rose-500/40'}`}>
-                            <div className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-6 opacity-40 relative z-10">Final Precision</div>
+                            <div className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-6 opacity-40 relative z-10">Final Accuracy</div>
                             <div className={`text-6xl font-black mb-2 group-hover:scale-110 transition-transform relative z-10 tracking-tighter ${testMetrics.accuracy >= lesson.masteryThreshold ? 'text-text-main' : 'text-rose-500'}`}>
                                 {testMetrics.accuracy}%
                             </div>
                             <div className="text-[10px] font-black uppercase tracking-widest relative z-10">
-                                {testMetrics.accuracy >= lesson.masteryThreshold ? '✓ Logic Validated' : `Target: ${lesson.masteryThreshold}%`}
+                                {testMetrics.accuracy >= lesson.masteryThreshold ? '✓ Target Met' : `Target: ${lesson.masteryThreshold}%`}
                             </div>
                         </div>
 
                         <div className="bg-slate-500/5 dark:bg-white/5 border border-slate-200/50 dark:border-white/5 p-10 rounded-[2rem] group hover:border-rose-500/30 transition-all relative overflow-hidden">
-                            <div className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-6 opacity-40 relative z-10">Signal Anomalies</div>
+                            <div className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-6 opacity-40 relative z-10">Accuracy Issues</div>
                             <div className="text-6xl font-black text-text-main mb-2 group-hover:scale-110 transition-transform relative z-10 tracking-tighter">{testMetrics.errors}</div>
-                            <div className="text-[10px] font-black text-rose-500 uppercase tracking-widest relative z-10">Input Drift</div>
+                            <div className="text-[10px] font-black text-rose-500 uppercase tracking-widest relative z-10">Mistakes</div>
                             <div className="absolute inset-0 bg-rose-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                     </div>
@@ -546,14 +546,14 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                                     onClick={handleFinish}
                                     className="px-12 py-6 bg-primary text-white rounded-2xl font-black text-xs uppercase tracking-[0.3em] shadow-xl shadow-primary/40 hover:scale-105 active:scale-95 transition-all flex-1"
                                 >
-                                    Commit Progress Array <span className="text-[9px] opacity-40 ml-4">Enter_key</span>
+                                    Commit Results <span className="text-[9px] opacity-40 ml-4">Enter_key</span>
                                 </button>
                                 {adaptiveText && (
                                     <button
                                         onClick={() => setMode('adaptive')}
                                         className="px-8 py-6 bg-white/5 border border-white/10 text-primary rounded-2xl font-black text-xs uppercase tracking-[0.25em] hover:bg-white/10 transition-all active:scale-95 flex items-center justify-center gap-3"
                                     >
-                                        Refine Sub-Metrics
+                                        Refine Accuracy
                                         <Zap size={14} />
                                     </button>
                                 )}
@@ -578,7 +578,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                                     onClick={onCancel}
                                     className="px-8 py-6 bg-transparent text-text-muted rounded-2xl font-black text-xs uppercase tracking-[0.25em] hover:text-text-main transition-all"
                                 >
-                                    Abort Hub
+                                    Abort Session
                                 </button>
                             </>
                         )}
@@ -595,7 +595,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                             </div>
                             <div>
                                 <h3 className="text-2xl font-black uppercase tracking-tighter">Precision Recovery</h3>
-                                <p className="text-[10px] text-white/60 font-black uppercase tracking-[0.3em] opacity-80">Recalibrating missed key signatures</p>
+                                <p className="text-[10px] text-white/60 font-black uppercase tracking-[0.3em] opacity-80">Refining missed keys</p>
                             </div>
                         </div>
                         <button onClick={() => setMode('results')} className="text-[10px] font-black uppercase tracking-widest bg-black/10 px-4 py-2 rounded-lg hover:bg-black/20 transition-all border border-white/10 relative z-10">Abort Sprint</button>

@@ -34,7 +34,7 @@ const PageTransition = ({ children }: PageTransitionProps) => {
             initial="initial"
             animate="animate"
             exit="exit"
-            variants={pageVariants}
+            variants={pageVariants as any}
             className="w-full"
         >
             {children}

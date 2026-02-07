@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import type { TypingMetrics } from '@shared/types';
 import type { Drill } from '@shared/drillLibrary';
+import { Card, CardTitle, CardDescription } from './ui/Card';
+import { Button } from './ui/Button';
+import { StatTile } from './ui/StatTile';
+import { SectionTitle } from './ui/SectionTitle';
+import { Badge } from './ui/Badge';
 
 interface DashboardProps {
     metrics: TypingMetrics | null;
@@ -20,60 +25,64 @@ const Dashboard: React.FC<DashboardProps> = ({ metrics, onStartDrill, onStartAss
             .catch(err => console.error('Failed to fetch drills:', err));
     }, [selectedDifficulty]);
 
+    const sessionRank = (metrics?.netWPM || 0) > 80 ? 'Elite' : (metrics?.netWPM || 0) > 40 ? 'Pro' : 'Novice';
+
     return (
-        <div style={{ maxWidth: '1200px', width: '100%', display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                <div>
-                    <h2 style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>Performance Dashboard</h2>
-                    <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem' }}>Welcome back. Here is your current typing trajectory.</p>
-                </div>
-                <div style={{ display: 'flex', gap: '1rem' }}>
-                    <button className="btn-primary" onClick={onStartAssessment}>New Assessment</button>
-                </div>
+        <div className="w-full max-w-7xl mx-auto flex flex-col gap-10 px-6 py-8">
+            {/* Header Section */}
+            <div className="flex flex-col md:flex-row justify-between items-end gap-6">
+                <SectionTitle
+                    title="Performance Dashboard"
+                    subtitle="Welcome back. Here is your current typing trajectory."
+                    className="mb-0"
+                />
+                <Button onClick={onStartAssessment} size="lg" className="w-full md:w-auto">
+                    New Assessment
+                </Button>
             </div>
 
-            <div className="card" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '2rem', padding: '3rem' }}>
-                <div className="metric-item">
-                    <span className="metric-label">Peak Net Speed</span>
-                    <span className="metric-value">{metrics?.netWPM || 0}</span>
-                    <span style={{ fontSize: '0.9rem', color: 'var(--secondary-teal)', fontWeight: '600' }}>WPM</span>
-                </div>
-                <div className="metric-item">
-                    <span className="metric-label">Global Accuracy</span>
-                    <span className="metric-value">{metrics?.accuracy || 0}</span>
-                    <span style={{ fontSize: '0.9rem', color: 'var(--accent-orange)', fontWeight: '600' }}>%</span>
-                </div>
-                <div className="metric-item">
-                    <span className="metric-label">Total Keystrokes</span>
-                    <span className="metric-value" style={{ fontSize: '2rem' }}>{metrics?.charsTyped || 0}</span>
-                    <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Captures</span>
-                </div>
-                <div className="metric-item">
-                    <span className="metric-label">Session Rank</span>
-                    <span className="metric-value" style={{ fontSize: '2rem' }}>{(metrics?.netWPM || 0) > 80 ? 'Elite' : (metrics?.netWPM || 0) > 40 ? 'Pro' : 'Novice'}</span>
-                    <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Tier</span>
-                </div>
+            {/* Metrics Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <StatTile
+                    label="Peak Net Speed"
+                    value={metrics?.netWPM || 0}
+                    unit="WPM"
+                    color="secondary"
+                />
+                <StatTile
+                    label="Global Accuracy"
+                    value={metrics?.accuracy || 0}
+                    unit="%"
+                    color="accent"
+                />
+                <StatTile
+                    label="Total Keystrokes"
+                    value={metrics?.charsTyped || 0}
+                    unit="Captures"
+                />
+                <StatTile
+                    label="Session Rank"
+                    value={sessionRank}
+                    color="primary"
+                />
             </div>
 
-            {/* Drill Selection */}
+            {/* Drills Section */}
             <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                    <h3 style={{ fontSize: '1.8rem' }}>Training Drills</h3>
-                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+                    <h3 className="text-2xl font-heading font-bold text-text-main">Training Drills</h3>
+
+                    <div className="flex bg-surface-2 p-1 rounded-xl">
                         {(['Beginner', 'Intermediate', 'Professional'] as const).map(level => (
                             <button
                                 key={level}
                                 onClick={() => setSelectedDifficulty(level)}
-                                style={{
-                                    padding: '8px 16px',
-                                    borderRadius: '8px',
-                                    border: selectedDifficulty === level ? '2px solid var(--primary-blue)' : '1px solid #ddd',
-                                    background: selectedDifficulty === level ? 'var(--primary-blue)' : 'white',
-                                    color: selectedDifficulty === level ? 'white' : 'var(--text-main)',
-                                    fontWeight: '600',
-                                    cursor: 'pointer',
-                                    transition: 'all 0.2s'
-                                }}
+                                className={`
+                                    px-4 py-2 rounded-lg text-sm font-semibold transition-all
+                                    ${selectedDifficulty === level
+                                        ? 'bg-primary text-white shadow-md'
+                                        : 'text-text-muted hover:text-text-main hover:bg-white/50'}
+                                `}
                             >
                                 {level}
                             </button>
@@ -81,57 +90,34 @@ const Dashboard: React.FC<DashboardProps> = ({ metrics, onStartDrill, onStartAss
                     </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {drills.map(drill => (
-                        <div
+                        <Card
                             key={drill.id}
-                            className="card"
-                            style={{
-                                padding: '1.5rem',
-                                transition: 'all 0.2s',
-                                border: '2px solid transparent',
-                                display: 'flex',
-                                flexDirection: 'column'
-                            }}
+                            variant="interactive"
+                            className="flex flex-col h-full"
                         >
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
-                                <h4 style={{ margin: 0, fontSize: '1.1rem' }}>{drill.title}</h4>
-                                <span style={{
-                                    fontSize: '0.7rem',
-                                    padding: '3px 8px',
-                                    background: 'var(--accent-orange)',
-                                    color: 'white',
-                                    borderRadius: '12px',
-                                    fontWeight: '700'
-                                }}>
-                                    {drill.category}
-                                </span>
+                            <div className="flex justify-between items-start mb-4">
+                                <CardTitle>{drill.title}</CardTitle>
+                                <Badge variant="accent">{drill.category}</Badge>
                             </div>
-                            <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', margin: '0.5rem 0', lineHeight: '1.4', flex: 1 }}>
+
+                            <CardDescription className="mb-4 flex-1">
                                 {drill.description}
-                            </p>
-                            <div style={{
-                                marginTop: '1rem',
-                                padding: '0.75rem',
-                                background: 'rgba(0,0,0,0.02)',
-                                borderRadius: '8px',
-                                fontFamily: 'var(--font-mono)',
-                                fontSize: '0.85rem',
-                                color: 'var(--text-muted)',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap'
-                            }}>
-                                {drill.content.substring(0, 50)}...
+                            </CardDescription>
+
+                            <div className="bg-surface-2/50 rounded-lg p-3 mb-6 font-mono text-xs text-text-muted truncate">
+                                {drill.content}
                             </div>
-                            <button
-                                className="btn-primary"
+
+                            <Button
+                                variant="secondary"
+                                className="w-full mt-auto"
                                 onClick={() => onStartDrill(drill)}
-                                style={{ marginTop: '1rem', width: '100%' }}
                             >
                                 Begin Drill
-                            </button>
-                        </div>
+                            </Button>
+                        </Card>
                     ))}
                 </div>
             </div>

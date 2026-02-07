@@ -95,7 +95,7 @@ const AdaptivePractice: React.FC<Props> = ({ userId, onSessionComplete }) => {
                         <Brain size={32} className="text-primary" />
                     </div>
                     <h2 className="text-2xl font-black text-text-main mb-2 uppercase tracking-tighter">Analyzing Performance</h2>
-                    <p className="text-[11px] font-black text-text-muted uppercase tracking-[0.2em] opacity-40">Generating personalized neural-sync drill</p>
+                    <p className="text-[11px] font-black text-text-muted uppercase tracking-[0.2em] opacity-40">Generating personalized practice drill</p>
                 </div>
             </div>
         );
@@ -110,7 +110,7 @@ const AdaptivePractice: React.FC<Props> = ({ userId, onSessionComplete }) => {
                             <Target size={40} className="text-primary" />
                         </div>
                         <h2 className="text-4xl font-black text-text-main mb-2 uppercase tracking-tighter">Session Complete</h2>
-                        <p className="text-[11px] font-black text-text-muted uppercase tracking-[0.3em] opacity-40">Adaptive Calibration Successful</p>
+                        <p className="text-[11px] font-black text-text-muted uppercase tracking-[0.3em] opacity-40">Practice Session Successful</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
@@ -157,7 +157,7 @@ const AdaptivePractice: React.FC<Props> = ({ userId, onSessionComplete }) => {
                             className="px-8 py-5 bg-white/5 text-text-muted rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] hover:bg-white/10 hover:text-text-main transition-all flex items-center justify-center gap-3"
                         >
                             <Home size={16} />
-                            Exit to Command
+                            Exit to Dashboard
                         </button>
                     </div>
 
@@ -177,13 +177,13 @@ const AdaptivePractice: React.FC<Props> = ({ userId, onSessionComplete }) => {
                         <span className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/30">
                             <Brain size={18} className="text-primary" />
                         </span>
-                        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Neural Adaptation Mode</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Strategic Mode</span>
                     </div>
                     <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-text-main mb-6 uppercase leading-[0.9]">
                         Strategic Practice
                     </h1>
                     <p className="text-text-muted text-lg max-w-2xl leading-relaxed opacity-70">
-                        AI-optimized targeting for <span className="text-primary font-black uppercase tracking-wider">Precision Refinement</span>. Calibrate your neural pathways.
+                        AI-optimized targeting for <span className="text-primary font-black uppercase tracking-wider">Precision Refinement</span>. Refine your typing skills.
                     </p>
                 </div>
 
@@ -213,7 +213,7 @@ const AdaptivePractice: React.FC<Props> = ({ userId, onSessionComplete }) => {
                         <div className="flex-1 min-w-0">
                             <h3 className="text-[11px] font-black text-text-muted uppercase tracking-[0.3em] mb-2">Focus Vectors</h3>
                             <div className="text-2xl font-black text-text-main tracking-tighter uppercase truncate">Targeting: {troubleKeys.join(', ')}</div>
-                            <p className="text-[11px] font-black text-text-muted uppercase tracking-widest opacity-30 mt-2">Heuristic optimization active for accuracy enhancement</p>
+                            <p className="text-[11px] font-black text-text-muted uppercase tracking-widest opacity-30 mt-2">Personalized optimization active for accuracy enhancement</p>
                         </div>
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -233,7 +233,7 @@ const AdaptivePractice: React.FC<Props> = ({ userId, onSessionComplete }) => {
                 {[
                     { title: "Priority One", desc: "Focus on accuracy first — velocity is a byproduct of precision.", icon: Target },
                     { title: "Kinetic Learning", desc: "Use the virtual interface to anchor correct finger placement metrics.", icon: Activity },
-                    { title: "Sync Routine", desc: "Consistent neural-sync sessions yield exponential performance growth.", icon: Award }
+                    { title: "Skill Routine", desc: "Consistent practice sessions yield exponential performance growth.", icon: Award }
                 ].map((tip, i) => (
                     <div key={i} className="card p-8 border border-white/5 hover:border-white/10 transition-colors">
                         <tip.icon size={20} className="text-primary mb-6 opacity-60" />

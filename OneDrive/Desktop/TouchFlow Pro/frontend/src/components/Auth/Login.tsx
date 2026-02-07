@@ -30,10 +30,10 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup }) => {
             if (response.ok) {
                 login(data.token, data.user);
             } else {
-                setError(data.error || 'Identity Verification Failed');
+                setError(data.error || 'Access Verification Failed');
             }
         } catch (err) {
-            setError('Neural Link Connection Failure');
+            setError('System Connection Failure');
         } finally {
             setLoading(false);
         }
@@ -59,14 +59,14 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup }) => {
 
                 <div className="mb-12">
                     <h1 className="text-4xl sm:text-5xl font-black mb-4 text-text-main tracking-tighter uppercase">
-                        Link Established
+                        Identity Verified
                     </h1>
-                    <p className="text-text-muted text-sm font-black uppercase tracking-[0.3em] opacity-40">Authenticating Neural Signature</p>
+                    <p className="text-text-muted text-sm font-black uppercase tracking-[0.3em] opacity-40">Verifying Professional Profile</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-8 text-left">
                     <div className="space-y-3">
-                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.4em] ml-1">Universal Identifier</label>
+                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.4em] ml-1">Professional ID</label>
                         <div className="relative group">
                             <div className="absolute left-5 top-1/2 -translate-y-1/2 text-text-muted/40 group-focus-within:text-primary transition-colors">
                                 <Mail size={18} />
@@ -75,7 +75,7 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup }) => {
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                placeholder="OPERATOR@TOUCHFLOW.SYSTEM"
+                                placeholder="USER@TOUCHFLOW.PRO"
                                 className="w-full pl-14 pr-6 py-5 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all font-black text-xs uppercase tracking-widest text-text-main placeholder:text-text-muted/20"
                                 required
                             />
@@ -83,7 +83,7 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup }) => {
                     </div>
 
                     <div className="space-y-3">
-                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.4em] ml-1">Security Cipher</label>
+                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.4em] ml-1">Security Key</label>
                         <div className="relative group">
                             <div className="absolute left-5 top-1/2 -translate-y-1/2 text-text-muted/40 group-focus-within:text-primary transition-colors">
                                 <Lock size={18} />
@@ -111,7 +111,7 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup }) => {
                         disabled={loading}
                         className="w-full bg-primary text-white py-6 rounded-2xl font-black text-xs uppercase tracking-[0.4em] shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-4 group"
                     >
-                        {loading ? 'Processing...' : 'Authorize Access'}
+                        {loading ? 'Processing...' : 'Authorize Profile'}
                         <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                     </button>
                 </form>
@@ -127,15 +127,15 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup }) => {
                         className="w-full bg-white/5 text-text-muted py-4 rounded-xl font-black text-[10px] uppercase tracking-[0.3em] border border-white/5 hover:bg-white/10 hover:text-text-main transition-all flex items-center justify-center gap-3"
                     >
                         <Zap size={14} className="text-primary" />
-                        Neural Bypass (Guest)
+                        Guest Access
                     </button>
 
                     <div className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted/40">
-                        New Operator? <span
+                        New Professional? <span
                             onClick={onSwitchToSignup}
                             className="text-primary cursor-pointer hover:text-primary/80 transition-colors ml-2 border-b border-primary/20"
                         >
-                            Initialize Account
+                            Create Profile
                         </span>
                     </div>
                 </div>

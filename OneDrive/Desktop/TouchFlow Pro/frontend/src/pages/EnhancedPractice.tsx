@@ -122,7 +122,7 @@ export const EnhancedPractice: React.FC = () => {
                             <span className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/30">
                                 <Zap size={18} className="text-primary" />
                             </span>
-                            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Live Calibration</span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Live Assessment</span>
                         </div>
                         <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-text-main mb-6 uppercase leading-[0.9]">
                             Enhanced Practice

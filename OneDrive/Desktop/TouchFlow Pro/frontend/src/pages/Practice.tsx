@@ -79,13 +79,13 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
                         <span className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/30">
                             <Target size={18} className="text-primary" />
                         </span>
-                        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Skill Calibration</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Skill Assessment</span>
                     </div>
                     <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-text-main mb-6 uppercase leading-[0.9]">
                         Practice Arena
                     </h1>
                     <p className="text-text-muted text-lg max-w-2xl leading-relaxed opacity-70">
-                        Choose your challenge. Focus on specific skills or <span className="text-primary font-black uppercase tracking-wider">Join Community Drills</span> for competitive calibration.
+                        Choose your challenge. Focus on specific skills or <span className="text-primary font-black uppercase tracking-wider">Join Community Drills</span> for competitive assessment.
                     </p>
                 </div>
 
@@ -192,7 +192,7 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
 
                             <div className="mt-8 pt-6 border-t border-slate-200/50 dark:border-white/5 flex justify-between items-center">
                                 <div className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-primary group-hover:gap-4 transition-all">
-                                    Initialize Practice
+                                    Start Practice
                                     <ChevronRight size={16} />
                                 </div>
                                 <Activity size={18} className="text-text-muted opacity-20 group-hover:opacity-100 transition-opacity" />
