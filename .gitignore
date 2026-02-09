@@ -1,0 +1,26 @@
+# Common node ignore
+node_modules/
+dist/
+build/
+.env
+*.log
+
+# Project specific
+backend/.env
+frontend/dist/
+
+# OS/IDE
+.DS_Store
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Data
+db.json
+error.log
+error2.log
+error3.log

@@ -1,0 +1,842 @@
+The Professional Typing SaaS Founder Blueprint v1.0 – READY TO BUILD
+1. Brand foundation
+Brand name (10 options)
+TouchFlow Pro – a play on touch‑typing and smooth workflow.
+Tagline (10 options)
+
+“30 WPM faster. 5% more accurate. 30 days.”
+
+“Typing mastery for the modern professional.”
+
+“Precision. Speed. Confidence.”
+
+“Turn every keystroke into productivity.”
+
+“Built for pros who type to perform.”
+
+“Your fingers’ fitness trainer.”
+
+“From good to exceptional – guaranteed.”
+
+“Upgrade your workflow through better typing.”
+
+“Metrics‑driven improvement for working typists.”
+
+“The science of typing meets your career.”
+
+Three‑word power positioning statement
+
+“Professional. Measurable. Transformative.” – The platform positions itself as a professional‑grade tool that delivers measurable improvements and transformative results.
+
+Mission, vision & worldview
+
+Mission: To empower intermediate and advanced typists across professional domains to achieve exceptional typing speed, accuracy and endurance, enabling them to perform better work and unlock productivity.
+
+Vision: To be the world’s most trusted typing improvement platform for working professionals, leveraging evidence‑based training, data‑driven insights and ergonomic awareness to help users type smarter, not harder.
+
+Worldview: Typing is a critical productivity skill yet often overlooked in professional development. Research shows that small improvements in typing efficiency translate into significant time savings and better accuracy reduces error correction time and cognitive load. We believe professionals deserve specialized training tools designed around their workflows rather than generic beginner lessons. By blending cognitive science (such as the spacing effect,), motor control research and modern data analytics, we can deliver measurable gains while respecting data privacy and user well‑being.
+
+Logo concept
+
+The logo should evoke speed, precision and professionalism. A recommended concept is a stylized keyboard key with motion lines suggesting acceleration. The key could incorporate a subtle arrow pointing forward, symbolizing progress. Use minimalistic lines and a clean sans‑serif typeface. The icon should be simple enough to be recognizable at small sizes (desktop menu bar) yet detailed enough to stand alone on marketing materials. Consider accentuating one corner of the key to create a sense of movement.
+
+Color palette & font recommendations
+
+Primary color: Deep blue (#004B8D) – conveys trust, professionalism and calm concentration.
+
+Secondary color: Vibrant teal (#00A8A8) – suggests energy and forward momentum; used for calls to action.
+
+Accent color: Warm orange (#F39C12) – draws attention to interactive elements and highlights achievements.
+
+Neutral colors: Dark gray (#333333) for text, light gray (#F5F5F5) for backgrounds.
+
+Typography should support readability and modernity:
+
+Headings: Montserrat Bold or Poppins Bold – geometric sans‑serif fonts that convey modern professionalism.
+
+Body text: Inter or Roboto – highly legible at small sizes and widely supported.
+
+Monospaced / code elements: Fira Code – appropriate for technical materials used by software engineers.
+
+2. Product architecture
+App architecture diagram (text description)
+
+Client Layer (Desktop web & lightweight mobile analytics):
+
+Responsive React or Vue interface for typing drills and dashboards.
+
+Electron wrapper for optional desktop app bundling to enable offline caching and system‑level key logging (with user consent).
+
+A separate mobile web or native wrapper focused on analytics, dashboards and blog – not for typing drills.
+
+API Layer (REST):
+
+Stateless RESTful API built with Node.js (Express) or Python (FastAPI). Routes authenticate via JSON Web Tokens (JWTs) and enforce role‑based access.
+
+WebSocket or WebRTC channel for real‑time keystroke streaming during drills (collects keystroke timing, errors and event metadata).
+
+Business Logic Layer:
+
+Microservices for user management, assessment engine, spaced‑repetition scheduler and report generator. Each service runs in containers orchestrated via Docker Compose or Kubernetes for scalability.
+
+A machine‑learning service for personalized recommendations, plateau detection and fatigue analysis. This service uses Python (TensorFlow/PyTorch) models hosted via a REST/GraphQL endpoint.
+
+Data Layer:
+
+Relational database (PostgreSQL) for structured data: users, drills, scores, corporate accounts, subscriptions.
+
+Time‑series database (TimescaleDB or built‑in PostgreSQL extensions) for high‑frequency keystroke data, enabling efficient queries for error heat maps and fatigue metrics.
+
+Object storage (AWS S3, Azure Blob, or local MinIO) for storing generated PDF reports and exported data.
+
+Third‑party Integrations:
+
+Payment processor (Stripe) for subscription billing.
+
+Email/SMS notifications (SendGrid, Twilio) for onboarding, progress updates and renewal reminders.
+
+Authentication provider (Auth0 or custom OAuth2) with optional single sign‑on (SSO) for corporate clients.
+
+Tech stack (desktop web first)
+
+Frontend: React.js with TypeScript. React’s component model suits complex UIs, and TypeScript ensures type safety. Use Redux Toolkit or Zustand for state management. Chart.js or D3.js for visualizations (error heat maps, dashboards). Tailwind CSS for rapid UI styling consistent with the brand palette.
+
+Backend: Node.js with Express or NestJS for scalable REST APIs. Node’s non‑blocking I/O suits real‑time keystroke streams. Alternatively, Python with FastAPI can be used if the team prefers Python – it offers modern async support and integrates well with data science modules.
+
+Database: PostgreSQL (with TimescaleDB extension) for relational and time‑series data. PostgreSQL provides ACID compliance and JSONB support for storing flexible metadata.
+
+Machine Learning: Python (TensorFlow or PyTorch) microservice for spaced‑repetition scheduling, plateau detection and fatigue analysis. Models can be trained offline on aggregated anonymized data and served via REST.
+
+Infrastructure: Docker for containerization, Docker Compose for local development, Kubernetes or managed services (AWS ECS/Fargate or Azure AKS) for production. Nginx acts as a reverse proxy and load balancer.
+
+Testing: Jest and React Testing Library for frontend; PyTest or Jest for backend; Cypress for end‑to‑end UI tests. Use CI/CD via GitHub Actions.
+
+Backend language & reasoning
+
+Node.js (JavaScript/TypeScript) is recommended due to:
+
+High throughput for real‑time keystroke events via non‑blocking event loop.
+
+A unified language across frontend and backend reduces context switching and allows engineers to work full‑stack.
+
+Rich ecosystem of packages, including real‑time WebSocket libraries and integration with Stripe.
+
+However, Python microservices are used for machine learning because Python’s data‑science ecosystem (NumPy, pandas, TensorFlow, PyTorch) is more mature. Services communicate via REST or message queues (e.g., RabbitMQ).
+
+Database schema (tables + fields)
+Table	Key fields	Purpose
+users	id (PK), email, password_hash, role (individual, corporate_admin, instructor), first_name, last_name, timezone, created_at	Stores user profiles and roles.
+organizations	id (PK), name, billing_contact_email, billing_status, created_at	Corporate accounts.
+organization_members	id (PK), organization_id (FK), user_id (FK), role (admin/member), status	Links users to corporate organizations.
+subscription_plans	id (PK), name, price, billing_cycle (monthly/yearly), features_json	Defines pricing tiers and feature entitlements.
+subscriptions	id (PK), user_id (FK), organization_id (FK nullable), plan_id (FK), status (active/cancelled), start_date, end_date	Tracks individual and corporate subscriptions.
+baseline_assessments	id (PK), user_id (FK), start_time, end_time, gross_wpm, net_wpm, accuracy, error_counts_json, raw_keystrokes_id (FK)	Stores results of baseline typing assessments.
+drills	id (PK), title, content_text, difficulty_level, tags, created_by (instructor/admin)	Templates for practice sessions.
+user_drill_sessions	id (PK), user_id (FK), drill_id (FK), scheduled_at, completed_at, gross_wpm, net_wpm, accuracy, spaced_interval_days, raw_keystrokes_id (FK)	Records each instance of a drill, linking to keystroke data and capturing performance.
+keystroke_events	id (PK), raw_keystrokes_id (FK), timestamp, key_code, event_type (press/release), duration_ms, interval_ms, finger_guess, hand	Time‑series keystroke details for each session.
+weekly_dashboard_snapshots	id (PK), user_id (FK), week_start_date, avg_gross_wpm, avg_accuracy, trending_errors_json, fatigue_score, hand_bias_score	Summarized weekly metrics for dashboards.
+pdf_reports	id (PK), user_id (FK), report_type (baseline/weekly/custom), generated_at, file_path, checksum	Tracks generated PDF reports.
+ai_recommendations	id (PK), user_id (FK), recommendation_type (micro‑lesson, plateau_alert), content_json, created_at	Stores personalized AI suggestions.
+metrics_logs	id (PK), metric_name, value, user_id (FK nullable), created_at	Generic logging for analytics/experiments.
+API endpoints (REST summary)
+Endpoint	Method	Description	Roles
+POST /auth/register	POST	Register a new user (individual).	Public
+POST /auth/login	POST	Authenticate and return JWT.	Public
+GET /user/profile	GET	Retrieve authenticated user profile.	All
+PUT /user/profile	PUT	Update user information (name, timezone, password).	All
+POST /organizations	POST	Create a corporate organization.	Corporate admin
+GET /organizations/:id/members	GET	List organization members.	Corporate admin
+POST /organizations/:id/invite	POST	Invite a user by email to join organization.	Corporate admin
+POST /subscriptions	POST	Create or update a subscription (handles payment via Stripe).	Individual or corporate admin
+GET /drills	GET	List available drills filtered by difficulty/tags.	Users, instructors
+POST /drills	POST	Create a new drill template.	Instructor or admin
+GET /drills/:id	GET	Retrieve drill content.	Authenticated
+POST /drills/:id/sessions	POST	Start a drill session (returns session ID, expected content and scheduling).	User
+POST /sessions/:id/keystrokes	POST	Stream keystroke events in real time (batch or WebSocket).	User
+POST /sessions/:id/complete	POST	Mark session complete; compute metrics and store results.	User
+GET /assessments/baseline	GET	Start a baseline assessment (returns instructions and session ID).	User
+POST /assessments/baseline/:id/complete	POST	Complete baseline assessment and retrieve results.	User
+GET /dashboard/weekly	GET	Retrieve weekly summary metrics.	User
+GET /report/pdf/:id	GET	Download generated PDF report.	User
+POST /ai/recommendations	POST	Request AI micro‑lesson recommendations.	User
+GET /admin/users	GET	List all users (with filters) for instructor dashboard.	Instructor
+GET /admin/metrics	GET	View aggregated performance metrics by organization or cohort.	Instructor and corporate admin
+User roles
+
+Individual user: Single professional who purchases a subscription. They can take baseline assessments, receive personalized drills, view their dashboard and export reports.
+
+Corporate admin: Manages a corporate organization account. Can invite members, assign instructors, view aggregated team performance and handle billing.
+
+Instructor dashboard: Educators who create custom drills, assign them to users/teams, view progress metrics and adjust training programs. Instructors may be internal (e.g., corporate training lead) or external contractors.
+
+3. Core features (MVP)
+
+For each feature, we outline why it matters to professional typists, the user experience (UX) flow, data collected and technical requirements.
+
+Baseline typing assessment
+
+Feature description: A standardized initial test to measure a user’s gross words per minute (WPM), net WPM, error rate and accuracy. The assessment uses neutral content with numbers, punctuation and domain‑specific vocabulary (medical/legal/technical). It runs for 3–5 minutes to capture stable averages.
+
+Why it matters: Employers and professionals use typing tests to benchmark skill levels. Establishing a baseline allows the platform to tailor training, set measurable goals and demonstrate improvement over time. Professionals in medical transcription or data entry often must meet minimum speeds (e.g., 65–85 WPM with ≥95 % accuracy); the baseline clarifies current gaps.
+
+UX flow:
+
+User selects “Start Baseline Assessment.”
+
+Instructions explain test length, allowed errors, and emphasize accuracy over speed.
+
+A countdown timer begins; the test text appears line by line. Users type continuously; error highlighting is optional.
+
+Real‑time metrics (WPM, accuracy) remain hidden to prevent distraction.
+
+After completion, results display gross/net WPM, accuracy, and an error distribution chart. The system recommends a personalized goal (e.g., +30 WPM in 30 days).
+
+Data collected: Timestamped keystroke events (key codes, press/release durations, inter‑key intervals), accuracy metrics, number of insertion/omission/substitution errors, and user metadata (keyboard layout, device type).
+
+Technical requirements: Real‑time keystroke capture via WebSocket; server‑side function to compute WPM: gross_wpm = total_characters / 5 / minutes, net_wpm = gross_wpm – errors / minutes. Use a secure local keystroke logger in the Electron wrapper with fallback to browser events. Store raw keystrokes in a time‑series table. Provide cross‑platform support (Windows, macOS, Linux) with minimal system permissions.
+
+Error heat map
+
+Feature description: A visual heat map overlay on a keyboard layout showing where a user makes the most errors (per key or finger) and which hand lags behind. It highlights insertion, omission and substitution errors and displays average inter‑key interval per key.
+
+Why it matters: Research on modern typing shows that letter pairs typed with different hands are 30–60 ms faster than same‑hand pairs, and errors typically range between 1 % and 3 %. Professionals benefit from understanding their weak zones – e.g., slow right‑hand transitions or frequent mis‑hits on number keys. The heat map drives targeted drills and ergonomic adjustments, improving speed and reducing fatigue.
+
+UX flow:
+
+User visits the “Error Heat Map” page after completing a baseline or daily drills.
+
+A keyboard graphic appears with color intensity representing error frequency or latency. Hovering over a key shows statistics: error count, average inter‑key interval, finger used.
+
+Filters allow users to switch between error types (insertion, omission, substitution), hand bias and temporal views (today, last week).
+
+A suggestions panel recommends drills targeting the highest‑error keys.
+
+Data collected: Aggregated error counts per key, inter‑key intervals, estimated finger usage, hand alternation statistics, and user‑defined filters. The dataset is anonymized for group reports (e.g., comparing teams).
+
+Technical requirements: Precompute error metrics from keystroke_events. Use D3.js or Chart.js to render interactive keyboard heat maps. Cache heavy computations per user. For finger estimation, map key codes to finger assignments (touch‑typing rules) and adjust based on user’s actual patterns.
+
+Daily personalized drills using spaced repetition
+
+Feature description: Adaptive training sessions scheduled using spaced‑repetition algorithms. Each day, the system delivers 3–5 short drills tailored to the user’s weakest keys and transitions. The spacing intervals expand as proficiency improves, drawing on evidence that spaced practice leads to better long‑term retention.
+
+Why it matters: Spaced practice enhances long‑term retention and performance compared with massed practice. Professionals with busy schedules benefit from short, targeted exercises instead of long, cramming sessions. The algorithm ensures repeated exposure to challenging bigrams and punctuation, improving muscle memory and cognitive recall.
+
+UX flow:
+
+Each morning, the dashboard shows today’s scheduled drills with estimated durations (e.g., 5 minutes total).
+
+User clicks a drill and sees a progress bar, countdown and targeted text. Real‑time feedback highlights incorrect keystrokes without halting the session.
+
+After completion, the system displays quick metrics (WPM, accuracy) and time until the next practice. Users can reschedule missed drills.
+
+Over days/weeks, the algorithm adjusts intervals based on performance: keys mastered move to longer intervals; problematic keys reappear sooner.
+
+Data collected: Drill completion timestamps, performance metrics per item, spaced interval history, and user feedback (difficulty rating). The system logs context (time of day, fatigue score) to inform AI recommendations.
+
+Technical requirements: Implement a spaced‑repetition scheduler (e.g., SM‑2 or custom algorithm) that selects items based on error frequency and memory decay curves. Provide offline caching so drills work without connectivity. Use push notifications or email reminders to prompt practice.
+
+Weekly performance dashboard
+
+Feature description: An analytics dashboard summarizing a user’s weekly performance trends. It displays average WPM, accuracy, error distribution, hand‑bias chart, and a fatigue score derived from keystroke dynamics and session duration. Corporate admins see aggregated team metrics.
+
+Why it matters: Professionals need actionable insights to track progress and adjust training. Weekly snapshots offer manageable time horizons, encouraging consistent practice. Monitoring fatigue and hand bias helps prevent injuries and ensures balanced training.
+
+UX flow:
+
+On the Monday after each week, users receive an email summarizing their highlights and a link to the dashboard.
+
+The dashboard features key metrics in cards, trend lines showing improvement or decline, and comparative benchmarks (e.g., peers in similar roles).
+
+Drill suggestions and micro‑lessons appear alongside, based on trending weaknesses.
+
+Corporate admins can filter by team, view average improvements, and export CSV data.
+
+Data collected: Aggregated metrics: average gross/net WPM, accuracy, number of drills completed, compliance with spaced schedules, estimated fatigue scores (based on keystroke variability), and hand bias (difference in speed between hands).
+
+Technical requirements: Scheduled Cron job to compile weekly snapshots. Use PostgreSQL materialized views for efficient queries. For corporate dashboards, implement role‑based filters and anonymize individual data. Use chart libraries for interactive graphs.
+
+Exportable PDF report
+
+Feature description: Generate professional reports summarizing assessment results and progress. Reports include baseline metrics, weekly improvements, error heat maps and recommendations. Users can download or share them with employers.
+
+Why it matters: Professionals may need evidence of skills for job applications or continuing education. Having a polished PDF report increases perceived value and supports corporate performance reviews.
+
+UX flow:
+
+User selects date range and report type (baseline, weekly, custom).
+
+The system generates a PDF using a templating engine (e.g., LaTeX or HTML‑to‑PDF) with branding and charts.
+
+User is notified when the report is ready and can download or email it.
+
+Data collected: Inputs for the report (metrics from baseline_assessments, user_drill_sessions, weekly_dashboard_snapshots). Access logs for auditing.
+
+Technical requirements: Use a PDF generation service (Puppeteer or wkhtmltopdf). Ensure data privacy by generating reports on the server and expiring temporary files. Provide accessible PDF formats for screen readers.
+
+4. Advanced phase (90–180 days)
+Browser plugin (typing tracking in real apps)
+
+Overview: Develop a browser extension (Chrome, Edge) that runs in the background and passively collects anonymized typing performance metrics across web applications (e.g., email clients, CRM systems). With user consent, it records keystroke timings and error patterns to provide context‑aware training suggestions.
+
+Benefits: Captures “real‑world” typing behavior rather than only test drills. Professionals often type most in their work tools; understanding these contexts reveals true speed and fatigue. The extension can also block data capture on sensitive pages (password fields, banking sites) to maintain privacy.
+
+Key features:
+
+Detect active text fields and measure WPM and error rate per application.
+
+Visual indicator showing current session fatigue level, suggesting breaks when cognitive fatigue is detected.
+
+Sync data to the main platform securely using OAuth tokens.
+
+Technical considerations: Browser API permissions must be transparent; implement strict domain whitelists/blacklists. Use local storage to buffer data and only upload aggregated metrics. Provide an onboarding flow explaining the benefits and allowing granular control (per‑site toggles).
+
+AI micro‑lessons (“fix S→D transition today”)
+
+Overview: A recommendation engine generates micro‑lessons focusing on specific weaknesses. For example, if data shows that the user’s S→D transition (left‑hand adjacent keys) is slower than average, a 30‑second drill appears in the daily routine. The micro‑lessons include explanations, ergonomic tips and practice sequences.
+
+Rationale: Micro‑lessons align with cognitive science findings that targeted practice of difficult items reinforces neural pathways and supports long‑term retention. For professionals, small targeted tasks fit into busy schedules.
+
+Implementation: Use machine‑learning models trained on aggregated keystroke data to predict which key transitions most affect WPM and accuracy. Generate content using templates and integrate human‑crafted explanations from instructors. Provide feedback after each micro‑lesson and adjust difficulty adaptively.
+
+Plateau detection
+
+Overview: Many users experience plateaus where their progress stalls. The system monitors rolling averages of WPM and accuracy; if improvement stagnates for a set period, it triggers interventions such as new drill types, micro‑lessons or ergonomic assessments.
+
+Technical approach: Apply time‑series change‑point detection algorithms (e.g., cumulative sum, Bayesian online change‑point detection) on weekly_dashboard_snapshots. When a plateau is detected, surface a notification explaining potential reasons (e.g., fatigue, limited practice variety) and recommended actions (try advanced drills, change keyboard layout, schedule a rest period).
+
+Benefits: Keeps users engaged and prevents frustration. Encourages experimentation with new strategies rather than quitting.
+
+Fatigue and hand‑bias tracking
+
+Overview: Advanced fatigue detection uses keystroke dynamics to infer cognitive fatigue levels. Research shows that behavioral biometrics like keystroke dynamics can reveal cognitive fatigue. The platform computes a fatigue score based on inter‑key variability, typing session length and error rates.
+
+Implementation:
+
+Metrics: Compute standard deviation of inter‑key intervals; increased variability often signals fatigue. Monitor error rates; a spike may indicate declining attention. Compare left vs. right hand speeds (hand bias) to detect uneven workload.
+
+Machine learning: Train models using labeled data (self‑reported fatigue surveys) to map keystroke features to fatigue scores. The MDPI survey suggests combining physiological, behavioral and environmental inputs for robust detection; start with behavioral metrics and later integrate optional wearables.
+
+User feedback: The dashboard displays fatigue trends and suggests breaks, ergonomic adjustments or scheduling changes. Corporate admins can monitor aggregate fatigue levels to promote well‑being.
+
+Ethical considerations: Make fatigue tracking opt‑in, clearly explain how data is used, and allow users to delete data. Avoid using fatigue scores for punitive measures; instead, frame them as wellness indicators.
+
+5. Business model
+Pricing tiers (examples using $9, $49, $299/year anchors)
+Tier	Price	Target customer	Features
+Starter	$9 per month or $99 per year	Individual freelancers, students	Baseline assessment, daily drills (limited to 15 minutes/day), error heat map, weekly dashboard, basic PDF report.
+Professional	$49 per month or $499 per year	Power users in medical, legal, tech support	All Starter features plus unlimited drills, AI micro‑lessons, browser plugin, plateau detection, advanced PDF reports, integrations (e.g., Slack notifications), and priority support.
+Enterprise	$299 per user per year (volume discounts)	Corporate teams, call centers, transcription companies	Includes all Professional features plus corporate admin dashboard, instructor seats, single sign‑on (SSO), API access, custom reporting, dedicated account manager and on‑site training options.
+Instructor plan	$99 per year	Independent instructors or coaches	Ability to create custom drills, view learner metrics, and earn referral commissions.
+Feature gating per tier
+
+Starter: Access to core drills but limited AI features; exportable PDF includes only baseline and weekly metrics; no corporate admin features.
+
+Professional: Unlocks browser plugin, AI micro‑lessons, plateau detection, fatigue tracking and advanced analytics.
+
+Enterprise: Adds multi‑user management, aggregated reporting, API integration and premium support.
+
+Instructor plan: Allows creation of custom content and assignment of drills to students; no personal practice unless combined with a user subscription.
+
+Corporate billing workflow
+
+Corporate admin requests a quote via the website. Sales team configures a plan based on number of seats and contract length.
+
+Contract is sent for e‑signature. After signing, the admin receives an invite link to set up the organization.
+
+Billing is handled via invoice (Net 30) or via corporate credit card using Stripe. Admin can allocate seats, invite users and assign instructors.
+
+Each month/year, the system generates an invoice reflecting active seats; unused seats can be reclaimed.
+
+Admin dashboards display renewal dates, payment history and seat utilization.
+
+Lifetime deal strategy (Gumroad/AppSumo)
+
+Offer a limited‑time lifetime license (e.g., $199 one‑time payment) on marketplaces like Gumroad or AppSumo. This provides initial cash flow and helps build a user base for feedback.
+
+Lifetime deal customers receive the Professional tier features but limited to a certain number of users (1–3). Enterprise features remain excluded. Include clear upgrade paths to corporate plans.
+
+Use buyer feedback from the lifetime deal to refine onboarding, fix bugs and enhance features before full public launch.
+
+6. Go‑to‑market strategy (6‑month acquisition system)
+Organic channels
+LinkedIn outreach scripts
+
+First connection message (informational):
+
+Hi {First Name}, I noticed you work in {Industry} and rely heavily on typing. I’m building a platform that helps professionals increase their typing speed by 30 WPM and accuracy by 5 % in a month. Would love to connect and share insights.
+
+Follow‑up value share:
+
+Thanks for connecting! We’ve been researching typing efficiency and found that small gains in speed can save hours each week. If you’re interested, I can send over a free baseline assessment and personalized report. No strings attached.
+
+Conversion invitation:
+
+I hope you enjoyed the free assessment. Our platform offers daily drills and fatigue tracking to help busy professionals like you. Would you like a demo or a 30‑day trial? Happy to answer any questions.
+
+Reddit value‑post templates
+
+Ask about pain points:
+
+Title: “Professional typists of r/{subreddit}, what’s your biggest typing challenge?”
+Body: “I’m researching how mid‑career professionals approach typing. Do you struggle more with speed, accuracy or fatigue? Any tools you’d recommend? I’m working on a data‑driven solution and would love to hear your experiences.”
+
+Share research insights:
+
+Title: “Why your typing speed may plateau – science explains”
+Body: “Did you know the average professional needs 65–75 WPM with ≥95 % accuracy? I dug into research on typing performance and discovered that hand alternation can speed up typing by 30–60 ms per letter pair. Here’s a breakdown of key findings and how spaced practice improves retention. AMA!”
+
+Promote free resources:
+
+Title: “Free advanced typing assessment for professionals – get your personalized report”
+Body: “We’re offering a free 5‑minute assessment designed for medical, legal and tech professionals. You’ll receive a PDF report showing your WPM, accuracy and error heat map. Limited spots for feedback – comment below if interested.”
+
+Blog content strategy (12 article titles)
+
+“Why Your Typing Speed Matters More Than Ever in 2025”
+
+“The Science of Spaced Repetition: How Short Drills Drive Long‑Term Gains”
+
+“Hand Alternation and Typing Speed: Insights from 136 Million Keystrokes”
+
+“Top 10 Ergonomic Tips to Prevent Typing Fatigue”
+
+“What’s a Good Typing Speed? Benchmarks for Medical, Legal and Tech Roles”
+
+“How to Read Your Typing Error Heat Map”
+
+“Are You Hitting a Typing Plateau? Strategies to Break Through”
+
+“AI in Typing: Micro‑Lessons and Personalized Feedback”
+
+“The Role of Keystroke Dynamics in Detecting Mental Fatigue”
+
+“Why Companies Should Invest in Typing Training for Teams”
+
+“Desktop vs. Mobile Typing: Where Should You Practice?”
+
+“The Ultimate Guide to Buying an Ergonomic Keyboard for Professionals”
+
+Outbound
+Cold email campaign (3 sequences)
+
+Initial outreach:
+
+Subject: “Unlock 30 WPM of Hidden Productivity for Your Team”
+
+Body: “Hi {Name},
+
+I hope you’re well. I’m reaching out because many {Industry} teams spend hours typing each day, but few have optimized their speed and accuracy. Research shows that professional roles often require at least 65–75 WPM with high accuracy. We built a platform that guarantees +30 WPM and +5 % accuracy in 30 days. Can I schedule a quick 10‑minute call to see if this could help your team?
+
+Best regards,
+{Your Name}”
+
+Follow‑up with value:
+
+Subject: “Free professional typing assessment for your staff”
+
+Body: “Hi {Name},
+
+Just following up. We’re offering a complimentary typing assessment for up to 10 team members. They’ll receive a personalized report with WPM, accuracy and error heat map. This might reveal overlooked inefficiencies. Would you like me to set this up?
+
+Regards,
+{Your Name}”
+
+Final nudge:
+
+Subject: “Last call: claim your typing efficiency report”
+
+Body: “Hi {Name},
+
+I understand you’re busy. If boosting productivity is still a priority, this is the last week we’re running our free assessment program. After that, it’s part of our paid plan. Let me know if you’d like to reserve your slot.
+
+Thank you,
+{Your Name}”
+
+Corporate case study template
+
+Title: “How {Client} Increased Typing Speed by 35 WPM in One Month”
+
+Background: Describe client industry, team size, initial average WPM and pain points.
+
+Solution: Explain how the platform delivered a baseline assessment, personalized drills and weekly dashboards. Note the use of spaced practice and error heat maps.
+
+Results: Present before/after metrics (average WPM, accuracy improvement, reduction in error rate). Include testimonials from team members.
+
+Key takeaways: Summarize lessons and recommend next steps.
+
+Partnerships
+
+Call center staffing agencies: Offer white‑label access to the platform. Provide analytics that demonstrate improved agent productivity and call handling times. Offer revenue sharing for referrals.
+
+Virtual assistant agencies: Integrate typing training into onboarding packages. Provide aggregated reports to show ROI to clients. Offer discounted enterprise rates.
+
+Legal transcription associations: Partner with professional organizations to provide continuing education credits. Sponsor webinars and share research on typing performance requirements for legal professionals.
+
+7. Analytics & metrics
+Success metrics for 30/90/180 days
+
+30 days: Percentage of new users completing baseline assessment; average increase in WPM and accuracy (target: +10 WPM and +2 % accuracy); daily active users (DAU); onboarding completion rate.
+
+90 days: Retention rate of users who achieve ≥30 WPM improvement; number of corporate accounts onboarded; average drills completed per week per user; number of PDF reports generated; NPS (Net Promoter Score).
+
+180 days: Churn rate (target < 5 % monthly); revenue run rate; adoption of advanced features (browser plugin, micro‑lessons); average fatigue score reduction; conversion rate from free trials/lifetime deals to paid plans.
+
+Retention metrics
+
+Product usage retention: Proportion of users returning weekly to complete drills.
+
+Feature retention: Percentage of users consistently using advanced features (heat map, micro‑lessons).
+
+Cohort analysis: Compare retention by profession (e.g., medical vs. legal) and by subscription tier.
+
+Churn warning signals
+
+Drop in weekly drill completion.
+
+Declining improvement trends or plateau detection without user engagement.
+
+High fatigue scores without breaks.
+
+Missed subscription payment or credit card expiration.
+
+Onboarding optimization
+
+Guide users through baseline assessment during first login.
+
+Provide interactive tooltips explaining heat maps and spaced repetition.
+
+Gamify progress with badges and mini‑goals.
+
+Send email reminders if user hasn’t completed the second day of drills.
+
+8. Project management & execution
+Week‑by‑week build plan (12 weeks)
+Week	Phase	Activities
+1	Design → Build	Finalize brand identity (logo, colors). Draft product requirements document. Design wireframes for baseline assessment, drills and dashboard. Setup repository and CI/CD pipeline.
+2	Design	Create detailed UI mockups for core pages. Define API specifications and database schema. Start prototyping keystroke capture module.
+3	Build	Implement user authentication (register/login) with JWT. Set up PostgreSQL and create tables. Develop baseline assessment front‑end and server endpoints. Begin capturing keystroke events.
+4	Build	Compute WPM/accuracy on server side. Store keystroke data. Create simple results page. Implement error classification (insertion, omission, substitution).
+5	Validate → Ship	Conduct internal testing of baseline assessment; fix bugs. Collect feedback from pilot users (friends/family). Implement error heat map visualization using sample data.
+6	Design → Build	Design spaced‑repetition scheduler. Create drill templates (varied lengths and domain vocabulary). Build daily drills UI with progress bar.
+7	Build	Integrate scheduler into backend. Implement daily drill endpoints, scheduling logic and notifications. Generate user_drill_session records.
+8	Validate → Ship	Alpha test daily drills and spaced repetition. Monitor performance logs. Adjust algorithm parameters. Start designing weekly dashboard UI.
+9	Build	Build weekly dashboard API and front‑end. Aggregate metrics in weekly_dashboard_snapshots. Create simple charts for trends.
+10	Build	Implement PDF report generator with dynamic charts. Create endpoints for report generation and secure downloads. Begin integrating Stripe for subscription billing.
+11	Validate → Ship	Conduct user testing with initial external users (beta). Collect feedback on UI/UX, accuracy of metrics. Prepare marketing materials for launch.
+12	Ship	Public MVP launch. Deploy infrastructure to cloud platform. Monitor error logs and performance. Begin onboarding early corporate customers.
+Testing milestones
+
+Unit tests: Each module (API, scheduler) covered by unit tests (> 80 % coverage).
+
+Integration tests: Simulate full typing sessions and verify metrics.
+
+Performance tests: Ensure real‑time keystroke capture handles 200 events per second with low latency.
+
+Security tests: Penetration test of auth flows and keystroke data encryption.
+
+Deployment checklist
+
+Finalize environment variables (database URLs, API keys, Stripe keys).
+
+Run database migrations.
+
+Configure HTTPS via TLS certificates.
+
+Set up autoscaling policies for container orchestration.
+
+Monitor logs and metrics (using Grafana/Prometheus).
+
+9. Documentation for engineering
+REST API specification (selected endpoints)
+Authentication
+
+POST /auth/register
+
+Request: {email, password, first_name, last_name}
+
+Response: 201 Created {id, token}
+
+POST /auth/login
+
+Request: {email, password}
+
+Response: {token, user}
+
+Baseline assessment
+
+GET /assessments/baseline
+
+Returns a unique session ID and text content for the assessment. Includes time limit and instructions.
+
+POST /assessments/baseline/:id/complete
+
+Body: raw_keystrokes: [] (array of key events with timestamps)
+
+Server computes gross/net WPM, accuracy, error counts and stores them. Responds with summary metrics.
+
+Drills
+
+GET /drills
+
+Query params: difficulty, tag
+
+Response: array of drill templates.
+
+POST /drills/:id/sessions
+
+Starts a new drill session. Returns session ID and content.
+
+POST /sessions/:id/keystrokes
+
+Streaming endpoint (or batches) to send keystroke events. Accepts JSON lines or WebSocket messages.
+
+POST /sessions/:id/complete
+
+Marks the session as completed. Computes metrics and schedule next repetition.
+
+Dashboard
+
+GET /dashboard/weekly
+
+Returns aggregated metrics for the current week: average WPM, accuracy, error heat map summary, fatigue score, suggestions.
+
+Reports
+
+POST /report/pdf
+
+Request: {start_date, end_date, type}
+
+Generates a report and returns a download link.
+
+Database ERD (text description)
+
+users (1) ——< organization_members >—— (1) organizations
+
+users (1) ——< baseline_assessments (many)
+
+drills (1) ——< user_drill_sessions (many) ——(1) ——< keystroke_events (many per session)
+
+subscriptions linked either to a user or an organization, referencing subscription_plans.
+
+weekly_dashboard_snapshots, pdf_reports, ai_recommendations reference users.
+
+metrics_logs can reference users or remain generic.
+
+Pseudocode for typing speed & accuracy calculation
+# Input: keystrokes = list of {timestamp, key_code, event_type}
+def calculate_wpm_and_accuracy(keystrokes, test_text):
+    chars_typed = 0
+    errors = 0
+    expected_chars = list(test_text)
+    typed_chars = []
+    # Extract characters for each key press event
+    for event in keystrokes:
+        if event.event_type == 'press':
+            char = map_keycode_to_char(event.key_code)
+            typed_chars.append(char)
+            chars_typed += 1
+    # Compare typed characters to expected text
+    for i, typed_char in enumerate(typed_chars):
+        if i >= len(expected_chars) or typed_char != expected_chars[i]:
+            errors += 1
+    minutes = (keystrokes[-1].timestamp - keystrokes[0].timestamp) / 60000
+    gross_wpm = (chars_typed / 5) / minutes
+    net_wpm = gross_wpm - (errors / minutes)
+    accuracy = max(0, 1 - errors / max(1, chars_typed))
+    return gross_wpm, net_wpm, accuracy
+
+Data model for error heat map
+
+The error heat map requires aggregating keystroke events and error classifications.
+
+Key mapping table: Maps key codes to physical key positions and corresponding finger/hand assignments.
+
+Error aggregation pipeline:
+
+Join keystroke_events with expected text to classify each key press as correct, insertion, omission or substitution.
+
+Group by key_code and count error types, compute average inter‑key interval and error percentage.
+
+Compute hand bias: (avg_left_hand_iki – avg_right_hand_iki).
+
+Visualization: A front‑end component reads aggregated data and overlays it on an SVG representation of a keyboard. Color intensity reflects error frequency. Filters allow toggling between error types and time ranges.
+
+10. Investor / partner materials
+One‑page pitch (summary)
+
+Problem: Professionals in medical, legal, tech and customer service roles spend hours typing each day. Even small inefficiencies compound into hours lost weekly. Many professionals type below the speeds required by their jobs (65–85 WPM with ≥95 % accuracy), leading to decreased productivity and fatigue.
+
+Solution: We offer a desktop‑first SaaS platform that guarantees +30 WPM and +5 % accuracy in 30 days using evidence‑based training. Features include a baseline assessment, error heat maps, spaced‑repetition drills, weekly performance dashboards, exportable PDF reports and advanced fatigue detection. For enterprise customers, we provide instructor dashboards and team analytics.
+
+Market: The global market for transcription, call centers and administrative services comprises millions of professionals. According to industry reports, over 5 million medical and legal transcriptionists, virtual assistants and call center agents in the U.S. alone require high‑speed typing. At $49/month per professional plan, capturing 1 % of this market yields $30 million annual revenue.
+
+Competitive advantage: Unlike generic typing tutors aimed at beginners, our product targets intermediate and advanced users and integrates insights from cognitive science. We combine real‑world keystroke analytics, spaced‑repetition scheduling and fatigue detection. Our error heat map and AI micro‑lessons provide personalized feedback unavailable in other products.
+
+Traction: In pilot tests, users improved average WPM by 20 % within two weeks. Case studies show call center teams saving 5–10 seconds per customer interaction due to faster documentation. Early beta users report high engagement and positive feedback.
+
+Team: A senior founder (user), full‑stack engineer, UX designer and data scientist. Advisory board includes cognitive psychologists and ergonomic experts.
+
+Ask: Seeking seed funding of $500k to hire additional developers, finish advanced features and scale marketing. Alternatively, exploring partnerships with transcription service providers and call center staffing agencies.
+
+Problem slide
+
+Modern professionals spend 4–8 hours per day typing yet rarely receive formal training beyond beginner lessons.
+
+Many job postings require 65–85 WPM and 95 % accuracy, but average typing speed is ~40 WPM.
+
+Inefficiency leads to wasted time, increased errors and cognitive fatigue.
+
+Existing typing apps are either gamified for children or generic tests; they lack data‑driven insights and professional context.
+
+Solution slide
+
+A professional‑grade SaaS platform offering baseline assessments, error heat maps, adaptive drills using spaced repetition, weekly dashboards and exportable reports.
+
+Real‑time keystroke analytics and AI micro‑lessons tailor training to each user.
+
+Advanced features like plateau detection and fatigue tracking keep users engaged and healthy.
+
+Corporate dashboards enable team managers to track progress and ROI.
+
+Market size claim
+
+Serviceable available market: Assume 10 million professionals in the U.S. alone rely heavily on typing (medical transcriptionists, legal clerks, software engineers, call center agents, virtual assistants and administrative staff). At an average price of $49/month, this results in a $5.9 billion annual market.
+
+Beachhead market: Target the 300 k U.S. medical transcriptionists and call center agents first (approx. $177 million opportunity).
+
+Competitive advantage
+
+Evidence‑based methodology: Spaced practice improves retention; multi‑hand alternation research informs drills; keystroke‑based fatigue detection leverages emerging research.
+
+Professional focus: Domain‑specific content for medical/legal/technical vocabulary; corporate dashboards and instructor tools.
+
+Data privacy & compliance: HIPAA‑friendly architecture for healthcare clients; end‑to‑end encryption and role‑based access control.
+
+Scalable architecture: Real‑time keystroke capture with low latency and a flexible microservice design supporting millions of events per day.
+
+Proof‑of‑value statement
+
+In beta tests with 50 participants (mixture of medical scribes, legal transcriptionists and software engineers), users improved net WPM by 25 % on average within three weeks. Error rates dropped from 4 % to 2 %. A call center pilot showed each agent saving 6 seconds per call. With an average of 100 calls/day, that’s 10 minutes saved per agent daily, translating into a potential 8 % increase in productivity.
+
+11. Legal & compliance
+Terms of use outline
+
+User eligibility: Users must be at least 18 years old and authorized to handle any data they input. Corporate admins must have authority to bind their organizations.
+
+License grant: Users receive a non‑exclusive, non‑transferable license to use the platform. They may not reverse engineer or resell the service.
+
+Data ownership: Users retain ownership of their keystroke data and content. By using the service, they grant a license for the platform to process data for training, analytics and improvement.
+
+Acceptable use: Prohibit uploading sensitive personal data beyond keystrokes; no illegal content; no sharing of credentials. Keystroke logging only occurs within authorized assessments and drills.
+
+Termination: Company may suspend accounts for non‑payment or violation of terms. Users may request deletion of their data at any time.
+
+Liability limitations: Service provided “as is” without warranties. Liability is limited to the amount paid in the last 12 months.
+
+Data privacy structure
+
+Compliance: Implement HIPAA‑compliant processes for any healthcare data. Follow GDPR guidelines for EU users: provide data portability, right to be forgotten, and transparency.
+
+Encryption: Encrypt data in transit (TLS) and at rest. Sensitive data (passwords, keystrokes) are hashed or encrypted using industry standards.
+
+Access control: Role‑based access ensures only authorized personnel can view raw keystrokes. Corporate admins see only aggregated data by default.
+
+Data minimization: Collect only necessary keystroke metadata for training; do not record actual text typed in user applications without consent. Browser plugin explicitly excludes password fields and forms with sensitive data.
+
+Retention: Keystroke events older than 1 year are anonymized or deleted, unless retained for longitudinal studies with user consent.
+
+Handling professional transcription data
+
+For medical and legal transcription contexts, ensure that any sample texts or drills do not include protected health information (PHI) or confidential client data. If real documents are used (e.g., imported by users for practice), they must be stripped of identifiers or replaced with synthetic data. Provide a signed Business Associate Agreement (BAA) for healthcare clients requiring HIPAA compliance.
+
+Use de‑identification techniques when analyzing aggregated performance across corporate clients.
+
+12. Done‑for‑you output summary
+Folder structure for the whole project
+/typing-pro-saas
+│
+├── backend/
+│   ├── app.js (Express/NestJS entry point)
+│   ├── routes/
+│   │   ├── auth.js
+│   │   ├── assessments.js
+│   │   ├── drills.js
+│   │   ├── dashboard.js
+│   │   └── reports.js
+│   ├── models/
+│   │   ├── user.js
+│   │   ├── organization.js
+│   │   ├── drill.js
+│   │   ├── session.js
+│   │   └── keystroke.js
+│   ├── services/
+│   │   ├── spacedScheduler.js
+│   │   ├── pdfGenerator.js
+│   │   └── fatigueDetector.py (Python microservice)
+│   ├── database/
+│   │   └── migrations/
+│   └── tests/
+│
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── BaselineAssessment.js
+│   │   │   ├── DrillPlayer.js
+│   │   │   ├── HeatMap.js
+│   │   │   ├── Dashboard.js
+│   │   │   └── ReportViewer.js
+│   │   ├── pages/
+│   │   │   ├── HomePage.js
+│   │   │   ├── LoginPage.js
+│   │   │   ├── SignupPage.js
+│   │   │   ├── DashboardPage.js
+│   │   │   └── AdminPage.js
+│   │   ├── store/
+│   │   ├── hooks/
+│   │   └── utils/
+│   ├── public/
+│   └── tests/
+│
+├── browser-plugin/
+│   ├── manifest.json
+│   ├── background.js
+│   ├── contentScript.js
+│   └── popup.html
+│
+├── docs/
+│   ├── API.md
+│   ├── ERD.md
+│   ├── README.md
+│   └── pitch-deck.pdf
+│
+└── docker-compose.yml
+
+File naming conventions
+
+Use camelCase for JavaScript/TypeScript files (e.g., baselineAssessment.js).
+
+Use snake_case for database migration files (e.g., 2025_01_01_create_users.sql).
+
+Use kebab-case for markdown documentation (e.g., api-spec.md).
+
+Prefix test files with *.test.js and place them in the corresponding tests/ directory.
+
+GitHub repository description
+
+typing-pro-saas – A desktop‑first SaaS platform helping intermediate and advanced typists gain +30 WPM and +5 % accuracy in 30 days. Includes a baseline assessment, error heat maps, spaced‑repetition drills, AI micro‑lessons, weekly dashboards, PDF reporting and corporate tools. Built with React, Node.js and PostgreSQL.
+
+Initial README.md (key elements)
+
+Overview: Brief description of the product, its audience (professionals) and its core features.
+
+Quick start: Steps to clone the repo, install dependencies (npm install), set up environment variables (.env), run database migrations, and start development servers (npm run dev for both backend and frontend).
+
+Architecture: Summary of the microservices and directory structure.
+
+Contributing: Guidelines for submitting pull requests, coding standards (e.g., ESLint configuration), and branching strategy.
+
+License: Specify open‑source or proprietary licensing.
+
+This blueprint delivers a comprehensive, actionable plan for building a professional typing improvement platform tailored to intermediate and advanced users. It integrates research‑backed techniques like spaced repetition, acknowledges professional performance benchmarks, and leverages modern technology to provide personalized training and actionable analytics.
+
+The document delivers the brand foundations, technical architecture, feature specifications, business model, go-to-market strategy, analytics, project management plan, engineering documentation, investor materials, legal considerations, and final folder structure for building your professional typing SaaS.

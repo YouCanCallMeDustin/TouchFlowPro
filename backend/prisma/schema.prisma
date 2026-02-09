@@ -1,0 +1,216 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id              String   @id @default(uuid())
+  email           String   @unique
+  passwordHash    String?
+  assignedLevel   String
+  unlockedLevels  String   // Comma separated list of levels
+  currentLessonId String?
+  totalPracticeTime Int    @default(0) // in seconds
+  createdAt       DateTime @default(now())
+  
+  // Profile fields
+  name            String?
+  city            String?
+  state           String?
+  age             Int?
+  photoUrl        String?
+  
+  // Relations
+  drillResults    DrillResult[]
+  spacedItems     SpacedItem[]
+  achievements    Achievement[]
+  dailyStreak     DailyStreak?
+  customDrills    CustomDrill[]
+  goals           UserGoal[]
+  preferences     UserPreferences?
+  progress        UserProgress?
+
+  // Subscription fields
+  stripeCustomerId       String?   @unique
+  subscriptionStatus     String    @default("free") // "free", "pro", "cancelled"
+  subscriptionEndDate    DateTime?
+}
+
+model DrillResult {
+  id         String   @id @default(uuid())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  drillId    String
+  grossWPM   Float
+  netWPM     Float
+  accuracy   Float
+  durationMs Int
+  timestamp  DateTime @default(now())
+}
+
+model SpacedItem {
+  id         String   @id @default(uuid())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  drillId    String
+  interval   Int
+  repetition Int
+  efactor    Float
+  nextReview DateTime
+}
+
+model Achievement {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  badgeType    String   // "first_drill", "week_streak", "100wpm_club", etc.
+  earnedAt     DateTime @default(now())
+  metadata     String?  // JSON string for additional data
+  
+  @@unique([userId, badgeType])
+}
+
+model DailyStreak {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id])
+  currentStreak   Int      @default(0)
+  longestStreak   Int      @default(0)
+  lastPracticeDate DateTime?
+  streakProtections Int    @default(0)
+}
+
+model CustomDrill {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  title       String
+  content     String
+  difficulty  String
+  createdAt   DateTime @default(now())
+  timesUsed   Int      @default(0)
+}
+
+model UserGoal {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  goalType     String   // "wpm_target", "accuracy_target", "daily_practice"
+  targetValue  Float
+  currentValue Float    @default(0)
+  deadline     DateTime?
+  completed    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+}
+
+model UserPreferences {
+  id                String  @id @default(uuid())
+  userId            String  @unique
+  user              User    @relation(fields: [userId], references: [id])
+  theme             String  @default("default")
+  soundEnabled      Boolean @default(true)
+  keyboardLayout    String  @default("qwerty")
+  practiceReminders Boolean @default(false)
+  reminderTime      String? // "09:00"
+}
+
+// ===== PHASE 0: Enhanced Tracking Tables =====
+
+model KeyStats {
+  id            String   @id @default(uuid())
+  userId        String
+  key           String   // The character (e.g., "a", "B", "1")
+  attempts      Int      @default(0)
+  correct       Int      @default(0)
+  avgSpeed      Float    @default(0) // Average ms per keystroke
+  lastPracticed DateTime @updatedAt
+  
+  @@unique([userId, key])
+  @@index([userId])
+}
+
+model SequenceStats {
+  id            String   @id @default(uuid())
+  userId        String
+  sequence      String   // The bigram or trigram (e.g., "th", "ion")
+  type          String   // "bigram" or "trigram"
+  attempts      Int      @default(0)
+  avgSpeed      Float    @default(0) // Average ms between keys in sequence
+  lastPracticed DateTime @updatedAt
+  
+  @@unique([userId, sequence])
+  @@index([userId, type])
+}
+
+model SessionDetails {
+  id          String   @id @default(uuid())
+  sessionId   String
+  keystrokes  String   // JSON array of EnhancedKeystrokeEvent
+  liveMetrics String   // JSON LiveMetrics snapshots
+  createdAt   DateTime @default(now())
+  
+  @@index([sessionId])
+}
+
+model UserProgress {
+  id               String    @id @default(uuid())
+  userId           String    @unique
+  user             User      @relation(fields: [userId], references: [id])
+  level            Int       @default(1)
+  xp               Int       @default(0)
+  totalPracticeTime Int      @default(0) // seconds
+  dailyStreak      Int       @default(0)
+  lastPracticeDate DateTime?
+  
+  // Adaptive learning fields
+  averageWPM       Float     @default(0)
+  averageAccuracy  Float     @default(100)
+  totalDrills      Int       @default(0)
+  
+  @@index([userId])
+}
+
+model Recommendation {
+  id          String   @id @default(uuid())
+  userId      String
+  type        String   // 'drill' | 'lesson' | 'custom'
+  title       String
+  reason      String
+  priority    Int
+  content     String?
+  dismissed   Boolean  @default(false)
+  completed   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  
+  @@index([userId, dismissed, completed])
+}
+
+model DailyChallenge {
+  id             String   @id @default(uuid())
+  date           DateTime @unique
+  type           String   // "speed", "accuracy", "endurance"
+  content        String
+  targetWPM      Int?
+  targetAccuracy Int?
+  targetTime     Int?     // seconds
+  xpReward       Int      @default(100)
+}
+
+model Certificate {
+  id             String   @id @default(uuid())
+  userId         String
+  type           String   // "60wpm", "80wpm", "100wpm"
+  wpm            Int
+  accuracy       Int
+  testDate       DateTime @default(now())
+  certificateUrl String?
+  
+  @@index([userId])
+}
