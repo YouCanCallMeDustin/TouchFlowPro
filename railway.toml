@@ -5,5 +5,5 @@ buildCommand = "npm install && npm run build --workspace=backend"
 [deploy]
 startCommand = "npm start --workspace=backend"
 healthcheckPath = "/health"
-healthcheckTimeout = 100
+healthcheckTimeout = 300
 

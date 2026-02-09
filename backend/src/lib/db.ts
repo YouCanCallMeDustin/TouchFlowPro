@@ -1,6 +1,12 @@
 import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+    log: ['query', 'info', 'warn', 'error'],
+});
+
+prisma.$connect()
+    .then(() => console.log('Prisma connected successfully'))
+    .catch((e) => console.error('Prisma connection error:', e));
 
 export default prisma;
 
