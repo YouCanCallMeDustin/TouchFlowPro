@@ -618,6 +618,10 @@ function App() {
           newLevel={showAchievement?.level}
         />
 
+        <div className="fixed bottom-2 right-2 text-[8px] text-white/10 pointer-events-none z-[100]">
+          v1.1 Connect Fix
+        </div>
+
         <style>{`
           @keyframes shine {
             from { transform: translateX(-100%); }
