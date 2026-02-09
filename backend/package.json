@@ -22,9 +22,12 @@
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
     "lowdb": "^7.0.1",
+    "mongoose": "^8.9.6",
     "multer": "^2.0.2",
+    "prisma": "^6.19.2",
     "stripe": "^20.3.1",
     "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.10",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.3",
     "uuid": "^8.3.2"
@@ -39,9 +42,7 @@
     "@types/supertest": "^6.0.3",
     "@types/uuid": "^8.3.4",
     "nodemon": "^3.1.11",
-    "prisma": "^6.19.2",
     "supertest": "^7.2.2",
-    "tsc-alias": "^1.8.16",
     "vite": "^6.0.5",
     "vitest": "^4.0.18"
   }
