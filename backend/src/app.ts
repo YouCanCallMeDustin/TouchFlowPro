@@ -56,6 +56,12 @@ app.use('/api/webhooks', webhooksRoutes);
 
 app.use(express.json());
 
+// Debug route
+app.get('/api/debug', (req, res) => {
+    console.log('Debug route hit');
+    res.json({ status: 'ok', timestamp: new Date() });
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/assessments', assessmentRoutes);
