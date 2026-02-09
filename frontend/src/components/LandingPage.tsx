@@ -28,7 +28,7 @@ interface LandingPageProps {
 const TypingText: React.FC<{ text: string; className?: string }> = ({ text, className }) => {
     const words = text.split(" ");
 
-    const container = {
+    const container: any = {
         hidden: { opacity: 0 },
         visible: (i = 1) => ({
             opacity: 1,
@@ -36,12 +36,12 @@ const TypingText: React.FC<{ text: string; className?: string }> = ({ text, clas
         }),
     };
 
-    const child = {
+    const child: any = {
         visible: {
             opacity: 1,
             x: 0,
             transition: {
-                type: "spring" as const,
+                type: "spring",
                 damping: 12,
                 stiffness: 100,
             },
@@ -50,7 +50,7 @@ const TypingText: React.FC<{ text: string; className?: string }> = ({ text, clas
             opacity: 0,
             x: 20,
             transition: {
-                type: "spring" as const,
+                type: "spring",
                 damping: 12,
                 stiffness: 100,
             },
@@ -79,7 +79,7 @@ const TypingText: React.FC<{ text: string; className?: string }> = ({ text, clas
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onLogin }) => {
     // ... existing variants
-    const containerVariants = {
+    const containerVariants: any = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
@@ -90,7 +90,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onL
         }
     };
 
-    const itemVariants = {
+    const itemVariants: any = {
         hidden: { opacity: 0, y: 20 },
         visible: {
             opacity: 1,

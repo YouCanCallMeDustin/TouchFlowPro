@@ -15,7 +15,6 @@ import {
     Target,
     Clock,
     Flame,
-    Trophy,
     TrendingUp,
     History,
     Activity,
@@ -23,7 +22,6 @@ import {
     Award,
     Edit3
 } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import PageTransition from '../components/PageTransition';
 import AnimatedStatCard from '../components/AnimatedStatCard';

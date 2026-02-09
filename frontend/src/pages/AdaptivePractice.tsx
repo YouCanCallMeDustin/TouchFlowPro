@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import TypingTest from '../components/TypingTest';
-import type { TypingMetrics, KeystrokeEvent } from '@shared/types';
+import type { TypingMetrics } from '@shared/types';
 import { Brain, Target, Activity, ArrowRight, Home, Zap, Award } from 'lucide-react';
 import { apiFetch } from '../utils/api';
 

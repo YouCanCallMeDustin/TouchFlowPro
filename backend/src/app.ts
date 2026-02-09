@@ -38,7 +38,6 @@ app.get('/health', (req, res) => {
 import webhooksRoutes from './routes/webhooks';
 
 // Middleware
-app.use(helmet());
 app.use(cors({
     origin: [
         'http://localhost:5173',
@@ -48,6 +47,9 @@ app.use(cors({
     ],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization']
+}));
+app.use(helmet({
+    crossOriginResourcePolicy: false,
 }));
 
 // Webhook route must be registered before express.json() to handle raw body

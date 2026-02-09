@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { codeSnippets } from '../data/codeSnippets';
-import { Curriculum, type Lesson } from '@shared/curriculum';
+import { type Lesson } from '@shared/curriculum';
 import LessonView from '../components/LessonView';
 import type { TypingMetrics } from '@shared/types';
-import { Code, Terminal, Play, Lock } from 'lucide-react';
+import { Code, Terminal, Play } from 'lucide-react';
 import ProFeatureLock from '../components/ProFeatureLock';
-import { useAuth } from '../context/AuthContext';
 
 interface CodePracticeProps {
     userId: string;
@@ -16,7 +15,6 @@ interface CodePracticeProps {
 const CodePractice: React.FC<CodePracticeProps> = ({ userId, onSessionComplete }) => {
     const [selectedLanguage, setSelectedLanguage] = useState<string>('All');
     const [activeDrill, setActiveDrill] = useState<Lesson | null>(null);
-    const { user } = useAuth();
 
     const languages = ['All', ...Array.from(new Set(codeSnippets.map(s => s.language)))];
 

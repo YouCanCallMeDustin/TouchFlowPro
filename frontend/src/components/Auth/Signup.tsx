@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { apiFetch } from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
 import { Mail, Lock, Shield, Zap, Rocket } from 'lucide-react';
-import logo from '../../assets/logo.png';
 
 interface SignupProps {
     onSwitchToLogin: () => void;
@@ -59,7 +58,7 @@ const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
                     <div className="relative group">
                         <div className="absolute inset-0 bg-primary blur-2xl opacity-20 group-hover:opacity-40 transition-opacity" />
                         <img
-                            src={logo}
+                            src={`${import.meta.env.BASE_URL}logo.png`}
                             alt="TouchFlow Pro"
                             className="h-24 w-auto relative z-10 brightness-110 drop-shadow-2xl"
                         />

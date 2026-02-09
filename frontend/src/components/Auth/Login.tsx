@@ -51,7 +51,7 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup }) => {
                     <div className="relative group">
                         <div className="absolute inset-0 bg-primary blur-2xl opacity-20 group-hover:opacity-40 transition-opacity" />
                         <img
-                            src="/assets/logo.png"
+                            src={`${import.meta.env.BASE_URL}logo.png`}
                             alt="TouchFlow Pro"
                             className="h-24 w-auto relative z-10 brightness-110 drop-shadow-2xl"
                         />

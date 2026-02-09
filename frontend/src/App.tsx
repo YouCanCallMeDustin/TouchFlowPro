@@ -46,7 +46,6 @@ import {
 type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'adaptive_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection'
 
 import { apiFetch } from './utils/api';
-import logo from './assets/logo.png';
 
 function App() {
   const { user, loading, logout } = useAuth()
@@ -318,7 +317,7 @@ function App() {
           <div className="max-w-7xl mx-auto flex justify-between items-center gap-4">
             <div className="flex items-center gap-8">
               <img
-                src={logo}
+                src={`${import.meta.env.BASE_URL}logo.png`}
                 alt="TouchFlow Pro"
                 className="h-10 w-auto cursor-pointer active:scale-95 transition-all hover:brightness-110"
                 onClick={() => userProgress && setStage('dashboard')}
@@ -620,7 +619,7 @@ function App() {
         />
 
         <div className="fixed bottom-2 right-2 text-[8px] text-white/10 pointer-events-none z-[100]">
-          v1.2 Logo & CORS Fix
+          v1.3 Final Connection Fix
         </div>
 
         <style>{`

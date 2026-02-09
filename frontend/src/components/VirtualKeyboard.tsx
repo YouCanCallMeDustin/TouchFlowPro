@@ -16,15 +16,6 @@ export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({
     showFingerGuide = true,
     compact = false
 }) => {
-    const getKeyColor = (key: string): string => {
-        if (!showFingerGuide) return 'bg-gray-700';
-
-        const finger = getCorrectFinger(key);
-        const color = FINGER_COLORS[finger];
-
-        // Convert hex to Tailwind-compatible color
-        return `bg-gray-700`; // We'll use inline styles for custom colors
-    };
 
     const getKeyStyle = (key: string): React.CSSProperties => {
         const finger = getCorrectFinger(key);
