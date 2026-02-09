@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_URL || '';
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://touchflow-pro-production.up.railway.app';
 
 export const apiFetch = (endpoint: string, options: RequestInit = {}) => {
     // Only prepend BASE_URL if endpoint starts with /api

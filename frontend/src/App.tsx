@@ -619,7 +619,7 @@ function App() {
         />
 
         <div className="fixed bottom-2 right-2 text-[8px] text-white/10 pointer-events-none z-[100]">
-          v1.3 Final Connection Fix
+          v1.4 API Force Fix
         </div>
 
         <style>{`
