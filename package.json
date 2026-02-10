@@ -2,6 +2,9 @@
     "name": "touchflow-pro-monorepo",
     "version": "1.0.0",
     "private": true,
+    "engines": {
+        "node": ">=20.0.0"
+    },
     "workspaces": [
         "backend",
         "frontend"
