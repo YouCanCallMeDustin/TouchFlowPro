@@ -22,6 +22,7 @@ import {
     Flame
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { apiFetch } from '../utils/api';
 
 const AbstractMesh = () => (
     <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none overflow-hidden hidden md:block">
@@ -74,8 +75,8 @@ const AnalyticsDashboard: React.FC = () => {
                 const headers = { 'Authorization': `Bearer ${token}` };
 
                 const [trendsRes, summaryRes] = await Promise.all([
-                    fetch(`/api/analytics/${userId}/trends?days=${days}`, { headers }),
-                    fetch(`/api/analytics/${userId}/summary`, { headers })
+                    apiFetch(`/api/analytics/${userId}/trends?days=${days}`, { headers }),
+                    apiFetch(`/api/analytics/${userId}/summary`, { headers })
                 ]);
 
                 if (trendsRes.ok && summaryRes.ok) {

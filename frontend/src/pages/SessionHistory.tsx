@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
 import { History, Box, ChevronUp, ChevronDown, Download } from 'lucide-react';
+import { apiFetch } from '../utils/api';
 
 interface SessionHistoryProps {
     userId: string;
@@ -39,7 +40,7 @@ const SessionHistory: React.FC<SessionHistoryProps> = ({ userId }) => {
     const fetchHistory = async () => {
         try {
             setLoading(true);
-            const response = await fetch(
+            const response = await apiFetch(
                 `/api/history/${userId}?page=${currentPage}&limit=20&sortBy=${sortBy}&order=${order}`
             );
             const data = await response.json();
@@ -54,7 +55,7 @@ const SessionHistory: React.FC<SessionHistoryProps> = ({ userId }) => {
 
     const handleExport = async () => {
         try {
-            const response = await fetch(`/api/history/${userId}/export`);
+            const response = await apiFetch(`/api/history/${userId}/export`);
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');

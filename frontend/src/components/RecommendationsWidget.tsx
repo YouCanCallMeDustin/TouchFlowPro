@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Target, Star, Flame, Lightbulb, Sparkles, X, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { apiFetch } from '../utils/api';
 
 interface Recommendation {
     id: string;
@@ -26,7 +27,7 @@ export const RecommendationsWidget: React.FC<Props> = ({ userId, onStartPractice
 
     const fetchRecommendations = async () => {
         try {
-            const response = await fetch(`/api/recommendations/${userId}`);
+            const response = await apiFetch(`/api/recommendations/${userId}`);
             const data = await response.json();
             setRecommendations(data.slice(0, 3)); // Show top 3
         } catch (error) {
@@ -44,7 +45,7 @@ export const RecommendationsWidget: React.FC<Props> = ({ userId, onStartPractice
 
     const handleDismiss = async (recId: string) => {
         try {
-            await fetch(`/api/recommendations/${userId}/dismiss/${recId}`, {
+            await apiFetch(`/api/recommendations/${userId}/dismiss/${recId}`, {
                 method: 'POST'
             });
             setRecommendations(recs => recs.filter(r => r.id !== recId));

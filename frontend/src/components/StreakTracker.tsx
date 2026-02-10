@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { apiFetch } from '../utils/api';
 
 interface StreakTrackerProps {
     userId: string;
@@ -23,7 +24,7 @@ const StreakTracker: React.FC<StreakTrackerProps> = ({ userId }) => {
 
     const fetchStreak = async () => {
         try {
-            const response = await fetch(`/api/streaks/${userId}`);
+            const response = await apiFetch(`/api/streaks/${userId}`);
             const data = await response.json();
             setStreak(data);
         } catch (error) {
@@ -43,8 +44,8 @@ const StreakTracker: React.FC<StreakTrackerProps> = ({ userId }) => {
 
     return (
         <div className={`rounded-3xl p-6 shadow-lg border-2 transition-all ${isOnFire
-                ? 'bg-gradient-to-br from-orange-50 to-red-50 border-orange-300'
-                : 'bg-white border-slate-200'
+            ? 'bg-gradient-to-br from-orange-50 to-red-50 border-orange-300'
+            : 'bg-white border-slate-200'
             }`}>
             <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-black text-text-main flex items-center gap-2">
@@ -79,10 +80,10 @@ const StreakTracker: React.FC<StreakTrackerProps> = ({ userId }) => {
 
             {/* Motivational Message */}
             <div className={`p-4 rounded-xl text-center font-bold ${isOnFire
-                    ? 'bg-orange-100 text-orange-700'
-                    : isWarning
-                        ? 'bg-yellow-100 text-yellow-700'
-                        : 'bg-blue-100 text-blue-700'
+                ? 'bg-orange-100 text-orange-700'
+                : isWarning
+                    ? 'bg-yellow-100 text-yellow-700'
+                    : 'bg-blue-100 text-blue-700'
                 }`}>
                 {isOnFire && `🔥 You're on fire! ${streak.currentStreak} days strong!`}
                 {!isOnFire && !isWarning && `Keep it up! Practice today to build your streak.`}

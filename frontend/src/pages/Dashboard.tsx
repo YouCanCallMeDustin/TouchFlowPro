@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { apiFetch } from '../utils/api';
 import {
     BarChart,
     Bar,
@@ -98,8 +99,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
     const verifySubscription = async (sessionId: string) => {
         try {
             setLoading(true);
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-            const response = await fetch(`${apiUrl}/api/subscriptions/verify-session`, {
+            const response = await apiFetch(`/api/subscriptions/verify-session`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -127,10 +127,10 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
         try {
             setLoading(true);
             const [summaryRes, streakRes, achievementsRes, trendsRes] = await Promise.all([
-                fetch(`/api/analytics/${userId}/summary`),
-                fetch(`/api/streaks/${userId}`),
-                fetch(`/api/achievements/${userId}`),
-                fetch(`/api/analytics/${userId}/trends?days=7`)
+                apiFetch(`/api/analytics/${userId}/summary`),
+                apiFetch(`/api/streaks/${userId}`),
+                apiFetch(`/api/achievements/${userId}`),
+                apiFetch(`/api/analytics/${userId}/trends?days=7`)
             ]);
 
             const summaryData = await summaryRes.json();

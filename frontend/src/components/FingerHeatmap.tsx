@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { getFingerName, getFingerForKey } from '../utils/fingerMapping';
 import type { Finger } from '../utils/fingerMapping';
 import { useAuth } from '../context/AuthContext';
+import { apiFetch } from '../utils/api';
 
 interface KeyStats {
     key: string;
@@ -38,7 +39,7 @@ export const FingerHeatmap: React.FC<FingerHeatmapProps> = ({ userId }) => {
 
         try {
             setLoading(true);
-            const response = await fetch(`/api/keystroke-tracking/stats/${userId}`, {
+            const response = await apiFetch(`/api/keystroke-tracking/stats/${userId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {

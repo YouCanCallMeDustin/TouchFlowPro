@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Sprout, Flame, Zap, Crown, Target, Activity } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { apiFetch } from '../utils/api';
 
 interface UserLevel {
     level: number;
@@ -26,7 +27,7 @@ export const LevelProgressBar: React.FC<Props> = ({ userId }) => {
 
     const fetchLevelInfo = async () => {
         try {
-            const response = await fetch(`/api/recommendations/${userId}/level`);
+            const response = await apiFetch(`/api/recommendations/${userId}/level`);
             const data = await response.json();
             setLevelInfo(data);
         } catch (error) {

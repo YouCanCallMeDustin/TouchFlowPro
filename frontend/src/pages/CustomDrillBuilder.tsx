@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PenTool } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
+import { apiFetch } from '../utils/api';
 
 interface CustomDrillBuilderProps {
     userId: string;
@@ -33,7 +34,7 @@ const CustomDrillBuilder: React.FC<CustomDrillBuilderProps> = ({ userId }) => {
 
     const fetchDrills = async () => {
         try {
-            const response = await fetch(`/api/custom-drills/${userId}`);
+            const response = await apiFetch(`/api/custom-drills/${userId}`);
             const data = await response.json();
             setDrills(data.drills || []);
         } catch (error) {
@@ -55,7 +56,7 @@ const CustomDrillBuilder: React.FC<CustomDrillBuilderProps> = ({ userId }) => {
         try {
             if (editingId) {
                 // Update existing drill
-                const response = await fetch(`/api/custom-drills/${editingId}`, {
+                const response = await apiFetch(`/api/custom-drills/${editingId}`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)
@@ -65,7 +66,7 @@ const CustomDrillBuilder: React.FC<CustomDrillBuilderProps> = ({ userId }) => {
                 toast.success('Drill updated successfully!');
             } else {
                 // Create new drill
-                const response = await fetch(`/api/custom-drills/${userId}`, {
+                const response = await apiFetch(`/api/custom-drills/${userId}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)
@@ -99,7 +100,7 @@ const CustomDrillBuilder: React.FC<CustomDrillBuilderProps> = ({ userId }) => {
         if (!confirm('Are you sure you want to delete this drill?')) return;
 
         try {
-            await fetch(`/api/custom-drills/${id}`, { method: 'DELETE' });
+            await apiFetch(`/api/custom-drills/${id}`, { method: 'DELETE' });
             setDrills(drills.filter(d => d.id !== id));
             toast.success('Drill deleted');
         } catch (error) {

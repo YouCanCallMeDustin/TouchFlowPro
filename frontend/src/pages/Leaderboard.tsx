@@ -53,7 +53,7 @@ const Leaderboard: React.FC<{ userId: string }> = ({ userId }) => {
 
     const fetchUserRank = async () => {
         try {
-            const res = await fetch(`/api/leaderboard/rank/${userId}`);
+            const res = await apiFetch(`/api/leaderboard/rank/${userId}`);
             const rankData = await res.json();
             setUserRank(rankData);
         } catch (error) {

@@ -3,6 +3,7 @@ import type { TypingMetrics } from '@shared/types';
 import type { Drill } from '@shared/drillLibrary';
 import { Card, CardTitle, CardDescription } from './ui/Card';
 import { Button } from './ui/Button';
+import { apiFetch } from '../utils/api';
 import { StatTile } from './ui/StatTile';
 import { SectionTitle } from './ui/SectionTitle';
 import { Badge } from './ui/Badge';
@@ -19,7 +20,7 @@ const Dashboard: React.FC<DashboardProps> = ({ metrics, onStartDrill, onStartAss
 
     useEffect(() => {
         // Fetch drills from backend
-        fetch(`/api/drills/difficulty/${selectedDifficulty}`)
+        apiFetch(`/api/drills/difficulty/${selectedDifficulty}`)
             .then(res => res.json())
             .then(data => setDrills(data))
             .catch(err => console.error('Failed to fetch drills:', err));

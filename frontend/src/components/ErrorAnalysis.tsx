@@ -13,6 +13,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import LoadingSkeleton from './LoadingSkeleton';
 import { Target, AlertCircle, TrendingDown } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { apiFetch } from '../utils/api';
 
 interface KeyStats {
     key: string;
@@ -37,7 +38,7 @@ export const ErrorAnalysis: React.FC<ErrorAnalysisProps> = ({ userId }) => {
 
             try {
                 setLoading(true);
-                const troubleResponse = await fetch(`/api/keystroke-tracking/trouble-keys/${userId}`, {
+                const troubleResponse = await apiFetch(`/api/keystroke-tracking/trouble-keys/${userId}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (troubleResponse.ok) {

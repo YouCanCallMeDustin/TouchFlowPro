@@ -3,6 +3,7 @@ import type { AnalyticsData, ProgressEntry } from '@shared/analytics';
 import { Card, CardTitle } from './ui/Card';
 import { Button } from './ui/Button';
 import { StatTile } from './ui/StatTile';
+import { apiFetch } from '../utils/api';
 import { SectionTitle } from './ui/SectionTitle';
 
 interface AnalyticsProps {
@@ -16,7 +17,7 @@ const Analytics: React.FC<AnalyticsProps> = ({ userId, onClose }) => {
 
     useEffect(() => {
         // Fetch analytics data from backend
-        fetch(`/api/analytics/${userId}`)
+        apiFetch(`/api/analytics/${userId}`)
             .then(res => res.json())
             .then(data => setAnalytics(data))
             .catch(err => console.error('Failed to fetch analytics:', err));

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Zap } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { apiFetch } from '../utils/api';
 
 interface SequenceStat {
     id: string;
@@ -31,7 +32,7 @@ export const SequenceAnalysis: React.FC<SequenceAnalysisProps> = ({ userId }) =>
 
         try {
             setLoading(true);
-            const response = await fetch(`/api/keystroke-tracking/sequences/${userId}?type=${tab.slice(0, -1)}&limit=8`, {
+            const response = await apiFetch(`/api/keystroke-tracking/sequences/${userId}?type=${tab.slice(0, -1)}&limit=8`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {

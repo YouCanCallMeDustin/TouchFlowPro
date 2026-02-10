@@ -6,6 +6,7 @@ import LessonView from '../components/LessonView';
 import type { TypingMetrics } from '@shared/types';
 import { Target, Activity, Zap, Filter, Layers, ChevronRight, Search, Lock } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { apiFetch } from '../utils/api';
 
 interface PracticeProps {
     userId: string;
@@ -64,7 +65,7 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
                 if (onSessionComplete) {
                     await onSessionComplete(metrics, 'practice', activeDrill.id, keystrokes);
                 } else {
-                    await fetch(`/api/drills/${activeDrill.id}/complete`, {
+                    await apiFetch(`/api/drills/${activeDrill.id}/complete`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ metrics, userId })

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { KEYBOARD_LAYOUT } from '../utils/keyboardLayout';
 import { useAuth } from '../context/AuthContext';
+import { apiFetch } from '../utils/api';
 
 
 interface KeyStats {
@@ -37,7 +38,7 @@ export const KeyHeatmap: React.FC<KeyHeatmapProps> = ({
 
         try {
             setLoading(true);
-            const response = await fetch(`/api/keystroke-tracking/stats/${userId}`, {
+            const response = await apiFetch(`/api/keystroke-tracking/stats/${userId}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {

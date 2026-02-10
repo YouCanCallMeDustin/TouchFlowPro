@@ -22,6 +22,7 @@ import VisualKeyboard from './VisualKeyboard';
 import type { Lesson } from '@shared/curriculum';
 import type { TypingMetrics, KeystrokeEvent } from '@shared/types';
 import AchievementCelebration from './AchievementCelebration';
+import { apiFetch } from '../utils/api';
 
 interface LessonViewProps {
     lesson: Lesson;
@@ -139,7 +140,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, isComp
     const handleFinish = async () => {
         if (testMetrics && mode === 'results') {
             try {
-                const achievementRes = await fetch(`/api/achievements/${_userId}/check`, {
+                const achievementRes = await apiFetch(`/api/achievements/${_userId}/check`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' }
                 });
@@ -171,7 +172,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, isComp
             }
 
             try {
-                await fetch(`/api/streaks/${_userId}/record`, {
+                await apiFetch(`/api/streaks/${_userId}/record`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' }
                 });

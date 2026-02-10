@@ -114,7 +114,7 @@ const BiblePractice: React.FC<BiblePracticeProps> = ({ userId, onSessionComplete
                 if (onSessionComplete) {
                     await onSessionComplete(metric, 'bible', `bible-${selectedBook?.name}-${selectedChapter}`, keystrokes);
                 } else {
-                    await fetch(`/api/drills/bible_practice/complete`, {
+                    await apiFetch(`/api/drills/bible_practice/complete`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ metrics: metric, userId, keystrokes })

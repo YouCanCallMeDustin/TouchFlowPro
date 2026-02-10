@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Target } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import { format } from 'date-fns';
+import { apiFetch } from '../utils/api';
 
 interface GoalsDashboardProps {
     userId: string;
@@ -34,7 +35,7 @@ const GoalsDashboard: React.FC<GoalsDashboardProps> = ({ userId }) => {
 
     const fetchGoals = async () => {
         try {
-            const response = await fetch(`/api/goals/${userId}`);
+            const response = await apiFetch(`/api/goals/${userId}`);
             const data = await response.json();
             setGoals(data.goals || []);
         } catch (error) {
@@ -48,7 +49,7 @@ const GoalsDashboard: React.FC<GoalsDashboardProps> = ({ userId }) => {
         e.preventDefault();
 
         try {
-            const response = await fetch(`/api/goals/${userId}`, {
+            const response = await apiFetch(`/api/goals/${userId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(formData)
@@ -68,7 +69,7 @@ const GoalsDashboard: React.FC<GoalsDashboardProps> = ({ userId }) => {
         if (!confirm('Delete this goal?')) return;
 
         try {
-            await fetch(`/api/goals/${id}`, { method: 'DELETE' });
+            await apiFetch(`/api/goals/${id}`, { method: 'DELETE' });
             setGoals(goals.filter(g => g.id !== id));
             toast.success('Goal deleted');
         } catch (error) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { X, Check, Zap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-
+import { apiFetch } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 
 interface Props {
@@ -14,8 +14,7 @@ const UpgradeModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
     const handleUpgrade = async () => {
         try {
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-            const response = await fetch(`${apiUrl}/api/subscriptions/create-checkout-session`, {
+            const response = await apiFetch(`/api/subscriptions/create-checkout-session`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,

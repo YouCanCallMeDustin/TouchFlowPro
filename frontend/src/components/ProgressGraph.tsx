@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { apiFetch } from '../utils/api';
 
 interface DataPoint {
     date: string;
@@ -33,7 +34,7 @@ export const ProgressGraph: React.FC<ProgressGraphProps> = ({
     const fetchTrends = async () => {
         try {
             setLoading(true);
-            const response = await fetch(`/api/analytics/${userId}/trends?days=${days}`);
+            const response = await apiFetch(`/api/analytics/${userId}/trends?days=${days}`);
             if (response.ok) {
                 const trendsData = await response.json();
                 setData(trendsData);
