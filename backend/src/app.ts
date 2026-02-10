@@ -98,5 +98,13 @@ app.use('/api/subscriptions', subscriptionsRoutes);
 // Serve uploaded files statically
 app.use('/api/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
+// Serve frontend static files (built by Vite)
+const frontendDist = path.join(process.cwd(), 'frontend', 'dist');
+app.use(express.static(frontendDist));
+
+// SPA catch-all: any non-API route serves index.html
+app.get('*', (req, res) => {
+    res.sendFile(path.join(frontendDist, 'index.html'));
+});
 
 export default app;

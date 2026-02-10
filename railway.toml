@@ -1,9 +1,8 @@
 [build]
 builder = "nixpacks"
-buildCommand = "npm install && npm run build --workspace=backend"
+buildCommand = "npm install && npm run build --workspace=frontend && npm run build --workspace=backend"
 
 [deploy]
 startCommand = "npm start --workspace=backend"
 healthcheckPath = "/health"
 healthcheckTimeout = 300
-
