@@ -53,7 +53,7 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
     const [selectedDuration, setSelectedDuration] = useState(TEST_DURATIONS[1])
     const [testText, setTestText] = useState('')
     const [userInput, setUserInput] = useState('')
-    const [_keystrokes, setKeystrokes] = useState<KeystrokeEvent[]>([])
+
     const [metrics, setMetrics] = useState<TypingMetrics | null>(null)
     const [timeLeft, setTimeLeft] = useState(0)
     const [isStarted, setIsStarted] = useState(false)
@@ -80,7 +80,6 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
         testTextRef.current = trimmed
         setUserInput('')
         userInputRef.current = ''
-        setKeystrokes([])
         keystrokesRef.current = []
         setMetrics(null)
         setTimeLeft(duration.seconds)
@@ -129,7 +128,6 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
             }
             const updated = [...keystrokesRef.current, event]
             keystrokesRef.current = updated
-            setKeystrokes(updated)
 
             if (e.key !== 'Shift') {
                 const newMetrics = TypingEngine.calculateMetrics(updated, currentText)
@@ -158,7 +156,6 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
         setMetrics(null)
         setUserInput('')
         userInputRef.current = ''
-        setKeystrokes([])
         keystrokesRef.current = []
     }
 
