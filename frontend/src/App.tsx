@@ -27,6 +27,7 @@ import PricingPage from './pages/PricingPage'
 import TermsOfService from './pages/TermsOfService'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import TypingCertificate from './pages/TypingCertificate'
+import Extension from './pages/Extension'
 import AchievementModal from './components/AchievementModal'
 import ErrorBoundary from './components/ErrorBoundary'
 import { LandingPage } from './components/LandingPage'
@@ -44,10 +45,11 @@ import {
   Award,
   Trophy,
   Compass,
-  Shield
+  Shield,
+  Code
 } from 'lucide-react'
 
-type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'adaptive_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate'
+type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'adaptive_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension'
 
 import { apiFetch } from './utils/api';
 
@@ -374,6 +376,7 @@ function App() {
                   { id: 'achievements' as Stage, label: 'Awards', icon: Award },
                   { id: 'leaderboard' as Stage, label: 'Ranks', icon: Trophy },
                   { id: 'certificate' as Stage, label: 'Certify', icon: Shield },
+                  { id: 'extension' as Stage, label: 'VS Code', icon: Code },
                 ].map((item) => (
                   <button
                     key={item.id}
@@ -628,6 +631,12 @@ function App() {
             {stage === 'certificate' && user && (
               <PageTransition key="certificate">
                 <TypingCertificate userId={user.id} userName={user.name || user.email} />
+              </PageTransition>
+            )}
+
+            {stage === 'extension' && (
+              <PageTransition key="extension">
+                <Extension />
               </PageTransition>
             )}
           </AnimatePresence>
