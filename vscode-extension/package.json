@@ -2,7 +2,7 @@
     "name": "touchflow-pro-tracker",
     "displayName": "TouchFlow Pro - Typing Tracker",
     "description": "Real-time WPM and accuracy tracking while you code. Powered by TouchFlow Pro.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "publisher": "touchflow-pro",
     "engines": {
         "vscode": "^1.85.0"
