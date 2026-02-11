@@ -9,9 +9,8 @@ COPY package.json package-lock.json ./
 COPY backend/package.json ./backend/
 COPY frontend/package.json ./frontend/
 
-# npm ci is 2-3x faster than npm install. Then add missing Linux native binaries.
-RUN npm ci && \
-    npm install @rollup/rollup-linux-x64-gnu lightningcss-linux-x64-gnu @esbuild/linux-x64 --no-save 2>/dev/null || true
+# npm install (not ci) resolves platform-specific native binaries for Linux
+RUN npm install
 
 # Copy source
 COPY . .
