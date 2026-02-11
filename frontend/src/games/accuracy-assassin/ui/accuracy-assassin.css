@@ -1,0 +1,175 @@
+/* ── Accuracy Assassin: Game-Specific Styles ── */
+
+/* Prompt character states */
+.aa-char {
+    display: inline;
+    transition: color 0.05s ease;
+}
+
+.aa-char--upcoming {
+    color: oklch(50% 0.02 240);
+}
+
+.dark .aa-char--upcoming {
+    color: oklch(45% 0.03 240);
+}
+
+.aa-char--correct {
+    color: oklch(70% 0.18 150);
+}
+
+.aa-char--active {
+    color: oklch(95% 0.01 240);
+    border-bottom: 2px solid oklch(70% 0.14 250);
+    padding-bottom: 1px;
+}
+
+.dark .aa-char--active {
+    color: oklch(98% 0 0);
+}
+
+.aa-char--pulse {
+    animation: aa-char-pulse 0.15s ease-out;
+}
+
+@keyframes aa-char-pulse {
+    0% {
+        transform: scale(1.3);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Screen shake */
+@keyframes aa-shake {
+
+    0%,
+    100% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+
+    10% {
+        transform: translate(-8px, -4px) rotate(-1deg);
+    }
+
+    20% {
+        transform: translate(8px, 2px) rotate(1deg);
+    }
+
+    30% {
+        transform: translate(-6px, 4px) rotate(-0.5deg);
+    }
+
+    40% {
+        transform: translate(6px, -2px) rotate(0.5deg);
+    }
+
+    50% {
+        transform: translate(-4px, 2px) rotate(-0.3deg);
+    }
+
+    60% {
+        transform: translate(4px, -1px) rotate(0.3deg);
+    }
+
+    70% {
+        transform: translate(-2px, 1px) rotate(0deg);
+    }
+
+    80% {
+        transform: translate(2px, 0) rotate(0deg);
+    }
+
+    90% {
+        transform: translate(-1px, 0) rotate(0deg);
+    }
+}
+
+/* Glitch overlay */
+.aa-glitch {
+    animation: aa-glitch-anim 0.3s steps(4) forwards !important;
+    opacity: 1 !important;
+}
+
+@keyframes aa-glitch-anim {
+    0% {
+        background: repeating-linear-gradient(0deg,
+                transparent,
+                transparent 2px,
+                rgba(255, 20, 20, 0.08) 2px,
+                rgba(255, 20, 20, 0.08) 4px);
+        transform: translate(0);
+    }
+
+    25% {
+        background: repeating-linear-gradient(0deg,
+                transparent,
+                transparent 3px,
+                rgba(0, 255, 255, 0.06) 3px,
+                rgba(0, 255, 255, 0.06) 6px);
+        transform: translate(2px, -1px);
+    }
+
+    50% {
+        background: repeating-linear-gradient(0deg,
+                transparent,
+                transparent 1px,
+                rgba(255, 20, 20, 0.1) 1px,
+                rgba(255, 20, 20, 0.1) 3px);
+        transform: translate(-3px, 1px);
+    }
+
+    75% {
+        background: repeating-linear-gradient(0deg,
+                transparent,
+                transparent 4px,
+                rgba(255, 255, 0, 0.05) 4px,
+                rgba(255, 255, 0, 0.05) 6px);
+        transform: translate(1px, -2px);
+    }
+
+    100% {
+        background: transparent;
+        transform: translate(0);
+    }
+}
+
+/* Background intensity ramp */
+.aa-intensity-1 {
+    background-image: radial-gradient(circle at 50% 50%, oklch(70% 0.14 250 / 0.03) 0%, transparent 60%);
+}
+
+.aa-intensity-2 {
+    background-image: radial-gradient(circle at 50% 50%, oklch(70% 0.18 250 / 0.06) 0%, transparent 60%);
+}
+
+.aa-intensity-3 {
+    background-image: radial-gradient(circle at 50% 50%, oklch(65% 0.22 30 / 0.08) 0%, transparent 60%);
+}
+
+.aa-intensity-4 {
+    background-image: radial-gradient(circle at 50% 50%, oklch(60% 0.25 30 / 0.1) 0%, transparent 60%);
+}
+
+.aa-intensity-5 {
+    background-image: radial-gradient(circle at 50% 50%, oklch(55% 0.28 15 / 0.12) 0%, transparent 60%);
+    animation: aa-bg-pulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes aa-bg-pulse {
+    from {
+        filter: brightness(1);
+    }
+
+    to {
+        filter: brightness(1.05);
+    }
+}
+
+/* Prompt container */
+.aa-prompt {
+    line-height: 2;
+    letter-spacing: 0.05em;
+}

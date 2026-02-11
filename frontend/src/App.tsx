@@ -4,6 +4,7 @@ import { AnimatePresence } from 'framer-motion'
 import { Card } from './components/ui/Card'
 import { Button } from './components/ui/Button'
 import './App.css'
+import './games/accuracy-assassin/ui/accuracy-assassin.css'
 import { Breadcrumbs } from './components/Breadcrumbs'
 import PageTransition from './components/PageTransition'
 import { Curriculum } from './components/Curriculum'
@@ -27,6 +28,8 @@ import TermsOfService from './pages/TermsOfService'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import TypingCertificate from './pages/TypingCertificate'
 import Extension from './pages/Extension'
+import { GamesLanding } from './pages/GamesLanding'
+import { AccuracyAssassinPage } from './games/accuracy-assassin/ui/AccuracyAssassinPage'
 import AchievementModal from './components/AchievementModal'
 import ErrorBoundary from './components/ErrorBoundary'
 import { LandingPage } from './components/LandingPage'
@@ -45,10 +48,11 @@ import {
   Trophy,
   Compass,
   Shield,
-  Code
+  Code,
+  Gamepad2
 } from 'lucide-react'
 
-type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension'
+type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension' | 'games' | 'games_accuracy_assassin'
 
 import { apiFetch } from './utils/api';
 
@@ -369,6 +373,7 @@ function App() {
                   { id: 'dashboard' as Stage, label: 'Dashboard', icon: LayoutDashboard },
                   { id: 'curriculum' as Stage, label: 'Learn', icon: BookOpen },
                   { id: 'practice' as Stage, label: 'Practice', icon: Zap },
+                  { id: 'games' as Stage, label: 'Games', icon: Gamepad2 },
                   { id: 'code_practice' as Stage, label: 'Code', icon: Compass },
                   { id: 'analytics' as Stage, label: 'Stats', icon: BarChart3 },
                   { id: 'achievements' as Stage, label: 'Awards', icon: Award },
@@ -379,7 +384,7 @@ function App() {
                   <button
                     key={item.id}
                     onClick={() => setStage(item.id)}
-                    className={`flex items-center gap-2 px-3.5 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-300 relative group overflow-hidden ${stage === item.id || (item.id === 'curriculum' && (stage === 'lesson' || stage === 'levelup'))
+                    className={`flex items-center gap-2 px-3.5 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-300 relative group overflow-hidden ${stage === item.id || (item.id === 'curriculum' && (stage === 'lesson' || stage === 'levelup')) || (item.id === 'games' && stage === 'games_accuracy_assassin')
                       ? 'bg-primary text-white shadow-lg shadow-primary/30 scale-105 active:scale-95'
                       : 'bg-transparent text-slate-500 dark:text-slate-400 hover:bg-slate-500/10 dark:hover:bg-white/5 hover:text-text-main hover:translate-y-[-1px]'}`}
                   >
@@ -631,6 +636,18 @@ function App() {
             {stage === 'extension' && (
               <PageTransition key="extension">
                 <Extension />
+              </PageTransition>
+            )}
+
+            {stage === 'games' && user && (
+              <PageTransition key="games">
+                <GamesLanding onNavigate={(s) => setStage(s as Stage)} />
+              </PageTransition>
+            )}
+
+            {stage === 'games_accuracy_assassin' && user && (
+              <PageTransition key="games_accuracy_assassin">
+                <AccuracyAssassinPage onBack={() => setStage('games')} />
               </PageTransition>
             )}
           </AnimatePresence>
