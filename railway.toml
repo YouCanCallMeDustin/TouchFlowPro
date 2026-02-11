@@ -1,9 +1,8 @@
 [build]
-builder = "nixpacks"
-buildCommand = "npm run build"
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
 
 [deploy]
 startCommand = "npm start --workspace=backend"
 healthcheckPath = "/health"
 healthcheckTimeout = 180
-servicePort = 4000
