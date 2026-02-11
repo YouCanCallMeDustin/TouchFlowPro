@@ -1,10 +1,10 @@
 [build]
 builder = "nixpacks"
-# Use npm install which is smarter about platforms than npm ci
-buildCommand = "npm install && npm run build"
+# Delete lockfile to force regeneration of Linux-specific native binaries (Rollup)
+buildCommand = "rm -f package-lock.json && npm install && npm run build"
 
 [deploy]
 startCommand = "npm start --workspace=backend"
 healthcheckPath = "/health"
-healthcheckTimeout = 120
+healthcheckTimeout = 180
 servicePort = 4000
