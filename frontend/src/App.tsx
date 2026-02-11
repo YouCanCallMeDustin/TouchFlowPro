@@ -20,7 +20,6 @@ import DrillSelectionPage from './pages/DrillSelectionPage'
 import Profile from './pages/Profile'
 import Practice from './pages/Practice'
 import BiblePractice from './pages/BiblePractice'
-import AdaptivePractice from './pages/AdaptivePractice'
 import Leaderboard from './pages/Leaderboard'
 import CodePractice from './pages/CodePractice'
 import PricingPage from './pages/PricingPage'
@@ -49,7 +48,7 @@ import {
   Code
 } from 'lucide-react'
 
-type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'adaptive_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension'
+type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension'
 
 import { apiFetch } from './utils/api';
 
@@ -370,7 +369,6 @@ function App() {
                   { id: 'dashboard' as Stage, label: 'Dashboard', icon: LayoutDashboard },
                   { id: 'curriculum' as Stage, label: 'Learn', icon: BookOpen },
                   { id: 'practice' as Stage, label: 'Practice', icon: Zap },
-                  { id: 'adaptive_practice' as Stage, label: 'Adaptive', icon: Compass },
                   { id: 'code_practice' as Stage, label: 'Code', icon: Compass },
                   { id: 'analytics' as Stage, label: 'Stats', icon: BarChart3 },
                   { id: 'achievements' as Stage, label: 'Awards', icon: Award },
@@ -592,11 +590,7 @@ function App() {
               </PageTransition>
             )}
 
-            {stage === 'adaptive_practice' && user && (
-              <PageTransition key="adaptive_practice">
-                <AdaptivePractice userId={user.id} onSessionComplete={handleSessionComplete} />
-              </PageTransition>
-            )}
+
 
             {stage === 'leaderboard' && user && (
               <PageTransition key="leaderboard">
