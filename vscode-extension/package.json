@@ -1,0 +1,97 @@
+{
+    "name": "touchflow-pro-tracker",
+    "displayName": "TouchFlow Pro - Typing Tracker",
+    "description": "Real-time WPM and accuracy tracking while you code. Powered by TouchFlow Pro.",
+    "version": "1.0.0",
+    "publisher": "touchflow-pro",
+    "engines": {
+        "vscode": "^1.85.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "keywords": [
+        "typing",
+        "wpm",
+        "speed",
+        "accuracy",
+        "productivity",
+        "typing test",
+        "keyboard"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/YouCanCallMeDustin/TouchFlowPro"
+    },
+    "homepage": "https://touchflowpro.com",
+    "activationEvents": [
+        "onStartupFinished"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "touchflow.startSession",
+                "title": "TouchFlow: Start Typing Session"
+            },
+            {
+                "command": "touchflow.stopSession",
+                "title": "TouchFlow: Stop Typing Session"
+            },
+            {
+                "command": "touchflow.resetSession",
+                "title": "TouchFlow: Reset Session"
+            },
+            {
+                "command": "touchflow.toggleSession",
+                "title": "TouchFlow: Toggle Tracking"
+            },
+            {
+                "command": "touchflow.showSummary",
+                "title": "TouchFlow: Show Session Summary"
+            }
+        ],
+        "configuration": {
+            "title": "TouchFlow Pro Tracker",
+            "properties": {
+                "touchflow.autoStart": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Automatically start tracking when VS Code opens"
+                },
+                "touchflow.updateInterval": {
+                    "type": "number",
+                    "default": 1000,
+                    "description": "How often to update WPM display (milliseconds)"
+                },
+                "touchflow.idleTimeout": {
+                    "type": "number",
+                    "default": 5,
+                    "description": "Seconds of inactivity before pausing the session timer"
+                },
+                "touchflow.showAccuracy": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Show accuracy percentage in status bar"
+                },
+                "touchflow.showSessionTime": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Show session duration in status bar"
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "package": "npx vsce package"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.85.0",
+        "@types/node": "^20.0.0",
+        "typescript": "^5.3.0",
+        "@vscode/vsce": "^2.22.0"
+    }
+}
