@@ -1,5 +1,8 @@
 FROM node:20.19-slim
 
+# Required for Prisma
+RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
 # Copy all package.json files first (for better Docker layer caching)
@@ -13,7 +16,8 @@ RUN npm install
 # Copy everything else
 COPY . .
 
-# Generate Prisma client and build both workspaces
+# Generate Prisma client, push schema to create SQLite DB, and build
+RUN cd backend && npx prisma generate && npx prisma db push && cd ..
 RUN npm run build
 
 EXPOSE 4000
