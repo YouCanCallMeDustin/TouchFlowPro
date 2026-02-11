@@ -103,7 +103,7 @@ const frontendDist = path.join(process.cwd(), 'frontend', 'dist');
 app.use(express.static(frontendDist));
 
 // SPA catch-all: any non-API route serves index.html
-app.use((req: express.Request, res: express.Response) => {
+app.use((req, res) => {
     res.sendFile(path.join(frontendDist, 'index.html'));
 });
 
