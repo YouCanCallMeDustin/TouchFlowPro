@@ -1,7 +1,7 @@
 [build]
 builder = "nixpacks"
-# Delete lockfile to force regeneration of Linux-specific native binaries (Rollup)
-buildCommand = "rm -f package-lock.json && npm install && npm run build"
+# Force fresh install on Linux to resolve Rollup native binary issues
+buildCommand = "rm -rf node_modules && rm -f package-lock.json && npm install && npm run build"
 
 [deploy]
 startCommand = "npm start --workspace=backend"
