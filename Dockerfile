@@ -4,8 +4,8 @@ RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Copy package files + lockfile for fast npm ci
-COPY package.json package-lock.json ./
+# Only copy package.json files - NO lockfile so npm resolves Linux-native deps fresh
+COPY package.json ./
 COPY backend/package.json ./backend/
 COPY frontend/package.json ./frontend/
 
