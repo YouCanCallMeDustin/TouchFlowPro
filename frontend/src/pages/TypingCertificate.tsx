@@ -63,6 +63,11 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
     const inputRef = useRef<HTMLInputElement>(null)
     const certificateRef = useRef<HTMLDivElement>(null)
 
+    // Refs to hold latest values so endTest always reads current data
+    const keystrokesRef = useRef<KeystrokeEvent[]>([])
+    const userInputRef = useRef('')
+    const testTextRef = useRef('')
+
     const startTest = (duration: typeof TEST_DURATIONS[0]) => {
         setSelectedDuration(duration)
         // Generate enough text for the duration
@@ -70,9 +75,13 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
         while (passage.length < duration.seconds * 8) {
             passage += TEST_PASSAGES[Math.floor(Math.random() * TEST_PASSAGES.length)] + ' '
         }
-        setTestText(passage.trim())
+        const trimmed = passage.trim()
+        setTestText(trimmed)
+        testTextRef.current = trimmed
         setUserInput('')
+        userInputRef.current = ''
         setKeystrokes([])
+        keystrokesRef.current = []
         setMetrics(null)
         setTimeLeft(duration.seconds)
         setIsStarted(false)
@@ -83,7 +92,8 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
 
     const endTest = () => {
         if (timerRef.current) clearInterval(timerRef.current)
-        const finalMetrics = TypingEngine.calculateMetrics(keystrokes, testText)
+        // Use refs to get the latest data (avoids stale closure)
+        const finalMetrics = TypingEngine.calculateMetrics(keystrokesRef.current, testTextRef.current)
         setMetrics(finalMetrics)
         setPhase('result')
     }
@@ -108,18 +118,21 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
         }
 
         if (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Shift') {
+            const currentInput = userInputRef.current
+            const currentText = testTextRef.current
             const event: KeystrokeEvent = {
                 keyCode: e.code,
                 key: e.key,
                 eventType: 'keydown',
                 timestamp: Date.now(),
-                expectedKey: e.key === 'Shift' ? 'Shift' : testText[userInput.length]
+                expectedKey: e.key === 'Shift' ? 'Shift' : currentText[currentInput.length]
             }
-            const updated = [...keystrokes, event]
+            const updated = [...keystrokesRef.current, event]
+            keystrokesRef.current = updated
             setKeystrokes(updated)
 
             if (e.key !== 'Shift') {
-                const newMetrics = TypingEngine.calculateMetrics(updated, testText)
+                const newMetrics = TypingEngine.calculateMetrics(updated, currentText)
                 setMetrics(newMetrics)
             }
         }
@@ -128,11 +141,13 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (phase !== 'testing') return
         const value = e.target.value
-        if (value.length <= testText.length) {
+        const currentText = testTextRef.current
+        if (value.length <= currentText.length) {
             setUserInput(value)
+            userInputRef.current = value
         }
         // Auto-end if they finish the text
-        if (value.length >= testText.length) {
+        if (value.length >= currentText.length) {
             endTest()
         }
     }
@@ -142,7 +157,9 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
         setPhase('select')
         setMetrics(null)
         setUserInput('')
+        userInputRef.current = ''
         setKeystrokes([])
+        keystrokesRef.current = []
     }
 
     const printCertificate = () => {
@@ -282,17 +299,12 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
                         />
                     </div>
 
-                    <div className="min-h-[160px] leading-loose select-none flex flex-wrap gap-x-0.5 gap-y-2">
+                    <div className="max-h-[200px] overflow-hidden leading-loose select-none flex flex-wrap gap-x-0.5 gap-y-2">
                         {testText.split('').map((char, index) => {
                             const isTyped = index < userInput.length
                             const isCurrent = index === userInput.length
                             const isCorrect = isTyped && userInput[index] === char
                             const isError = isTyped && !isCorrect
-
-                            // Only show a window of text around the cursor
-                            const windowStart = Math.max(0, userInput.length - 40)
-                            const windowEnd = windowStart + 200
-                            if (index < windowStart || index > windowEnd) return null
 
                             return (
                                 <span
