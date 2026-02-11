@@ -1,7 +1,7 @@
 // ── Games Landing Page ──
 
 import { motion } from 'framer-motion';
-import { Crosshair } from 'lucide-react';
+import { Crosshair, Rocket } from 'lucide-react';
 
 interface GamesLandingProps {
     onNavigate: (stage: string) => void;
@@ -18,6 +18,17 @@ export function GamesLanding({ onNavigate }: GamesLandingProps) {
             icon: Crosshair,
             gradient: 'from-red-500 via-orange-500 to-yellow-500',
             shadow: 'shadow-orange-500/20',
+            badge: 'POPULAR',
+        },
+        {
+            id: 'burner_burst',
+            stage: 'games_burner_burst',
+            title: 'Burner Burst',
+            subtitle: 'Rocket Racing',
+            description: 'Race vertically to orbit against AI bots. Type fast to fuel your rocket and use Afterburners to skip ahead.',
+            icon: Rocket,
+            gradient: 'from-blue-600 to-indigo-600',
+            shadow: 'shadow-blue-500/20',
             badge: 'NEW',
         },
         // Future games go here

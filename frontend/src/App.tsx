@@ -30,6 +30,7 @@ import TypingCertificate from './pages/TypingCertificate'
 import Extension from './pages/Extension'
 import { GamesLanding } from './pages/GamesLanding'
 import { AccuracyAssassinPage } from './games/accuracy-assassin/ui/AccuracyAssassinPage'
+import { BurnerBurstPage } from './games/type-to-orbit/ui/TypeToOrbitPage'
 import AchievementModal from './components/AchievementModal'
 import ErrorBoundary from './components/ErrorBoundary'
 import { LandingPage } from './components/LandingPage'
@@ -52,7 +53,7 @@ import {
   Gamepad2
 } from 'lucide-react'
 
-type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension' | 'games' | 'games_accuracy_assassin'
+type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension' | 'games' | 'games_accuracy_assassin' | 'games_burner_burst'
 
 import { apiFetch } from './utils/api';
 
@@ -648,6 +649,12 @@ function App() {
             {stage === 'games_accuracy_assassin' && user && (
               <PageTransition key="games_accuracy_assassin">
                 <AccuracyAssassinPage onBack={() => setStage('games')} />
+              </PageTransition>
+            )}
+
+            {stage === 'games_burner_burst' && user && (
+              <PageTransition key="games_burner_burst">
+                <BurnerBurstPage onBack={() => setStage('games')} />
               </PageTransition>
             )}
           </AnimatePresence>
