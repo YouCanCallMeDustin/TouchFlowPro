@@ -24,6 +24,8 @@ import AdaptivePractice from './pages/AdaptivePractice'
 import Leaderboard from './pages/Leaderboard'
 import CodePractice from './pages/CodePractice'
 import PricingPage from './pages/PricingPage'
+import TermsOfService from './pages/TermsOfService'
+import PrivacyPolicy from './pages/PrivacyPolicy'
 import AchievementModal from './components/AchievementModal'
 import ErrorBoundary from './components/ErrorBoundary'
 import { LandingPage } from './components/LandingPage'
@@ -43,7 +45,7 @@ import {
   Compass
 } from 'lucide-react'
 
-type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'adaptive_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection'
+type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'adaptive_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy'
 
 import { apiFetch } from './utils/api';
 
@@ -607,6 +609,18 @@ function App() {
                 <PricingPage />
               </PageTransition>
             )}
+
+            {stage === 'terms' && (
+              <PageTransition key="terms">
+                <TermsOfService onBack={() => setStage(user ? 'dashboard' : 'auth_login')} />
+              </PageTransition>
+            )}
+
+            {stage === 'privacy' && (
+              <PageTransition key="privacy">
+                <PrivacyPolicy onBack={() => setStage(user ? 'dashboard' : 'auth_login')} />
+              </PageTransition>
+            )}
           </AnimatePresence>
         </main>
 
@@ -618,9 +632,27 @@ function App() {
           newLevel={showAchievement?.level}
         />
 
-        <div className="fixed bottom-2 right-2 text-[8px] text-white/10 pointer-events-none z-[100]">
-          v1.4 API Force Fix
-        </div>
+        <footer className="border-t border-white/5 mt-12 py-6 px-4">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+            <span className="text-[10px] text-text-muted font-medium">
+              © {new Date().getFullYear()} TouchFlow Pro. All rights reserved.
+            </span>
+            <div className="flex items-center gap-6">
+              <button
+                onClick={() => setStage('terms')}
+                className="text-[10px] text-text-muted hover:text-primary transition-colors font-medium uppercase tracking-[0.15em]"
+              >
+                Terms of Service
+              </button>
+              <button
+                onClick={() => setStage('privacy')}
+                className="text-[10px] text-text-muted hover:text-primary transition-colors font-medium uppercase tracking-[0.15em]"
+              >
+                Privacy Policy
+              </button>
+            </div>
+          </div>
+        </footer>
 
         <style>{`
           @keyframes shine {

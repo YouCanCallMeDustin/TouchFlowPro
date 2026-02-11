@@ -52,7 +52,7 @@
     0 0 0 1px oklch(20% 0.1 250 / 0.03);
 
   /* Glass Effects */
-  --glass-bg: oklch(100% 0 0 / 0.85);
+  --glass-bg: oklch(100% 0 0 / 0.95);
   --glass-border: oklch(20% 0.1 250 / 0.1);
 }
 
@@ -72,7 +72,7 @@
   --accent: oklch(75% 0.25 60);
 
   /* Glass/Border Effects */
-  --glass-bg: oklch(20% 0.03 240 / 0.55);
+  --glass-bg: oklch(20% 0.03 240 / 0.80);
   --glass-border: oklch(100% 0 0 / 0.1);
 
   /* Dark Mode Shadows */
