@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { TypingEngine } from '@shared/typingEngine'
 import type { KeystrokeEvent, TypingMetrics } from '@shared/types'
-import { Award, Clock, Target, Zap, Download, RotateCcw, ChevronRight, Shield, Star } from 'lucide-react'
+import { Award, Clock, Target, Zap, Download, RotateCcw, ChevronRight, Shield } from 'lucide-react'
 
 interface TypingCertificateProps {
     userId: string
@@ -16,7 +16,7 @@ const TIERS = [
     { name: 'Gold', minWPM: 60, color: '#FFD700', gradient: 'from-yellow-500 to-yellow-300', border: 'border-yellow-500/40', bg: 'bg-yellow-500/10', text: 'text-yellow-400', icon: '🥇' },
     { name: 'Platinum', minWPM: 80, color: '#E5E4E2', gradient: 'from-cyan-400 to-blue-300', border: 'border-cyan-400/40', bg: 'bg-cyan-400/10', text: 'text-cyan-400', icon: '💎' },
     { name: 'Diamond', minWPM: 100, color: '#B9F2FF', gradient: 'from-violet-500 to-fuchsia-400', border: 'border-violet-500/40', bg: 'bg-violet-500/10', text: 'text-violet-400', icon: '👑' },
-] as const
+]
 
 const TEST_DURATIONS = [
     { label: '1 Minute', seconds: 60, description: 'Quick Assessment' },
@@ -48,7 +48,7 @@ function formatDate(date: Date): string {
 
 type Phase = 'select' | 'testing' | 'result'
 
-const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId, userName }) => {
+const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, userName }) => {
     const [phase, setPhase] = useState<Phase>('select')
     const [selectedDuration, setSelectedDuration] = useState(TEST_DURATIONS[1])
     const [testText, setTestText] = useState('')
@@ -298,9 +298,9 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId, userName 
                                 <span
                                     key={index}
                                     className={`inline-block font-mono text-lg sm:text-xl transition-all relative ${isError ? 'text-red-500 bg-red-500/10 rounded' :
-                                            isCorrect ? 'text-primary' :
-                                                isCurrent ? 'text-text-main font-black' :
-                                                    'text-text-muted opacity-40'
+                                        isCorrect ? 'text-primary' :
+                                            isCurrent ? 'text-text-main font-black' :
+                                                'text-text-muted opacity-40'
                                         }`}
                                 >
                                     {char === ' ' ? '\u00A0' : char}
