@@ -1,8 +1,14 @@
 [build]
-builder = "dockerfile"
-dockerfilePath = "Dockerfile"
+builder = "nixpacks"
+
+[phases.setup]
+aptPkgs = ["openssl"]
+
+[phases.install]
+cmds = ["npm install --force"]
+
+[phases.build]
+cmds = ["cd backend && npx prisma db push && cd ..", "npm run build"]
 
 [deploy]
 startCommand = "npm start --workspace=backend"
-healthcheckPath = "/health"
-healthcheckTimeout = 180
