@@ -99,7 +99,7 @@ app.use('/api/subscriptions', subscriptionsRoutes);
 app.use('/api/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // Serve frontend static files (built by Vite)
-const frontendDist = path.join(process.cwd(), 'frontend', 'dist');
+const frontendDist = path.join(process.cwd(), '..', 'frontend', 'dist');
 app.use(express.static(frontendDist));
 
 // SPA catch-all: any non-API route serves index.html
