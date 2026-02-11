@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { TypingEngine } from '@shared/typingEngine'
 import type { KeystrokeEvent, TypingMetrics } from '@shared/types'
@@ -62,11 +62,27 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
     const inputRef = useRef<HTMLInputElement>(null)
     const certificateRef = useRef<HTMLDivElement>(null)
+    const textContainerRef = useRef<HTMLDivElement>(null)
+    const cursorCharRef = useRef<HTMLSpanElement>(null)
 
     // Refs to hold latest values so endTest always reads current data
     const keystrokesRef = useRef<KeystrokeEvent[]>([])
     const userInputRef = useRef('')
     const testTextRef = useRef('')
+
+    // Auto-scroll to keep cursor visible
+    useEffect(() => {
+        if (cursorCharRef.current && textContainerRef.current) {
+            const container = textContainerRef.current
+            const cursor = cursorCharRef.current
+            const containerRect = container.getBoundingClientRect()
+            const cursorRect = cursor.getBoundingClientRect()
+            // If cursor is below the visible area, scroll down
+            if (cursorRect.bottom > containerRect.bottom || cursorRect.top < containerRect.top) {
+                cursor.scrollIntoView({ block: 'center', behavior: 'smooth' })
+            }
+        }
+    }, [userInput])
 
     const startTest = (duration: typeof TEST_DURATIONS[0]) => {
         setSelectedDuration(duration)
@@ -296,7 +312,11 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
                         />
                     </div>
 
-                    <div className="max-h-[200px] overflow-hidden leading-loose select-none flex flex-wrap gap-x-0.5 gap-y-2">
+                    <div
+                        ref={textContainerRef}
+                        className="max-h-[200px] overflow-y-auto leading-loose select-none flex flex-wrap gap-x-0.5 gap-y-2 scrollbar-none"
+                        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                    >
                         {testText.split('').map((char, index) => {
                             const isTyped = index < userInput.length
                             const isCurrent = index === userInput.length
@@ -306,6 +326,7 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
                             return (
                                 <span
                                     key={index}
+                                    ref={isCurrent ? cursorCharRef : undefined}
                                     className={`inline-block font-mono text-lg sm:text-xl transition-all relative ${isError ? 'text-red-500 bg-red-500/10 rounded' :
                                         isCorrect ? 'text-primary' :
                                             isCurrent ? 'text-text-main font-black' :
