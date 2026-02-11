@@ -1,7 +1,6 @@
 [build]
 builder = "nixpacks"
-# Delete lockfile so npm resolves Linux-native packages correctly
-buildCommand = "rm -f package-lock.json && npm install && npm run build"
+buildCommand = "npm run build"
 
 [deploy]
 startCommand = "npm start --workspace=backend"
