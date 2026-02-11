@@ -1,9 +1,10 @@
 [build]
 builder = "nixpacks"
-nixpacksConfigPath = "nixpacks.toml"
-buildCommand = "npm run build --workspace=frontend && npm run build --workspace=backend"
+# Use npm install which is smarter about platforms than npm ci
+buildCommand = "npm install && npm run build"
 
 [deploy]
 startCommand = "npm start --workspace=backend"
 healthcheckPath = "/health"
-healthcheckTimeout = 300
+healthcheckTimeout = 120
+servicePort = 4000
