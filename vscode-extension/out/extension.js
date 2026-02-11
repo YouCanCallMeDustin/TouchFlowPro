@@ -86,7 +86,7 @@ function activate(context) {
                 tracker.reset();
             }
             else if (selection === 'Visit TouchFlow Pro') {
-                vscode.env.openExternal(vscode.Uri.parse('https://touchflowpro.com')); // Update with real URL
+                vscode.env.openExternal(vscode.Uri.parse('https://touchflow-pro-production.up.railway.app')); // Update with real URL
             }
         });
     }));

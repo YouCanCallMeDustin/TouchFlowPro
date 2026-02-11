@@ -32,4 +32,4 @@ You can customize the extension in VS Code Settings:
 4. Select "Install from VSIX...".
 5. Choose the file.
 
-Powered by [TouchFlow Pro](https://touchflowpro.com).
+Powered by [TouchFlow Pro](https://touchflow-pro-production.up.railway.app).

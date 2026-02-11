@@ -23,7 +23,7 @@
         "type": "git",
         "url": "https://github.com/YouCanCallMeDustin/TouchFlowPro"
     },
-    "homepage": "https://touchflowpro.com",
+    "homepage": "https://touchflow-pro-production.up.railway.app",
     "activationEvents": [
         "onStartupFinished"
     ],
