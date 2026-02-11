@@ -9,7 +9,8 @@ COPY package.json ./
 COPY backend/package.json ./backend/
 COPY frontend/package.json ./frontend/
 
-# npm install (not ci) resolves platform-specific native binaries for Linux
+# Cache bust: change this value to force a fresh npm install (bypasses Docker layer cache)
+ARG CACHEBUST=2
 RUN npm install
 
 # Copy source
