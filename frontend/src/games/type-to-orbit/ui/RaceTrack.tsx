@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { type RacerState } from '../engine/types';
 import { Rocket } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
 
 interface RaceTrackProps {
     racers: RacerState[];
@@ -17,53 +18,44 @@ export function RaceTrack({ racers, player }: RaceTrackProps) {
 
     return (
         <div className="absolute inset-0 z-0 bg-slate-950 overflow-hidden">
-            {/* Layer 3: Deep Space (Slowest) */}
+            {/* Layer 3: Deep Space (Slowest) - Fades in */}
             <div
-                className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-60"
-                style={{ transform: `translateY(${progress * 2}px)` }}
+                className="absolute inset-0 bg-[url('/assets/bg_space.png')] bg-cover bg-center transition-opacity duration-1000"
+                style={{
+                    transform: `translateY(${progress * 2}px)`,
+                    opacity: Math.max(0, (progress - 20) / 40) // Fade in starting at 20%
+                }}
             />
 
-            {/* Layer 2: Stars/Atmosphere (Mid) */}
+            {/* Layer 2: Stars/Atmosphere (Mid) - Additional parallax depth */}
             <div
                 className="absolute inset-0"
                 style={{ transform: `translateY(${progress * 5}px)` }}
             >
-                {/* Random Stars */}
+                {/* Random Stars for extra depth */}
                 {Array.from({ length: 20 }).map((_, i) => (
                     <div
                         key={i}
-                        className="absolute w-1 h-1 bg-white rounded-full opacity-80"
+                        className="absolute w-1 h-1 bg-white rounded-full opacity-60"
                         style={{
                             left: `${Math.random() * 100}%`,
-                            top: `${Math.random() * 100 - 100}%` // Start above
+                            top: `${Math.random() * 100 - 100}%`
                         }}
                     />
                 ))}
             </div>
 
-            {/* Layer 1: Ground/Clouds (Fastest) */}
+            {/* Layer 1: Ground/Clouds (Fastest) - Fades out */}
             <div
-                className="absolute inset-x-0 bottom-0 h-[150vh] transition-transform duration-100 ease-linear"
-                style={{ transform: `translateY(${progress * 15}px)` }}
+                className="absolute inset-x-0 bottom-0 h-[150vh] transition-transform duration-100 ease-linear bg-[url('/assets/bg_launch.png')] bg-cover bg-bottom"
+                style={{
+                    transform: `translateY(${progress * 15}px)`,
+                    opacity: Math.max(0, 1 - (progress / 40)) // Fade out by 40%
+                }}
             >
-                {/* Ground */}
-                <div className="absolute bottom-0 w-full h-[30vh] bg-gradient-to-t from-emerald-900 to-emerald-800/80 border-t border-emerald-500/30">
-                    <div className="text-emerald-500/20 text-[10vw] font-black absolute bottom-0 left-1/2 -translate-x-1/2 select-none">LAUNCH</div>
+                <div className="absolute bottom-[20vh] w-full text-center">
+                    <div className="text-white/40 text-[10vw] font-black select-none drop-shadow-lg">LAUNCH</div>
                 </div>
-
-                {/* Clouds */}
-                {Array.from({ length: 5 }).map((_, i) => (
-                    <div
-                        key={i}
-                        className="absolute bg-white/5 rounded-full blur-3xl"
-                        style={{
-                            width: `${200 + Math.random() * 300}px`,
-                            height: '50px',
-                            left: `${Math.random() * 80}%`,
-                            bottom: `${40 + Math.random() * 40}%`
-                        }}
-                    />
-                ))}
             </div>
 
             {/* Track Lanes */}
@@ -72,6 +64,9 @@ export function RaceTrack({ racers, player }: RaceTrackProps) {
                     <div key={i} className="h-full w-[1px] bg-white/5" />
                 ))}
             </div>
+
+            {/* Particle Layer (Behind Rockets) */}
+            <ParticleSystem racers={racers} />
 
             {/* Racers */}
             <div className="absolute inset-0 px-4 lg:px-20 flex justify-around items-end pb-[15vh]">
@@ -95,33 +90,49 @@ export function RaceTrack({ racers, player }: RaceTrackProps) {
                                     {racer.isPlayer ? 'YOU' : racer.name}
                                 </span>
 
-                                {/* Altitude / WPM */}
+                                {/* Altitude */}
                                 <span className="text-[9px] font-mono text-white/60 bg-black/40 px-1 rounded">
                                     {Math.floor(racer.progress)}% ALT
                                 </span>
                             </div>
 
-                            {/* Rocket */}
+                            {/* Rocket Sprite */}
                             <div className="relative group">
-                                {/* Engine Flame */}
+                                {/* Engine Flame (Core) */}
                                 <motion.div
                                     animate={{
-                                        height: racer.isBoosting ? [40, 60, 40] : [20, 30, 20],
+                                        height: racer.isBoosting ? [60, 100, 60] : [40, 60, 40],
                                         opacity: [0.6, 0.9, 0.6],
                                         backgroundColor: racer.isBoosting ? ['#a855f7', '#d8b4fe', '#a855f7'] : ['#f97316', '#fb923c', '#f97316']
                                     }}
-                                    transition={{ duration: 0.2, repeat: Infinity }}
-                                    className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 rounded-full blur-md"
+                                    transition={{ duration: 0.1, repeat: Infinity }}
+                                    className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-6 rounded-full blur-md"
                                 />
 
-                                <Rocket
-                                    size={racer.isPlayer ? 56 : 32}
-                                    color={racer.color}
-                                    fill={racer.color}
-                                    fillOpacity={0.2}
-                                    strokeWidth={1.5}
-                                    className={`transform -rotate-45 drop-shadow-[0_0_15px_${racer.color}] transition-all duration-300 ${racer.isBoosting ? 'scale-110 drop-shadow-[0_0_25px_#a855f7]' : ''
-                                        }`}
+                                {/* Sprite Sheet Rocket */}
+                                <div
+                                    className={`relative z-10 transition-transform duration-300 drop-shadow-xl ${racer.isPlayer ? 'w-32 h-40' : 'w-24 h-32'
+                                        } ${racer.isBoosting ? 'scale-105' : ''}`}
+                                    style={{
+                                        backgroundImage: "url('/assets/rockets_row.png')",
+                                        backgroundSize: '500% 100%', // 5 cols, 1 row
+                                        backgroundPosition: racer.isPlayer
+                                            ? '0% 0%' // Blue (1st)
+                                            : (() => {
+                                                // Map other bots to remaining 4 slots
+                                                // Hash the entire ID string to ensure uniqueness
+                                                const seed = racer.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+                                                const hash = (seed % 4) + 1; // 1, 2, 3, 4
+
+                                                switch (hash) {
+                                                    case 1: return '25% 0%'; // Red
+                                                    case 2: return '50% 0%'; // Green
+                                                    case 3: return '75% 0%'; // Yellow
+                                                    case 4: return '100% 0%'; // Purple
+                                                    default: return '25% 0%';
+                                                }
+                                            })()
+                                    }}
                                 />
                             </div>
                         </motion.div>
@@ -129,5 +140,92 @@ export function RaceTrack({ racers, player }: RaceTrackProps) {
                 ))}
             </div>
         </div>
+    );
+}
+
+// Particle System implementation
+function ParticleSystem({ racers }: { racers: RacerState[] }) {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    const lastTimeRef = useRef(0);
+    const particlePoolRef = useRef<{ x: number, y: number, vx: number, vy: number, life: number, color: string, size: number }[]>([]);
+
+    useEffect(() => {
+        let rafId: number;
+
+        const loop = (time: number) => {
+            const dt = (time - lastTimeRef.current) / 1000;
+            if (dt > 0.1) {
+                lastTimeRef.current = time; // Skip large delta
+                rafId = requestAnimationFrame(loop);
+                return;
+            }
+            lastTimeRef.current = time;
+
+            const canvas = canvasRef.current;
+            const ctx = canvas?.getContext('2d');
+
+            if (canvas && ctx) {
+                // Resize if needed
+                if (canvas.width !== canvas.clientWidth || canvas.height !== canvas.clientHeight) {
+                    canvas.width = canvas.clientWidth;
+                    canvas.height = canvas.clientHeight;
+                }
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Spawn new particles based on racer positions
+                racers.forEach((racer, index) => {
+                    const laneWidth = canvas.width / 5; // Assuming 5 racers
+                    const x = (index + 0.5) * laneWidth;
+
+                    const H = canvas.height;
+                    const yFromBottom = (0.15 * H) + (racer.progress / 100) * (0.8 * H);
+                    const y = H - yFromBottom + (H * 0.05); // +Offset to overlap engine
+
+                    // Spawn logic
+                    if (Math.random() > 0.3) { // High spawn rate for trails
+                        particlePoolRef.current.push({
+                            x: x + (Math.random() - 0.5) * 10,
+                            y: y,
+                            vx: (Math.random() - 0.5) * 20,
+                            vy: 100 + Math.random() * 200 + (racer.isBoosting ? 300 : 0),
+                            life: 0.6 + Math.random() * 0.4,
+                            color: racer.isBoosting ? '#a855f7' : '#f97316',
+                            size: Math.random() * 4 + 2
+                        });
+                    }
+                });
+
+                // Update and Draw
+                for (let i = particlePoolRef.current.length - 1; i >= 0; i--) {
+                    const p = particlePoolRef.current[i];
+                    p.x += p.vx * dt;
+                    p.y += p.vy * dt;
+                    p.life -= dt * 2.0;
+
+                    if (p.life <= 0) {
+                        particlePoolRef.current.splice(i, 1);
+                    } else {
+                        ctx.globalAlpha = p.life;
+                        ctx.fillStyle = p.color;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+            }
+
+            rafId = requestAnimationFrame(loop);
+        };
+
+        rafId = requestAnimationFrame(loop);
+        return () => cancelAnimationFrame(rafId);
+    }, [racers]);
+
+    return (
+        <canvas
+            ref={canvasRef}
+            className="absolute inset-0 w-full h-full pointer-events-none z-0"
+        />
     );
 }

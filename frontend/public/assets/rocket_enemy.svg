@@ -1,0 +1,24 @@
+<svg width="200" height="400" viewBox="0 0 200 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Main Fuselage -->
+    <path d="M100 20C100 20 150 120 150 280C150 350 130 380 100 380C70 380 50 350 50 280C50 120 100 20 100 20Z" fill="url(#bodyGradientEnemy)" stroke="#DC2626" stroke-width="4"/>
+    
+    <!-- Cockpit Window -->
+    <rect x="80" y="120" width="40" height="40" rx="10" fill="#EF4444" stroke="#FCA5A5" stroke-width="4"/>
+    
+    <!-- Fins (Left) -->
+    <path d="M50 260L20 360H60L70 320" fill="#991B1B" stroke="#7F1D1D" stroke-width="2"/>
+    
+    <!-- Fins (Right) -->
+    <path d="M150 260L180 360H140L130 320" fill="#991B1B" stroke="#7F1D1D" stroke-width="2"/>
+    
+    <!-- Engine Nozzle -->
+    <path d="M80 380H120L115 400H85L80 380Z" fill="#333"/>
+    
+    <!-- Gradients -->
+    <defs>
+        <linearGradient id="bodyGradientEnemy" x1="100" y1="20" x2="100" y2="380" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FEF2F2"/>
+            <stop offset="1" stop-color="#FECACA"/>
+        </linearGradient>
+    </defs>
+</svg>
