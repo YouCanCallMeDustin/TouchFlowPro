@@ -278,7 +278,7 @@ const TypingTest: React.FC<Props> = ({
                             currentSpeed={dictationSpeed}
                         />
                     ) : (
-                        <div className={`min-h-[100px] leading-relaxed select-none ${mode === 'code' ? 'whitespace-pre font-mono text-left overflow-x-auto' : 'flex flex-wrap gap-x-0.5 gap-y-4'}`}>
+                        <div className={`min-h-[100px] leading-relaxed select-none ${mode === 'code' ? 'whitespace-pre-wrap break-all font-mono text-left' : 'flex flex-wrap gap-x-0.5 gap-y-4'}`}>
                             {renderText()}
                         </div>
                     )}
