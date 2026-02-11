@@ -26,6 +26,7 @@ import CodePractice from './pages/CodePractice'
 import PricingPage from './pages/PricingPage'
 import TermsOfService from './pages/TermsOfService'
 import PrivacyPolicy from './pages/PrivacyPolicy'
+import TypingCertificate from './pages/TypingCertificate'
 import AchievementModal from './components/AchievementModal'
 import ErrorBoundary from './components/ErrorBoundary'
 import { LandingPage } from './components/LandingPage'
@@ -42,10 +43,11 @@ import {
   BarChart3,
   Award,
   Trophy,
-  Compass
+  Compass,
+  Shield
 } from 'lucide-react'
 
-type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'adaptive_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy'
+type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'adaptive_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate'
 
 import { apiFetch } from './utils/api';
 
@@ -371,6 +373,7 @@ function App() {
                   { id: 'analytics' as Stage, label: 'Stats', icon: BarChart3 },
                   { id: 'achievements' as Stage, label: 'Awards', icon: Award },
                   { id: 'leaderboard' as Stage, label: 'Ranks', icon: Trophy },
+                  { id: 'certificate' as Stage, label: 'Certify', icon: Shield },
                 ].map((item) => (
                   <button
                     key={item.id}
@@ -619,6 +622,12 @@ function App() {
             {stage === 'privacy' && (
               <PageTransition key="privacy">
                 <PrivacyPolicy onBack={() => setStage(user ? 'dashboard' : 'auth_login')} />
+              </PageTransition>
+            )}
+
+            {stage === 'certificate' && user && (
+              <PageTransition key="certificate">
+                <TypingCertificate userId={user.id} userName={user.name || user.email} />
               </PageTransition>
             )}
           </AnimatePresence>
