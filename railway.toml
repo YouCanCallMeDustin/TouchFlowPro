@@ -1,14 +1,6 @@
 [build]
-builder = "nixpacks"
-
-[phases.setup]
-aptPkgs = ["openssl"]
-
-[phases.install]
-cmds = ["npm install --force"]
-
-[phases.build]
-cmds = ["cd backend && npx prisma db push && cd ..", "npm run build"]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
 
 [deploy]
 startCommand = "npm start --workspace=backend"
