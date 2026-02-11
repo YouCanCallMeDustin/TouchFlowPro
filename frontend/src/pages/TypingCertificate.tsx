@@ -70,16 +70,16 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
     const userInputRef = useRef('')
     const testTextRef = useRef('')
 
-    // Auto-scroll to keep cursor visible
+    // Page-flip scroll: only scroll when cursor goes past the bottom of the visible area
     useEffect(() => {
         if (cursorCharRef.current && textContainerRef.current) {
             const container = textContainerRef.current
             const cursor = cursorCharRef.current
             const containerRect = container.getBoundingClientRect()
             const cursorRect = cursor.getBoundingClientRect()
-            // If cursor is below the visible area, scroll down
-            if (cursorRect.bottom > containerRect.bottom || cursorRect.top < containerRect.top) {
-                cursor.scrollIntoView({ block: 'center', behavior: 'smooth' })
+            // Only scroll when cursor drops below the visible area (page-flip)
+            if (cursorRect.bottom > containerRect.bottom) {
+                container.scrollTop += containerRect.height
             }
         }
     }, [userInput])
