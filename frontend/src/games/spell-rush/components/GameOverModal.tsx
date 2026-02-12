@@ -6,18 +6,31 @@ import { HighScoreBoard } from './HighScoreBoard';
 
 export const GameOverModal: React.FC = () => {
     const { stats, isGameOver, saveScore } = useGameStore();
+    const [name, setName] = React.useState('');
+    const [hasSaved, setHasSaved] = React.useState(false);
 
+    // Reset local state when game over opens
     React.useEffect(() => {
         if (isGameOver) {
-            saveScore({
-                score: stats.score,
-                date: Date.now(),
-                maxCombo: stats.maxCombo,
-                wordsFound: stats.wordsFound,
-                survivalTime: stats.survivalTime
-            });
+            setHasSaved(false);
+            setName('');
         }
     }, [isGameOver]);
+
+    const handleSave = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!name.trim() || hasSaved) return;
+
+        saveScore({
+            name: name.trim().toUpperCase(),
+            score: stats.score,
+            date: Date.now(),
+            maxCombo: stats.maxCombo,
+            wordsFound: stats.wordsFound,
+            survivalTime: stats.survivalTime
+        });
+        setHasSaved(true);
+    };
 
     if (!isGameOver) return null;
 
@@ -89,6 +102,39 @@ export const GameOverModal: React.FC = () => {
                                 </div>
                             </div>
                         </div>
+
+                        {/* Name Entry Form */}
+                        {!hasSaved ? (
+                            <form onSubmit={handleSave} className="mb-8">
+                                <label className="block text-[10px] uppercase tracking-widest text-slate-500 font-bold mb-2">
+                                    Enter Pilot Identification
+                                </label>
+                                <div className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        maxLength={10}
+                                        placeholder="PILOT NAME"
+                                        className="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white font-bold uppercase tracking-wider focus:outline-none focus:border-blue-500 transition-colors"
+                                        autoFocus
+                                    />
+                                    <button
+                                        type="submit"
+                                        disabled={!name.trim()}
+                                        className="bg-blue-600 hover:bg-blue-500 disabled:bg-slate-800 disabled:text-slate-600 text-white font-bold px-6 rounded-xl uppercase tracking-wider transition-colors"
+                                    >
+                                        Save
+                                    </button>
+                                </div>
+                            </form>
+                        ) : (
+                            <div className="mb-8 p-4 bg-green-500/10 border border-green-500/20 rounded-xl text-center">
+                                <span className="text-green-400 font-bold uppercase tracking-wider text-sm">
+                                    Data Archived Successfully
+                                </span>
+                            </div>
+                        )}
 
                         {/* Actions */}
                         <div className="flex gap-4">
