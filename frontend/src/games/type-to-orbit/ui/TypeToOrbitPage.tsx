@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { RaceEngine } from '../engine/raceEngine';
-import { type RaceSnapshot } from '../engine/types';
+import { type RaceSnapshot, type RaceState } from '../engine/types';
 import { soundManager } from '../engine/SoundManager';
 import { RaceTrack } from './RaceTrack';
 import { TypingDashboard } from './TypingDashboard';
@@ -12,12 +12,54 @@ interface TypeToOrbitPageProps {
     onBack: () => void;
 }
 
+function Chatter({ difficulty }: { difficulty: string }) {
+    const [msg, setMsg] = useState("Initializing communication sub-systems...");
+
+    useEffect(() => {
+        const messages = [
+            { bot: "Atlas", text: "My logic processors are running at 99% efficiency." },
+            { bot: "Echo", text: "You type like a rusty terminal." },
+            { bot: "Nova", text: "I calculate a 0.00% chance of your victory." },
+            { bot: "Atlas", text: "Human reaction times are... quaint." },
+            { bot: "System", text: "Weather conditions: Optional for orbital insertion." },
+            { bot: "Echo", text: "Prepare to eat my exhaust dust." },
+            { bot: "Nova", text: "My algorithms predict you will typo." },
+        ];
+        const interval = setInterval(() => {
+            const random = messages[Math.floor(Math.random() * messages.length)];
+            setMsg(`${random.bot}: "${random.text}"`);
+        }, 4000);
+        return () => clearInterval(interval);
+    }, [difficulty]);
+
+    return (
+        <motion.div
+            key={msg}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="italic text-slate-400"
+        >
+            {msg}
+        </motion.div>
+    );
+}
+
 export function BurnerBurstPage({ onBack }: TypeToOrbitPageProps) {
     const engineRef = useRef<RaceEngine | null>(null);
     const rafRef = useRef<number>(0);
 
     const [snapshot, setSnapshot] = useState<RaceSnapshot | null>(null);
     const [eventMessage, setEventMessage] = useState<string | null>(null);
+    const [difficulty, setDifficulty] = useState<'EASY' | 'MEDIUM' | 'HARD' | 'INSANE'>('MEDIUM');
+
+    // Shake State
+    const [shake, setShake] = useState({ x: 0, y: 0 });
+    const triggerShake = (intensity: number = 5) => {
+        const x = (Math.random() - 0.5) * intensity;
+        const y = (Math.random() - 0.5) * intensity;
+        setShake({ x, y });
+        setTimeout(() => setShake({ x: 0, y: 0 }), 50);
+    };
 
     // Initialize Engine
     useEffect(() => {
@@ -32,8 +74,18 @@ export function BurnerBurstPage({ onBack }: TypeToOrbitPageProps) {
                     soundManager.playOrbit();
                 } else if (type === 'error') {
                     soundManager.playError();
+                    triggerShake(8); // Jolt on error
                 } else if (type === 'launch') {
                     soundManager.playLaunch();
+                    // Launch Shake Sequence
+                    let count = 0;
+                    const interval = setInterval(() => {
+                        triggerShake(12);
+                        count++;
+                        if (count > 20) clearInterval(interval);
+                    }, 50);
+                } else if (type === 'boost_start') {
+                    triggerShake(4);
                 }
             };
         }
@@ -51,13 +103,27 @@ export function BurnerBurstPage({ onBack }: TypeToOrbitPageProps) {
             const engine = engineRef.current;
             if (!engine) return;
 
+            // Get FRESH snapshot directly from engine to avoid stale closure
+            const snap = engine.getSnapshot();
+
+            // Restart Logic (Enter on Results Screen)
+            // We allow restart if we are in orbit and a short delay has passed (e.g. 500ms)
+            // The renderer controls the visual appearance, but we control the logic here.
+            if (snap.phase === 'orbit' && snap.endTime) {
+                const timeSinceFinish = performance.now() - snap.endTime;
+                if (timeSinceFinish > 500 && e.key === 'Enter') {
+                    handleLobby();
+                    return;
+                }
+            }
+
             if (e.key.length === 1 || e.key === 'Enter') {
                 if (e.key === ' ') e.preventDefault();
-
-                // Play typing sound
-                soundManager.playType();
-
                 engine.handleInput(e.key);
+                // Sound is handled by engine events or we can do it here for regular typing
+                soundManager.playType();
+            } else if (e.key === 'Backspace') {
+                engine.handleInput('Backspace');
             }
         };
         window.addEventListener('keydown', handleKeyDown);
@@ -71,6 +137,14 @@ export function BurnerBurstPage({ onBack }: TypeToOrbitPageProps) {
             if (engine) {
                 engine.tick(time, dt);
                 setSnapshot(engine.getSnapshot());
+
+                // Continuous shake if boosting
+                const snap = engine.getSnapshot();
+                if (snap.player.isBoosting) {
+                    // Randomly shake every few frames? Or just rely on CSS vibration?
+                    // Let's do JS shake for "Game Juice"
+                    if (Math.random() > 0.5) triggerShake(3);
+                }
             }
 
             rafRef.current = requestAnimationFrame(loop);
@@ -83,56 +157,30 @@ export function BurnerBurstPage({ onBack }: TypeToOrbitPageProps) {
         };
     }, []);
 
-    const [difficulty, setDifficulty] = useState<'EASY' | 'MEDIUM' | 'HARD' | 'INSANE'>('MEDIUM');
-
     const handleLobby = () => {
-        const engine = new RaceEngine(difficulty);
-        engineRef.current = engine;
-        setSnapshot(engine.getSnapshot());
-        setEventMessage(null);
-    };
-
-    const handleStart = () => {
-        // Re-init with selected difficulty just in case
-        if (snapshot?.phase === 'lobby') {
-            const engine = new RaceEngine(difficulty);
-            engineRef.current = engine;
-            engine.onEvent = (type) => {
-                if (type === 'orbit') {
-                    setEventMessage('ORBIT ACHIEVED');
-                    soundManager.playOrbit();
-                } else if (type === 'error') {
-                    soundManager.playError();
-                } else if (type === 'launch') {
-                    soundManager.playLaunch();
-                }
-            };
+        const engine = engineRef.current;
+        if (engine) {
+            engine.setDifficulty(difficulty); // Ensure difficulty is set
+            engine.resetRace();
             setSnapshot(engine.getSnapshot());
-            engine.start();
-        } else {
-            engineRef.current?.start();
+            setEventMessage(null);
         }
     };
 
-    const handleRestart = () => {
-        const engine = new RaceEngine(difficulty);
-        engineRef.current = engine;
+    const handleStart = () => {
+        const engine = engineRef.current;
+        if (engine && snapshot?.phase === 'lobby') {
+            engine.setDifficulty(difficulty);
+            engine.resetRace(); // Reset to pick new text
+            engine.startRace(); // Uses internal random text
+        }
+    };
 
-        // Re-bind event listener
-        engine.onEvent = (type) => {
-            if (type === 'orbit') {
-                setEventMessage('ORBIT ACHIEVED');
-                soundManager.playOrbit();
-            } else if (type === 'error') {
-                soundManager.playError();
-            } else if (type === 'launch') {
-                soundManager.playLaunch();
-            }
-        };
-
-        engine.start(); // Auto-start for Re-Launch
-        setSnapshot(engine.getSnapshot());
-        setEventMessage(null);
+    // Manual Input Handler (passed to Dashboard)
+    const handleManualInput = (char: string) => {
+        // This is primarily for the visual keyboard or if Dashboard assumes control
+        // But we have a global listener. 
+        // We can just trigger sound here if needed.
     };
 
     if (!snapshot) return <div className="text-white">Initializing Launch Systems...</div>;
@@ -140,7 +188,11 @@ export function BurnerBurstPage({ onBack }: TypeToOrbitPageProps) {
     const player = snapshot.player;
 
     return (
-        <div className="fixed inset-0 bg-slate-950 flex flex-col font-sans overflow-hidden select-none">
+        <motion.div
+            className="fixed inset-0 bg-slate-950 flex flex-col font-sans overflow-hidden select-none"
+            animate={{ x: shake.x, y: shake.y }}
+            transition={{ type: 'tween', duration: 0.05 }}
+        >
 
             {/* Cinematic Event Overlay */}
             <AnimatePresence>
@@ -151,67 +203,53 @@ export function BurnerBurstPage({ onBack }: TypeToOrbitPageProps) {
                         exit={{ opacity: 0, y: -50, scale: 1.2 }}
                         className="absolute top-1/3 left-0 right-0 z-50 flex justify-center pointer-events-none"
                     >
-                        <div className="bg-black/50 backdrop-blur-md border border-white/20 px-8 py-4 rounded-full text-white font-black italic text-2xl uppercase tracking-widest shadow-[0_0_50px_rgba(255,255,255,0.2)]">
-                            {eventMessage}
+                        <div className="bg-black/60 backdrop-blur-md px-12 py-6 rounded-2xl border border-white/20 shadow-[0_0_50px_rgba(255,255,255,0.2)]">
+                            <h2 className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 uppercase tracking-widest drop-shadow-lg">
+                                {eventMessage}
+                            </h2>
                         </div>
                     </motion.div>
                 )}
             </AnimatePresence>
 
-            {/* Top UI: Exit & Status */}
-            <div className="absolute top-6 left-6 z-50 flex gap-4">
-                <button onClick={onBack} className="bg-black/40 hover:bg-white/10 text-white/60 hover:text-white px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-colors backdrop-blur-sm border border-white/5">
-                    ← Abort Mission
+            {/* Back Button */}
+            <div className="absolute top-6 left-6 z-50">
+                <button
+                    onClick={onBack}
+                    className="flex items-center gap-2 px-4 py-2 bg-slate-800/80 hover:bg-slate-700/80 text-white rounded-lg backdrop-blur-sm transition-all border border-white/10 group"
+                >
+                    <RotateCcw size={16} className="group-hover:-rotate-90 transition-transform" />
+                    <span className="text-sm font-bold tracking-wider">ABORT</span>
                 </button>
             </div>
 
-            {/* Core Visuals */}
-            <div className="absolute inset-0 z-0">
-                <RaceTrack racers={snapshot.racers} player={player} />
-            </div>
+            {/* Game World Layer */}
+            <RaceTrack racers={snapshot.racers} player={player} />
 
-            {/* Countdown Overlay */}
-            <div className="absolute top-0 inset-x-0 bottom-0 z-20 flex items-center justify-center pointer-events-none">
-                <AnimatePresence>
-                    {snapshot.phase === 'countdown' && (
-                        <motion.div
-                            key={snapshot.countdown} // Key change triggers animation
-                            initial={{ scale: 0.5, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 2, opacity: 0 }}
-                            className="text-9xl font-black text-white italic drop-shadow-[0_0_30px_rgba(255,255,255,0.8)]"
-                        >
-                            {snapshot.countdown}
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </div>
+            {/* UI Overlay Layer */}
+            <div className="absolute inset-0 z-10 pointer-events-none">
 
-            {/* Bottom UI Area */}
-            <div className="absolute bottom-0 inset-x-0 z-30 pb-8 flex justify-center pointer-events-none">
-                <div className="pointer-events-auto w-full max-w-5xl">
+                {/* Lobby Screen */}
+                {snapshot.phase === 'lobby' && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm pointer-events-auto">
+                        <div className="max-w-2xl w-full mx-4 text-center">
+                            <motion.div
+                                initial={{ y: 20, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                className="mb-12"
+                            >
+                                <h1 className="text-7xl font-black text-white italic tracking-tighter drop-shadow-[0_0_20px_rgba(59,130,246,0.5)]">
+                                    TYPE<span className="text-blue-500">TO</span>ORBIT
+                                </h1>
+                                <p className="text-blue-200 tracking-[0.5em] text-sm mt-4 font-bold uppercase opacity-80">
+                                    Vertical Velocity Training Simulation
+                                </p>
+                            </motion.div>
 
-                    {/* Lobby Screen */}
-                    {snapshot.phase === 'lobby' && (
-                        <div className="bg-black/80 backdrop-blur-2xl p-12 rounded-3xl border border-blue-500/20 text-center shadow-2xl max-w-2xl mx-auto">
-                            <div className="mb-6 flex justify-center">
-                                <div className="bg-blue-500/20 p-4 rounded-full border border-blue-500/50">
-                                    <Rocket size={48} className="text-blue-400" />
-                                </div>
-                            </div>
-                            <h1 className="text-5xl font-heading font-black text-white italic mb-2 tracking-tight">
-                                TYPE<span className="text-blue-500">TO</span>ORBIT
-                            </h1>
-                            <p className="text-slate-400 mb-8 uppercase tracking-widest text-xs font-bold">
-                                Vertical Velocity Training Simulation
-                            </p>
-
-                            <div className="grid grid-cols-2 gap-4 mb-4 text-left max-w-md mx-auto">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12 text-left">
                                 <div className="bg-white/5 p-4 rounded-xl border border-white/5">
                                     <div className="text-[10px] text-slate-500 uppercase font-bold mb-1 flex items-center gap-2"><Cpu size={12} /> AI Opponents</div>
-                                    <div className="text-sm text-slate-300">
-                                        <Chatter difficulty={difficulty} />
-                                    </div>
+                                    <Chatter difficulty={difficulty} />
                                 </div>
                                 <div className="bg-white/5 p-4 rounded-xl border border-white/5">
                                     <div className="text-[10px] text-slate-500 uppercase font-bold mb-1 flex items-center gap-2"><AlertTriangle size={12} /> Efficiency</div>
@@ -225,9 +263,9 @@ export function BurnerBurstPage({ onBack }: TypeToOrbitPageProps) {
                                     <button
                                         key={level}
                                         onClick={() => setDifficulty(level)}
-                                        className={`flex-1 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all ${difficulty === level
-                                            ? 'bg-blue-600 text-white shadow-lg'
-                                            : 'text-slate-500 hover:text-white hover:bg-white/5'
+                                        className={`flex-1 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all border ${difficulty === level
+                                            ? 'bg-blue-600 border-blue-500 text-white shadow-lg'
+                                            : 'bg-black/40 border-white/10 text-slate-300 hover:text-white hover:bg-white/10'
                                             }`}
                                     >
                                         {level}
@@ -242,90 +280,86 @@ export function BurnerBurstPage({ onBack }: TypeToOrbitPageProps) {
                                 <Play fill="currentColor" size={20} /> Initiate Launch
                             </button>
                         </div>
-                    )}
+                    </div>
+                )}
 
-                    {/* Main HUD (Active Race) */}
-                    {(snapshot.phase === 'launch' || snapshot.phase === 'orbit') && (
-                        <div className="animate-in slide-in-from-bottom duration-700">
-                            <TypingDashboard
-                                text={engineRef.current?.getText() || ''}
-                                cursorIndex={player.cursorIndex}
-                                wpm={player.wpm}
-                                fuelEfficiency={player.fuelEfficiency}
-                                isBoosting={player.isBoosting}
-                            />
-                        </div>
-                    )}
-
-                    {/* Results Screen */}
-                    {snapshot.phase === 'orbit' && snapshot.elapsedTime > 3000 && (
-                        // Delay showing results so player sees "Orbit Achieved" first
+                {/* Countdown Screen */}
+                {snapshot.phase === 'countdown' && (
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-50">
                         <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="bg-black/90 backdrop-blur-2xl p-10 rounded-3xl border border-yellow-500/30 text-center shadow-2xl max-w-xl mx-auto mt-4"
+                            key={snapshot.countdown}
+                            initial={{ scale: 0.5, opacity: 0 }}
+                            animate={{ scale: 1.5, opacity: 1 }}
+                            exit={{ scale: 2, opacity: 0 }}
+                            className="text-9xl font-black text-white italic tracking-tighter drop-shadow-[0_4px_4px_rgba(0,0,0,1)] stroke-black"
+                            style={{ WebkitTextStroke: '4px black' }}
                         >
-                            <Trophy size={48} className="mx-auto text-yellow-500 mb-4" />
-                            <h2 className="text-4xl font-heading font-black text-white mb-2">
-                                MISSION {player.rank === 1 ? 'SUCCESS' : 'COMPLETE'}
-                            </h2>
-                            <div className="flex justify-center gap-8 my-6">
-                                <div className="text-center">
-                                    <div className="text-xs text-slate-500 font-bold uppercase">Rank</div>
-                                    <div className="text-3xl font-black text-white">#{player.rank}</div>
-                                </div>
-                                <div className="text-center">
-                                    <div className="text-xs text-slate-500 font-bold uppercase">Speed</div>
-                                    <div className="text-3xl font-black text-blue-400">{player.wpm}</div>
-                                </div>
-                                <div className="text-center">
-                                    <div className="text-xs text-slate-500 font-bold uppercase">Efficiency</div>
-                                    <div className="text-3xl font-black text-green-400">{Math.floor(player.fuelEfficiency)}%</div>
-                                </div>
-                            </div>
-
-                            <div className="flex gap-4">
-                                <button onClick={handleLobby} className="flex-1 py-3 bg-white/10 hover:bg-white/20 rounded-lg text-white font-bold text-xs uppercase tracking-widest">
-                                    Hangar
-                                </button>
-                                <button onClick={handleRestart} className="flex-1 py-3 bg-blue-600 hover:bg-blue-500 rounded-lg text-white font-bold text-xs uppercase tracking-widest shadow-lg flex items-center justify-center gap-2">
-                                    <RotateCcw size={14} /> Re-Launch
-                                </button>
-                            </div>
+                            {snapshot.countdown > 0 ? snapshot.countdown : 'GO!'}
                         </motion.div>
-                    )}
-                </div>
+                    </div>
+                )}
+
+                {/* Main HUD (Active Race) */}
+                {(snapshot.phase === 'launch' || snapshot.phase === 'orbit') && (
+                    <div className="absolute bottom-6 inset-x-0 z-50 animate-in slide-in-from-bottom duration-700 pointer-events-auto">
+                        <TypingDashboard
+                            text={engineRef.current?.getText() || ''}
+                            cursorIndex={snapshot.player.cursorIndex}
+                            wpm={snapshot.player.wpm}
+                            fuelEfficiency={snapshot.player.fuelEfficiency}
+                            isBoosting={snapshot.player.isBoosting}
+                            // onInput={handleManualInput} 
+                            onError={() => triggerShake(8)}
+                        />
+                    </div>
+                )}
+
+                {/* Results Screen */}
+                {snapshot.phase === 'orbit' && (!snapshot.endTime || (performance.now() - snapshot.endTime > 500)) && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-md pointer-events-auto"
+                    >
+                        <div className="bg-slate-900 border border-white/10 p-12 rounded-3xl text-center max-w-2xl w-full shadow-2xl relative overflow-hidden">
+                            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500" />
+
+                            <Trophy className="w-24 h-24 text-yellow-500 mx-auto mb-6 drop-shadow-[0_0_30px_rgba(234,179,8,0.4)]" />
+
+                            <h2 className="text-5xl font-black text-white italic mb-2">MISSION COMPLETE</h2>
+                            <p className="text-slate-400 mb-12 uppercase tracking-widest font-bold">Orbital Insertion Successful</p>
+
+                            <div className="grid grid-cols-3 gap-8 mb-12">
+                                <div>
+                                    <div className="text-4xl font-black text-white mb-2">{Math.floor(snapshot.player.wpm)}</div>
+                                    <div className="text-xs text-slate-500 font-bold uppercase tracking-widest">WPM</div>
+                                </div>
+                                <div>
+                                    <div className="text-4xl font-black text-blue-400 mb-2">{snapshot.player.accuracy}%</div>
+                                    <div className="text-xs text-slate-500 font-bold uppercase tracking-widest">Accuracy</div>
+                                </div>
+                                <div>
+                                    <div className="text-4xl font-black text-purple-400 mb-2">
+                                        {((snapshot.endTime! - snapshot.startTime) / 1000).toFixed(1)}s
+                                    </div>
+                                    <div className="text-xs text-slate-500 font-bold uppercase tracking-widest">Time</div>
+                                </div>
+                            </div>
+
+                            <button
+                                onClick={handleLobby}
+                                className="group px-12 py-4 bg-white text-slate-900 hover:bg-blue-50 font-black uppercase tracking-widest rounded-xl transition-all hover:scale-105 shadow-xl flex items-center gap-3 mx-auto relative"
+                            >
+                                <RotateCcw size={20} className="group-hover:-rotate-180 transition-transform duration-500" />
+                                <span>Race Again</span>
+                                <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] text-slate-500 font-bold opacity-60 whitespace-nowrap">
+                                    PRESS <span className="border border-slate-500 px-1 rounded">ENTER</span>
+                                </div>
+                            </button>
+                        </div>
+                    </motion.div>
+                )}
             </div>
-        </div>
-    );
-}
-
-function Chatter({ difficulty }: { difficulty: string }) {
-    const [msg, setMsg] = useState("Initializing communication sub-systems...");
-
-    useEffect(() => {
-        const messages = [
-            { bot: 'Atlas', text: "Systems nominal. I am ready." },
-            { bot: 'Viper', text: "Try to keep up, human." },
-            { bot: 'Echo', text: "I learn from your mistakes." },
-            { bot: 'Nova', text: "Efficiency is key. Speed is a byproduct." },
-            { bot: 'System', text: "Propulsion systems heating up..." },
-            { bot: 'System', text: "T-minus 3 minutes to launch window." },
-            { bot: 'Viper', text: "My reaction time is 0.02ms. Yours?" },
-            { bot: 'Atlas', text: "Slow and steady wins the... oh wait, this is a race." }
-        ];
-
-        const interval = setInterval(() => {
-            const random = messages[Math.floor(Math.random() * messages.length)];
-            setMsg(`${random.bot}: "${random.text}"`);
-        }, 4000);
-
-        return () => clearInterval(interval);
-    }, [difficulty]);
-
-    return (
-        <span className="italic text-slate-400 animate-pulse">
-            {msg}
-        </span>
+        </motion.div>
     );
 }

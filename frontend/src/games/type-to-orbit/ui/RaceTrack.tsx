@@ -52,9 +52,6 @@ export function RaceTrack({ racers, player }: RaceTrackProps) {
                     opacity: Math.max(0, 1 - (progress / 40)) // Fade out by 40%
                 }}
             >
-                <div className="absolute bottom-[20vh] w-full text-center">
-                    <div className="text-white/40 text-[10vw] font-black select-none drop-shadow-lg">LAUNCH</div>
-                </div>
             </div>
 
             {/* Track Lanes */}
@@ -81,17 +78,17 @@ export function RaceTrack({ racers, player }: RaceTrackProps) {
                             transition={{ ease: 'linear', duration: 0.1 }}
                         >
                             {/* Status Tag */}
-                            <div className={`flex flex-col items-center mb-2 transition-opacity duration-300 ${racer.isPlayer ? 'opacity-100' : 'opacity-70'}`}>
-                                <span className={`text-[9px] font-bold uppercase px-2 py-0.5 rounded shadow-lg backdrop-blur-sm whitespace-nowrap mb-1 ${racer.isPlayer
-                                    ? 'bg-blue-600/90 text-white shadow-blue-500/30'
-                                    : 'bg-slate-800/80 text-slate-400'
+                            <div className={`flex flex-col items-center mb-2 transition-opacity duration-300 ${racer.isPlayer ? 'opacity-100' : 'opacity-80'}`}>
+                                <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full shadow-lg border whitespace-nowrap mb-1 ${racer.isPlayer
+                                    ? 'bg-white text-blue-700 border-blue-600'
+                                    : 'bg-white text-slate-700 border-slate-400'
                                     }`}>
                                     {racer.isPlayer ? 'YOU' : racer.name}
                                 </span>
 
                                 {/* Altitude */}
-                                <span className="text-[9px] font-mono text-white/60 bg-black/40 px-1 rounded">
-                                    {Math.floor(racer.progress)}% ALT
+                                <span className="text-[9px] font-mono font-bold text-slate-900 bg-white/90 border border-slate-300 px-1.5 rounded-full shadow-sm">
+                                    {Math.floor(racer.progress)}%
                                 </span>
                             </div>
 

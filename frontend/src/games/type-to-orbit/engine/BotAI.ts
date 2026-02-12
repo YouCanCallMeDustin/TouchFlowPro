@@ -1,8 +1,10 @@
 import { type RacerState, type BotPersonality } from './types';
 
 export class BotRacer {
-    state: RacerState;
-    private personality: BotPersonality;
+    public wpm: number;
+    public difficulty: 'EASY' | 'MEDIUM' | 'HARD' | 'INSANE' = 'MEDIUM';
+    public state: RacerState;
+    private targetProgress: number = 0; BotPersonality;
     private targetWpm: number;
     private nextActionTime: number = 0;
     private burstActive: boolean = false;

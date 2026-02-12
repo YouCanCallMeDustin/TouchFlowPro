@@ -22,7 +22,7 @@ export interface RacerState {
     // Fuel System (Accuracy/Streak)
     fuelLevel: number; // 0-100%
     fuelEfficiency: number; // Rolling accuracy average
-
+    accuracy: number; // 0-100
     // Afterburner
     afterburnerCharge: number; // 0-100%
     isBoosting: boolean;
@@ -46,6 +46,7 @@ export interface RaceSnapshot {
 
     startTime: number;
     elapsedTime: number;
+    endTime?: number;
 }
 
 export interface AnalyticsData {

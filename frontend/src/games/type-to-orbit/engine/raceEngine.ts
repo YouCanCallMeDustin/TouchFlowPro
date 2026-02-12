@@ -6,6 +6,7 @@ export class RaceEngine {
     private phase: RacePhase = 'lobby';
     private text: string = "";
     private startTime: number = 0;
+    private endTime: number = 0;
     private player: RacerState;
     private bots: BotRacer[] = [];
 
@@ -24,7 +25,7 @@ export class RaceEngine {
         this.player = {
             id: 'player', name: 'You', isPlayer: true, color: '#3b82f6',
             progress: 0, velocity: 0, altitude: 0, wpm: 0, rank: 1,
-            combo: 0, fuelLevel: 100, fuelEfficiency: 100,
+            combo: 0, fuelLevel: 100, fuelEfficiency: 100, accuracy: 100,
             afterburnerCharge: 0, isBoosting: false,
             cursorIndex: 0, typedContent: ''
         };
@@ -43,6 +44,62 @@ export class RaceEngine {
         this.bots = configs.map((c, i) => new BotRacer(
             `bot-${i}`, c.name, c.p, c.wpm * multiplier, c.color
         ));
+    }
+
+    setDifficulty(difficulty: 'EASY' | 'MEDIUM' | 'HARD' | 'INSANE') {
+        const multiplier = difficulty === 'EASY' ? 0.7 : difficulty === 'HARD' ? 1.3 : difficulty === 'INSANE' ? 1.6 : 1.0;
+        // Update bots
+        this.bots.forEach(b => {
+            // We need to re-scale their WPM based on base stats. 
+            // For now, let's just re-instantiate or update their target WPM if possible.
+            // Simplified:
+            b.wpm = b.wpm * (multiplier / (this.getMultiplierFor(b.difficulty || 'MEDIUM')));
+            // Actually, storing difficulty on bot or engine is better. 
+            // Let's just quick-patch:
+            // We will re-init bots on reset.
+        });
+        // Store difficulty for reset
+        this._difficulty = difficulty;
+    }
+
+    private _difficulty: 'EASY' | 'MEDIUM' | 'HARD' | 'INSANE' = 'MEDIUM';
+    private getMultiplierFor(d: string) {
+        return d === 'EASY' ? 0.7 : d === 'HARD' ? 1.3 : d === 'INSANE' ? 1.6 : 1.0;
+    }
+
+    resetRace() {
+        this.phase = 'lobby';
+        this.countdown = 3;
+        this.startTime = 0;
+        this.endTime = 0;
+        this.text = SPACE_QUOTES[Math.floor(Math.random() * SPACE_QUOTES.length)];
+
+        // Reset Player
+        this.player = {
+            id: 'player', name: 'You', isPlayer: true, color: '#3b82f6',
+            progress: 0, velocity: 0, altitude: 0, wpm: 0, rank: 1,
+            combo: 0, fuelLevel: 100, fuelEfficiency: 100, accuracy: 100,
+            afterburnerCharge: 0, isBoosting: false,
+            cursorIndex: 0, typedContent: ''
+        };
+        this.keystrokes = [];
+
+        // Reset Bots
+        const multiplier = this.getMultiplierFor(this._difficulty);
+        const configs: { name: string, p: BotPersonality, wpm: number, color: string }[] = [
+            { name: 'Atlas', p: 'steady', wpm: 40, color: '#ef4444' },
+            { name: 'Viper', p: 'burst', wpm: 60, color: '#22c55e' },
+            { name: 'Echo', p: 'reactive', wpm: 50, color: '#eab308' },
+            { name: 'Nova', p: 'elite', wpm: 90, color: '#a855f7' }
+        ];
+        this.bots = configs.map((c, i) => new BotRacer(
+            `bot-${i}`, c.name, c.p, c.wpm * multiplier, c.color
+        ));
+    }
+
+    startRace(text?: string) {
+        if (text) this.text = text;
+        this.start();
     }
 
     start() {
@@ -115,6 +172,13 @@ export class RaceEngine {
             this.player.wpm = Math.floor((this.player.cursorIndex / 5) / elapsedMin);
         }
 
+        // Calculate Accuracy
+        const total = this.keystrokes.length;
+        if (total > 0) {
+            const correct = this.keystrokes.filter(k => k.correct).length;
+            this.player.accuracy = Math.floor((correct / total) * 100);
+        }
+
         // Rank
         const all = [this.player, ...this.bots.map(b => b.state)];
         all.sort((a, b) => b.progress - a.progress);
@@ -129,6 +193,7 @@ export class RaceEngine {
     finishPlayer() {
         if (this.phase === 'launch') {
             this.phase = 'orbit';
+            this.endTime = performance.now();
             this.onEvent?.('orbit');
         }
     }
@@ -141,7 +206,8 @@ export class RaceEngine {
             player: this.player,
             environment: { layer: 'atmosphere', event: 'none' },
             startTime: this.startTime,
-            elapsedTime: this.startTime ? performance.now() - this.startTime : 0
+            elapsedTime: this.startTime ? (this.endTime || performance.now()) - this.startTime : 0,
+            endTime: this.endTime
         };
     }
     getText() { return this.text; }
