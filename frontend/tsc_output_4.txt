@@ -1,0 +1,6 @@
+src/games/type-to-orbit/engine/BotAI.ts(8,13): error TS6133: 'targetProgress' is declared but its value is never read.
+src/games/type-to-orbit/ui/TypeToOrbitPage.tsx(4,34): error TS2724: '"../engine/types"' has no exported member named 'RaceState'. Did you mean 'RacerState'?
+src/games/type-to-orbit/ui/TypeToOrbitPage.tsx(4,34): error TS6133: 'RaceState' is declared but its value is never read.
+src/games/type-to-orbit/ui/TypeToOrbitPage.tsx(8,35): error TS6133: 'Rocket' is declared but its value is never read.
+src/games/type-to-orbit/ui/TypeToOrbitPage.tsx(308,29): error TS2322: Type '{ text: string; cursorIndex: number; wpm: number; fuelEfficiency: number; isBoosting: boolean; onError: () => void; }' is not assignable to type 'IntrinsicAttributes & TypingDashboardProps'.
+  Property 'onError' does not exist on type 'IntrinsicAttributes & TypingDashboardProps'.

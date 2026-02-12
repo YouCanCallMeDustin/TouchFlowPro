@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { RaceEngine } from '../engine/raceEngine';
-import { type RaceSnapshot, type RaceState } from '../engine/types';
+import { type RaceSnapshot } from '../engine/types';
 import { soundManager } from '../engine/SoundManager';
 import { RaceTrack } from './RaceTrack';
 import { TypingDashboard } from './TypingDashboard';
-import { Play, RotateCcw, Trophy, Rocket, AlertTriangle, Cpu } from 'lucide-react';
+import { Play, RotateCcw, Trophy, AlertTriangle, Cpu } from 'lucide-react';
 import './type-to-orbit.css';
 
 interface TypeToOrbitPageProps {
@@ -176,12 +176,8 @@ export function BurnerBurstPage({ onBack }: TypeToOrbitPageProps) {
         }
     };
 
-    // Manual Input Handler (passed to Dashboard)
-    const handleManualInput = (char: string) => {
-        // This is primarily for the visual keyboard or if Dashboard assumes control
-        // But we have a global listener. 
-        // We can just trigger sound here if needed.
-    };
+    // Manual Input Handler (passed to Dashboard) - Unused but keeping for future ref
+    // const handleManualInput = (char: string) => { ... };
 
     if (!snapshot) return <div className="text-white">Initializing Launch Systems...</div>;
 
@@ -285,7 +281,7 @@ export function BurnerBurstPage({ onBack }: TypeToOrbitPageProps) {
 
                 {/* Countdown Screen */}
                 {snapshot.phase === 'countdown' && (
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-50">
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[60]">
                         <motion.div
                             key={snapshot.countdown}
                             initial={{ scale: 0.5, opacity: 0 }}
@@ -299,17 +295,17 @@ export function BurnerBurstPage({ onBack }: TypeToOrbitPageProps) {
                     </div>
                 )}
 
-                {/* Main HUD (Active Race) */}
-                {(snapshot.phase === 'launch' || snapshot.phase === 'orbit') && (
+                {/* Main HUD (Active Race & Countdown) */}
+                {(snapshot.phase === 'launch' || snapshot.phase === 'orbit' || snapshot.phase === 'countdown') && (
                     <div className="absolute bottom-6 inset-x-0 z-50 animate-in slide-in-from-bottom duration-700 pointer-events-auto">
+                        {/* Countdown Dimmer Overlay for text? Optional. User wants to see it clearly. */}
                         <TypingDashboard
                             text={engineRef.current?.getText() || ''}
                             cursorIndex={snapshot.player.cursorIndex}
                             wpm={snapshot.player.wpm}
                             fuelEfficiency={snapshot.player.fuelEfficiency}
                             isBoosting={snapshot.player.isBoosting}
-                            // onInput={handleManualInput} 
-                            onError={() => triggerShake(8)}
+                        // onInput={handleManualInput} 
                         />
                     </div>
                 )}

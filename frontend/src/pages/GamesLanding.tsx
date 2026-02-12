@@ -1,7 +1,7 @@
 // ── Games Landing Page ──
 
 import { motion } from 'framer-motion';
-import { Crosshair, Rocket } from 'lucide-react';
+import { Crosshair, Rocket, Sparkles } from 'lucide-react';
 
 interface GamesLandingProps {
     onNavigate: (stage: string) => void;
@@ -30,6 +30,17 @@ export function GamesLanding({ onNavigate }: GamesLandingProps) {
             gradient: 'from-blue-600 to-indigo-600',
             shadow: 'shadow-blue-500/20',
             badge: 'NEW',
+        },
+        {
+            id: 'spell_rush',
+            stage: 'games_spell_rush',
+            title: 'Spell Rush',
+            subtitle: 'Word Combat',
+            description: 'Connect letters to cast spells and defeat enemies. Use strategy and speed to survive!',
+            icon: Sparkles,
+            gradient: 'from-purple-600 to-pink-600',
+            shadow: 'shadow-purple-500/20',
+            badge: 'BETA',
         },
         // Future games go here
     ];

@@ -4,7 +4,8 @@ export class BotRacer {
     public wpm: number;
     public difficulty: 'EASY' | 'MEDIUM' | 'HARD' | 'INSANE' = 'MEDIUM';
     public state: RacerState;
-    private targetProgress: number = 0; BotPersonality;
+    public personality: BotPersonality; // Added property
+
     private targetWpm: number;
     private nextActionTime: number = 0;
     private burstActive: boolean = false;
@@ -12,6 +13,7 @@ export class BotRacer {
     constructor(id: string, name: string, personality: BotPersonality, targetWpm: number, color: string) {
         this.personality = personality;
         this.targetWpm = targetWpm;
+        this.wpm = 0; // Initialize wpm
 
         this.state = {
             id,
@@ -22,6 +24,7 @@ export class BotRacer {
             velocity: 0,
             altitude: 0,
             wpm: 0,
+            accuracy: 100, // Added accuracy
             rank: 0,
             combo: 0,
             fuelLevel: 100,

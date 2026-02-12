@@ -70,29 +70,63 @@ export function TypingDashboard({
 
                     <div
                         ref={containerRef}
-                        className="font-mono text-xl leading-relaxed z-20 relative w-full h-full overflow-y-auto pr-2 text-left scrollbar-hide whitespace-pre-wrap break-words"
+                        className="font-mono text-xl leading-relaxed z-20 relative w-full h-full overflow-y-auto pr-2 text-left scrollbar-hide whitespace-pre-wrap break-normal"
                     >
-                        {text.split('').map((char, i) => {
-                            let status = 'future';
-                            if (i < cursorIndex) status = 'done';
-                            if (i === cursorIndex) status = 'current';
+                        {/* 
+                           We map the text into words to ensure they stay together. 
+                           We track a global character index to match against `cursorIndex`.
+                        */}
+                        {(() => {
+                            const elements = [];
+                            let globalIdx = 0;
+                            // Split by spaces but preserve them as tokens to be rendered
+                            const tokens = text.split(/(\s+)/);
 
-                            const isCursor = status === 'current';
+                            for (let tIdx = 0; tIdx < tokens.length; tIdx++) {
+                                const token = tokens[tIdx];
+                                const isSpace = /^\s+$/.test(token);
 
-                            return (
-                                <span
-                                    key={i}
-                                    ref={isCursor ? cursorRef : null}
-                                    className={`transition-colors duration-100 ${isCursor ? 'inline-block' : 'inline'
-                                        } ${status === 'done' ? 'text-slate-600 brightness-75' :
-                                            status === 'current' ? 'bg-blue-500/20 text-blue-100 border-b-2 border-blue-400 rounded-sm' :
-                                                'text-slate-300'
-                                        }`}
-                                >
-                                    {char}
-                                </span>
-                            );
-                        })}
+                                // For words, we wrap in an inline-block to prevent splitting.
+                                // For spaces, we just render them (they allow breaking).
+
+                                const charElements = token.split('').map((char, localIdx) => {
+                                    const currentGlobal = globalIdx + localIdx;
+                                    let status = 'future';
+                                    if (currentGlobal < cursorIndex) status = 'done';
+                                    if (currentGlobal === cursorIndex) status = 'current';
+
+                                    const isCursor = status === 'current';
+
+                                    return (
+                                        <span
+                                            key={currentGlobal}
+                                            ref={isCursor ? cursorRef : null}
+                                            className={`transition-colors duration-100 ${isCursor ? 'inline-block' : 'inline'
+                                                } ${status === 'done' ? 'text-slate-600 brightness-75' :
+                                                    status === 'current' ? 'bg-blue-500/20 text-blue-100 border-b-2 border-blue-400 rounded-sm' :
+                                                        'text-slate-300'
+                                                }`}
+                                        >
+                                            {char}
+                                        </span>
+                                    );
+                                });
+
+                                if (isSpace) {
+                                    elements.push(
+                                        <span key={`token-${tIdx}`} className="inline">{charElements}</span>
+                                    );
+                                } else {
+                                    // Word: use inline-block to keep together
+                                    elements.push(
+                                        <span key={`token-${tIdx}`} className="inline-block">{charElements}</span>
+                                    );
+                                }
+
+                                globalIdx += token.length;
+                            }
+                            return elements;
+                        })()}
                     </div>
                 </div>
 

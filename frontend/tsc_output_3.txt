@@ -1,0 +1,23 @@
+src/games/spell-rush/components/Grid.tsx(25,11): error TS6133: 'handleTouchMove' is declared but its value is never read.
+src/games/spell-rush/components/Grid.tsx(44,29): error TS6133: 'y' is declared but its value is never read.
+src/games/spell-rush/components/Grid.tsx(45,32): error TS6133: 'x' is declared but its value is never read.
+src/games/spell-rush/state/slices/comboSlice.ts(1,10): error TS1484: 'StateCreator' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/games/spell-rush/state/slices/comboSlice.ts(2,10): error TS1484: 'GameStore' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/games/spell-rush/state/slices/interactionSlice.ts(1,10): error TS1484: 'StateCreator' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/games/spell-rush/state/store.ts(3,27): error TS1484: 'GridSlice' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/games/spell-rush/state/store.ts(4,29): error TS1484: 'CombatSlice' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/games/spell-rush/state/store.ts(5,34): error TS1484: 'InteractionSlice' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/games/spell-rush/state/store.ts(6,28): error TS1484: 'ComboSlice' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/games/type-to-orbit/engine/BotAI.ts(4,12): error TS2564: Property 'wpm' has no initializer and is not definitely assigned in the constructor.
+src/games/type-to-orbit/engine/BotAI.ts(7,13): error TS6133: 'targetProgress' is declared but its value is never read.
+src/games/type-to-orbit/engine/BotAI.ts(7,41): error TS7008: Member 'BotPersonality' implicitly has an 'any' type.
+src/games/type-to-orbit/engine/BotAI.ts(13,14): error TS2551: Property 'personality' does not exist on type 'BotRacer'. Did you mean 'BotPersonality'?
+src/games/type-to-orbit/engine/BotAI.ts(16,9): error TS2741: Property 'accuracy' is missing in type '{ id: string; name: string; isPlayer: false; color: string; progress: number; velocity: number; altitude: number; wpm: number; rank: number; combo: number; fuelLevel: number; fuelEfficiency: number; afterburnerCharge: number; isBoosting: false; cursorIndex: number; typedContent: string; }' but required in type 'RacerState'.
+src/games/type-to-orbit/engine/BotAI.ts(60,22): error TS2551: Property 'personality' does not exist on type 'BotRacer'. Did you mean 'BotPersonality'?
+src/games/type-to-orbit/ui/TypeToOrbitPage.tsx(4,34): error TS2724: '"../engine/types"' has no exported member named 'RaceState'. Did you mean 'RacerState'?
+src/games/type-to-orbit/ui/TypeToOrbitPage.tsx(4,34): error TS6133: 'RaceState' is declared but its value is never read.
+src/games/type-to-orbit/ui/TypeToOrbitPage.tsx(8,35): error TS6133: 'Rocket' is declared but its value is never read.
+src/games/type-to-orbit/ui/TypeToOrbitPage.tsx(180,11): error TS6133: 'handleManualInput' is declared but its value is never read.
+src/games/type-to-orbit/ui/TypeToOrbitPage.tsx(180,32): error TS6133: 'char' is declared but its value is never read.
+src/games/type-to-orbit/ui/TypeToOrbitPage.tsx(312,29): error TS2322: Type '{ text: string; cursorIndex: number; wpm: number; fuelEfficiency: number; isBoosting: boolean; onError: () => void; }' is not assignable to type 'IntrinsicAttributes & TypingDashboardProps'.
+  Property 'onError' does not exist on type 'IntrinsicAttributes & TypingDashboardProps'.

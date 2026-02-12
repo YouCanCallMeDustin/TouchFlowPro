@@ -31,6 +31,7 @@ import Extension from './pages/Extension'
 import { GamesLanding } from './pages/GamesLanding'
 import { AccuracyAssassinPage } from './games/accuracy-assassin/ui/AccuracyAssassinPage'
 import { BurnerBurstPage } from './games/type-to-orbit/ui/TypeToOrbitPage'
+import SpellRushGame from './games/spell-rush/Game'
 import AchievementModal from './components/AchievementModal'
 import ErrorBoundary from './components/ErrorBoundary'
 import { LandingPage } from './components/LandingPage'
@@ -655,6 +656,27 @@ function App() {
             {stage === 'games_burner_burst' && user && (
               <PageTransition key="games_burner_burst">
                 <BurnerBurstPage onBack={() => setStage('games')} />
+              </PageTransition>
+            )}
+
+            {stage === 'games_spell_rush' && user && (
+              <PageTransition key="games_spell_rush">
+                {/* SpellRush handles its own layout, but we might want a back button wrapper if it doesn't have one? 
+                     Current SpellRush implementation has strict layout. 
+                     Let's wrap it in a div with a back button overlay strictly for now or just render it. 
+                     The game supposedly has a "Game Over" screen with Retry. 
+                     But no "Exit" button in the HUD. 
+                     I should wrap it with a back button to 'games'. 
+                 */}
+                <div className="relative w-full h-full">
+                  <SpellRushGame />
+                  <button
+                    onClick={() => setStage('games')}
+                    className="fixed top-4 left-4 z-[60] px-4 py-2 bg-slate-800/80 text-white rounded-lg backdrop-blur text-xs font-bold uppercase tracking-wider hover:bg-slate-700 border border-white/10"
+                  >
+                    Exit Game
+                  </button>
+                </div>
               </PageTransition>
             )}
           </AnimatePresence>
