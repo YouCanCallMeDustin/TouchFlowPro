@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import { type RacerState } from '../engine/types';
-import { Rocket } from 'lucide-react';
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface RaceTrackProps {
     racers: RacerState[];
