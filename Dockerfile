@@ -17,6 +17,6 @@ RUN npm install
 COPY . .
 
 # Build: Prisma generate + db push + compile both workspaces
-RUN cd backend && npx prisma generate && npx prisma db push && cd .. && npm run build
+RUN cd backend && npx prisma generate && cd .. && npm run build
 
 CMD ["npm", "start", "--workspace=backend"]
