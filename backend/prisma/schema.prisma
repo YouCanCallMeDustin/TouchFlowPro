@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,88 +8,77 @@ datasource db {
 }
 
 model User {
-  id              String   @id @default(uuid())
-  email           String   @unique
-  passwordHash    String?
-  assignedLevel   String
-  unlockedLevels  String   // Comma separated list of levels
-  currentLessonId String?
-  totalPracticeTime Int    @default(0) // in seconds
-  createdAt       DateTime @default(now())
-  
-  // Profile fields
-  name            String?
-  city            String?
-  state           String?
-  age             Int?
-  photoUrl        String?
-  
-  // Relations
-  drillResults    DrillResult[]
-  spacedItems     SpacedItem[]
-  achievements    Achievement[]
-  dailyStreak     DailyStreak?
-  customDrills    CustomDrill[]
-  goals           UserGoal[]
-  preferences     UserPreferences?
-  progress        UserProgress?
-
-  // Subscription fields
-  stripeCustomerId       String?   @unique
-  subscriptionStatus     String    @default("free") // "free", "pro", "cancelled"
-  subscriptionEndDate    DateTime?
-  trainingPlans          TrainingPlan[]
-  orgMemberships         OrgMember[]
+  id                  String           @id @default(uuid())
+  email               String           @unique
+  passwordHash        String?
+  assignedLevel       String
+  unlockedLevels      String
+  currentLessonId     String?
+  totalPracticeTime   Int              @default(0)
+  createdAt           DateTime         @default(now())
+  name                String?
+  city                String?
+  state               String?
+  age                 Int?
+  photoUrl            String?
+  stripeCustomerId    String?          @unique
+  subscriptionStatus  String           @default("free")
+  subscriptionEndDate DateTime?
+  achievements        Achievement[]
+  customDrills        CustomDrill[]
+  dailyStreak         DailyStreak?
+  drillResults        DrillResult[]
+  orgMemberships      OrgMember[]
+  spacedItems         SpacedItem[]
+  trainingPlans       TrainingPlan[]
+  goals               UserGoal[]
+  preferences         UserPreferences?
+  progress            UserProgress?
 }
 
 model DrillResult {
-  id         String   @id @default(uuid())
-  user       User     @relation(fields: [userId], references: [id])
-  userId     String
-  drillId    String
-  grossWPM   Float
-  netWPM     Float
-  accuracy   Float
-  durationMs Int
-  timestamp  DateTime @default(now())
-  fatigueScore Int?     // 0-100
-  fatigueFlags String?  // JSON or comma-separated reasons
-  mode         String   @default("drill") // "lesson", "practice", "bible", "code", "custom"
-  idempotencyKey String? @unique
+  id             String   @id @default(uuid())
+  userId         String
+  drillId        String
+  grossWPM       Float
+  netWPM         Float
+  accuracy       Float
+  durationMs     Int
+  timestamp      DateTime @default(now())
+  fatigueScore   Int?
+  fatigueFlags   String?
+  mode           String   @default("drill")
+  idempotencyKey String?  @unique
+  user           User     @relation(fields: [userId], references: [id])
 
   @@index([userId, timestamp])
   @@index([mode, timestamp])
 }
 
-// ... (Rest of file content implicit, appending new models at end)
-
 model Organization {
-  id        String      @id @default(uuid())
-  name      String
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  planTier  String      @default("FREE") // FREE, PRO, ENTERPRISE
-  seatLimit Int         @default(5)
-  
-  // Stripe Fields
-  stripeCustomerId      String?
-  stripeSubscriptionId  String?
-  stripePriceId         String?
-  planStatus            String      @default("ACTIVE") // ACTIVE, PAST_DUE, CANCELED, INCOMPLETE
-  currentPeriodEnd      DateTime?
-
-  members   OrgMember[]
-  invites   OrgInvite[]
+  id                   String      @id @default(uuid())
+  name                 String
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+  planTier             String      @default("FREE")
+  seatLimit            Int         @default(5)
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  stripePriceId        String?
+  planStatus           String      @default("ACTIVE")
+  currentPeriodEnd     DateTime?
+  invites              OrgInvite[]
+  members              OrgMember[]
 }
 
 model OrgMember {
   id        String       @id @default(uuid())
   orgId     String
-  org       Organization @relation(fields: [orgId], references: [id])
   userId    String
-  user      User         @relation(fields: [userId], references: [id])
-  role      String       // "OWNER", "ADMIN", "MANAGER", "MEMBER"
+  role      String
   createdAt DateTime     @default(now())
+  user      User         @relation(fields: [userId], references: [id])
+  org       Organization @relation(fields: [orgId], references: [id])
 
   @@unique([orgId, userId])
   @@index([orgId])
@@ -102,94 +88,92 @@ model OrgMember {
 model OrgInvite {
   id         String       @id @default(uuid())
   orgId      String
-  org        Organization @relation(fields: [orgId], references: [id])
   email      String
   role       String
   token      String       @unique
   expiresAt  DateTime
   createdAt  DateTime     @default(now())
   acceptedAt DateTime?
-  
+  org        Organization @relation(fields: [orgId], references: [id])
+
   @@index([orgId])
 }
 
 model SpacedItem {
   id         String   @id @default(uuid())
-  user       User     @relation(fields: [userId], references: [id])
   userId     String
   drillId    String
   interval   Int
   repetition Int
   efactor    Float
   nextReview DateTime
+  user       User     @relation(fields: [userId], references: [id])
 }
 
 model Achievement {
-  id           String   @id @default(uuid())
-  userId       String
-  user         User     @relation(fields: [userId], references: [id])
-  badgeType    String   // "first_drill", "week_streak", "100wpm_club", etc.
-  earnedAt     DateTime @default(now())
-  metadata     String?  // JSON string for additional data
-  
+  id        String   @id @default(uuid())
+  userId    String
+  badgeType String
+  earnedAt  DateTime @default(now())
+  metadata  String?
+  user      User     @relation(fields: [userId], references: [id])
+
   @@unique([userId, badgeType])
 }
 
 model DailyStreak {
-  id              String   @id @default(uuid())
-  userId          String   @unique
-  user            User     @relation(fields: [userId], references: [id])
-  currentStreak   Int      @default(0)
-  longestStreak   Int      @default(0)
-  lastPracticeDate DateTime?
-  streakProtections Int    @default(0)
+  id                String    @id @default(uuid())
+  userId            String    @unique
+  currentStreak     Int       @default(0)
+  longestStreak     Int       @default(0)
+  lastPracticeDate  DateTime?
+  streakProtections Int       @default(0)
+  user              User      @relation(fields: [userId], references: [id])
 }
 
 model CustomDrill {
-  id          String   @id @default(uuid())
-  userId      String
-  user        User     @relation(fields: [userId], references: [id])
-  title       String
-  content     String
-  difficulty  String
-  createdAt   DateTime @default(now())
-  timesUsed   Int      @default(0)
+  id         String   @id @default(uuid())
+  userId     String
+  title      String
+  content    String
+  difficulty String
+  createdAt  DateTime @default(now())
+  timesUsed  Int      @default(0)
+  user       User     @relation(fields: [userId], references: [id])
 }
 
 model UserGoal {
-  id           String   @id @default(uuid())
+  id           String    @id @default(uuid())
   userId       String
-  user         User     @relation(fields: [userId], references: [id])
-  goalType     String   // "wpm_target", "accuracy_target", "daily_practice"
+  goalType     String
   targetValue  Float
-  currentValue Float    @default(0)
+  currentValue Float     @default(0)
   deadline     DateTime?
-  completed    Boolean  @default(false)
-  createdAt    DateTime @default(now())
+  completed    Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  user         User      @relation(fields: [userId], references: [id])
 }
 
 model UserPreferences {
   id                String  @id @default(uuid())
   userId            String  @unique
-  user              User    @relation(fields: [userId], references: [id])
   theme             String  @default("default")
   soundEnabled      Boolean @default(true)
   keyboardLayout    String  @default("qwerty")
   practiceReminders Boolean @default(false)
-  reminderTime      String? // "09:00"
+  reminderTime      String?
+  user              User    @relation(fields: [userId], references: [id])
 }
-
-// ===== PHASE 0: Enhanced Tracking Tables =====
 
 model KeyStats {
   id            String   @id @default(uuid())
   userId        String
-  key           String   // The character (e.g., "a", "B", "1")
+  key           String
   attempts      Int      @default(0)
   correct       Int      @default(0)
-  avgSpeed      Float    @default(0) // Average ms per keystroke
+  avgSpeed      Float    @default(0)
   lastPracticed DateTime @updatedAt
-  
+
   @@unique([userId, key])
   @@index([userId])
 }
@@ -197,12 +181,12 @@ model KeyStats {
 model SequenceStats {
   id            String   @id @default(uuid())
   userId        String
-  sequence      String   // The bigram or trigram (e.g., "th", "ion")
-  type          String   // "bigram" or "trigram"
+  sequence      String
+  type          String
   attempts      Int      @default(0)
-  avgSpeed      Float    @default(0) // Average ms between keys in sequence
+  avgSpeed      Float    @default(0)
   lastPracticed DateTime @updatedAt
-  
+
   @@unique([userId, sequence])
   @@index([userId, type])
 }
@@ -210,95 +194,93 @@ model SequenceStats {
 model SessionDetails {
   id          String   @id @default(uuid())
   sessionId   String
-  keystrokes  String   // JSON array of EnhancedKeystrokeEvent
-  liveMetrics String   // JSON LiveMetrics snapshots
+  keystrokes  String
+  liveMetrics String
   createdAt   DateTime @default(now())
-  
+
   @@index([sessionId])
 }
 
 model UserProgress {
-  id               String    @id @default(uuid())
-  userId           String    @unique
-  user             User      @relation(fields: [userId], references: [id])
-  level            Int       @default(1)
-  xp               Int       @default(0)
-  totalPracticeTime Int      @default(0) // seconds
-  dailyStreak      Int       @default(0)
-  lastPracticeDate DateTime?
-  
-  // Adaptive learning fields
-  averageWPM       Float     @default(0)
-  averageAccuracy  Float     @default(100)
-  totalDrills      Int       @default(0)
-  
+  id                String    @id @default(uuid())
+  userId            String    @unique
+  level             Int       @default(1)
+  xp                Int       @default(0)
+  totalPracticeTime Int       @default(0)
+  dailyStreak       Int       @default(0)
+  lastPracticeDate  DateTime?
+  averageWPM        Float     @default(0)
+  averageAccuracy   Float     @default(100)
+  totalDrills       Int       @default(0)
+  user              User      @relation(fields: [userId], references: [id])
+
   @@index([userId])
 }
 
 model Recommendation {
-  id          String   @id @default(uuid())
-  userId      String
-  type        String   // 'drill' | 'lesson' | 'custom'
-  title       String
-  reason      String
-  priority    Int
-  content     String?
-  dismissed   Boolean  @default(false)
-  completed   Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  
+  id        String   @id @default(uuid())
+  userId    String
+  type      String
+  title     String
+  reason    String
+  priority  Int
+  content   String?
+  dismissed Boolean  @default(false)
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+
   @@index([userId, dismissed, completed])
 }
 
 model DailyChallenge {
   id             String   @id @default(uuid())
   date           DateTime @unique
-  type           String   // "speed", "accuracy", "endurance"
+  type           String
   content        String
   targetWPM      Int?
   targetAccuracy Int?
-  targetTime     Int?     // seconds
+  targetTime     Int?
   xpReward       Int      @default(100)
 }
 
 model Certificate {
   id             String   @id @default(uuid())
   userId         String
-  type           String   // "60wpm", "80wpm", "100wpm"
+  type           String
   wpm            Int
   accuracy       Int
   testDate       DateTime @default(now())
   certificateUrl String?
-  
+
   @@index([userId])
 }
 
 model TrainingPlan {
-  id        String   @id @default(uuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  track     String   // "MEDICAL", "LEGAL", "OPS", "CODE", "CUSTOM"
-  goalWpm   Int
-  goalAccuracy Int
-  minutesPerDay Int  @default(20)
-  startDate DateTime @default(now())
-  endDate   DateTime?
-  status    String   @default("ACTIVE") // "ACTIVE", "COMPLETED", "ARCHIVED"
-  createdAt DateTime @default(now())
-  days      TrainingDay[]
-  
+  id            String        @id @default(uuid())
+  userId        String
+  track         String
+  goalWpm       Int
+  goalAccuracy  Int
+  minutesPerDay Int           @default(20)
+  startDate     DateTime      @default(now())
+  endDate       DateTime?
+  status        String        @default("ACTIVE")
+  createdAt     DateTime      @default(now())
+  days          TrainingDay[]
+  user          User          @relation(fields: [userId], references: [id])
+
   @@index([userId, status])
 }
 
 model TrainingDay {
-  id        String   @id @default(uuid())
-  planId    String
-  plan      TrainingPlan @relation(fields: [planId], references: [id])
-  date      DateTime
-  itemsJson String   // JSON array of PlanItems
-  status    String   @default("PLANNED") // "PLANNED", "COMPLETED", "SKIPPED"
+  id          String       @id @default(uuid())
+  planId      String
+  date        DateTime
+  itemsJson   String
+  status      String       @default("PLANNED")
   completedAt DateTime?
-  createdAt DateTime @default(now())
-  
+  createdAt   DateTime     @default(now())
+  plan        TrainingPlan @relation(fields: [planId], references: [id])
+
   @@index([planId, date])
 }
