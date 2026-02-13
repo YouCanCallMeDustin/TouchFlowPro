@@ -41,6 +41,8 @@ model User {
   stripeCustomerId       String?   @unique
   subscriptionStatus     String    @default("free") // "free", "pro", "cancelled"
   subscriptionEndDate    DateTime?
+  trainingPlans          TrainingPlan[]
+  orgMemberships         OrgMember[]
 }
 
 model DrillResult {
@@ -53,6 +55,62 @@ model DrillResult {
   accuracy   Float
   durationMs Int
   timestamp  DateTime @default(now())
+  fatigueScore Int?     // 0-100
+  fatigueFlags String?  // JSON or comma-separated reasons
+  mode         String   @default("drill") // "lesson", "practice", "bible", "code", "custom"
+  idempotencyKey String? @unique
+
+  @@index([userId, timestamp])
+  @@index([mode, timestamp])
+}
+
+// ... (Rest of file content implicit, appending new models at end)
+
+model Organization {
+  id        String      @id @default(uuid())
+  name      String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  planTier  String      @default("FREE") // FREE, PRO, ENTERPRISE
+  seatLimit Int         @default(5)
+  
+  // Stripe Fields
+  stripeCustomerId      String?
+  stripeSubscriptionId  String?
+  stripePriceId         String?
+  planStatus            String      @default("ACTIVE") // ACTIVE, PAST_DUE, CANCELED, INCOMPLETE
+  currentPeriodEnd      DateTime?
+
+  members   OrgMember[]
+  invites   OrgInvite[]
+}
+
+model OrgMember {
+  id        String       @id @default(uuid())
+  orgId     String
+  org       Organization @relation(fields: [orgId], references: [id])
+  userId    String
+  user      User         @relation(fields: [userId], references: [id])
+  role      String       // "OWNER", "ADMIN", "MANAGER", "MEMBER"
+  createdAt DateTime     @default(now())
+
+  @@unique([orgId, userId])
+  @@index([orgId])
+  @@index([userId])
+}
+
+model OrgInvite {
+  id         String       @id @default(uuid())
+  orgId      String
+  org        Organization @relation(fields: [orgId], references: [id])
+  email      String
+  role       String
+  token      String       @unique
+  expiresAt  DateTime
+  createdAt  DateTime     @default(now())
+  acceptedAt DateTime?
+  
+  @@index([orgId])
 }
 
 model SpacedItem {
@@ -213,4 +271,34 @@ model Certificate {
   certificateUrl String?
   
   @@index([userId])
+}
+
+model TrainingPlan {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  track     String   // "MEDICAL", "LEGAL", "OPS", "CODE", "CUSTOM"
+  goalWpm   Int
+  goalAccuracy Int
+  minutesPerDay Int  @default(20)
+  startDate DateTime @default(now())
+  endDate   DateTime?
+  status    String   @default("ACTIVE") // "ACTIVE", "COMPLETED", "ARCHIVED"
+  createdAt DateTime @default(now())
+  days      TrainingDay[]
+  
+  @@index([userId, status])
+}
+
+model TrainingDay {
+  id        String   @id @default(uuid())
+  planId    String
+  plan      TrainingPlan @relation(fields: [planId], references: [id])
+  date      DateTime
+  itemsJson String   // JSON array of PlanItems
+  status    String   @default("PLANNED") // "PLANNED", "COMPLETED", "SKIPPED"
+  completedAt DateTime?
+  createdAt DateTime @default(now())
+  
+  @@index([planId, date])
 }

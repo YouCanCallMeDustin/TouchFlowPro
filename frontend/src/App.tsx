@@ -41,6 +41,7 @@ import type { TypingMetrics, KeystrokeEvent } from '@shared/types'
 import { drillLibrary } from '@shared/drillLibrary'
 import type { UserProgress, Lesson } from '@shared/curriculum'
 import type { DifficultyLevel, PlacementResult } from '@shared/placement'
+import Orgs from './pages/Orgs'
 import {
   LayoutDashboard,
   BookOpen,
@@ -51,12 +52,13 @@ import {
   Compass,
   Shield,
   Code,
-  Gamepad2
+  Gamepad2,
+  Users
 } from 'lucide-react'
 
-type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension' | 'games' | 'games_accuracy_assassin' | 'games_burner_burst' | 'games_spell_rush'
-
 import { apiFetch } from './utils/api';
+
+type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension' | 'games' | 'games_accuracy_assassin' | 'games_burner_burst' | 'games_spell_rush' | 'orgs'
 
 function App() {
   const { user, loading, logout } = useAuth()
@@ -71,8 +73,6 @@ function App() {
   const [selectedLessonForDrills, setSelectedLessonForDrills] = useState<Lesson | null>(null)
   const [isFetchingProgress, setIsFetchingProgress] = useState(false)
   const [showAchievement, setShowAchievement] = useState<{ type?: string, isLevel?: boolean, level?: number } | null>(null)
-
-
 
   useEffect(() => {
     // Force permanent dark mode (nighttime mode)
@@ -174,7 +174,6 @@ function App() {
     window.addEventListener('navigate-to-pricing' as any, handleNav);
     return () => window.removeEventListener('navigate-to-pricing' as any, handleNav);
   }, []);
-
 
   const updateKeystrokeStats = async (userId: string, keystrokes: KeystrokeEvent[], text: string) => {
     if (!keystrokes || keystrokes.length === 0) return;
@@ -376,6 +375,7 @@ function App() {
                   { id: 'curriculum' as Stage, label: 'Learn', icon: BookOpen },
                   { id: 'practice' as Stage, label: 'Practice', icon: Zap },
                   { id: 'games' as Stage, label: 'Games', icon: Gamepad2 },
+                  { id: 'orgs' as Stage, label: 'Teams', icon: Users },
                   { id: 'code_practice' as Stage, label: 'Code', icon: Compass },
                   { id: 'analytics' as Stage, label: 'Stats', icon: BarChart3 },
                   { id: 'achievements' as Stage, label: 'Awards', icon: Award },
@@ -425,9 +425,6 @@ function App() {
                 <Signup onSwitchToLogin={() => setStage('auth_login')} />
               </PageTransition>
             )}
-
-
-
 
             {stage === 'dashboard' && user && (
               <PageTransition key="dashboard">
@@ -598,7 +595,6 @@ function App() {
             )}
 
 
-
             {stage === 'leaderboard' && user && (
               <PageTransition key="leaderboard">
                 <Leaderboard userId={user.id} />
@@ -638,6 +634,12 @@ function App() {
             {stage === 'extension' && (
               <PageTransition key="extension">
                 <Extension />
+              </PageTransition>
+            )}
+
+            {stage === 'orgs' && user && (
+              <PageTransition key="orgs">
+                <Orgs userId={user.id} />
               </PageTransition>
             )}
 

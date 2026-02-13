@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import { requestLogger } from './middleware/requestLogger';
+import { errorHandler } from './middleware/errorHandler';
 
 import authRoutes from './routes/auth';
 import assessmentRoutes from './routes/assessments';
@@ -53,6 +55,8 @@ app.use(helmet({
     crossOriginResourcePolicy: false,
 }));
 
+app.use(requestLogger);
+
 // Webhook route must be registered before express.json() to handle raw body
 app.use('/api/webhooks', webhooksRoutes);
 
@@ -90,8 +94,17 @@ app.use('/api/sessions', sessionsRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
 // Phase 4+ routes
 import subscriptionsRoutes from './routes/subscriptions';
+import plansRoutes from './routes/plans';
+import orgsRoutes from './routes/orgs';
+import orgInvitesRoutes from './routes/orgInvites';
 
 app.use('/api/subscriptions', subscriptionsRoutes);
+app.use('/api/plans', plansRoutes);
+app.use('/api/orgs', orgsRoutes);
+app.use('/api/org-invites', orgInvitesRoutes);
+
+import billingRoutes from './routes/billing';
+app.use('/api/billing', billingRoutes);
 
 
 
@@ -106,5 +119,7 @@ app.use(express.static(frontendDist));
 app.use((req, res) => {
     res.sendFile(path.join(frontendDist, 'index.html'));
 });
+
+app.use(errorHandler);
 
 export default app;

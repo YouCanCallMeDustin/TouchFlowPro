@@ -27,11 +27,23 @@ export const RecommendationsWidget: React.FC<Props> = ({ userId, onStartPractice
 
     const fetchRecommendations = async () => {
         try {
-            const response = await apiFetch(`/api/recommendations/${userId}`);
-            const data = await response.json();
-            setRecommendations(data.slice(0, 3)); // Show top 3
+            const data = await apiFetch<any>('/api/recommendations/next');
+            if (data.next) {
+                const rec: Recommendation = {
+                    id: data.next.drillId,
+                    type: data.next.mode === 'break' ? 'custom' : 'drill',
+                    title: data.next.title || (data.next.mode === 'break' ? 'Take a Break' : 'Recommended Drill'),
+                    reason: data.next.reasons?.[0] || 'Recommended for you',
+                    priority: 1,
+                    content: data.next.content
+                };
+                setRecommendations([rec]);
+            } else {
+                setRecommendations([]);
+            }
         } catch (error) {
             console.error('Failed to fetch recommendations:', error);
+            setRecommendations([]);
         } finally {
             setLoading(false);
         }

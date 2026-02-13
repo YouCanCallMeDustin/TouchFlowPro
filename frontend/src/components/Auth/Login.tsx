@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { apiFetch } from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
 import { Mail, Lock, Shield, ArrowRight, Zap } from 'lucide-react';
+import { Button } from '../ui/Button';
+import { Input } from '../ui/Input';
+import { Card } from '../ui/Card';
 
 interface LoginProps {
     onSwitchToSignup: () => void;
@@ -46,7 +49,7 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup }) => {
             <div className="absolute top-1/4 -left-20 w-80 h-80 bg-primary/10 rounded-full blur-[120px] pointer-events-none" />
             <div className="absolute bottom-1/4 -right-20 w-80 h-80 bg-secondary/10 rounded-full blur-[120px] pointer-events-none" />
 
-            <div className="card max-w-lg w-full p-10 sm:p-16 text-center animate-in fade-in slide-in-from-bottom-8 duration-1000">
+            <Card glass className="max-w-lg w-full p-10 sm:p-16 text-center animate-in fade-in slide-in-from-bottom-8 duration-1000">
                 <div className="flex justify-center mb-12">
                     <div className="relative group">
                         <div className="absolute inset-0 bg-primary blur-2xl opacity-20 group-hover:opacity-40 transition-opacity" />
@@ -66,59 +69,47 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup }) => {
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-8 text-left">
-                    <div className="space-y-3">
-                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.4em] ml-1">Professional ID</label>
-                        <div className="relative group">
-                            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-text-muted/40 group-focus-within:text-primary transition-colors">
-                                <Mail size={18} />
-                            </div>
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="USER@TOUCHFLOW.PRO"
-                                className="w-full pl-14 pr-6 py-5 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all font-black text-xs uppercase tracking-widest text-text-main placeholder:text-text-muted/20"
-                                required
-                            />
-                        </div>
-                    </div>
+                    <Input
+                        label="Professional ID"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="USER@TOUCHFLOW.PRO"
+                        required
+                        startIcon={<Mail size={18} />}
+                    />
 
-                    <div className="space-y-3">
-                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.4em] ml-1">Security Key</label>
-                        <div className="relative group">
-                            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-text-muted/40 group-focus-within:text-primary transition-colors">
-                                <Lock size={18} />
-                            </div>
-                            <input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="••••••••"
-                                className="w-full pl-14 pr-6 py-5 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all font-black text-xs uppercase tracking-widest text-text-main placeholder:text-text-muted/20"
-                                required
-                            />
-                        </div>
-                    </div>
+                    <Input
+                        label="Security Key"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="••••••••"
+                        required
+                        startIcon={<Lock size={18} />}
+                    />
 
                     {error && (
-                        <div className="bg-rose-500/10 text-rose-500 p-5 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-rose-500/20 animate-in shake duration-500 flex items-center gap-3">
+                        <div className="bg-[var(--danger)]/10 text-[var(--danger)] p-5 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-[var(--danger)]/20 animate-in shake duration-500 flex items-center gap-3">
                             <Shield size={16} />
                             {error}
                         </div>
                     )}
 
-                    <button
+                    <Button
                         type="submit"
-                        disabled={loading}
-                        className="w-full bg-primary text-white py-6 rounded-2xl font-black text-xs uppercase tracking-[0.4em] shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-4 group"
+                        isLoading={loading}
+                        className="w-full py-6 text-xs uppercase tracking-[0.4em] font-black"
+                        size="lg"
                     >
-                        {loading ? 'Processing...' : 'Authorize Profile'}
-                        <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                    </button>
+                        {!loading && 'Authorize Profile'}
+                        {!loading && <ArrowRight size={18} className="ml-4 group-hover:translate-x-1 transition-transform" />}
+                    </Button>
                 </form>
 
-                <div className="mt-12 pt-10 border-t border-white/5 flex flex-col gap-6">
-                    <button
+                <div className="mt-12 pt-10 border-t border-[var(--border)] flex flex-col gap-6">
+                    <Button
+                        variant="ghost"
                         onClick={() => login('dev-bypass-token', {
                             id: 'admin',
                             email: 'admin@touchflow.pro',
@@ -127,22 +118,22 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup }) => {
                             currentLessonId: 'b1',
                             subscriptionStatus: 'pro'
                         })}
-                        className="w-full bg-white/5 text-text-muted py-4 rounded-xl font-black text-[10px] uppercase tracking-[0.3em] border border-white/5 hover:bg-white/10 hover:text-text-main transition-all flex items-center justify-center gap-3"
+                        className="w-full py-4 text-[10px] uppercase tracking-[0.3em] border border-[var(--border)]"
                     >
-                        <Zap size={14} className="text-primary" />
+                        <Zap size={14} className="text-primary mr-3" />
                         Admin Access
-                    </button>
+                    </Button>
 
                     <div className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted/40">
                         New Professional? <span
                             onClick={onSwitchToSignup}
-                            className="text-primary cursor-pointer hover:text-primary/80 transition-colors ml-2 border-b border-primary/20"
+                            className="text-primary cursor-pointer hover:text-primary/80 transition-colors ml-2"
                         >
                             Create Profile
                         </span>
                     </div>
                 </div>
-            </div>
+            </Card>
         </div>
     );
 };

@@ -6,6 +6,7 @@ import prisma from '../lib/db';
 import { drillLibrary } from '@shared/drillLibrary';
 import { v4 as uuidv4 } from 'uuid';
 import { updateUserStats } from '../utils/userStats';
+import { assessmentSchema, completeLessonSchema } from '../lib/validation';
 
 const router = Router();
 
@@ -57,41 +58,45 @@ async function getUserProgress(userId: string): Promise<UserProgress | null> {
 }
 
 // POST /api/progress/assessment - Complete assessment and get placement
-router.post('/assessment', async (req, res) => {
-    const { userId, metrics } = req.body as { userId: string; metrics: TypingMetrics };
+router.post('/assessment', async (req, res, next) => {
+    try {
+        const { userId, metrics } = assessmentSchema.parse(req.body);
 
-    const placement = PlacementEngine.calculatePlacement(metrics);
+        const placement = PlacementEngine.calculatePlacement(metrics);
 
-    let user = await prisma.user.findUnique({ where: { id: userId } });
+        let user = await prisma.user.findUnique({ where: { id: userId } });
 
-    if (user) {
-        user = await prisma.user.update({
-            where: { id: userId },
-            data: {
-                assignedLevel: placement.level,
-                unlockedLevels: placement.level,
-                currentLessonId: placement.recommendedStartLesson
-            }
+        if (user) {
+            user = await prisma.user.update({
+                where: { id: userId },
+                data: {
+                    assignedLevel: placement.level,
+                    unlockedLevels: placement.level,
+                    currentLessonId: placement.recommendedStartLesson
+                }
+            });
+        } else {
+            user = await prisma.user.create({
+                data: {
+                    id: userId,
+                    email: `temp_${userId}@example.com`,
+                    assignedLevel: placement.level,
+                    unlockedLevels: placement.level,
+                    currentLessonId: placement.recommendedStartLesson,
+                    createdAt: new Date()
+                }
+            });
+        }
+
+        const progress = await getUserProgress(userId);
+
+        res.json({
+            placement,
+            progress
         });
-    } else {
-        user = await prisma.user.create({
-            data: {
-                id: userId,
-                email: `temp_${userId}@example.com`,
-                assignedLevel: placement.level,
-                unlockedLevels: placement.level,
-                currentLessonId: placement.recommendedStartLesson,
-                createdAt: new Date()
-            }
-        });
+    } catch (error) {
+        next(error);
     }
-
-    const progress = await getUserProgress(userId);
-
-    res.json({
-        placement,
-        progress
-    });
 });
 
 // GET /api/progress/:userId - Get user progress
@@ -107,88 +112,92 @@ router.get('/:userId', async (req, res) => {
 });
 
 // POST /api/progress/:userId/lesson/:lessonId/complete - Complete a lesson
-router.post('/:userId/lesson/:lessonId/complete', async (req, res) => {
-    const { userId, lessonId } = req.params;
-    const { metrics, lesson } = req.body as { metrics: TypingMetrics; lesson: any };
+router.post('/:userId/lesson/:lessonId/complete', async (req, res, next) => {
+    try {
+        const { userId, lessonId } = req.params;
+        const { metrics, lesson } = completeLessonSchema.parse(req.body);
 
-    // 1. Ensure user exists
-    const user = await prisma.user.findUnique({ where: { id: userId } });
-    if (!user) return res.status(404).json({ error: 'User not found' });
+        // 1. Ensure user exists
+        const user = await prisma.user.findUnique({ where: { id: userId } });
+        if (!user) return res.status(404).json({ error: 'User not found' });
 
-    // 2. Save Result
-    await prisma.drillResult.create({
-        data: {
-            userId,
-            drillId: lessonId,
-            grossWPM: metrics.grossWPM,
-            netWPM: metrics.netWPM,
-            accuracy: metrics.accuracy,
-            durationMs: metrics.durationMs || 0,
-            timestamp: new Date()
-        }
-    });
+        // 2. Save Result
+        await prisma.drillResult.create({
+            data: {
+                userId,
+                drillId: lessonId,
+                grossWPM: metrics.grossWPM,
+                netWPM: metrics.netWPM,
+                accuracy: metrics.accuracy,
+                durationMs: metrics.durationMs || 0,
+                timestamp: new Date()
+            }
+        });
 
-    // 2b. Sync aggregate stats for dashboard/recommendations
-    await updateUserStats(userId, metrics);
+        // 2b. Sync aggregate stats for dashboard/recommendations
+        await updateUserStats(userId, metrics);
 
-    // 3. Check Mastery
-    const passed = Curriculum.checkMastery(lesson, metrics);
+        // 3. Check Mastery
+        const passed = Curriculum.checkMastery(lesson, metrics);
 
-    // 4. Update User state
-    const progress = await getUserProgress(userId);
-    if (!progress) return res.status(500).json({ error: 'Failed to rebuild progress' });
+        // 4. Update User state
+        const progress = await getUserProgress(userId);
+        if (!progress) return res.status(500).json({ error: 'Failed to rebuild progress' });
 
-    const levelUpCheck = PlacementEngine.canLevelUp(
-        progress.assignedLevel,
-        progress.completedLessons,
-        progress.lessonScores
-    );
+        const levelUpCheck = PlacementEngine.canLevelUp(
+            progress.assignedLevel,
+            progress.completedLessons,
+            progress.lessonScores
+        );
 
-    let leveledUp = false;
-    let newLevel: DifficultyLevel | null = null;
-    let levelUpMessage = "";
+        let leveledUp = false;
+        let newLevel: DifficultyLevel | null = null;
+        let levelUpMessage = "";
 
-    if (levelUpCheck.canLevelUp) {
-        newLevel = PlacementEngine.getNextLevel(progress.assignedLevel);
-        if (newLevel && !progress.unlockedLevels.includes(newLevel)) {
-            const newUnlocked = [...progress.unlockedLevels, newLevel];
-            const levelPrefixes: Record<string, string> = { 'Beginner': 'b', 'Intermediate': 'i', 'Professional': 'p', 'Specialist': 'm' };
-            const nextLessonId = `${levelPrefixes[newLevel] || 'm'}1`;
+        if (levelUpCheck.canLevelUp) {
+            newLevel = PlacementEngine.getNextLevel(progress.assignedLevel);
+            if (newLevel && !progress.unlockedLevels.includes(newLevel)) {
+                const newUnlocked = [...progress.unlockedLevels, newLevel];
+                const levelPrefixes: Record<string, string> = { 'Beginner': 'b', 'Intermediate': 'i', 'Professional': 'p', 'Specialist': 'm' };
+                const nextLessonId = `${levelPrefixes[newLevel] || 'm'}1`;
 
-            await prisma.user.update({
-                where: { id: userId },
-                data: {
-                    assignedLevel: newLevel,
-                    unlockedLevels: newUnlocked.join(','),
-                    currentLessonId: nextLessonId
+                await prisma.user.update({
+                    where: { id: userId },
+                    data: {
+                        assignedLevel: newLevel,
+                        unlockedLevels: newUnlocked.join(','),
+                        currentLessonId: nextLessonId
+                    }
+                });
+
+                leveledUp = true;
+                levelUpMessage = levelUpCheck.reason;
+
+                if (progress) {
+                    progress.assignedLevel = newLevel;
+                    progress.unlockedLevels = newUnlocked;
+                    progress.currentLesson = nextLessonId;
                 }
-            });
-
-            leveledUp = true;
-            levelUpMessage = levelUpCheck.reason;
-
-            if (progress) {
-                progress.assignedLevel = newLevel;
-                progress.unlockedLevels = newUnlocked;
-                progress.currentLesson = nextLessonId;
             }
         }
+
+        const result: LessonResult = {
+            lessonId,
+            passed,
+            metrics,
+            timestamp: new Date()
+        };
+
+        res.json({
+            result,
+            progress,
+            leveledUp,
+            newLevel,
+            levelUpMessage
+        });
+    } catch (error) {
+        next(error);
     }
-
-    const result: LessonResult = {
-        lessonId,
-        passed,
-        metrics,
-        timestamp: new Date()
-    };
-
-    res.json({
-        result,
-        progress,
-        leveledUp,
-        newLevel,
-        levelUpMessage
-    });
 });
 
 // GET /api/progress/:userId/curriculum/:level

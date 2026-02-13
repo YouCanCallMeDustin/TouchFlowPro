@@ -35,18 +35,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 }
 
                 try {
-                    const response = await apiFetch('/api/auth/me', {
+                    const userData = await apiFetch<User>('/api/auth/me', {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }
                     });
-
-                    if (response.ok) {
-                        const userData = await response.json();
-                        setUser(userData);
-                    } else {
-                        logout();
-                    }
+                    setUser(userData);
                 } catch (error) {
                     console.error('Verify token error:', error);
                     logout();

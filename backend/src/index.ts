@@ -1,5 +1,8 @@
 import 'dotenv/config';
 import app from './app';
+import recommendationsRouter from './routes/recommendations';
+
+app.use('/api/recommendations', recommendationsRouter);
 
 const PORT = Number(process.env.PORT) || 4000;
 

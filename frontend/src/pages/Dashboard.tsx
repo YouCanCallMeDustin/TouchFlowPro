@@ -28,6 +28,10 @@ import PageTransition from '../components/PageTransition';
 import AnimatedStatCard from '../components/AnimatedStatCard';
 import { LevelProgressBar } from '../components/LevelProgressBar';
 import { RecommendationsWidget } from '../components/RecommendationsWidget';
+import { Card } from '../components/ui/Card';
+import { Button } from '../components/ui/Button';
+
+const MotionCard = motion(Card);
 
 interface DashboardProps {
     userId: string;
@@ -76,6 +80,10 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
     const [streak, setStreak] = useState<StreakData | null>(null);
     const [recentAchievements, setRecentAchievements] = useState<Achievement[]>([]);
     const [weekActivity, setWeekActivity] = useState<WeekActivity[]>([]);
+    const [plateau, setPlateau] = useState<any>(null);
+    const [activePlan, setActivePlan] = useState<any>(null);
+    const [todaysPlan, setTodaysPlan] = useState<any>(null);
+    const [showCreatePlan, setShowCreatePlan] = useState(false);
     const [loading, setLoading] = useState(true);
 
     const displayName = propUserName || (userEmail
@@ -126,17 +134,32 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
     const fetchDashboardData = async () => {
         try {
             setLoading(true);
-            const [summaryRes, streakRes, achievementsRes, trendsRes] = await Promise.all([
+            const [summaryRes, streakRes, achievementsRes, trendsRes, plateauRes, planRes] = await Promise.all([
                 apiFetch(`/api/analytics/${userId}/summary`),
                 apiFetch(`/api/streaks/${userId}`),
                 apiFetch(`/api/achievements/${userId}`),
-                apiFetch(`/api/analytics/${userId}/trends?days=7`)
+                apiFetch(`/api/analytics/${userId}/trends?days=7`),
+                apiFetch(`/api/analytics/${userId}/insights/plateau`),
+                apiFetch(`/api/plans/active`)
             ]);
 
             const summaryData = await summaryRes.json();
             const streakData = await streakRes.json();
             const achievementsData = await achievementsRes.json();
             const trendsData = await trendsRes.json();
+            const plateauData = await plateauRes.json();
+
+            if (planRes.ok) {
+                const plan = await planRes.json();
+                setActivePlan(plan);
+                if (plan) {
+                    // Fetch today's plan details if active plan exists
+                    const todayRes = await apiFetch('/api/plans/active/today');
+                    if (todayRes.ok) {
+                        setTodaysPlan(await todayRes.json());
+                    }
+                }
+            }
 
             setTodayStats({
                 drillsToday: 0,
@@ -145,6 +168,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
             });
 
             setStreak(streakData);
+            setPlateau(plateauData);
 
             if (achievementsData.achievements) {
                 const recent = achievementsData.achievements
@@ -166,6 +190,43 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
             console.error('Failed to fetch dashboard data:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleCreatePlan = async (track: string, goalWpm: number, minutes: number) => {
+        try {
+            const res = await apiFetch('/api/plans', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    track,
+                    goalWpm,
+                    goalAccuracy: 98,
+                    minutesPerDay: minutes,
+                    durationWeeks: 4
+                })
+            });
+            if (res.ok) {
+                const newPlan = await res.json();
+                setActivePlan(newPlan);
+                setShowCreatePlan(false);
+                // Refresh today
+                const todayRes = await apiFetch('/api/plans/active/today');
+                if (todayRes.ok) setTodaysPlan(await todayRes.json());
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    const handleCompleteDay = async () => {
+        try {
+            const res = await apiFetch('/api/plans/active/today/complete', { method: 'POST' });
+            if (res.ok) {
+                setTodaysPlan({ ...todaysPlan, status: 'COMPLETED' });
+            }
+        } catch (e) {
+            console.error(e);
         }
     };
 
@@ -209,21 +270,21 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                 className="max-w-7xl mx-auto p-4 sm:p-10 space-y-16"
             >
                 {/* Hero section */}
-                <motion.div variants={itemVariants} className="relative overflow-hidden card group min-h-[220px] flex items-center bg-gradient-to-br from-primary/[0.03] to-secondary/[0.03] border border-white/10">
-                    <div className="relative z-10 w-full md:w-2/3">
+                <MotionCard variants={itemVariants} className="relative overflow-hidden group min-h-[220px] flex items-center bg-gradient-to-br from-[var(--primary)]/5 to-[var(--secondary)]/5 p-0">
+                    <div className="relative z-10 w-full md:w-2/3 p-10">
                         <div className="flex items-center gap-3 mb-6">
-                            <span className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/30">
-                                <Activity size={18} className="text-primary" />
+                            <span className="w-10 h-10 rounded-xl bg-[var(--primary)]/20 flex items-center justify-center border border-[var(--primary)]/30">
+                                <Activity size={18} className="text-[var(--primary)]" />
                             </span>
-                            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Platform Ready</span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--primary)]">Platform Ready</span>
                         </div>
                         <h1 className="text-6xl mb-4 tracking-tight leading-[1.1]">
-                            <span className="text-text-muted block mb-2">{getGreeting()},</span>
+                            <span className="text-[var(--text-muted)] block mb-2">{getGreeting()},</span>
                             <span className="text-gradient drop-shadow-sm">{displayName}.</span>
                         </h1>
-                        <p className="text-xl text-text-muted max-w-xl font-medium leading-relaxed opacity-70">
+                        <p className="text-xl text-[var(--text-muted)] max-w-xl font-medium leading-relaxed opacity-70">
                             Your skills are improving.
-                            <span className="text-text-main font-bold"> Skill Assessment </span> is recommended for top speed.
+                            <span className="text-[var(--text)] font-bold"> Skill Assessment </span> is recommended for top speed.
                         </p>
                     </div>
 
@@ -241,14 +302,151 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                             <path d="M 0,300 Q 100,200 200,300 T 400,300" fill="none" stroke="url(#meshGrad)" strokeWidth="0.5" />
                         </svg>
                     </div>
-                </motion.div>
+                </MotionCard>
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
                     {/* Main Content Column */}
                     <div className="lg:col-span-8 space-y-12">
+                        {/* Training Plan Section - NEW */}
+                        <motion.div variants={itemVariants}>
+                            {!activePlan ? (
+                                <Card className="p-8 bg-surface-2/30 border-dashed border-2 flex flex-col items-center justify-center text-center gap-4">
+                                    <div className="p-4 rounded-full bg-primary/10 text-primary">
+                                        <Target size={32} />
+                                    </div>
+                                    <div>
+                                        <h3 className="text-xl font-bold">No Active Training Plan</h3>
+                                        <p className="text-text-muted max-w-md mx-auto mt-2">
+                                            Get a personalized daily schedule based on your professional track and goals.
+                                        </p>
+                                    </div>
+                                    <Button onClick={() => setShowCreatePlan(true)}>Create Training Plan</Button>
+
+                                    {showCreatePlan && (
+                                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" onClick={() => setShowCreatePlan(false)}>
+                                            <div className="bg-surface border border-border rounded-xl w-full max-w-lg p-6 shadow-2xl space-y-4" onClick={e => e.stopPropagation()}>
+                                                <h3 className="text-xl font-bold border-b border-border pb-2">Create Plan</h3>
+                                                <div className="space-y-4">
+                                                    <div>
+                                                        <label className="block text-sm font-bold mb-1">Professional Track</label>
+                                                        <div className="grid grid-cols-2 gap-2">
+                                                            {['MEDICAL', 'LEGAL', 'OPS', 'CODE'].map(t => (
+                                                                <button
+                                                                    key={t}
+                                                                    onClick={() => handleCreatePlan(t, 60, 20)} // Simplified for demo
+                                                                    className="p-3 rounded-lg border border-border hover:bg-primary/10 hover:border-primary transition-colors text-sm font-bold"
+                                                                >
+                                                                    {t}
+                                                                </button>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                    <p className="text-xs text-text-muted">
+                                                        * Defaulting to 4 weeks, 20 mins/day, 98% acc goal for this demo.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </Card>
+                            ) : (
+                                <Card className="p-0 overflow-hidden border-primary/20 bg-surface-2/10">
+                                    <div className="p-6 bg-gradient-to-r from-primary/5 to-transparent border-b border-border flex justify-between items-center">
+                                        <div>
+                                            <div className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">
+                                                {activePlan.track} Track • Day {new Date().getDate()}
+                                            </div>
+                                            <h3 className="text-2xl font-bold">Today's Training</h3>
+                                        </div>
+                                        <div className="text-right">
+                                            <div className="text-2xl font-bold">{todaysPlan?.estimatedMinutes || 20}m</div>
+                                            <div className="text-[10px] font-black uppercase tracking-widest text-text-muted">Est. Time</div>
+                                        </div>
+                                    </div>
+
+                                    <div className="p-6 space-y-4">
+                                        {todaysPlan?.items && todaysPlan.items.map((item: any, idx: number) => (
+                                            <div key={idx} className="flex items-center gap-4 p-4 rounded-xl bg-surface border border-border">
+                                                <div className="p-3 rounded-lg bg-surface-2">
+                                                    {item.type === 'WARMUP' && <Flame size={18} />}
+                                                    {item.type === 'REVIEW' && <History size={18} />}
+                                                    {item.type === 'SKILL' && <Zap size={18} />}
+                                                    {item.type === 'COOLDOWN' && <Clock size={18} />}
+                                                </div>
+                                                <div className="flex-1">
+                                                    <div className="flex justify-between">
+                                                        <h4 className="font-bold">{item.title}</h4>
+                                                        <span className="text-xs font-bold bg-surface-2 px-2 py-1 rounded">{item.minutes}m</span>
+                                                    </div>
+                                                    {item.reason && (
+                                                        <p className="text-xs text-text-muted mt-1">
+                                                            {item.reason.join(' • ')}
+                                                        </p>
+                                                    )}
+                                                </div>
+                                                <Button
+                                                    size="sm"
+                                                    onClick={() => {
+                                                        const mode = item.mode || 'practice';
+                                                        if (mode === 'custom') onStartCustomSession?.(item.title, item.title); // Simplification, ideally fetches content
+                                                        else onNavigate(mode === 'drill' ? 'adaptive_practice' : 'practice');
+                                                    }}
+                                                >
+                                                    Start
+                                                </Button>
+                                            </div>
+                                        ))}
+
+                                        {(!todaysPlan || !todaysPlan.items || todaysPlan.items.length === 0) && (
+                                            <div className="text-center p-8 text-text-muted">
+                                                Generating plan...
+                                            </div>
+                                        )}
+
+                                        {todaysPlan && todaysPlan.status !== 'COMPLETED' && (
+                                            <Button className="w-full mt-4" variant="secondary" onClick={handleCompleteDay}>
+                                                Mark Day Complete
+                                            </Button>
+                                        )}
+                                        {todaysPlan && todaysPlan.status === 'COMPLETED' && (
+                                            <div className="w-full mt-4 p-3 bg-green-500/10 text-green-500 text-center font-bold rounded-xl border border-green-500/20">
+                                                Day Completed! 🎉
+                                            </div>
+                                        )}
+                                    </div>
+                                </Card>
+                            )}
+                        </motion.div>
+
                         <motion.div variants={itemVariants}>
                             <LevelProgressBar userId={userId} />
                         </motion.div>
+
+                        {plateau && plateau.plateau && (
+                            <motion.div variants={itemVariants}>
+                                <Card className="bg-orange-500/5 border-orange-500/20">
+                                    <div className="flex items-start gap-4 p-6">
+                                        <div className="p-3 rounded-xl bg-orange-500/10 text-orange-500">
+                                            <Activity size={24} />
+                                        </div>
+                                        <div className="flex-1">
+                                            <div className="flex justify-between items-start mb-2">
+                                                <h3 className="font-bold text-lg text-orange-500">Plateau Detected</h3>
+                                                <span className="text-xs font-black uppercase tracking-widest bg-orange-500/10 text-orange-500 px-2 py-1 rounded">
+                                                    {plateau.signal.replace('_', ' ')}
+                                                </span>
+                                            </div>
+                                            <p className="text-sm text-text-muted mb-3">
+                                                {plateau.explanation}
+                                            </p>
+                                            <div className="text-sm font-medium text-text bg-surface-2/50 p-3 rounded-lg border border-border">
+                                                💡 Tip: {plateau.suggestion}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Card>
+                            </motion.div>
+                        )}
 
                         <motion.div variants={itemVariants}>
                             <RecommendationsWidget
@@ -289,10 +487,10 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                             </div>
                         </motion.div>
 
-                        <motion.div variants={itemVariants} className="card p-8 border border-white/5">
+                        <MotionCard variants={itemVariants} className="p-8">
                             <div className="flex justify-between items-center mb-10">
-                                <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-text-muted">Daily Drill Volume</h3>
-                                <TrendingUp size={16} className="text-secondary opacity-50" />
+                                <h3 className="text-[11px] font-black uppercase tracking-[0.4em] text-[var(--muted)]">Daily Drill Volume</h3>
+                                <TrendingUp size={16} className="text-[var(--secondary)] opacity-50" />
                             </div>
                             <div className="h-[280px] w-full">
                                 <ResponsiveContainer width="100%" height="100%">
@@ -303,7 +501,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                                                 <stop offset="100%" stopColor="var(--primary)" stopOpacity={0.3} />
                                             </linearGradient>
                                         </defs>
-                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.03)" />
+                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
                                         <XAxis
                                             dataKey="day"
                                             axisLine={false}
@@ -317,18 +515,19 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                                             width={30}
                                         />
                                         <Tooltip
-                                            cursor={{ fill: 'rgba(255,255,255,0.03)' }}
+                                            cursor={{ fill: 'var(--surface-2)' }}
                                             contentStyle={{
-                                                backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                                                backgroundColor: 'var(--bg-card)',
                                                 backdropFilter: 'blur(16px)',
-                                                borderRadius: '20px',
-                                                border: '1px solid rgba(255,255,255,0.1)',
-                                                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+                                                borderRadius: '16px',
+                                                border: '1px solid var(--border)',
+                                                boxShadow: 'var(--shadow-lg)',
                                                 padding: '16px',
                                                 fontSize: '11px',
                                                 fontWeight: '900',
                                                 textTransform: 'uppercase',
-                                                letterSpacing: '0.1em'
+                                                letterSpacing: '0.1em',
+                                                color: 'var(--text)'
                                             }}
                                             formatter={(value: any) => [`${value} DRILLS`, 'COMPLETED']}
                                         />
@@ -338,7 +537,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                                             animationDuration={1500}
                                             label={{
                                                 position: 'top',
-                                                fill: 'var(--text-main)',
+                                                fill: 'var(--text)',
                                                 fontSize: 10,
                                                 fontWeight: 900,
                                                 formatter: (val: any) => val > 0 ? val : ''
@@ -351,27 +550,27 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                                     </BarChart>
                                 </ResponsiveContainer>
                             </div>
-                        </motion.div>
+                        </MotionCard>
                     </div>
 
                     {/* Sidebar Column */}
                     <div className="lg:col-span-4 space-y-12">
                         {streak && (
-                            <motion.div variants={itemVariants} className="card relative overflow-hidden group border border-orange-500/10 dark:border-orange-500/5 bg-gradient-to-br from-orange-500/[0.02] to-transparent">
+                            <MotionCard variants={itemVariants} className="relative overflow-hidden group border-orange-500/10 dark:border-orange-500/5 bg-gradient-to-br from-orange-500/[0.02] to-transparent">
                                 <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:scale-110 group-hover:opacity-10 transition-all duration-700">
                                     <Flame size={80} strokeWidth={1} />
                                 </div>
                                 <div className="flex items-center gap-3 mb-6">
                                     <Flame size={14} className="text-orange-500" />
-                                    <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-text-muted">Streak Consistency</h3>
+                                    <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-[var(--muted)]">Streak Consistency</h3>
                                 </div>
                                 <div className="text-[6xl] font-black mb-2 tracking-tighter">
                                     {streak.currentStreak} <span className="text-xl font-bold opacity-30 tracking-normal">Days</span>
                                 </div>
-                                <div className="text-[10px] font-black text-text-muted uppercase tracking-widest mb-10 opacity-60">Longest Streak: {streak.longestStreak}</div>
+                                <div className="text-[10px] font-black text-[var(--muted)] uppercase tracking-widest mb-10 opacity-60">Longest Streak: {streak.longestStreak}</div>
 
                                 <div className="space-y-3">
-                                    <div className="flex justify-between text-[9px] font-black uppercase tracking-widest text-text-muted opacity-40">
+                                    <div className="flex justify-between text-[9px] font-black uppercase tracking-widest text-[var(--muted)] opacity-40">
                                         <span>Next Milestone</span>
                                         <span>{Math.ceil((streak.currentStreak + 1) / 5) * 5} Days</span>
                                     </div>
@@ -383,47 +582,49 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                                         />
                                     </div>
                                 </div>
-                            </motion.div>
+                            </MotionCard>
                         )}
 
-                        <motion.div variants={itemVariants} className="card border border-white/5">
-                            <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-6">
-                                <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-text-muted">Recent Milestones</h3>
-                                <button
+                        <MotionCard variants={itemVariants}>
+                            <div className="flex justify-between items-center mb-8 border-b border-[var(--border)] pb-6">
+                                <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-[var(--muted)]">Recent Milestones</h3>
+                                <Button
                                     onClick={() => onNavigate('achievements')}
-                                    className="text-[9px] font-black text-primary px-3 py-1.5 rounded-lg bg-primary/5 hover:bg-primary/10 transition-colors uppercase tracking-widest"
+                                    size="sm"
+                                    variant="ghost"
+                                    className="h-7 text-[9px] uppercase tracking-widest bg-[var(--primary)]/5 text-[var(--primary)] hover:bg-[var(--primary)]/10"
                                 >
                                     Milestones
-                                </button>
+                                </Button>
                             </div>
                             <div className="space-y-3">
                                 {recentAchievements.length > 0 ? recentAchievements.map((achievement) => {
                                     return (
-                                        <div key={achievement.id} className="flex items-center gap-5 p-4 rounded-2xl bg-white/5 border border-white/5 group hover:border-primary/20 transition-all">
-                                            <div className="p-2 rounded-xl bg-white/5 text-2xl group-hover:scale-110 transition-transform">
+                                        <div key={achievement.id} className="flex items-center gap-5 p-4 rounded-2xl bg-[var(--surface-2)]/50 border border-[var(--border)] group hover:border-[var(--primary)]/20 transition-all">
+                                            <div className="p-2 rounded-xl bg-[var(--bg)] text-2xl group-hover:scale-110 transition-transform">
                                                 {achievement.icon}
                                             </div>
                                             <div className="flex-1 min-w-0">
-                                                <div className="text-[13px] font-bold text-text-main truncate uppercase tracking-tight">{achievement.name}</div>
-                                                <div className="text-[9px] font-black text-text-muted uppercase tracking-widest mt-1 opacity-40">{format(new Date(achievement.earnedAt), 'MMM d, yyyy')}</div>
+                                                <div className="text-[13px] font-bold text-[var(--text)] truncate uppercase tracking-tight">{achievement.name}</div>
+                                                <div className="text-[9px] font-black text-[var(--muted)] uppercase tracking-widest mt-1 opacity-40">{format(new Date(achievement.earnedAt), 'MMM d, yyyy')}</div>
                                             </div>
-                                            <ArrowUpRight size={14} className="text-text-muted opacity-0 group-hover:opacity-10 transition-opacity" />
+                                            <ArrowUpRight size={14} className="text-[var(--muted)] opacity-0 group-hover:opacity-10 transition-opacity" />
                                         </div>
                                     );
                                 }) : (
                                     <div className="py-10 text-center opacity-30 select-none">
                                         <div className="relative inline-block mb-4">
                                             <Award size={40} strokeWidth={1} />
-                                            <div className="absolute inset-0 blur-lg bg-primary/20" />
+                                            <div className="absolute inset-0 blur-lg bg-[var(--primary)]/20" />
                                         </div>
                                         <p className="text-[10px] font-black uppercase tracking-[0.2em]">Unlock Milestones</p>
                                     </div>
                                 )}
                             </div>
-                        </motion.div>
+                        </MotionCard>
 
                         <motion.div variants={itemVariants} className="space-y-6">
-                            <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-text-muted px-4">Quick Access</h3>
+                            <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-[var(--muted)] px-4">Quick Access</h3>
                             <div className="grid grid-cols-2 gap-4">
                                 {[
                                     { id: 'practice', label: 'Practice', icon: Target },
@@ -434,11 +635,11 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                                     <button
                                         key={item.id}
                                         onClick={() => onNavigate(item.id)}
-                                        className="p-6 rounded-3xl bg-white/5 border border-white/5 hover:border-primary/20 transition-all text-center group relative overflow-hidden flex flex-col items-center justify-center gap-3"
+                                        className="p-6 rounded-3xl bg-[var(--surface)] border border-[var(--border)] hover:border-[var(--primary)]/20 transition-all text-center group relative overflow-hidden flex flex-col items-center justify-center gap-3 shadow-sm hover:shadow-md"
                                     >
-                                        <item.icon size={24} className="text-text-muted group-hover:text-primary group-hover:scale-125 transition-all duration-500" strokeWidth={1.5} />
-                                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted group-hover:text-text-main transition-colors">{item.label}</div>
-                                        <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                                        <item.icon size={24} className="text-[var(--muted)] group-hover:text-[var(--primary)] group-hover:scale-125 transition-all duration-500" strokeWidth={1.5} />
+                                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--muted)] group-hover:text-[var(--text)] transition-colors">{item.label}</div>
+                                        <div className="absolute inset-0 bg-[var(--primary)]/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
                                     </button>
                                 ))}
                             </div>

@@ -23,6 +23,8 @@ import type { Lesson } from '@shared/curriculum';
 import type { TypingMetrics, KeystrokeEvent } from '@shared/types';
 import AchievementCelebration from './AchievementCelebration';
 import { apiFetch } from '../utils/api';
+import { Card } from './ui/Card';
+import { Button } from './ui/Button';
 
 interface LessonViewProps {
     lesson: Lesson;
@@ -211,7 +213,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, isComp
     return (
         <div className="max-w-5xl mx-auto w-full">
             {mode === 'intro' && (
-                <div className="card border border-slate-200/60 dark:border-white/5 text-center relative overflow-hidden p-6 sm:p-8">
+                <Card className="border border-slate-200/60 dark:border-white/5 text-center relative overflow-hidden p-6 sm:p-8">
                     <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/5 text-primary rounded-full text-[9px] font-black uppercase tracking-[0.2em] mb-4 border border-primary/20">
                         <div className="w-1 h-1 rounded-full bg-primary animate-pulse"></div>
                         Module {lesson.lessonNumber} • {lesson.category}
@@ -244,13 +246,13 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, isComp
                     <div className="flex flex-col gap-5 max-w-md mx-auto">
                         {(isCompleted || warmupCompleted) ? (
                             <>
-                                <button
+                                <Button
                                     onClick={() => setMode('test')}
-                                    className="px-8 py-3 bg-primary text-white rounded-xl font-black text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 group"
+                                    className="px-8 py-6 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 group"
                                 >
                                     Begin Test
                                     <Trophy size={14} className="group-hover:rotate-12 transition-transform" />
-                                </button>
+                                </Button>
                                 <button
                                     onClick={() => {
                                         setWarmupCompleted(false);
@@ -262,13 +264,13 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, isComp
                                 </button>
                             </>
                         ) : (
-                            <button
+                            <Button
                                 onClick={() => setMode('theory')}
-                                className="px-8 py-3 bg-primary text-white rounded-xl font-black text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 group"
+                                className="px-8 py-6 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 group"
                             >
                                 Begin Lesson
                                 <Rocket size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                            </button>
+                            </Button>
                         )}
 
                         <div className="flex gap-3">
@@ -318,11 +320,11 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, isComp
                     >
                         Exit to Dashboard
                     </button>
-                </div>
+                </Card>
             )}
 
             {mode === 'theory' && (
-                <div className="card text-center border border-slate-200/60 dark:border-white/5 animate-in fade-in slide-in-from-bottom-6 duration-700">
+                <Card className="text-center border border-slate-200/60 dark:border-white/5 animate-in fade-in slide-in-from-bottom-6 duration-700">
                     <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/5 text-primary rounded-full text-[9px] font-black uppercase tracking-[0.2em] mb-4 border border-primary/20">
                         <BookOpen size={12} />
                         Session Info
@@ -350,15 +352,15 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, isComp
                     </div>
 
                     <div className="flex justify-center">
-                        <button
+                        <Button
                             onClick={initiateWarmup}
-                            className="px-8 py-3 bg-primary text-white rounded-xl font-black text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3"
+                            className="px-8 py-6 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3"
                         >
                             Begin Lesson
                             <ArrowRight size={14} />
-                        </button>
+                        </Button>
                     </div>
-                </div>
+                </Card>
             )}
 
             {mode === 'warmup' && (
@@ -508,7 +510,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, isComp
             )}
 
             {mode === 'results' && testMetrics && (
-                <div className="card text-center relative overflow-hidden animate-in fade-in slide-in-from-bottom-10 duration-1000">
+                <Card className="text-center relative overflow-hidden animate-in fade-in slide-in-from-bottom-10 duration-1000">
                     <div className={`absolute -top-24 -right-24 w-80 h-80 rounded-full blur-[120px] opacity-20 ${passed ? 'bg-primary' : 'bg-rose-500'}`}></div>
 
                     {isAdaptiveResult ? (
@@ -579,12 +581,12 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, isComp
                     <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-3xl mx-auto">
                         {passed ? (
                             <>
-                                <button
+                                <Button
                                     onClick={handleFinish}
-                                    className="px-6 py-3 bg-primary text-white rounded-xl font-black text-[10px] uppercase tracking-[0.3em] shadow-lg shadow-primary/40 hover:scale-105 active:scale-95 transition-all flex-1"
+                                    className="px-6 py-6 rounded-xl font-black text-[10px] uppercase tracking-[0.3em] shadow-lg shadow-primary/40 hover:scale-105 active:scale-95 transition-all flex-1"
                                 >
                                     Commit Results <span className="text-[9px] opacity-40 ml-4">Enter_key</span>
-                                </button>
+                                </Button>
                                 {adaptiveText && (
                                     <button
                                         onClick={() => setMode('adaptive')}
@@ -598,12 +600,13 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, isComp
                         ) : (
                             <>
                                 {adaptiveText && (
-                                    <button
+                                    <Button
                                         onClick={() => setMode('adaptive')}
-                                        className="px-6 py-3 bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded-xl font-black text-[10px] uppercase tracking-[0.25em] hover:bg-orange-500/20 transition-all active:scale-95 flex-1"
+                                        variant="danger"
+                                        className="px-6 py-6 rounded-xl font-black text-[10px] uppercase tracking-[0.25em] transition-all active:scale-95 flex-1"
                                     >
                                         Execute Recovery Mode
-                                    </button>
+                                    </Button>
                                 )}
                                 <button
                                     onClick={() => setMode('test')}
@@ -620,7 +623,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, isComp
                             </>
                         )}
                     </div>
-                </div>
+                </Card>
             )}
 
             {mode === 'adaptive' && (

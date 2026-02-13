@@ -1,13 +1,14 @@
 import { Router } from 'express';
 import prisma from '../lib/db';
+import { keystrokeRecordSchema } from '../lib/validation';
 
 const router = Router();
 
 // POST /api/keystroke-tracking/record
 // Record keystroke data for a session
-router.post('/record', async (req, res) => {
+router.post('/record', async (req, res, next) => {
     try {
-        const { sessionId, keystrokes, liveMetrics } = req.body;
+        const { sessionId, keystrokes, liveMetrics } = keystrokeRecordSchema.parse(req.body);
 
         const sessionDetails = await prisma.sessionDetails.create({
             data: {
@@ -19,8 +20,7 @@ router.post('/record', async (req, res) => {
 
         res.json(sessionDetails);
     } catch (error) {
-        console.error('Record keystroke error:', error);
-        res.status(500).json({ error: 'Failed to record keystroke data' });
+        next(error);
     }
 });
 

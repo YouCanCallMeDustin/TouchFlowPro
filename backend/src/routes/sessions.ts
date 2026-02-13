@@ -21,82 +21,98 @@ interface SessionCompleteBody {
  */
 router.post('/complete', async (req, res) => {
     try {
-        const { userId, drillId, type, metrics } = req.body as SessionCompleteBody;
+        const { userId, drillId, type, metrics, idempotencyKey } = req.body as SessionCompleteBody & { idempotencyKey?: string };
 
         if (!userId || !metrics) {
             return res.status(400).json({ error: 'Missing required session data' });
         }
 
-        // 1. Save Drill Result
-        const drillResult = await prisma.drillResult.create({
-            data: {
-                userId,
-                drillId,
-                grossWPM: metrics.grossWPM,
-                netWPM: metrics.netWPM,
-                accuracy: metrics.accuracy,
-                durationMs: metrics.durationMs || 0,
-                timestamp: new Date()
-            }
-        });
-
-        // 1b. Save Keystroke/Session Details
-        if (req.body.keystrokes) {
-            await prisma.sessionDetails.create({
-                data: {
-                    sessionId: drillResult.id,
-                    keystrokes: JSON.stringify(req.body.keystrokes),
-                    liveMetrics: JSON.stringify(req.body.liveMetrics || [])
-                }
+        // 0. Idempotency Check
+        if (idempotencyKey) {
+            const existing = await prisma.drillResult.findUnique({
+                where: { idempotencyKey }
             });
+            if (existing) {
+                return res.json({
+                    success: true,
+                    drillResult: existing,
+                    xpEarned: 0,
+                    leveledUp: false,
+                    newLevel: 0,
+                    streak: null,
+                    newAchievements: [],
+                    isDuplicate: true
+                });
+            }
         }
 
-        // 2. Update User Progress (XP, Level, Stats)
-        const currentProgress = await prisma.userProgress.findUnique({
-            where: { userId }
-        });
-
-        const xpEarned = calculateXPEarned(metrics);
-        let leveledUp = false;
-        let newLevel = currentProgress?.level || 1;
-
-        if (currentProgress) {
-            let totalXP = currentProgress.xp + xpEarned;
-
-            // Simple level up logic
-            const xpToNext = Math.floor(100 * Math.pow(1.5, currentProgress.level - 1));
-            if (totalXP >= xpToNext) {
-                totalXP -= xpToNext;
-                newLevel++;
-                leveledUp = true;
-            }
-
-            // Update stats via shared utility
-            await updateUserStats(userId, metrics);
-
-            // Update XP and Level specifically here (utility handles averages/time/drills)
-            await prisma.userProgress.update({
-                where: { userId },
+        // Transaction for Data Integrity
+        const result = await prisma.$transaction(async (tx) => {
+            // 1. Save Drill Result
+            const drillResult = await tx.drillResult.create({
                 data: {
-                    xp: totalXP,
-                    level: newLevel,
+                    userId,
+                    drillId,
+                    mode: type,
+                    grossWPM: metrics.grossWPM,
+                    netWPM: metrics.netWPM,
+                    accuracy: metrics.accuracy,
+                    durationMs: metrics.durationMs || 0,
+                    timestamp: new Date(),
+                    idempotencyKey: idempotencyKey || undefined
                 }
             });
-        }
 
-        // 3. Update Streak
+            // 1b. Save Keystroke/Session Details
+            if (req.body.keystrokes) {
+                await tx.sessionDetails.create({
+                    data: {
+                        sessionId: drillResult.id,
+                        keystrokes: JSON.stringify(req.body.keystrokes),
+                        liveMetrics: JSON.stringify(req.body.liveMetrics || [])
+                    }
+                });
+            }
+
+            // 2. Update User Progress
+            const currentProgress = await tx.userProgress.findUnique({ where: { userId } });
+
+            const xpEarned = calculateXPEarned(metrics);
+            let leveledUp = false;
+            let newLevel = currentProgress?.level || 1;
+
+            if (currentProgress) {
+                let totalXP = currentProgress.xp + xpEarned;
+                const xpToNext = Math.floor(100 * Math.pow(1.5, currentProgress.level - 1));
+
+                if (totalXP >= xpToNext) {
+                    totalXP -= xpToNext;
+                    newLevel++;
+                    leveledUp = true;
+                }
+
+                await tx.userProgress.update({
+                    where: { userId },
+                    data: { xp: totalXP, level: newLevel }
+                });
+            }
+
+            return { drillResult, xpEarned, leveledUp, newLevel };
+        });
+
+        // 3. Post-Transaction Updates
+        await updateUserStats(userId, metrics);
         const streakRes = await updateStreak(userId);
 
-        // 4. Check Achievements (Using centralized logic)
         const { runAchievementCheck } = require('./achievements');
         const newAchievements = await runAchievementCheck(userId);
 
         res.json({
             success: true,
-            drillResult,
-            xpEarned,
-            leveledUp,
-            newLevel,
+            drillResult: result.drillResult,
+            xpEarned: result.xpEarned,
+            leveledUp: result.leveledUp,
+            newLevel: result.newLevel,
             streak: streakRes,
             newAchievements
         });

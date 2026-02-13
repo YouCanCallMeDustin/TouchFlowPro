@@ -6,7 +6,8 @@
     "dev": "nodemon src/index.ts",
     "build": "npx prisma generate && tsc && tsc-alias",
     "start": "node -r dotenv/config dist/backend/src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
   },
   "keywords": [],
   "author": "",
@@ -24,13 +25,15 @@
     "lowdb": "^7.0.1",
     "mongoose": "^8.9.6",
     "multer": "^2.0.2",
+    "pdfkit": "^0.17.2",
     "prisma": "^6.19.2",
     "stripe": "^20.3.1",
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.10",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.3",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -39,6 +42,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.0.0",
     "@types/node": "^25.2.0",
+    "@types/pdfkit": "^0.17.5",
     "@types/supertest": "^6.0.3",
     "@types/uuid": "^8.3.4",
     "nodemon": "^3.1.11",

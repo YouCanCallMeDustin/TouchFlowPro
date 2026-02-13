@@ -2,27 +2,27 @@ import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
+import { z } from 'zod'; // Import zod if needed for catch block, though middleware handles it? No, middleware handles `next(err)`. I need to pass errors to next().
 import prisma from '../lib/db';
 import { JWT_SECRET } from '../config';
+import { loginSchema, registerSchema } from '../lib/validation';
 
 const router = Router();
 // JWT_SECRET imported from config
 
 // POST /signup
-router.post('/signup', async (req, res) => {
+router.post('/signup', async (req, res, next) => {
     try {
-        const { email, password } = req.body;
-
-        if (!email || !password) {
-            return res.status(400).json({ error: 'Email and password are required' });
-        }
+        const { email, password } = registerSchema.parse(req.body);
 
         const existingUser = await prisma.user.findUnique({
             where: { email }
         });
 
         if (existingUser) {
-            return res.status(400).json({ error: 'Email already exists' });
+            return res.status(400).json({
+                error: { code: 'EMAIL_EXISTS', message: 'Email already exists' }
+            });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -57,31 +57,31 @@ router.post('/signup', async (req, res) => {
             }
         });
     } catch (error) {
-        console.error('Signup error:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        next(error);
     }
 });
 
 // POST /login
-router.post('/login', async (req, res) => {
+router.post('/login', async (req, res, next) => {
     try {
-        const { email, password } = req.body;
-
-        if (!email || !password) {
-            return res.status(400).json({ error: 'Email and password are required' });
-        }
+        const { email, password } = loginSchema.parse(req.body);
 
         const user = await prisma.user.findUnique({
             where: { email }
         });
 
         if (!user || !user.passwordHash) {
-            return res.status(401).json({ error: 'Invalid email or password' });
+            // Standardize auth failure
+            return res.status(401).json({
+                error: { code: 'AUTH_FAILED', message: 'Invalid email or password' }
+            });
         }
 
         const validPassword = await bcrypt.compare(password, user.passwordHash);
         if (!validPassword) {
-            return res.status(401).json({ error: 'Invalid email or password' });
+            return res.status(401).json({
+                error: { code: 'AUTH_FAILED', message: 'Invalid email or password' }
+            });
         }
 
         // DEBUG: Log secret length being used for signing
@@ -105,8 +105,7 @@ router.post('/login', async (req, res) => {
             }
         });
     } catch (error) {
-        console.error('Login error:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        next(error);
     }
 });
 
