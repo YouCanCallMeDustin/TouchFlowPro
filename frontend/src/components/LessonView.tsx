@@ -119,7 +119,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, isComp
         setPassed(didPass);
         setIsAdaptiveResult(false);
 
-        if (Object.keys(metrics.errorMap).length > 0) {
+        if (metrics.errorMap && Object.keys(metrics.errorMap).length > 0) {
             const weakKeys = Object.entries(metrics.errorMap)
                 .sort((a, b) => b[1] - a[1])
                 .slice(0, 3)
@@ -649,7 +649,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, isComp
                             <h4 className="text-[11px] font-black text-text-muted uppercase tracking-[0.4em]">Tactical Guidance</h4>
                         </div>
                         <p className="text-lg text-text-muted mb-12 font-black uppercase tracking-widest opacity-40 max-w-2xl mx-auto">Reduce velocity. Isolate kinematic path for the identified target keys below.</p>
-                        <VisualKeyboard highlightKeys={testMetrics ? Object.keys(testMetrics.errorMap) : []} />
+                        <VisualKeyboard highlightKeys={testMetrics?.errorMap ? Object.keys(testMetrics.errorMap) : []} />
                     </div>
                 </div>
             )}

@@ -129,9 +129,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onL
                         <Button
                             onClick={onStartAssessment}
                             className="w-full sm:flex-1 py-7 rounded-2xl font-black uppercase tracking-[0.4em] text-[14px] shadow-[0_20px_50px_rgba(var(--primary-rgb),0.3)] group overflow-hidden relative"
-                            rightIcon={<ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />}
                         >
                             Start Assessment
+                            <ArrowRight size={20} className="ml-2 group-hover:translate-x-2 transition-transform" />
                         </Button>
                         <button
                             onClick={onLogin}

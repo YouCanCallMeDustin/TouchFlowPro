@@ -24,6 +24,8 @@ import {
 import { useAuth } from '../context/AuthContext';
 import { apiFetch } from '../utils/api';
 
+import { motion } from 'framer-motion';
+
 const AbstractMesh = () => (
     <div className="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none overflow-hidden hidden md:block">
         <svg width="400" height="400" viewBox="0 0 400 400" className="translate-x-20 -translate-y-20 animate-[spin_60s_linear_infinite]">
@@ -39,6 +41,8 @@ const AbstractMesh = () => (
         </svg>
     </div>
 );
+
+const MotionCard = motion(Card);
 
 interface MetricsSummary {
     totalDrills: number;
@@ -142,8 +146,8 @@ const AnalyticsDashboard: React.FC = () => {
                         </div>
                     </div>
 
-                    <Card
-                        variant="glass"
+                    <MotionCard
+                        glass
                         className="relative overflow-hidden group min-h-[220px] flex items-center bg-gradient-to-br from-primary/[0.03] to-secondary/[0.03] border-white/10 p-8 sm:p-12"
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -165,7 +169,7 @@ const AnalyticsDashboard: React.FC = () => {
                         </div>
 
                         <AbstractMesh />
-                    </Card>
+                    </MotionCard>
                 </div>
 
                 {/* Stat Cards */}
@@ -203,7 +207,7 @@ const AnalyticsDashboard: React.FC = () => {
                 {/* Main Section */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* WPM Trend Chart */}
-                    <Card
+                    <MotionCard
                         className="p-8 lg:col-span-2"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -265,7 +269,7 @@ const AnalyticsDashboard: React.FC = () => {
                     </Card>
 
                     {/* Stats Summary */}
-                    <Card
+                    <MotionCard
                         className="p-8"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -298,7 +302,7 @@ const AnalyticsDashboard: React.FC = () => {
                                 <span className="text-xl font-black text-text-main">{summary.currentStreak || 0} Days</span>
                             </div>
                         </div>
-                    </Card>
+                    </MotionCard>
                 </div>
 
                 {/* Heatmaps & Diagnostics */}

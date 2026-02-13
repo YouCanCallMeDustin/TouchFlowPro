@@ -95,8 +95,7 @@ const Dashboard: React.FC<DashboardProps> = ({ metrics, onStartDrill, onStartAss
                     {drills.map(drill => (
                         <Card
                             key={drill.id}
-                            variant="interactive"
-                            className="flex flex-col h-full"
+                            className="flex flex-col h-full hover:border-primary/50 transition-colors"
                         >
                             <div className="flex justify-between items-start mb-4">
                                 <CardTitle>{drill.title}</CardTitle>
