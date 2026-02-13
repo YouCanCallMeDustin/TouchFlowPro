@@ -417,5 +417,8 @@ const Analytics: React.FC<AnalyticsProps> = ({ userId, onClose }) => {
                     </div>
                 </div>
             )}
+        </div>
+    );
+};
 
-            export default Analytics;
+export default Analytics;
