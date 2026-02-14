@@ -55,7 +55,7 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
                 // Create custom lesson on the fly
                 const customLesson: Lesson = {
                     id: `plan-${pendingLaunch.planItemId}`,
-                    title: pendingLaunch.title,
+                    title: pendingLaunch.title || 'Training Plan Lesson',
                     content: pendingLaunch.launch.promptText,
                     category: 'Training Plan',
                     difficulty: 'Professional', // Default

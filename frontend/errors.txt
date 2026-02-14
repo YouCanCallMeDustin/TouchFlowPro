@@ -1,0 +1,6 @@
+src/components/Auth/Login.tsx(68,25): error TS2322: Type '{ label: string; type: "email"; value: string; onChange: (e: ChangeEvent<HTMLInputElement, Element>) => void; placeholder: string; required: true; startIcon: Element; }' is not assignable to type 'IntrinsicAttributes & InputProps & RefAttributes<HTMLInputElement>'.
+  Property 'label' does not exist on type 'IntrinsicAttributes & InputProps & RefAttributes<HTMLInputElement>'.
+src/components/Auth/Login.tsx(78,25): error TS2322: Type '{ label: string; type: "password"; value: string; onChange: (e: ChangeEvent<HTMLInputElement, Element>) => void; placeholder: string; required: true; startIcon: Element; }' is not assignable to type 'IntrinsicAttributes & InputProps & RefAttributes<HTMLInputElement>'.
+  Property 'label' does not exist on type 'IntrinsicAttributes & InputProps & RefAttributes<HTMLInputElement>'.
+src/components/LessonView.tsx(253,21): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+  Type 'undefined' is not assignable to type 'number'.

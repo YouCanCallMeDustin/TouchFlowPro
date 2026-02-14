@@ -68,7 +68,7 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup }) => {
                         label="Professional ID"
                         type="email"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
                         placeholder="USER@TOUCHFLOW.PRO"
                         required
                         startIcon={<Mail size={18} />}
@@ -78,7 +78,7 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup }) => {
                         label="Security Key"
                         type="password"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
                         placeholder="••••••••"
                         required
                         startIcon={<Lock size={18} />}

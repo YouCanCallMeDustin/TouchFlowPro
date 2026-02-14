@@ -6,7 +6,3 @@ node_modules
 
 /generated/prisma
 dist
-
-# SQLite
-*.db
-*.db-journal

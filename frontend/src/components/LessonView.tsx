@@ -2,20 +2,12 @@ import React, { useState, useEffect } from 'react';
 import {
     Target,
     Activity,
-    Zap,
     Rocket,
     Settings,
     ArrowRight,
-    History,
     Award,
     BookOpen,
-    Waves,
-    Trophy,
-    AlertOctagon,
-    RefreshCcw,
-    Mic,
-    Sparkles,
-    Lightbulb
+    AlertOctagon
 } from 'lucide-react';
 import TypingTest from './TypingTest';
 import VisualKeyboard from './VisualKeyboard';
@@ -40,7 +32,7 @@ interface LessonViewProps {
 
 type Mode = 'intro' | 'theory' | 'warmup' | 'practice' | 'test' | 'results' | 'adaptive';
 
-const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, isCompleted = false, onComplete, onCancel, initialDrillText, timeLimit }) => {
+const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComplete, onCancel, initialDrillText, timeLimit }) => {
     const [mode, setMode] = useState<Mode>('intro');
     const [testMetrics, setTestMetrics] = useState<TypingMetrics | null>(null);
     const [passed, setPassed] = useState(false);
@@ -52,8 +44,8 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, isComp
     const [warmupStepMetrics, setWarmupStepMetrics] = useState<TypingMetrics | null>(null);
     const [isAdaptiveResult, setIsAdaptiveResult] = useState(false);
     const [suddenDeathEnabled, setSuddenDeathEnabled] = useState(true);
-    const [dictationEnabled, setDictationEnabled] = useState(false);
-    const [enhancedModeEnabled, setEnhancedModeEnabled] = useState(true); // Enable enhanced mode by default
+    const [dictationEnabled] = useState(false);
+    const [enhancedModeEnabled] = useState(true); // Enable enhanced mode by default
     const [showCelebration, setShowCelebration] = useState(false);
     const [forceFinishTest, setForceFinishTest] = useState(false);
 
@@ -88,7 +80,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, isComp
     }, [initialDrillText, lesson.id, pendingLaunch]);
 
     const [newAchievement, setNewAchievement] = useState<{ name: string; icon: string; description: string } | null>(null);
-    const [warmupCompleted, setWarmupCompleted] = useState(false);
+    const [, setWarmupCompleted] = useState(false);
 
     const activeWarmupSteps = lesson.warmupSteps || [
         { text: lesson.content.split(' ').slice(0, 3).join(' '), insight: 'Let\'s start with a quick warmup to find your rhythm.' }
@@ -96,13 +88,13 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, isComp
 
     const currentWarmup = activeWarmupSteps[warmupStepIndex];
 
-    const getRandomPracticeText = () => {
-        if (lesson.practiceVariations && lesson.practiceVariations.length > 0) {
-            const randomIndex = Math.floor(Math.random() * lesson.practiceVariations.length);
-            return lesson.practiceVariations[randomIndex];
-        }
-        return lesson.content;
-    };
+    // const getRandomPracticeText = () => {
+    //     if (lesson.practiceVariations && lesson.practiceVariations.length > 0) {
+    //         const randomIndex = Math.floor(Math.random() * lesson.practiceVariations.length);
+    //         return lesson.practiceVariations[randomIndex];
+    //     }
+    //     return lesson.content;
+    // };
 
     const initiateWarmup = () => {
         setWarmupStepIndex(0);
@@ -258,10 +250,10 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, isComp
             {/* PLAN TIMER OVERLAY */}
             {isPlanLauncher && pendingLaunch && planTimerActive && mode === 'practice' && (
                 <PlanTimer
-                    durationSeconds={pendingLaunch.recommendedSeconds}
+                    durationSeconds={pendingLaunch.recommendedSeconds || 300}
                     onComplete={() => setForceFinishTest(true)}
                     isActive={!planTimerPaused}
-                    onPauseToggle={(paused) => setPlanTimerPaused(paused)}
+                    onPauseToggle={(paused: boolean) => setPlanTimerPaused(paused)}
                 />
             )}
 

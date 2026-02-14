@@ -27,7 +27,6 @@ const TypingTest: React.FC<Props> = ({
     dictationMode,
     showLiveMetrics = false,
     showVirtualKeyboard = false,
-    showVirtualKeyboard = false,
     mode,
     timeLimit,
     ...props

@@ -1,22 +1,24 @@
 import { create } from 'zustand';
-import { TrainingDayItem } from '../../../shared/trainingPlan';
 
 interface LaunchState {
     pendingLaunch: {
-        source: 'trainingPlan';
-        planId: string; // plan ID or day ID really
-        planItemId: string;
+        source: string;
         mode: string;
-        recommendedSeconds: number;
-        launch: TrainingDayItem['launch'];
-        title: string;
+        title?: string;
+        launch: {
+            kind: string;
+            promptText?: string;
+            drillId?: string;
+        };
+        planItemId?: string;
+        recommendedSeconds?: number;
     } | null;
-    setPendingLaunch: (launch: LaunchState['pendingLaunch']) => void;
+    setPendingLaunch: (launch: any) => void;
     clearPendingLaunch: () => void;
 }
 
 export const useLaunchStore = create<LaunchState>((set) => ({
     pendingLaunch: null,
     setPendingLaunch: (launch) => set({ pendingLaunch: launch }),
-    clearPendingLaunch: () => set({ pendingLaunch: null })
+    clearPendingLaunch: () => set({ pendingLaunch: null }),
 }));
