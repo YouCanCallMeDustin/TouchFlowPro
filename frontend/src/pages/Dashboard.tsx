@@ -21,7 +21,8 @@ import {
     Activity,
     ArrowUpRight,
     Award,
-    Edit3
+    Edit3,
+    CheckCircle
 } from 'lucide-react';
 import { format } from 'date-fns';
 import PageTransition from '../components/PageTransition';
@@ -30,6 +31,8 @@ import { LevelProgressBar } from '../components/LevelProgressBar';
 import { RecommendationsWidget } from '../components/RecommendationsWidget';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
+
+import { useLaunchStore } from '../state/launchStore';
 
 const MotionCard = motion(Card);
 
@@ -368,10 +371,14 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                                         {todaysPlan?.items && todaysPlan.items.map((item: any, idx: number) => (
                                             <div key={idx} className="flex items-center gap-4 p-4 rounded-xl bg-surface border border-border">
                                                 <div className="p-3 rounded-lg bg-surface-2">
-                                                    {item.type === 'WARMUP' && <Flame size={18} />}
-                                                    {item.type === 'REVIEW' && <History size={18} />}
-                                                    {item.type === 'SKILL' && <Zap size={18} />}
-                                                    {item.type === 'COOLDOWN' && <Clock size={18} />}
+                                                    {item.isCompleted ? <CheckCircle size={18} className="text-green-500" /> : (
+                                                        <>
+                                                            {item.blockType === 'WARMUP' && <Flame size={18} />}
+                                                            {item.blockType === 'REVIEW' && <History size={18} />}
+                                                            {item.blockType === 'SKILL' && <Zap size={18} />}
+                                                            {item.blockType === 'COOLDOWN' && <Clock size={18} />}
+                                                        </>
+                                                    )}
                                                 </div>
                                                 <div className="flex-1">
                                                     <div className="flex justify-between">
@@ -386,17 +393,31 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                                                 </div>
                                                 <Button
                                                     size="sm"
+                                                    variant={item.isCompleted ? "outline" : "primary"}
                                                     onClick={() => {
-                                                        // Always use custom session to ensure content is passed
-                                                        if (item.content) {
-                                                            onStartCustomSession?.(item.content, item.title, item.minutes);
+                                                        // Use the store to launch
+                                                        useLaunchStore.getState().setPendingLaunch({
+                                                            source: 'trainingPlan',
+                                                            planId: activePlan.id,
+                                                            planItemId: item.id,
+                                                            mode: item.mode,
+                                                            recommendedSeconds: item.recommendedSeconds,
+                                                            launch: item.launch,
+                                                            title: item.title
+                                                        });
+
+                                                        // Navigate to the correct stage
+                                                        if (item.launch.kind === 'LESSON') {
+                                                            onNavigate('lesson');
+                                                        } else if (item.mode === 'code') {
+                                                            // Usually code practice is in practice view but with code mode
+                                                            onNavigate('practice');
                                                         } else {
-                                                            const mode = item.mode || 'practice';
-                                                            onNavigate(mode === 'drill' ? 'adaptive_practice' : 'practice');
+                                                            onNavigate('practice');
                                                         }
                                                     }}
                                                 >
-                                                    Start
+                                                    {item.isCompleted ? 'Redo' : 'Start'}
                                                 </Button>
                                             </div>
                                         ))}

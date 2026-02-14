@@ -7,6 +7,8 @@ import type { TypingMetrics } from '@shared/types';
 import { Target, Activity, Zap, Filter, Layers, ChevronRight, Search, Lock } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { apiFetch } from '../utils/api';
+import { useLaunchStore } from '../state/launchStore';
+import { useEffect } from 'react';
 
 interface PracticeProps {
     userId: string;
@@ -37,7 +39,38 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
 
     const { user } = useAuth(); // Get user from context
 
-    // ... (rest of filtering logic)
+    // Store Integration for Training Plans
+    const { pendingLaunch } = useLaunchStore();
+
+    useEffect(() => {
+        if (pendingLaunch && pendingLaunch.source === 'trainingPlan' && !activeDrill) {
+            // Auto-launch the plan item
+            if (pendingLaunch.launch.kind === 'DRILL' && pendingLaunch.launch.drillId) {
+                const drill = drillLibrary.find(d => d.id === pendingLaunch.launch.drillId);
+                if (drill) {
+                    const practiceLesson = Curriculum.drillToLesson(drill, 0);
+                    setActiveDrill(practiceLesson);
+                }
+            } else if (pendingLaunch.launch.kind === 'CUSTOM_TEXT' && pendingLaunch.launch.promptText) {
+                // Create custom lesson on the fly
+                const customLesson: Lesson = {
+                    id: `plan-${pendingLaunch.planItemId}`,
+                    title: pendingLaunch.title,
+                    content: pendingLaunch.launch.promptText,
+                    category: 'Training Plan',
+                    difficulty: 'Professional', // Default
+                    order: 0,
+                    xpReward: 10,
+                    learningObjectives: ['Plan Execution'],
+                    lessonNumber: 0,
+                    prerequisites: [],
+                    masteryThreshold: 0,
+                    description: 'Scheduled training task'
+                };
+                setActiveDrill(customLesson);
+            }
+        }
+    }, [pendingLaunch, activeDrill]);
 
     const handleStartDrill = (drill: Drill) => {
         const isPro = user?.subscriptionStatus === 'pro';

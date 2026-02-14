@@ -16,6 +16,7 @@ interface Props {
     mode?: string;
     onReset?: () => void;
     timeLimit?: number; // Minutes
+    forceFinish?: boolean;
 }
 
 const TypingTest: React.FC<Props> = ({
@@ -26,8 +27,10 @@ const TypingTest: React.FC<Props> = ({
     dictationMode,
     showLiveMetrics = false,
     showVirtualKeyboard = false,
+    showVirtualKeyboard = false,
     mode,
-    timeLimit
+    timeLimit,
+    ...props
 }) => {
     const [userInput, setUserInput] = useState('');
     const [keystrokes, setKeystrokes] = useState<KeystrokeEvent[]>([]);
@@ -82,6 +85,13 @@ const TypingTest: React.FC<Props> = ({
             setTimeLeft(timeLimit * 60);
         }
     }, [timeLimit, isStarted]);
+
+    // Force finish handler
+    useEffect(() => {
+        if (props.forceFinish && isStarted && !isFailed) {
+            onComplete?.(metrics, keystrokes);
+        }
+    }, [props.forceFinish, isStarted, isFailed, metrics, keystrokes, onComplete]);
 
     useEffect(() => {
         if (isStarted && startTimeRef.current && !isFailed) {

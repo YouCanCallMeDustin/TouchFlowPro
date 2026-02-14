@@ -276,8 +276,9 @@ model TrainingDay {
   id          String       @id @default(uuid())
   planId      String
   date        DateTime
-  itemsJson   String
-  status      String       @default("PLANNED")
+  itemsJson       String
+  completedItemIds String       @default("[]") // JSON array of completed item IDs
+  status          String       @default("PLANNED")
   completedAt DateTime?
   createdAt   DateTime     @default(now())
   plan        TrainingPlan @relation(fields: [planId], references: [id])
