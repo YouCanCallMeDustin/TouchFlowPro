@@ -15,6 +15,7 @@ interface Props {
     showVirtualKeyboard?: boolean;
     mode?: string;
     onReset?: () => void;
+    timeLimit?: number; // Minutes
 }
 
 const TypingTest: React.FC<Props> = ({
@@ -25,7 +26,8 @@ const TypingTest: React.FC<Props> = ({
     dictationMode,
     showLiveMetrics = false,
     showVirtualKeyboard = false,
-    mode
+    mode,
+    timeLimit
 }) => {
     const [userInput, setUserInput] = useState('');
     const [keystrokes, setKeystrokes] = useState<KeystrokeEvent[]>([]);
@@ -49,6 +51,7 @@ const TypingTest: React.FC<Props> = ({
         averageKeyDelay: 0,
         timeElapsed: 0
     });
+    const [timeLeft, setTimeLeft] = useState<number | null>(null);
 
     const startTimeRef = useRef<number | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -69,14 +72,36 @@ const TypingTest: React.FC<Props> = ({
         setIsStarted(false);
         setIsFailed(false);
         setLiveWPM(0);
+        if (timeLimit) setTimeLeft(timeLimit * 60);
         startTimeRef.current = null;
         inputRef.current?.focus();
     };
 
     useEffect(() => {
+        if (timeLimit && !isStarted) {
+            setTimeLeft(timeLimit * 60);
+        }
+    }, [timeLimit, isStarted]);
+
+    useEffect(() => {
         if (isStarted && startTimeRef.current && !isFailed) {
             const interval = setInterval(() => {
-                const elapsed = (Date.now() - startTimeRef.current!) / 1000 / 60;
+                const now = Date.now();
+                const elapsed = (now - startTimeRef.current!) / 1000 / 60;
+
+                // Timer Logic
+                if (timeLimit) {
+                    const secondsElapsed = (now - startTimeRef.current!) / 1000;
+                    const remaining = Math.max(0, (timeLimit * 60) - secondsElapsed);
+                    setTimeLeft(remaining);
+
+                    if (remaining <= 0) {
+                        // Time's up!
+                        clearInterval(interval);
+                        onComplete?.(metrics, keystrokes);
+                    }
+                }
+
                 if (elapsed > 0) {
                     const words = userInput.length / 5;
                     setLiveWPM(Math.round(words / elapsed));
@@ -84,7 +109,7 @@ const TypingTest: React.FC<Props> = ({
             }, 100);
             return () => clearInterval(interval);
         }
-    }, [isStarted, userInput, isFailed]);
+    }, [isStarted, userInput, isFailed, timeLimit, metrics, keystrokes, onComplete]);
 
     useEffect(() => {
         if (showLiveMetrics && isStarted && keystrokes.length > 0 && !isFailed) {
@@ -108,6 +133,7 @@ const TypingTest: React.FC<Props> = ({
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (isFailed) return;
+        if (timeLeft === 0 && timeLimit) return;
 
         if (!isStarted) {
             setIsStarted(true);
@@ -145,6 +171,8 @@ const TypingTest: React.FC<Props> = ({
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (isFailed) return;
+        if (timeLeft === 0 && timeLimit) return;
+
         const value = e.target.value;
         if (value.length <= text.length) {
             setUserInput(value);
@@ -184,6 +212,12 @@ const TypingTest: React.FC<Props> = ({
 
     const accuracyGlow = metrics.accuracy >= 98 ? 'shadow-primary/10 border-primary/20' : metrics.accuracy >= 90 ? 'shadow-secondary/10 border-secondary/20' : 'shadow-accent/10 border-accent/20';
 
+    const formatTime = (seconds: number) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
+    };
+
     return (
         <div className="w-full max-w-5xl mx-auto space-y-8">
             {/* Header Metrics */}
@@ -192,7 +226,12 @@ const TypingTest: React.FC<Props> = ({
                     { label: 'Velocity', value: liveWPM, unit: 'WPM', color: 'text-primary' },
                     { label: 'Precision', value: metrics.accuracy, unit: '%', color: 'text-secondary' },
                     { label: 'Progress', value: Math.round((userInput.length / text.length) * 100), unit: '%', color: 'text-accent' },
-                    { label: 'Key Delay', value: liveMetrics.averageKeyDelay, unit: 'ms', color: 'text-text-main' }
+                    {
+                        label: timeLimit ? 'Time Left' : 'Key Delay',
+                        value: timeLimit && timeLeft !== null ? formatTime(timeLeft) : liveMetrics.averageKeyDelay,
+                        unit: timeLimit ? '' : 'ms',
+                        color: timeLimit && (timeLeft || 0) < 30 ? 'text-rose-500 animate-pulse' : 'text-text-main'
+                    }
                 ].map((stat, i) => (
                     <motion.div
                         key={i}

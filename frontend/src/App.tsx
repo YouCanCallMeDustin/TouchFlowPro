@@ -287,7 +287,9 @@ function App() {
     }
   }
 
-  const handleStartCustomSession = (content: string, title: string) => {
+  const [currentLessonDuration, setCurrentLessonDuration] = useState<number | undefined>(undefined)
+
+  const handleStartCustomSession = (content: string, title: string, duration?: number) => {
     const customLesson: Lesson = {
       id: `custom-${Date.now()}`,
       title: title,
@@ -303,6 +305,7 @@ function App() {
       description: 'Custom generated practice session'
     }
     setCurrentLesson(customLesson)
+    setCurrentLessonDuration(duration)
     setCurrentLessonCompleted(false)
     setStage('lesson')
   }
@@ -536,6 +539,7 @@ function App() {
                   onComplete={handleLessonComplete}
                   onCancel={() => setStage('curriculum')}
                   initialDrillText={initialDrillText}
+                  timeLimit={currentLessonDuration}
                 />
               </PageTransition>
             )}

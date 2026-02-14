@@ -33,11 +33,12 @@ interface LessonViewProps {
     onComplete: (metrics: TypingMetrics, passed: boolean, keystrokes?: KeystrokeEvent[]) => void;
     onCancel: () => void;
     initialDrillText?: string;
+    timeLimit?: number;
 }
 
 type Mode = 'intro' | 'theory' | 'warmup' | 'practice' | 'test' | 'results' | 'adaptive';
 
-const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, isCompleted = false, onComplete, onCancel, initialDrillText }) => {
+const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, isCompleted = false, onComplete, onCancel, initialDrillText, timeLimit }) => {
     const [mode, setMode] = useState<Mode>('intro');
     const [testMetrics, setTestMetrics] = useState<TypingMetrics | null>(null);
     const [passed, setPassed] = useState(false);
@@ -478,6 +479,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, isComp
                         dictationMode={dictationEnabled}
                         showLiveMetrics={enhancedModeEnabled}
                         showVirtualKeyboard={enhancedModeEnabled}
+                        timeLimit={timeLimit}
                         mode={lesson.category === 'Code' || lesson.category === 'Programming' ? 'code' : undefined}
                     />
                 </div>

@@ -38,7 +38,7 @@ interface DashboardProps {
     onNavigate: (stage: string) => void;
     userEmail?: string;
     userName?: string | null;
-    onStartCustomSession?: (content: string, title: string) => void;
+    onStartCustomSession?: (content: string, title: string, duration?: number) => void;
 }
 
 interface TodayStats {
@@ -354,7 +354,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                                     <div className="p-6 bg-gradient-to-r from-primary/5 to-transparent border-b border-border flex justify-between items-center">
                                         <div>
                                             <div className="text-[10px] font-black uppercase tracking-widest text-primary mb-1">
-                                                {activePlan.track} Track • Day {new Date().getDate()}
+                                                {activePlan.track} Track • Day {Math.max(1, Math.ceil((new Date().getTime() - new Date(activePlan.createdAt).getTime()) / (1000 * 60 * 60 * 24)))}
                                             </div>
                                             <h3 className="text-2xl font-bold">Today's Training</h3>
                                         </div>
@@ -387,9 +387,13 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                                                 <Button
                                                     size="sm"
                                                     onClick={() => {
-                                                        const mode = item.mode || 'practice';
-                                                        if (mode === 'custom') onStartCustomSession?.(item.title, item.title); // Simplification, ideally fetches content
-                                                        else onNavigate(mode === 'drill' ? 'adaptive_practice' : 'practice');
+                                                        // Always use custom session to ensure content is passed
+                                                        if (item.content) {
+                                                            onStartCustomSession?.(item.content, item.title, item.minutes);
+                                                        } else {
+                                                            const mode = item.mode || 'practice';
+                                                            onNavigate(mode === 'drill' ? 'adaptive_practice' : 'practice');
+                                                        }
                                                     }}
                                                 >
                                                     Start
