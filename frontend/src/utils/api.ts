@@ -51,9 +51,30 @@ export const apiFetch = async <T = any>(endpoint: string, options: RequestInit =
         throw new ApiError(response.statusText, 'UNKNOWN_ERROR', response.status);
     }
 
+    let data: T;
     if (response.status === 204) {
-        return {} as T;
+        data = {} as T;
+    } else {
+        data = await response.json();
     }
 
-    return response.json();
+    // Hybrid response hack to support legacy code expecting Response object
+    if (data && typeof data === 'object') {
+        try {
+            Object.defineProperty(data, 'ok', {
+                value: true,
+                writable: false,
+                enumerable: false
+            });
+            Object.defineProperty(data, 'json', {
+                value: async () => data,
+                writable: false,
+                enumerable: false
+            });
+        } catch (e) {
+            console.warn('Failed to patch apiFetch response:', e);
+        }
+    }
+
+    return data;
 };

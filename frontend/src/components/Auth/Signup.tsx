@@ -27,21 +27,16 @@ const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
         setLoading(true);
 
         try {
-            const response = await apiFetch('/api/auth/signup', {
+            const data = await apiFetch('/api/auth/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
             });
 
-            const data = await response.json();
-
-            if (response.ok) {
-                login(data.token, data.user);
-            } else {
-                setError(data.error || 'Profile Creation Failed');
-            }
-        } catch (err) {
-            setError('System Connection Failure');
+            login(data.token, data.user);
+        } catch (err: any) {
+            console.error('Signup error:', err);
+            setError(err.message || 'System Connection Failure');
         } finally {
             setLoading(false);
         }

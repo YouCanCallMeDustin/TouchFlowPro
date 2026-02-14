@@ -23,21 +23,16 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup }) => {
         setLoading(true);
 
         try {
-            const response = await apiFetch('/api/auth/login', {
+            const data = await apiFetch('/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
             });
 
-            const data = await response.json();
-
-            if (response.ok) {
-                login(data.token, data.user);
-            } else {
-                setError(data.error || 'Access Verification Failed');
-            }
-        } catch (err) {
-            setError('System Connection Failure');
+            login(data.token, data.user);
+        } catch (err: any) {
+            console.error('Login error:', err);
+            setError(err.message || 'System Connection Failure');
         } finally {
             setLoading(false);
         }
