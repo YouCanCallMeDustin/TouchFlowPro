@@ -50,7 +50,7 @@ router.post('/accept', async (req: AuthRequest, res: Response) => {
             })
         ]);
 
-        if (targetOrg && memberCount >= targetOrg.seatLimit) {
+        if (targetOrg && (targetOrg as any).seatLimit !== undefined && memberCount >= (targetOrg as any).seatLimit) {
             return res.status(403).json({
                 error: { code: 'SEAT_LIMIT_REACHED', message: 'Seat limit reached. Upgrade your plan to add more members.' }
             });

@@ -266,7 +266,7 @@ const AnalyticsDashboard: React.FC = () => {
                                 </LineChart>
                             </ResponsiveContainer>
                         </div>
-                    </Card>
+                    </MotionCard>
 
                     {/* Stats Summary */}
                     <MotionCard
