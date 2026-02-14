@@ -75,7 +75,7 @@ router.post('/accept', async (req: AuthRequest, res: Response) => {
     } catch (error) {
         if (error instanceof z.ZodError) {
             return res.status(400).json({
-                error: { code: 'BAD_REQUEST', message: JSON.stringify(error.errors) }
+                error: { code: 'BAD_REQUEST', message: JSON.stringify((error as any).errors) }
             });
         }
         console.error('Failed to accept invite:', error);

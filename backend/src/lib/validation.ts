@@ -26,7 +26,7 @@ const typingMetricsSchema = z.object({
 }).transform(data => ({
     ...data,
     netWPM: data.netWPM ?? data.wpm,
-    durationMs: data.durationMs ?? data.duration
+    durationMs: data.durationMs ?? data.duration ?? 0
 }));
 
 export const completeDrillSchema = z.object({

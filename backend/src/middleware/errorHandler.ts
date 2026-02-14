@@ -9,7 +9,7 @@ export const errorHandler = (err: any, req: Request, res: Response, next: NextFu
             error: {
                 message: 'Validation Error',
                 code: 'VALIDATION_ERROR',
-                details: err.errors || (err as any).issues
+                details: (err as any).errors || (err as any).issues
             }
         });
     }
