@@ -1,5 +1,6 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import prisma from '../lib/db';
+import { authenticateToken, AuthRequest } from '../middleware/auth';
 import { drillLibrary } from '@shared/drillLibrary';
 
 const router = Router();
@@ -8,11 +9,9 @@ const router = Router();
  * GET /api/recommendations/next
  * Returns the single best drill/action for the user right now.
  */
-router.get('/next', async (req, res, next) => {
+router.get('/next', authenticateToken, async (req, res, next) => {
     try {
-        // Authenticated user via middleware (assuming middleware adds req.user)
-        // If strict types, might need casting or extending Request definition.
-        const userId = (req as any).user?.userId;
+        const userId = (req as AuthRequest).user?.id;
 
         if (!userId) {
             return res.status(401).json({ error: 'Unauthorized' });
@@ -121,6 +120,56 @@ router.get('/next', async (req, res, next) => {
 
     } catch (error) {
         next(error);
+    }
+});
+
+/**
+ * GET /api/recommendations/:userId/level
+ * Returns progress towards the next level
+ */
+router.get('/:userId/level', authenticateToken, async (req: Request, res: Response) => {
+    try {
+        const { userId } = req.params as { userId: string };
+
+        const progress = await prisma.userProgress.findUnique({
+            where: { userId }
+        });
+
+        if (!progress) {
+            return res.json({
+                level: 1,
+                levelName: 'Beginner',
+                nextLevelRequirements: { wpm: 20, accuracy: 90 },
+                progress: 0
+            });
+        }
+
+        // Tier logic
+        let levelName = 'Beginner';
+        if (progress.level > 9) levelName = 'Specialist';
+        else if (progress.level > 6) levelName = 'Professional';
+        else if (progress.level > 3) levelName = 'Intermediate';
+
+        // Requirement logic (sample scaling)
+        const nextWpm = 10 + (progress.level * 10);
+        const nextAcc = Math.min(99, 90 + Math.floor(progress.level / 2));
+
+        // XP Math
+        const xpToNext = Math.floor(100 * Math.pow(1.5, progress.level - 1));
+        const percent = Math.min(100, Math.round((progress.xp / xpToNext) * 100));
+
+        res.json({
+            level: progress.level,
+            levelName,
+            nextLevelRequirements: {
+                wpm: nextWpm,
+                accuracy: nextAcc
+            },
+            progress: percent
+        });
+    } catch (error) {
+        console.error('Level info error:', error);
+        res.status(500).json({ error: 'Failed to fetch level info' });
     }
 });
 
