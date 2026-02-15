@@ -76,7 +76,7 @@ function App() {
   const [selectedLessonForDrills, setSelectedLessonForDrills] = useState<Lesson | null>(null)
   const [isFetchingProgress, setIsFetchingProgress] = useState(false)
   const [showAchievement, setShowAchievement] = useState<{ type?: string, isLevel?: boolean, level?: number } | null>(null)
-  const [userSettings, setUserSettings] = useState<any>(null);
+  const [userSettings, _setUserSettings] = useState<any>(null);
 
   useEffect(() => {
     // Force permanent dark mode (nighttime mode)
