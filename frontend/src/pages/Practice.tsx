@@ -4,7 +4,7 @@ import { drillLibrary, type Drill } from '@shared/drillLibrary';
 import { Curriculum, type Lesson } from '@shared/curriculum';
 import LessonView from '../components/LessonView';
 import type { TypingMetrics } from '@shared/types';
-import { Target, Activity, Zap, Filter, Layers, ChevronRight, Search, Lock } from 'lucide-react';
+import { Target, Activity, Zap, Filter, Layers, ChevronRight, Search, Lock, CheckCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { apiFetch } from '../utils/api';
 import { useLaunchStore } from '../state/launchStore';
@@ -19,6 +19,20 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
     const [selectedCategory, setSelectedCategory] = useState<string>('All');
     const [selectedDifficulty, setSelectedDifficulty] = useState<string>('All');
     const [activeDrill, setActiveDrill] = useState<Lesson | null>(null);
+    const [completedDrills, setCompletedDrills] = useState<Set<string>>(new Set());
+
+    // Fetch Completed Drills
+    useEffect(() => {
+        if (!userId) return;
+        apiFetch('/api/drills/completed')
+            .then(res => res.json())
+            .then(data => {
+                if (data.completedDrillIds) {
+                    setCompletedDrills(new Set(data.completedDrillIds));
+                }
+            })
+            .catch(err => console.error('Failed to fetch completed drills', err));
+    }, [userId, activeDrill]); // Re-fetch when activeDrill changes (implies completion)
 
     // Extract unique categories and difficulties
     const categories = useMemo(() => {
@@ -49,6 +63,10 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
                 const drill = drillLibrary.find(d => d.id === pendingLaunch.launch.drillId);
                 if (drill) {
                     const practiceLesson = Curriculum.drillToLesson(drill, 0);
+                    // Override content if promptText is provided (e.g. for custom warmups)
+                    if (pendingLaunch.launch.promptText) {
+                        practiceLesson.content = pendingLaunch.launch.promptText;
+                    }
                     setActiveDrill(practiceLesson);
                 }
             } else if (pendingLaunch.launch.kind === 'CUSTOM_TEXT' && pendingLaunch.launch.promptText) {
@@ -98,17 +116,26 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
                 if (onSessionComplete) {
                     await onSessionComplete(metrics, 'practice', activeDrill.id, keystrokes);
                 } else {
-                    await apiFetch(`/api/drills/${activeDrill.id}/complete`, {
+                    const res = await apiFetch(`/api/drills/${activeDrill.id}/complete`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ metrics, userId })
                     });
+                    const data = await res.json();
+                    if (data.newAchievement) {
+                        alert(`🏆 ACHIEVEMENT UNLOCKED: ${JSON.parse(data.newAchievement.metadata).title}!`);
+                    }
                 }
             }
         } catch (error) {
             console.error('Failed to save practice result:', error);
         } finally {
+            // Force return to list view
             setActiveDrill(null);
+            // Refresh completed list locally for immediate feedback (though effect handles it too)
+            if (activeDrill) {
+                setCompletedDrills(prev => new Set(prev).add(activeDrill.id));
+            }
         }
     };
 
@@ -137,7 +164,7 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
                         Practice Arena
                     </h1>
                     <p className="text-text-muted text-lg max-w-2xl leading-relaxed opacity-70">
-                        Choose your challenge. Focus on specific skills or <span className="text-primary font-black uppercase tracking-wider">Join Community Drills</span> for competitive assessment.
+                        Choose your challenge. Focus on specific skills.
                     </p>
                 </div>
 
@@ -225,6 +252,12 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
                                 </span>
                                 {(['Intermediate', 'Professional', 'Specialist'].includes(drill.difficulty) && user?.subscriptionStatus !== 'pro') && (
                                     <span className="ml-2 text-text-muted opacity-50"><Lock size={12} /></span>
+                                )}
+                                {completedDrills.has(drill.id) && (
+                                    <span className="ml-2 text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full flex items-center gap-1">
+                                        <CheckCircle size={10} />
+                                        <span className="text-[9px] font-black uppercase tracking-wider">Done</span>
+                                    </span>
                                 )}
                                 <span className="text-[10px] font-black text-text-muted uppercase tracking-widest opacity-40">
                                     {drill.category}

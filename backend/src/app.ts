@@ -18,6 +18,7 @@ import customDrillsRoutes from './routes/customDrills';
 import goalsRoutes from './routes/goals';
 import preferencesRoutes from './routes/preferences';
 import profileRoutes from './routes/profile';
+import settingsRoutes from './routes/settings';
 import bibleRoutes from './routes/bible';
 // Phase 0 routes
 import keystrokeTrackingRoutes from './routes/keystrokeTracking';
@@ -45,6 +46,7 @@ app.use(cors({
         'http://localhost:5173',
         'http://localhost:5174',
         'http://localhost:3000',
+        'http://localhost:4000',
         'https://youcancallmedustin.github.io',
         'https://touchflowpro-production.up.railway.app'
     ],
@@ -81,6 +83,7 @@ app.use('/api/history', historyRoutes);
 app.use('/api/custom-drills', customDrillsRoutes);
 app.use('/api/goals', goalsRoutes);
 app.use('/api/profile', profileRoutes);
+app.use('/api/me', settingsRoutes);
 app.use('/api/bible', bibleRoutes);
 app.use('/api/preferences', preferencesRoutes);
 app.use('/api/upload', uploadRoutes);
@@ -98,11 +101,13 @@ import subscriptionsRoutes from './routes/subscriptions';
 import plansRoutes from './routes/plans';
 import orgsRoutes from './routes/orgs';
 import orgInvitesRoutes from './routes/orgInvites';
+import certificatesRoutes from './routes/certificates';
 
 app.use('/api/subscriptions', subscriptionsRoutes);
 app.use('/api/plans', plansRoutes);
 app.use('/api/orgs', orgsRoutes);
 app.use('/api/org-invites', orgInvitesRoutes);
+app.use('/api/certificates', certificatesRoutes);
 
 import billingRoutes from './routes/billing';
 app.use('/api/billing', billingRoutes);

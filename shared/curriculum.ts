@@ -51,13 +51,47 @@ export class Curriculum {
         // Generate learning objectives based on category
         const learningObjectives = this.generateObjectives(drill);
 
+        // Generate Prep Phase Drills (Repeated Words)
+        const warmupSteps = this.generatePrepDrills(drill.content);
+
         return {
             ...drill,
             lessonNumber,
             prerequisites,
             masteryThreshold,
-            learningObjectives
+            learningObjectives,
+            warmupSteps // Override any static warmup steps
         };
+    }
+
+    /**
+     * Generates prep drills based on unique words in the content
+     */
+    private static generatePrepDrills(content: string): { text: string; insight: string }[] {
+        // 1. Clean and extract words
+        const words = content
+            .replace(/[^\w\s']/g, '') // Remove punctuation
+            .split(/\s+/)
+            .filter(w => w.length > 0);
+
+        // 2. Get unique words, preserving order of appearance
+        const uniqueWords = Array.from(new Set(words));
+
+        // 3. Select top 10 (or all if less than 10)
+        const selectedWords = uniqueWords.slice(0, 10);
+
+        // 4. Generate drills
+        return selectedWords.map(word => {
+            // Adjust repetitions based on length to prevent exhaustion
+            // User Request: If >= 8 chars, repeat 5 times. Else 10.
+            const repetitions = word.length >= 8 ? 5 : 10;
+
+            const repeatedText = Array(repetitions).fill(word).join(' ');
+            return {
+                text: repeatedText,
+                insight: `Master the rhythm of "${word}". Build muscle memory before the final test.`
+            };
+        });
     }
 
     /**

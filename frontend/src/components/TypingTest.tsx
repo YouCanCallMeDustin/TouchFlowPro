@@ -4,6 +4,7 @@ import { TypingEngine } from '@shared/typingEngine';
 import type { KeystrokeEvent, TypingMetrics, LiveMetrics } from '@shared/types';
 import { DictationUI } from './DictationMode';
 import { VirtualKeyboard } from './VirtualKeyboard';
+import { soundManager } from '../utils/soundManager';
 
 interface Props {
     text: string;
@@ -153,10 +154,20 @@ const TypingTest: React.FC<Props> = ({
             const isCorrect = e.key === text[userInput.length];
 
             if (suddenDeath && !isCorrect && e.key !== 'Backspace' && e.key !== 'Shift') {
+                soundManager.playError();
                 setIsFailed(true);
                 onSuddenDeathFailure?.();
                 setTimeout(resetTest, 600);
                 return;
+            }
+
+            // Sound Feedback
+            if (e.key !== 'Shift') {
+                if (isCorrect || e.key === 'Backspace') {
+                    soundManager.playType();
+                } else {
+                    soundManager.playError();
+                }
             }
 
             const event: KeystrokeEvent = {

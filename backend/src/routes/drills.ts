@@ -1,8 +1,10 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
+import { authenticateToken, AuthRequest } from '../middleware/auth';
 import { drillLibrary } from '@shared/drillLibrary';
 import { SpacedScheduler } from '@shared/scheduler';
 import { calculateFatigue } from '@shared/fatigue';
 import prisma from '../lib/db';
+import { Achievement } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 import { completeDrillSchema } from '../lib/validation';
 
@@ -22,6 +24,21 @@ router.get('/difficulty/:level', (req, res) => {
     res.json(filtered);
 });
 
+// GET completed drills for user
+router.get('/completed', authenticateToken, async (req: Request, res: Response) => {
+    try {
+        const { id: userId } = (req as AuthRequest).user!;
+        const completed = await prisma.drillResult.findMany({
+            where: { userId },
+            select: { drillId: true },
+            distinct: ['drillId']
+        });
+        res.json({ completedDrillIds: completed.map(c => c.drillId) });
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch completed drills' });
+    }
+});
+
 // GET drill by ID
 router.get('/:id', (req, res) => {
     const drill = drillLibrary.find(d => d.id === req.params.id);
@@ -33,7 +50,6 @@ router.get('/:id', (req, res) => {
 
 // POST complete drill
 router.post('/:id/complete', async (req, res, next) => {
-    // ...
     try {
         const { id: drillId } = req.params;
         const { metrics, userId } = completeDrillSchema.parse(req.body);
@@ -69,7 +85,7 @@ router.post('/:id/complete', async (req, res, next) => {
         const keystrokes = (req.body.keystrokes || []) as any[];
         const fatigue = calculateFatigue(metrics, keystrokes);
 
-        const { updatedItemCalc } = await prisma.$transaction(async (tx) => {
+        const { updatedItemCalc, newAchievement } = await prisma.$transaction(async (tx) => {
             // Save Result
             await tx.drillResult.create({
                 data: {
@@ -85,6 +101,45 @@ router.post('/:id/complete', async (req, res, next) => {
                     idempotencyKey: idempotencyKey || undefined
                 }
             });
+
+            // Check for Category Completion / Achievement
+            let createdAchievement: Achievement | null = null;
+            const currentDrill = drillLibrary.find(d => d.id === drillId);
+            if (currentDrill) {
+                // Get all drills in this category/difficulty
+                const categoryDrills = drillLibrary.filter(d => d.difficulty === currentDrill.difficulty);
+                const totalInCategory = categoryDrills.length;
+
+                // Count user's completed drills in this category
+                // We need to count distinct drillIds for this user where the drill is in this category
+                const categoryDrillIds = categoryDrills.map(d => d.id);
+                const userCompleted = await tx.drillResult.findMany({
+                    where: {
+                        userId,
+                        drillId: { in: categoryDrillIds }
+                    },
+                    select: { drillId: true },
+                    distinct: ['drillId']
+                });
+
+                if (userCompleted.length === totalInCategory) {
+                    const badgeType = `MASTER_${currentDrill.difficulty.toUpperCase()}`;
+                    // Check if already awarded
+                    const existingBadge = await tx.achievement.findUnique({
+                        where: { userId_badgeType: { userId, badgeType } }
+                    });
+
+                    if (!existingBadge) {
+                        createdAchievement = await tx.achievement.create({
+                            data: {
+                                userId,
+                                badgeType,
+                                metadata: JSON.stringify({ category: currentDrill.difficulty, title: `${currentDrill.difficulty} Mastery` })
+                            }
+                        });
+                    }
+                }
+            }
 
             // Get existing spaced item
             let spacedItem = await tx.spacedItem.findFirst({
@@ -132,13 +187,14 @@ router.post('/:id/complete', async (req, res, next) => {
                 });
             }
 
-            return { updatedItemCalc };
+            return { updatedItemCalc, newAchievement: createdAchievement };
         });
 
         res.json({
             message: 'Drill completed',
             nextReview: updatedItemCalc.nextReview,
-            interval: updatedItemCalc.interval
+            interval: updatedItemCalc.interval,
+            newAchievement
         });
     } catch (error) {
         next(error);

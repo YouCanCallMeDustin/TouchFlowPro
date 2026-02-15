@@ -9,13 +9,13 @@ interface TypingCertificateProps {
     userName: string
 }
 
-// Certificate tiers based on WPM
+// Certificate tiers
 const TIERS = [
-    { name: 'Bronze', minWPM: 20, color: '#CD7F32', gradient: 'from-amber-700 to-amber-500', border: 'border-amber-600/40', bg: 'bg-amber-500/10', text: 'text-amber-500', icon: '🥉' },
-    { name: 'Silver', minWPM: 40, color: '#C0C0C0', gradient: 'from-slate-400 to-slate-300', border: 'border-slate-400/40', bg: 'bg-slate-400/10', text: 'text-slate-400', icon: '🥈' },
-    { name: 'Gold', minWPM: 60, color: '#FFD700', gradient: 'from-yellow-500 to-yellow-300', border: 'border-yellow-500/40', bg: 'bg-yellow-500/10', text: 'text-yellow-400', icon: '🥇' },
-    { name: 'Platinum', minWPM: 80, color: '#E5E4E2', gradient: 'from-cyan-400 to-blue-300', border: 'border-cyan-400/40', bg: 'bg-cyan-400/10', text: 'text-cyan-400', icon: '💎' },
-    { name: 'Diamond', minWPM: 100, color: '#B9F2FF', gradient: 'from-violet-500 to-fuchsia-400', border: 'border-violet-500/40', bg: 'bg-violet-500/10', text: 'text-violet-400', icon: '👑' },
+    { name: 'Bronze', minWPM: 20, color: '#CD7F32', icon: '🥉', description: 'Beginner Proficiency' },
+    { name: 'Silver', minWPM: 40, color: '#C0C0C0', icon: '🥈', description: 'Intermediate Proficiency' },
+    { name: 'Gold', minWPM: 60, color: '#FFD700', icon: '🥇', description: 'Advanced Proficiency' },
+    { name: 'Platinum', minWPM: 80, color: '#E5E4E2', icon: '💎', description: 'Expert Proficiency' },
+    { name: 'Diamond', minWPM: 100, color: '#B9F2FF', icon: '👑', description: 'Elite Proficiency' },
 ]
 
 const TEST_DURATIONS = [
@@ -24,7 +24,6 @@ const TEST_DURATIONS = [
     { label: '5 Minutes', seconds: 300, description: 'Professional Certification' },
 ]
 
-// Longer passage for multi-minute tests
 const TEST_PASSAGES = [
     "The quick brown fox jumps over the lazy dog. A journey of a thousand miles begins with a single step. Every moment is a fresh beginning. In the middle of difficulty lies opportunity. The only way to do great work is to love what you do.",
     "Technology is best when it brings people together. Innovation distinguishes between a leader and a follower. The advance of technology is based on making it fit in so that you don't really even notice it, so it's part of everyday life.",
@@ -55,6 +54,7 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
     const [userInput, setUserInput] = useState('')
 
     const [metrics, setMetrics] = useState<TypingMetrics | null>(null)
+    const [testDate, setTestDate] = useState<Date>(new Date())
     const [timeLeft, setTimeLeft] = useState(0)
     const [isStarted, setIsStarted] = useState(false)
     const [isFailed, setIsFailed] = useState(false)
@@ -65,28 +65,109 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
     const textContainerRef = useRef<HTMLDivElement>(null)
     const cursorCharRef = useRef<HTMLSpanElement>(null)
 
-    // Refs to hold latest values so endTest always reads current data
     const keystrokesRef = useRef<KeystrokeEvent[]>([])
     const userInputRef = useRef('')
     const testTextRef = useRef('')
 
-    // Page-flip scroll: only scroll when cursor goes past the bottom of the visible area
+    const [history, setHistory] = useState<any[]>([])
+    const [isLoadingHistory, setIsLoadingHistory] = useState(false)
+    const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle')
+    const [saveError, setSaveError] = useState<string>('')
+
+    const processingRef = useRef(false)
+
+    const endTest = async () => {
+        if (processingRef.current) return
+        processingRef.current = true
+
+        if (timerRef.current) clearInterval(timerRef.current)
+        const finalMetrics = TypingEngine.calculateMetrics(keystrokesRef.current, testTextRef.current)
+        setMetrics(finalMetrics)
+        setPhase('result')
+
+        // Save if passed
+        if (finalMetrics.netWPM >= 20 && finalMetrics.accuracy >= 90) {
+            setSaveStatus('saving')
+            try {
+                const token = localStorage.getItem('tfp_token')
+                if (!token) {
+                    throw new Error('No authentication token found')
+                }
+
+                const res = await fetch('/api/certificates', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        wpm: Math.round(finalMetrics.netWPM),
+                        accuracy: Math.round(finalMetrics.accuracy),
+                        type: selectedDuration.label
+                    })
+                })
+
+                if (!res.ok) {
+                    const errorData = await res.json()
+                    throw new Error(errorData.error || 'Failed to save certificate')
+                }
+
+                setSaveStatus('success')
+                // Refresh history in background so it's ready when they go back
+                fetchHistory()
+            } catch (err: any) {
+                console.error('Failed to save certificate', err)
+                setSaveStatus('error')
+                setSaveError(err.message || 'Unknown error occurred')
+            } finally {
+                processingRef.current = false
+            }
+        } else {
+            processingRef.current = false
+        }
+    }
+
+    // Page-flip scroll
     useEffect(() => {
         if (cursorCharRef.current && textContainerRef.current) {
             const container = textContainerRef.current
             const cursor = cursorCharRef.current
             const containerRect = container.getBoundingClientRect()
             const cursorRect = cursor.getBoundingClientRect()
-            // Only scroll when cursor drops below the visible area (page-flip)
             if (cursorRect.bottom > containerRect.bottom) {
                 container.scrollTop += containerRect.height
             }
         }
     }, [userInput])
 
+    // Fetch history
+    const fetchHistory = async () => {
+        setIsLoadingHistory(true)
+        try {
+            const token = localStorage.getItem('tfp_token')
+            const res = await fetch('/api/certificates', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+            if (res.ok) {
+                const data = await res.json()
+                setHistory(data)
+            }
+        } catch (err) {
+            console.error('Failed to load history', err)
+        } finally {
+            setIsLoadingHistory(false)
+        }
+    }
+
+    useEffect(() => {
+        if (phase === 'select') {
+            fetchHistory()
+        }
+    }, [phase])
+
     const startTest = (duration: typeof TEST_DURATIONS[0]) => {
         setSelectedDuration(duration)
-        // Generate enough text for the duration
+        setTestDate(new Date())
         let passage = ''
         while (passage.length < duration.seconds * 8) {
             passage += TEST_PASSAGES[Math.floor(Math.random() * TEST_PASSAGES.length)] + ' '
@@ -105,13 +186,21 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
         setTimeout(() => inputRef.current?.focus(), 100)
     }
 
-    const endTest = () => {
-        if (timerRef.current) clearInterval(timerRef.current)
-        // Use refs to get the latest data (avoids stale closure)
-        const finalMetrics = TypingEngine.calculateMetrics(keystrokesRef.current, testTextRef.current)
-        setMetrics(finalMetrics)
-        setPhase('result')
-    }
+
+
+    // Continuous WPM update
+    useEffect(() => {
+        let interval: ReturnType<typeof setInterval>
+        if (isStarted && phase === 'testing') {
+            interval = setInterval(() => {
+                if (keystrokesRef.current.length > 0) {
+                    const newMetrics = TypingEngine.calculateMetrics(keystrokesRef.current, testTextRef.current)
+                    setMetrics(newMetrics)
+                }
+            }, 500)
+        }
+        return () => clearInterval(interval)
+    }, [isStarted, phase])
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (isFailed || phase !== 'testing') return
@@ -160,7 +249,6 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
             setUserInput(value)
             userInputRef.current = value
         }
-        // Auto-end if they finish the text
         if (value.length >= currentText.length) {
             endTest()
         }
@@ -168,6 +256,7 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
 
     const resetToSelection = () => {
         if (timerRef.current) clearInterval(timerRef.current)
+        processingRef.current = false
         setPhase('select')
         setMetrics(null)
         setUserInput('')
@@ -180,28 +269,216 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
         if (!cert) return
         const printWindow = window.open('', '_blank')
         if (!printWindow) return
+
+        const css = `
+            @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap');
+            @page { size: landscape; margin: 0; }
+            * { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            body { 
+                margin: 0; 
+                padding: 0; 
+                font-family: 'Montserrat', sans-serif; 
+                background: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 100vh;
+            }
+            .cert-container {
+                width: 11in;
+                height: 8.5in;
+                margin: 0 auto;
+                padding: 40px;
+                position: relative;
+                background: #fff;
+                color: #1a1a1a;
+                overflow: hidden;
+            }
+            /* Fancy Border */
+            .cert-border-outer {
+                position: absolute;
+                top: 20px; left: 20px; right: 20px; bottom: 20px;
+                border: 2px solid #1a1a1a;
+                z-index: 10;
+            }
+            .cert-border-inner {
+                position: absolute;
+                top: 28px; left: 28px; right: 28px; bottom: 28px;
+                border: 1px solid #cfaa5e;
+                z-index: 10;
+            }
+            .corner-tl, .corner-tr, .corner-bl, .corner-br {
+                position: absolute;
+                width: 60px;
+                height: 60px;
+                background-size: contain;
+                z-index: 20;
+                opacity: 0.8;
+            }
+            .corner-tl { top: 15px; left: 15px; border-top: 4px solid #1a1a1a; border-left: 4px solid #1a1a1a; }
+            .corner-tr { top: 15px; right: 15px; border-top: 4px solid #1a1a1a; border-right: 4px solid #1a1a1a; }
+            .corner-bl { bottom: 15px; left: 15px; border-bottom: 4px solid #1a1a1a; border-left: 4px solid #1a1a1a; }
+            .corner-br { bottom: 15px; right: 15px; border-bottom: 4px solid #1a1a1a; border-right: 4px solid #1a1a1a; }
+
+            .cert-content {
+                position: relative;
+                z-index: 30;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            }
+            .logo {
+                font-family: 'Cinzel', serif;
+                font-weight: 900;
+                font-size: 24px;
+                letter-spacing: 4px;
+                color: #333;
+                text-transform: uppercase;
+                margin-bottom: 20px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .main-title {
+                font-family: 'Cinzel', serif;
+                font-size: 48px;
+                font-weight: 700;
+                color: #1a1a1a;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                margin-bottom: 10px;
+                line-height: 1.2;
+            }
+            .subtitle {
+                font-family: 'Playfair Display', serif;
+                font-size: 18px;
+                font-style: italic;
+                color: #666;
+                margin-bottom: 40px;
+            }
+            .recipient-intro {
+                font-size: 14px;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                color: #888;
+                margin-bottom: 15px;
+            }
+            .recipient-name {
+                font-family: 'Playfair Display', serif;
+                font-size: 56px;
+                font-weight: 700;
+                color: #000;
+                border-bottom: 1px solid #ddd;
+                padding-bottom: 10px;
+                margin-bottom: 30px;
+                min-width: 400px;
+            }
+            .achievement-text {
+                font-size: 18px;
+                color: #444;
+                max-width: 700px;
+                margin-bottom: 40px;
+                line-height: 1.6;
+            }
+            .achievement-highlight {
+                font-weight: 700;
+                color: #000;
+            }
+            .tier-Badge {
+                margin: 20px 0;
+            }
+            .metrics-row {
+                display: flex;
+                gap: 40px;
+                margin-bottom: 40px;
+                justify-content: center;
+            }
+            .metric {
+                text-align: center;
+            }
+            .metric-val {
+                font-family: 'Cinzel', serif;
+                font-size: 32px;
+                font-weight: 700;
+                color: #1a1a1a;
+            }
+            .metric-label {
+                font-size: 10px;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                color: #888;
+            }
+            .footer-row {
+                display: flex;
+                justify-content: space-between;
+                width: 80%;
+                margin-top: 40px;
+                border-top: 1px solid #eee;
+                padding-top: 20px;
+            }
+            .footer-col {
+                text-align: center;
+            }
+            .signature {
+                font-family: 'Playfair Display', serif;
+                font-size: 24px;
+                font-style: italic;
+                color: #333;
+                margin-bottom: 5px;
+            }
+            .footer-label {
+                font-size: 10px;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                color: #999;
+            }
+            .watermark {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) rotate(-15deg);
+                font-family: 'Cinzel', serif;
+                font-size: 120px;
+                color: rgba(207, 170, 94, 0.05); /* Gold tint opacity */
+                z-index: 15;
+                pointer-events: none;
+                white-space: nowrap;
+                text-transform: uppercase;
+            }
+        `;
+
         printWindow.document.write(`
-      <html><head><title>TouchFlow Pro - Typing Certificate</title>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Outfit:wght@700;800;900&display=swap" rel="stylesheet">
-      <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #0f172a; font-family: 'Inter', sans-serif; }
-        @media print { body { background: white; } }
-      </style></head><body>${cert.outerHTML}</body></html>
-    `)
+            <html>
+                <head>
+                    <title>Certificate - ${userName}</title>
+                    <style>${css}</style>
+                </head>
+                <body>
+                    ${cert.innerHTML}
+                </body>
+            </html>
+        `)
         printWindow.document.close()
-        setTimeout(() => { printWindow.print(); printWindow.close() }, 500)
+
+        // Wait for fonts/images?
+        setTimeout(() => {
+            printWindow.focus();
+            printWindow.print();
+            printWindow.close();
+        }, 800)
     }
 
     const tier = metrics ? getTier(metrics.netWPM) : TIERS[0]
     const formatTime = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`
 
-    // ─── Selection Screen ───
+    // Render logic components - same as before but prettier UI for phase === 'select'
     if (phase === 'select') {
         return (
             <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
-                {/* Hero */}
-                <div className="relative overflow-hidden card group min-h-[220px] flex items-center p-8 sm:p-12 mb-12">
+                <div className="relative overflow-hidden card group min-h-[220px] flex items-center p-8 sm:p-12 mb-12 border border-slate-700/50">
                     <div className="relative z-10 w-full md:w-2/3">
                         <div className="flex items-center gap-3 mb-6">
                             <span className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/30">
@@ -217,13 +494,8 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
                             Take an official timed typing test and receive a <span className="text-primary font-black uppercase tracking-wider">verifiable certificate</span> of your typing proficiency.
                         </p>
                     </div>
-                    <div className="absolute top-0 right-0 w-1/3 h-full opacity-[0.03] pointer-events-none flex items-center justify-center">
-                        <Award size={300} />
-                    </div>
                 </div>
 
-                {/* Duration Selection */}
-                <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted mb-6">Select Test Duration</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
                     {TEST_DURATIONS.map((dur) => (
                         <motion.button
@@ -231,36 +503,78 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
                             whileHover={{ y: -4 }}
                             whileTap={{ scale: 0.97 }}
                             onClick={() => startTest(dur)}
-                            className="card group cursor-pointer text-left hover:border-primary/30 transition-all p-8"
+                            className="card group cursor-pointer text-left hover:border-primary/30 transition-all p-8 relative overflow-hidden"
                         >
-                            <div className="flex items-center gap-3 mb-4">
-                                <Clock size={18} className="text-primary opacity-60 group-hover:opacity-100 transition-opacity" />
+                            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                                <Clock size={64} />
+                            </div>
+                            <div className="flex items-center gap-3 mb-4 relative z-10">
+                                <Clock size={18} className="text-primary group-hover:scale-110 transition-transform" />
                                 <span className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted">{dur.description}</span>
                             </div>
-                            <h3 className="text-3xl font-heading font-black text-text-main mb-2 group-hover:text-primary transition-colors">{dur.label}</h3>
-                            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-primary opacity-0 group-hover:opacity-100 transition-opacity mt-4">
+                            <h3 className="text-3xl font-heading font-black text-text-main mb-2 group-hover:text-primary transition-colors relative z-10">{dur.label}</h3>
+                            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-primary opacity-0 group-hover:opacity-100 transition-opacity mt-4 relative z-10">
                                 Start Test <ChevronRight size={12} />
                             </div>
                         </motion.button>
                     ))}
                 </div>
 
-                {/* Tier Guide */}
-                <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted mb-6">Certificate Tiers</h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-                    {TIERS.map((t) => (
-                        <div key={t.name} className={`card p-4 text-center ${t.border} ${t.bg}`}>
-                            <span className="text-3xl block mb-2">{t.icon}</span>
-                            <span className={`text-sm font-black ${t.text}`}>{t.name}</span>
-                            <span className="text-[10px] text-text-muted block mt-1">{t.minWPM}+ WPM</span>
+                {/* History Section */}
+                {isLoadingHistory && (
+                    <div className="flex justify-center py-8">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                    </div>
+                )}
+
+                {!isLoadingHistory && history.length > 0 && (
+                    <div className="animate-in fade-in slide-in-from-bottom-8 duration-700">
+                        <h3 className="text-sm font-black uppercase tracking-widest text-text-muted mb-6 flex items-center gap-2">
+                            <Shield size={14} /> Certificate History
+                        </h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                            {history.map((cert) => (
+                                <motion.button
+                                    key={cert.id}
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    onClick={() => {
+                                        setMetrics({
+                                            netWPM: cert.wpm,
+                                            accuracy: cert.accuracy,
+                                            grossWPM: cert.wpm, // Fallback
+                                            errors: 0,
+                                            durationMs: 0
+                                        })
+                                        setTestDate(new Date(cert.testDate))
+                                        // Try to find matching duration label or default
+                                        const dur = TEST_DURATIONS.find(d => d.label === cert.type) || TEST_DURATIONS[0]
+                                        setSelectedDuration(dur)
+                                        setPhase('result')
+                                    }}
+                                    className="card p-4 text-left hover:border-primary/30 transition-colors group"
+                                >
+                                    <div className="flex justify-between items-start mb-2">
+                                        <span className="text-xs font-mono text-text-muted">{new Date(cert.testDate).toLocaleDateString()}</span>
+                                        <Award size={14} className="text-primary opacity-50 group-hover:opacity-100" />
+                                    </div>
+                                    <div className="flex items-baseline gap-2 mb-1">
+                                        <span className="text-2xl font-black text-text-main">{cert.wpm}</span>
+                                        <span className="text-[10px] font-bold text-text-muted uppercase">WPM</span>
+                                    </div>
+                                    <div className="flex justify-between items-end">
+                                        <span className="text-xs text-text-muted">{cert.type}</span>
+                                        <span className={`text-xs font-bold ${cert.accuracy >= 98 ? 'text-green-400' : 'text-secondary'}`}>{cert.accuracy}% Acc</span>
+                                    </div>
+                                </motion.button>
+                            ))}
                         </div>
-                    ))}
-                </div>
+                    </div>
+                )}
             </div>
         )
     }
 
-    // ─── Testing Screen ───
     if (phase === 'testing') {
         const progress = testText.length > 0 ? (userInput.length / testText.length) * 100 : 0
         const currentWPM = metrics?.netWPM || 0
@@ -268,45 +582,41 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
 
         return (
             <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
-                {/* Top Bar */}
                 <div className="flex items-center justify-between mb-6">
                     <button onClick={resetToSelection} className="flex items-center gap-2 text-text-muted hover:text-primary transition-colors">
                         <RotateCcw size={14} />
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">Cancel</span>
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">Abort Test</span>
                     </button>
-                    <div className="flex items-center gap-6">
-                        <div className="flex items-center gap-2">
-                            <Zap size={14} className="text-primary" />
-                            <span className="text-xl font-black text-primary">{currentWPM}</span>
-                            <span className="text-[9px] font-bold text-text-muted uppercase">WPM</span>
+                    <div className="flex items-center gap-8 bg-slate-800/50 backdrop-blur px-6 py-3 rounded-full border border-white/5">
+                        <div className="flex items-center gap-3">
+                            <Zap size={16} className="text-primary" />
+                            <div className="flex flex-col">
+                                <span className="text-xl font-black text-primary leading-none">{currentWPM}</span>
+                                <span className="text-[8px] font-bold text-text-muted uppercase tracking-wider">WPM</span>
+                            </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                            <Target size={14} className="text-secondary" />
-                            <span className="text-xl font-black text-secondary">{currentAccuracy}%</span>
-                            <span className="text-[9px] font-bold text-text-muted uppercase">ACC</span>
+                        <div className="flex items-center gap-3">
+                            <Target size={16} className="text-secondary" />
+                            <div className="flex flex-col">
+                                <span className="text-xl font-black text-secondary leading-none">{currentAccuracy}%</span>
+                                <span className="text-[8px] font-bold text-text-muted uppercase tracking-wider">ACC</span>
+                            </div>
+                        </div>
+                        <div className={`flex items-center gap-3 ${timeLeft <= 10 && isStarted ? 'text-red-500 animate-pulse' : 'text-text-main'}`}>
+                            <Clock size={16} />
+                            <div className="flex flex-col">
+                                <span className="text-xl font-black leading-none tabular-nums">{formatTime(timeLeft)}</span>
+                                <span className="text-[8px] font-bold text-text-muted uppercase tracking-wider">Time</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Timer */}
-                <motion.div
-                    className={`card p-4 mb-6 flex items-center justify-center gap-4 ${timeLeft <= 10 && isStarted ? 'border-red-500/30 bg-red-500/5' : ''}`}
-                    animate={timeLeft <= 10 && isStarted ? { scale: [1, 1.01, 1] } : {}}
-                    transition={{ repeat: Infinity, duration: 1 }}
-                >
-                    <Clock size={20} className={timeLeft <= 10 && isStarted ? 'text-red-500' : 'text-primary'} />
-                    <span className={`text-4xl font-heading font-black tabular-nums ${timeLeft <= 10 && isStarted ? 'text-red-500' : 'text-text-main'}`}>
-                        {formatTime(timeLeft)}
-                    </span>
-                    <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">remaining</span>
-                </motion.div>
-
-                {/* Text Display */}
-                <div className="card p-6 sm:p-10 overflow-hidden mb-6">
-                    {/* Progress Bar */}
-                    <div className="w-full h-1 bg-white/5 rounded-full mb-8">
+                <div className="card p-8 sm:p-12 overflow-hidden mb-6 min-h-[400px] flex flex-col relative">
+                    {/* Progress Line */}
+                    <div className="absolute top-0 left-0 w-full h-1 bg-white/5">
                         <motion.div
-                            className="h-full bg-gradient-to-r from-primary to-secondary rounded-full"
+                            className="h-full bg-gradient-to-r from-primary to-secondary"
                             animate={{ width: `${progress}%` }}
                             transition={{ type: 'spring', stiffness: 100 }}
                         />
@@ -314,8 +624,7 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
 
                     <div
                         ref={textContainerRef}
-                        className="max-h-[200px] overflow-y-auto leading-loose select-none flex flex-wrap gap-x-0.5 gap-y-2 scrollbar-none"
-                        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                        className="flex-1 overflow-y-auto leading-loose select-none flex flex-wrap gap-x-0.5 gap-y-2 scrollbar-none outline-none font-mono text-xl sm:text-2xl"
                     >
                         {testText.split('').map((char, index) => {
                             const isTyped = index < userInput.length
@@ -327,19 +636,19 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
                                 <span
                                     key={index}
                                     ref={isCurrent ? cursorCharRef : undefined}
-                                    className={`inline-block font-mono text-lg sm:text-xl transition-all relative ${isError ? 'text-red-500 bg-red-500/10 rounded' :
+                                    className={`relative transition-colors duration-100 ${isError ? 'text-red-400 bg-red-400/10 rounded-sm' :
                                         isCorrect ? 'text-primary' :
-                                            isCurrent ? 'text-text-main font-black' :
-                                                'text-text-muted opacity-40'
+                                            isCurrent ? 'text-white font-bold decoration-primary underline underline-offset-4' :
+                                                'text-slate-600'
                                         }`}
                                 >
                                     {char === ' ' ? '\u00A0' : char}
                                     {isCurrent && (
                                         <motion.div
                                             layoutId="cert-cursor"
-                                            className="absolute -bottom-1 left-0 w-full h-1 bg-primary rounded-full"
-                                            animate={{ opacity: [1, 0.3, 1] }}
-                                            transition={{ repeat: Infinity, duration: 1 }}
+                                            className="absolute -bottom-1 left-0 w-full h-1 bg-primary rounded-full shadow-[0_0_10px_rgba(var(--primary-rgb),0.8)]"
+                                            animate={{ opacity: [1, 0.5, 1] }}
+                                            transition={{ repeat: Infinity, duration: 0.8 }}
                                         />
                                     )}
                                 </span>
@@ -347,7 +656,6 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
                         })}
                     </div>
 
-                    {/* Hidden Input */}
                     <div className="relative mt-6">
                         <input
                             ref={inputRef}
@@ -357,161 +665,199 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
                             onKeyDown={handleKeyDown}
                             className="absolute inset-0 w-full h-full opacity-0 cursor-default"
                             autoComplete="off"
-                            autoCorrect="off"
+                            autoCorrect="off" // No spellcheck for typing tests
                             autoCapitalize="off"
                             spellCheck="false"
+                            autoFocus
                         />
-                        <div className={`w-full p-3 text-center rounded-xl border-2 transition-all duration-300 ${isStarted ? 'bg-primary/5 border-primary/30 shadow-inner' : 'bg-surface-2 border-border'
-                            }`}>
-                            <span className={`text-[10px] font-black uppercase tracking-[0.2em] ${isStarted ? 'text-primary' : 'text-text-muted opacity-50 animate-pulse'}`}>
-                                {isStarted ? `${selectedDuration.label} Certification Test in Progress...` : 'Type to begin your certification test'}
-                            </span>
-                        </div>
+                        {/* Input Overlay Message */}
+                        {!isStarted && (
+                            <div className="absolute inset-x-0 -top-20 flex justify-center pointer-events-none">
+                                <div className="bg-slate-900/90 backdrop-blur border border-primary/30 text-primary px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest animate-bounce shadow-lg shadow-primary/20">
+                                    Start typing to begin
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
         )
     }
 
-    // ─── Result / Certificate Screen ───
     if (phase === 'result' && metrics) {
         const passed = metrics.accuracy >= 90 && metrics.netWPM >= 20
-        const testDate = new Date()
 
         return (
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
                 <AnimatePresence>
                     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-                        {/* Results Summary */}
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-                            {[
-                                { label: 'Net WPM', value: metrics.netWPM, unit: '', color: 'text-primary' },
-                                { label: 'Accuracy', value: metrics.accuracy, unit: '%', color: 'text-secondary' },
-                                { label: 'Characters', value: metrics.charsTyped, unit: '', color: 'text-accent' },
-                                { label: 'Duration', value: selectedDuration.label, unit: '', color: 'text-text-main' },
-                            ].map((stat, i) => (
-                                <motion.div
-                                    key={i}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: i * 0.1 }}
-                                    className="card p-4 text-center"
-                                >
-                                    <span className="text-[9px] font-black uppercase tracking-widest text-text-muted block mb-1">{stat.label}</span>
-                                    <span className={`text-2xl font-black ${stat.color}`}>
-                                        {stat.value}{stat.unit}
-                                    </span>
-                                </motion.div>
-                            ))}
+                        <div className="text-center mb-12">
+                            <h2 className="text-3xl font-heading font-black text-text-main mb-4 uppercase tracking-tight">Test Results</h2>
+
+                            {/* Save Status Feedback */}
+                            {saveStatus === 'saving' && (
+                                <div className="mb-4 text-primary animate-pulse text-sm font-bold uppercase tracking-widest">Saving result...</div>
+                            )}
+                            {saveStatus === 'success' && (
+                                <div className="mb-4 text-green-400 text-sm font-bold uppercase tracking-widest flex items-center justify-center gap-2">
+                                    <Shield size={14} /> Certificate Saved to History
+                                </div>
+                            )}
+                            {saveStatus === 'error' && (
+                                <div className="mb-4 text-red-400 text-sm font-bold uppercase tracking-widest flex items-center justify-center gap-2">
+                                    <span>Save Failed: {saveError}</span>
+                                </div>
+                            )}
+
+                            <div className="flex justify-center gap-8">
+                                <div className="text-center">
+                                    <div className="text-5xl font-black text-primary mb-1">{metrics.netWPM}</div>
+                                    <div className="text-xs font-bold text-text-muted uppercase tracking-widest">WPM</div>
+                                </div>
+                                <div className="w-px h-16 bg-white/10" />
+                                <div className="text-center">
+                                    <div className="text-5xl font-black text-secondary mb-1">{metrics.accuracy}%</div>
+                                    <div className="text-xs font-bold text-text-muted uppercase tracking-widest">Accuracy</div>
+                                </div>
+                            </div>
                         </div>
 
                         {passed ? (
                             <>
-                                {/* Certificate */}
-                                <div
-                                    ref={certificateRef}
-                                    className="relative overflow-hidden rounded-3xl p-1"
-                                    style={{ background: `linear-gradient(135deg, ${tier.color}40, ${tier.color}10, ${tier.color}40)` }}
-                                >
-                                    <div className="bg-bg-main dark:bg-slate-900 rounded-[1.3rem] p-10 sm:p-16 text-center relative overflow-hidden">
-                                        {/* Decorative corners */}
-                                        <div className="absolute top-4 left-4 w-16 h-16 border-t-2 border-l-2 rounded-tl-lg opacity-20" style={{ borderColor: tier.color }} />
-                                        <div className="absolute top-4 right-4 w-16 h-16 border-t-2 border-r-2 rounded-tr-lg opacity-20" style={{ borderColor: tier.color }} />
-                                        <div className="absolute bottom-4 left-4 w-16 h-16 border-b-2 border-l-2 rounded-bl-lg opacity-20" style={{ borderColor: tier.color }} />
-                                        <div className="absolute bottom-4 right-4 w-16 h-16 border-b-2 border-r-2 rounded-br-lg opacity-20" style={{ borderColor: tier.color }} />
+                                {/* HIDDEN CERTIFICATE TEMPLATE - Used for printing */}
+                                <div className="hidden">
+                                    <div ref={certificateRef} className="cert-container">
+                                        <div className="cert-border-outer"></div>
+                                        <div className="cert-border-inner"></div>
+                                        <div className="corner-tl"></div>
+                                        <div className="corner-tr"></div>
+                                        <div className="corner-br"></div>
+                                        <div className="corner-bl"></div>
 
-                                        {/* Logo / Brand */}
-                                        <div className="flex items-center justify-center gap-2 mb-8">
-                                            <Shield size={16} className="text-primary" />
-                                            <span className="text-[10px] font-black uppercase tracking-[0.5em] text-text-muted">TouchFlow Pro</span>
-                                        </div>
+                                        <div className="watermark">TouchFlow</div>
 
-                                        {/* Title */}
-                                        <h1 className="text-[10px] font-black uppercase tracking-[0.5em] text-text-muted mb-2">Certificate of Typing Proficiency</h1>
-                                        <div className="w-24 h-0.5 mx-auto bg-gradient-to-r from-transparent via-primary to-transparent mb-8" />
-
-                                        {/* Tier Badge */}
-                                        <motion.div
-                                            initial={{ scale: 0 }}
-                                            animate={{ scale: 1 }}
-                                            transition={{ type: 'spring', delay: 0.3 }}
-                                            className="mb-8"
-                                        >
-                                            <span className="text-6xl block mb-3">{tier.icon}</span>
-                                            <span className={`text-3xl font-heading font-black bg-gradient-to-r ${tier.gradient} bg-clip-text text-transparent`}>
-                                                {tier.name} Tier
-                                            </span>
-                                        </motion.div>
-
-                                        {/* Recipient */}
-                                        <p className="text-text-muted text-sm mb-2">This certifies that</p>
-                                        <h2 className="text-4xl sm:text-5xl font-heading font-black text-text-main mb-6 tracking-tight">
-                                            {userName || 'Typist'}
-                                        </h2>
-
-                                        {/* Stats */}
-                                        <p className="text-text-muted text-sm leading-relaxed max-w-lg mx-auto mb-8">
-                                            has demonstrated typing proficiency at{' '}
-                                            <span className={`font-black ${tier.text}`}>{metrics.netWPM} WPM</span>{' '}
-                                            with{' '}
-                                            <span className={`font-black ${tier.text}`}>{metrics.accuracy}% accuracy</span>{' '}
-                                            on a {selectedDuration.label.toLowerCase()} certification test.
-                                        </p>
-
-                                        {/* Date & ID */}
-                                        <div className="flex items-center justify-center gap-8 text-[10px] text-text-muted">
-                                            <div>
-                                                <span className="font-black uppercase tracking-widest block mb-1">Date Issued</span>
-                                                <span className="font-medium">{formatDate(testDate)}</span>
+                                        <div className="cert-content">
+                                            <div className="logo">
+                                                <Shield size={24} /> TouchFlow Pro
                                             </div>
-                                            <div className="w-px h-8 bg-border" />
-                                            <div>
-                                                <span className="font-black uppercase tracking-widest block mb-1">Certificate ID</span>
-                                                <span className="font-mono font-medium">{`TFP-${Date.now().toString(36).toUpperCase()}`}</span>
-                                            </div>
-                                        </div>
 
-                                        {/* Signature Line */}
-                                        <div className="mt-12 pt-8 border-t border-border/30 max-w-xs mx-auto">
-                                            <div className="font-heading text-2xl font-black text-text-muted/30 italic mb-1">TouchFlow Pro</div>
-                                            <div className="w-full h-px bg-text-muted/20 mb-2" />
-                                            <span className="text-[9px] font-black uppercase tracking-[0.4em] text-text-muted">Certification Authority</span>
+                                            <div className="main-title">Certificate of Proficiency</div>
+                                            <div className="subtitle">Awarded for Excellence in Typing Speed & Accuracy</div>
+
+                                            <div className="recipient-intro">This certifies that</div>
+                                            <div className="recipient-name">{userName || "TouchFlow User"}</div>
+
+                                            <div className="achievement-text">
+                                                has successfully completed the <strong>{selectedDuration.label} Certification Standard</strong> and has demonstrated professional typing proficiency.
+                                            </div>
+
+                                            <div className="metrics-row">
+                                                <div className="metric">
+                                                    <div className="metric-val">{metrics.netWPM}</div>
+                                                    <div className="metric-label">Net Words Per Minute</div>
+                                                </div>
+                                                <div className="metric">
+                                                    <div className="metric-val">{tier.name}</div>
+                                                    <div className="metric-label">Proficiency Tier</div>
+                                                </div>
+                                                <div className="metric">
+                                                    <div className="metric-val">{metrics.accuracy}%</div>
+                                                    <div className="metric-label">Accuracy Score</div>
+                                                </div>
+                                            </div>
+
+                                            <div className="footer-row">
+                                                <div className="footer-col">
+                                                    <div className="signature">{formatDate(testDate)}</div>
+                                                    <div className="footer-label">Date of Issue</div>
+                                                </div>
+                                                <div className="footer-col">
+                                                    <div className="signature" style={{ fontFamily: 'monospace', fontSize: '14px', fontStyle: 'normal', letterSpacing: '2px' }}>
+                                                        ID: {Date.now().toString(36).toUpperCase()}
+                                                    </div>
+                                                    <div className="footer-label">Certificate ID</div>
+                                                </div>
+                                                <div className="footer-col">
+                                                    <div className="signature">TouchFlow Authority</div>
+                                                    <div className="footer-label">Verified By</div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* Actions */}
-                                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
+                                {/* PREVIEW CARD (On Screen) */}
+                                <div className="max-w-3xl mx-auto bg-white text-slate-900 rounded-lg shadow-2xl overflow-hidden mb-12 transform hover:scale-[1.01] transition-transform duration-500">
+                                    <div className="p-12 text-center relative border-8 border-slate-100">
+                                        <div className="absolute top-4 left-4 w-12 h-12 border-t-4 border-l-4 border-slate-900"></div>
+                                        <div className="absolute top-4 right-4 w-12 h-12 border-t-4 border-r-4 border-slate-900"></div>
+                                        <div className="absolute bottom-4 left-4 w-12 h-12 border-b-4 border-l-4 border-slate-900"></div>
+                                        <div className="absolute bottom-4 right-4 w-12 h-12 border-b-4 border-r-4 border-slate-900"></div>
+
+                                        <Shield className="w-8 h-8 mx-auto mb-4 text-slate-900" />
+                                        <h2 className="text-3xl font-serif font-bold text-slate-900 mb-2 uppercase tracking-widest">Certificate of Proficiency</h2>
+                                        <div className="w-24 h-1 bg-amber-500 mx-auto mb-8"></div>
+
+                                        <p className="text-slate-500 font-serif italic mb-2">This certifies that</p>
+                                        <h3 className="text-4xl font-serif font-bold text-slate-900 mb-6 border-b-2 border-slate-200 inline-block pb-2 px-8">
+                                            {userName}
+                                        </h3>
+
+                                        <p className="text-slate-600 mb-8 max-w-lg mx-auto leading-relaxed">
+                                            Has achieved the rank of <strong className="text-slate-900">{tier.name}</strong> with a speed of <strong className="text-slate-900">{metrics.netWPM} WPM</strong> and <strong className="text-slate-900">{metrics.accuracy}% accuracy</strong>.
+                                        </p>
+
+                                        <div className="flex justify-between items-end border-t border-slate-200 pt-8 mt-8">
+                                            <div className="text-center">
+                                                <div className="font-serif italic text-lg">{formatDate(testDate)}</div>
+                                                <div className="text-[10px] uppercase font-bold text-slate-400 tracking-widest">Date</div>
+                                            </div>
+                                            <div className="text-center">
+                                                <div className="font-serif italic text-lg text-slate-300">TouchFlow Authority</div>
+                                                <div className="text-[10px] uppercase font-bold text-slate-400 tracking-widest">Signature</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="flex justify-center gap-4">
                                     <button
                                         onClick={printCertificate}
-                                        className="flex items-center gap-2 px-8 py-3 rounded-xl bg-gradient-to-r from-primary to-secondary text-white font-black text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-primary/30 hover:scale-105 active:scale-95 transition-all"
+                                        className="flex items-center gap-2 px-8 py-4 rounded-xl bg-primary text-white font-black text-xs uppercase tracking-widest shadow-xl shadow-primary/30 hover:scale-105 transition-transform"
                                     >
-                                        <Download size={14} />
-                                        Download / Print Certificate
+                                        <Download size={16} />
+                                        Download Official Certificate
                                     </button>
                                     <button
                                         onClick={resetToSelection}
-                                        className="flex items-center gap-2 px-8 py-3 rounded-xl border border-border text-text-muted font-black text-[10px] uppercase tracking-[0.2em] hover:bg-surface-2 transition-all"
+                                        className="flex items-center gap-2 px-8 py-4 rounded-xl border border-white/10 hover:bg-white/5 text-text-muted hover:text-white font-black text-xs uppercase tracking-widest transition-colors"
                                     >
-                                        <RotateCcw size={14} />
-                                        Take Another Test
+                                        <RotateCcw size={16} />
+                                        New Test
+                                    </button>
+                                </div>
+                                <div className="mt-8 flex justify-center">
+                                    <button
+                                        onClick={resetToSelection}
+                                        className="text-text-muted hover:text-primary text-xs uppercase tracking-widest font-bold flex items-center gap-2 transition-colors"
+                                    >
+                                        <Shield size={14} /> Back to History
                                     </button>
                                 </div>
                             </>
                         ) : (
-                            /* Failed to qualify */
-                            <div className="card p-12 text-center">
-                                <span className="text-5xl block mb-6">📋</span>
-                                <h2 className="text-2xl font-heading font-black text-text-main mb-3">Keep Practicing!</h2>
-                                <p className="text-text-muted max-w-md mx-auto mb-8">
-                                    You need at least <strong className="text-primary">20 WPM</strong> with <strong className="text-primary">90% accuracy</strong> to earn a certificate.
-                                    Your result: {metrics.netWPM} WPM / {metrics.accuracy}% accuracy.
+                            <div className="card max-w-lg mx-auto p-12 text-center border-dashed border-2 border-white/10 bg-transparent">
+                                <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <Target size={32} className="text-text-muted opacity-50" />
+                                </div>
+                                <h3 className="text-2xl font-black text-text-main mb-2">Certification Requirement Not Met</h3>
+                                <p className="text-text-muted mb-8 leading-relaxed">
+                                    To achieve certification, you must maintain at least <strong className="text-white">90% accuracy</strong> and <strong className="text-white">20 WPM</strong>.
                                 </p>
                                 <button
                                     onClick={resetToSelection}
-                                    className="flex items-center gap-2 mx-auto px-8 py-3 rounded-xl bg-primary text-white font-black text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-primary/30 hover:scale-105 active:scale-95 transition-all"
+                                    className="px-8 py-3 rounded-xl bg-white/10 hover:bg-white/20 text-white font-black text-xs uppercase tracking-widest transition-all"
                                 >
-                                    <RotateCcw size={14} />
                                     Try Again
                                 </button>
                             </div>

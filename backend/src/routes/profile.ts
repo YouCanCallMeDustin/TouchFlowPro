@@ -25,7 +25,8 @@ router.get('/:userId', async (req: Request, res: Response) => {
             state: (user as any).state || null,
             age: (user as any).age || null,
             photoUrl: (user as any).photoUrl || null,
-            createdAt: user.createdAt
+            subscriptionStatus: user.subscriptionStatus,
+            subscriptionEndDate: user.subscriptionEndDate
         };
 
         res.json(profileData);

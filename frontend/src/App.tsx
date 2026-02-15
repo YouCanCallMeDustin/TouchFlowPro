@@ -42,6 +42,8 @@ import { drillLibrary } from '@shared/drillLibrary'
 import type { UserProgress, Lesson } from '@shared/curriculum'
 import type { DifficultyLevel, PlacementResult } from '@shared/placement'
 import Orgs from './pages/Orgs'
+import Settings from './pages/Settings'
+import { soundManager } from './utils/soundManager'
 import {
   LayoutDashboard,
   BookOpen,
@@ -53,12 +55,13 @@ import {
   Shield,
   Code,
   Gamepad2,
-  Users
+  Users,
+  Settings as SettingsIcon
 } from 'lucide-react'
 
 import { apiFetch } from './utils/api';
 
-type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension' | 'games' | 'games_accuracy_assassin' | 'games_burner_burst' | 'games_spell_rush' | 'orgs'
+type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension' | 'games' | 'games_accuracy_assassin' | 'games_burner_burst' | 'games_spell_rush' | 'orgs' | 'settings'
 
 function App() {
   const { user, loading, logout } = useAuth()
@@ -73,6 +76,7 @@ function App() {
   const [selectedLessonForDrills, setSelectedLessonForDrills] = useState<Lesson | null>(null)
   const [isFetchingProgress, setIsFetchingProgress] = useState(false)
   const [showAchievement, setShowAchievement] = useState<{ type?: string, isLevel?: boolean, level?: number } | null>(null)
+  const [userSettings, setUserSettings] = useState<any>(null);
 
   useEffect(() => {
     // Force permanent dark mode (nighttime mode)
@@ -124,12 +128,28 @@ function App() {
     }
   }, [user, loading, fetchProgress])
 
-  const handleStartLesson = (lesson: Lesson, isCompleted: boolean, drillText?: string) => {
-    setCurrentLesson(lesson)
-    setCurrentLessonCompleted(isCompleted)
-    setInitialDrillText(drillText)
-    setStage('lesson')
-  }
+  // Fetch user settings
+  useEffect(() => {
+    if (user) {
+      apiFetch('/api/me/settings')
+        .then(res => {
+          if (res.ok) return res.json();
+          throw new Error('Failed to fetch settings');
+        })
+        .then(settings => {
+          if (settings && typeof settings.soundEnabled === 'boolean') {
+            soundManager.setEnabled(settings.soundEnabled);
+          }
+        })
+        .catch(err => {
+          console.error('Failed to load settings:', err);
+          // Default to true if fetch fails or no settings
+          soundManager.setEnabled(true);
+        });
+    }
+  }, [user]);
+
+  const [activeVariationId, setActiveVariationId] = useState<string | null>(null)
 
   const handleViewDrills = (lesson: Lesson) => {
     setSelectedLessonForDrills(lesson)
@@ -214,6 +234,14 @@ function App() {
     }
   };
 
+  const handleStartLesson = (lesson: Lesson, isCompleted: boolean, drillText?: string, variationId?: string) => {
+    setCurrentLesson(lesson)
+    setCurrentLessonCompleted(isCompleted)
+    setInitialDrillText(drillText)
+    setActiveVariationId(variationId || null)
+    setStage('lesson')
+  }
+
   const handleLessonComplete = async (metrics: TypingMetrics, _passed: boolean, ks?: KeystrokeEvent[]) => {
     if (!currentLesson || !userProgress || !user) return
 
@@ -223,27 +251,43 @@ function App() {
         updateKeystrokeStats(user.id, ks, currentLesson.content);
       }
 
-      const response = await apiFetch(`/api/progress/${user.id}/lesson/${currentLesson.id}/complete`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ metrics, lesson: currentLesson })
-      })
-
-      const data = await response.json()
-      setUserProgress(data.progress)
-
-      if (data.leveledUp && data.newLevel) {
-        setLevelUpInfo({
-          newLevel: data.newLevel,
-          message: data.levelUpMessage
+      if (activeVariationId) {
+        // Handle Focus Drill Variation Completion
+        const response = await apiFetch(`/api/drills/${activeVariationId}/complete`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ metrics, userId: user.id })
         })
-        setStage('levelup')
+        const data = await response.json()
+        if (data.newAchievement) {
+          setShowAchievement({ type: data.newAchievement })
+        }
+        // Return to selection
+        setStage('drill_selection')
       } else {
-        setStage('curriculum')
+        // Standard Lesson Completion
+        const response = await apiFetch(`/api/progress/${user.id}/lesson/${currentLesson.id}/complete`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ metrics, lesson: currentLesson })
+        })
+
+        const data = await response.json()
+        setUserProgress(data.progress)
+
+        if (data.leveledUp && data.newLevel) {
+          setLevelUpInfo({
+            newLevel: data.newLevel,
+            message: data.levelUpMessage
+          })
+          setStage('levelup')
+        } else {
+          setStage('curriculum')
+        }
       }
     } catch (error) {
       console.error('Failed to complete lesson:', error)
-      setStage('curriculum')
+      setStage(activeVariationId ? 'drill_selection' : 'curriculum')
     }
   }
 
@@ -259,7 +303,7 @@ function App() {
           drillId,
           type,
           metrics,
-          keystrokes,
+          keystrokes: (type === 'practice' && userSettings?.storeRawLogsPractice === false) || (type === 'lesson' && userSettings?.storeRawLogsCurriculum === false) ? [] : keystrokes,
           liveMetrics
         })
       })
@@ -350,14 +394,16 @@ function App() {
                   </div>
 
                   {/* Upgrade Button */}
-                  <button
-                    onClick={() => setStage('pricing')}
-                    className="group relative px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95"
-                  >
-                    <span className="relative z-10 text-[9px] font-black uppercase tracking-[0.2em] flex items-center gap-2">
-                      <Zap size={12} fill="currentColor" /> Upgrade
-                    </span>
-                  </button>
+                  {user.subscriptionStatus !== 'pro' && (
+                    <button
+                      onClick={() => setStage('pricing')}
+                      className="group relative px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95"
+                    >
+                      <span className="relative z-10 text-[9px] font-black uppercase tracking-[0.2em] flex items-center gap-2">
+                        <Zap size={12} fill="currentColor" /> Upgrade
+                      </span>
+                    </button>
+                  )}
 
                   <button
                     onClick={logout}
@@ -385,6 +431,7 @@ function App() {
                   { id: 'leaderboard' as Stage, label: 'Ranks', icon: Trophy },
                   { id: 'certificate' as Stage, label: 'Certify', icon: Shield },
                   { id: 'extension' as Stage, label: 'VS Code', icon: Code },
+                  { id: 'settings' as Stage, label: 'Settings', icon: SettingsIcon },
                 ].map((item) => (
                   <button
                     key={item.id}
@@ -524,7 +571,7 @@ function App() {
               <PageTransition key="drill_selection">
                 <DrillSelectionPage
                   lesson={selectedLessonForDrills}
-                  onStartDrill={(lesson, drillText) => handleStartLesson(lesson, true, drillText)}
+                  onStartDrill={(lesson, drillText, variationId) => handleStartLesson(lesson, true, drillText, variationId)}
                   onBack={() => setStage('curriculum')}
                 />
               </PageTransition>
@@ -583,6 +630,12 @@ function App() {
                   userEmail={user.email}
                   onProfileUpdate={() => fetchProgress(user.id)}
                 />
+              </PageTransition>
+            )}
+
+            {stage === 'settings' && user && (
+              <PageTransition key="settings">
+                <Settings />
               </PageTransition>
             )}
 

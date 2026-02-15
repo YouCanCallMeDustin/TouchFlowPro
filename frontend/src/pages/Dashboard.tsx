@@ -22,7 +22,8 @@ import {
     ArrowUpRight,
     Award,
     Edit3,
-    CheckCircle
+    CheckCircle,
+    ChevronRight
 } from 'lucide-react';
 import { format } from 'date-fns';
 import PageTransition from '../components/PageTransition';
@@ -33,6 +34,7 @@ import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 
 import { useLaunchStore } from '../state/launchStore';
+import { drillLibrary } from '@shared/drillLibrary';
 
 const MotionCard = motion(Card);
 
@@ -86,6 +88,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
     const [plateau, setPlateau] = useState<any>(null);
     const [activePlan, setActivePlan] = useState<any>(null);
     const [todaysPlan, setTodaysPlan] = useState<any>(null);
+    const [userSettings, setUserSettings] = useState<any>(null);
     const [showCreatePlan, setShowCreatePlan] = useState(false);
     const [loading, setLoading] = useState(true);
 
@@ -137,13 +140,14 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
     const fetchDashboardData = async () => {
         try {
             setLoading(true);
-            const [summaryRes, streakRes, achievementsRes, trendsRes, plateauRes, planRes] = await Promise.all([
+            const [summaryRes, streakRes, achievementsRes, trendsRes, plateauRes, planRes, settingsRes] = await Promise.all([
                 apiFetch(`/api/analytics/${userId}/summary`),
                 apiFetch(`/api/streaks/${userId}`),
                 apiFetch(`/api/achievements/${userId}`),
                 apiFetch(`/api/analytics/${userId}/trends?days=7`),
                 apiFetch(`/api/analytics/${userId}/insights/plateau`),
-                apiFetch(`/api/plans/active`)
+                apiFetch(`/api/plans/active`),
+                apiFetch('/api/me/settings')
             ]);
 
             const summaryData = await summaryRes.json();
@@ -151,6 +155,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
             const achievementsData = await achievementsRes.json();
             const trendsData = await trendsRes.json();
             const plateauData = await plateauRes.json();
+            const settingsData = settingsRes.ok ? await settingsRes.json() : null;
 
             if (planRes.ok) {
                 const plan = await planRes.json();
@@ -172,6 +177,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
 
             setStreak(streakData);
             setPlateau(plateauData);
+            if (settingsData) setUserSettings(settingsData);
 
             if (achievementsData.achievements) {
                 const recent = achievementsData.achievements
@@ -336,7 +342,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                                                             {['MEDICAL', 'LEGAL', 'OPS', 'CODE'].map(t => (
                                                                 <button
                                                                     key={t}
-                                                                    onClick={() => handleCreatePlan(t, 60, 20)} // Simplified for demo
+                                                                    onClick={() => handleCreatePlan(t, 60, userSettings?.dailyGoalMinutes || 20)}
                                                                     className="p-3 rounded-lg border border-border hover:bg-primary/10 hover:border-primary transition-colors text-sm font-bold"
                                                                 >
                                                                     {t}
@@ -367,6 +373,32 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                                         </div>
                                     </div>
 
+                                    {/* Update Plan Banner */}
+                                    {userSettings && activePlan && userSettings.dailyGoalMinutes !== activePlan.minutesPerDay && (
+                                        <div className="mx-6 mt-6 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg flex items-center justify-between text-xs">
+                                            <div className="text-blue-200">
+                                                <strong>Plan Update Available:</strong> Your daily goal setting ({userSettings.dailyGoalMinutes}m) differs from this plan ({activePlan.minutesPerDay}m).
+                                            </div>
+                                            <button
+                                                onClick={async () => {
+                                                    setLoading(true);
+                                                    try {
+                                                        const res = await apiFetch('/api/plans/active/sync', { method: 'POST' });
+                                                        if (res.ok) {
+                                                            fetchDashboardData();
+                                                        }
+                                                    } catch (e) {
+                                                        console.error(e);
+                                                        setLoading(false);
+                                                    }
+                                                }}
+                                                className="text-white bg-blue-500/20 hover:bg-blue-500/30 px-3 py-1.5 rounded-md font-bold transition-colors ml-4"
+                                            >
+                                                Sync to {userSettings.dailyGoalMinutes}m
+                                            </button>
+                                        </div>
+                                    )}
+
                                     <div className="p-6 space-y-4">
                                         {todaysPlan?.items && todaysPlan.items.map((item: any, idx: number) => (
                                             <div key={idx} className="flex items-center gap-4 p-4 rounded-xl bg-surface border border-border">
@@ -395,23 +427,49 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                                                     size="sm"
                                                     variant={item.isCompleted ? "outline" : "primary"}
                                                     onClick={() => {
+                                                        // Custom Override for Medical Warmup
+                                                        // If this is the Daily Warmup AND we are on the MEDICAL track,
+                                                        // launch a RANDOM BEGINNER drill instead of the generic warmup.
+                                                        let launchConfig = { ...item.launch };
+                                                        let titleConfig = item.title;
+                                                        let modeConfig = item.mode;
+
+                                                        if (activePlan.track === 'MEDICAL' && item.blockType === 'WARMUP') {
+                                                            // Filter for Beginner drills
+                                                            const beginnerDrills = drillLibrary.filter(d => d.difficulty === 'Beginner');
+                                                            const randomDrill = beginnerDrills[Math.floor(Math.random() * beginnerDrills.length)];
+
+                                                            if (randomDrill) {
+                                                                let content = randomDrill.content;
+                                                                // Ensure at least 100 characters
+                                                                while (content.length < 100) {
+                                                                    content += ' ' + randomDrill.content;
+                                                                }
+
+                                                                launchConfig = {
+                                                                    kind: 'DRILL',
+                                                                    drillId: randomDrill.id,
+                                                                    promptText: content
+                                                                };
+                                                                titleConfig = `Warmup: ${randomDrill.title}`;
+                                                                modeConfig = 'quote';
+                                                            }
+                                                        }
+
                                                         // Use the store to launch
                                                         useLaunchStore.getState().setPendingLaunch({
                                                             source: 'trainingPlan',
                                                             planId: activePlan.id,
                                                             planItemId: item.id,
-                                                            mode: item.mode,
+                                                            mode: modeConfig,
                                                             recommendedSeconds: item.recommendedSeconds,
-                                                            launch: item.launch,
-                                                            title: item.title
+                                                            launch: launchConfig,
+                                                            title: titleConfig
                                                         });
 
                                                         // Navigate to the correct stage
-                                                        if (item.launch.kind === 'LESSON') {
+                                                        if (launchConfig.kind === 'LESSON') {
                                                             onNavigate('lesson');
-                                                        } else if (item.mode === 'code') {
-                                                            // Usually code practice is in practice view but with code mode
-                                                            onNavigate('practice');
                                                         } else {
                                                             onNavigate('practice');
                                                         }
@@ -434,8 +492,20 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                                             </Button>
                                         )}
                                         {todaysPlan && todaysPlan.status === 'COMPLETED' && (
-                                            <div className="w-full mt-4 p-3 bg-green-500/10 text-green-500 text-center font-bold rounded-xl border border-green-500/20">
-                                                Day Completed! 🎉
+                                            <div className="space-y-4 mt-6">
+                                                <div className="w-full p-4 bg-emerald-500/10 text-emerald-500 text-center font-bold rounded-xl border border-emerald-500/20 flex items-center justify-center gap-2">
+                                                    <CheckCircle size={20} />
+                                                    <span>Day Completed! Great work.</span>
+                                                </div>
+                                                <Button
+                                                    className="w-full py-6 text-lg font-black uppercase tracking-widest shadow-xl shadow-primary/20 hover:scale-[1.02] transition-all"
+                                                    onClick={() => {
+                                                        setLoading(true);
+                                                        fetchDashboardData();
+                                                    }}
+                                                >
+                                                    Start Next Day <ChevronRight size={20} className="ml-2" />
+                                                </Button>
                                             </div>
                                         )}
                                     </div>

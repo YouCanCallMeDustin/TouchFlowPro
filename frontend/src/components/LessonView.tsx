@@ -36,14 +36,14 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
     const [mode, setMode] = useState<Mode>('intro');
     const [testMetrics, setTestMetrics] = useState<TypingMetrics | null>(null);
     const [passed, setPassed] = useState(false);
-    const [practiceText, setPracticeText] = useState<string>('');
+    const [practiceText, setPracticeText] = useState<string>(lesson.content);
     const [adaptiveText, setAdaptiveText] = useState<string>('');
     const [keystrokes, setKeystrokes] = useState<KeystrokeEvent[]>([]);
     const [warmupStepIndex, setWarmupStepIndex] = useState(0);
     const [showWarmupStepInsight, setShowWarmupStepInsight] = useState(false);
     const [warmupStepMetrics, setWarmupStepMetrics] = useState<TypingMetrics | null>(null);
     const [isAdaptiveResult, setIsAdaptiveResult] = useState(false);
-    const [suddenDeathEnabled, setSuddenDeathEnabled] = useState(true);
+    const [suddenDeathEnabled, setSuddenDeathEnabled] = useState(false);
     const [dictationEnabled] = useState(false);
     const [enhancedModeEnabled] = useState(true); // Enable enhanced mode by default
     const [showCelebration, setShowCelebration] = useState(false);
@@ -59,7 +59,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
         if (pendingLaunch && pendingLaunch.source === 'trainingPlan') {
             setIsPlanLauncher(true);
             setPracticeText(
-                pendingLaunch.launch.kind === 'CUSTOM_TEXT' && pendingLaunch.launch.promptText
+                pendingLaunch.launch.promptText
                     ? pendingLaunch.launch.promptText
                     : lesson.content
             );
@@ -119,7 +119,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
             setWarmupStepMetrics(null);
             setShowWarmupStepInsight(false);
             setWarmupCompleted(true);
-            setMode('intro');
+            setMode('practice');
         }
     };
 
@@ -134,9 +134,8 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
         // Handle Training Plan Completion
         if (isPlanLauncher && pendingLaunch) {
             try {
-                await apiFetch('/api/plans/active/today/complete', {
-                    method: 'POST',
-                    body: JSON.stringify({ planItemId: pendingLaunch.planItemId })
+                await apiFetch(`/api/plans/active/item/${pendingLaunch.planItemId}/complete`, {
+                    method: 'POST'
                 });
                 // Clear pending launch so further nav works
                 clearPendingLaunch();
@@ -290,10 +289,10 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
 
                     <div className="flex flex-col gap-5 max-w-md mx-auto">
                         <Button
-                            onClick={() => setMode('practice')}
+                            onClick={initiateWarmup}
                             className="px-8 py-6 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 group"
                         >
-                            Start Practice
+                            Start Training
                             <Rocket size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                         </Button>
                     </div>

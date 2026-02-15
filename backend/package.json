@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/index.ts",
+    "dev": "nodemon -r tsconfig-paths/register src/index.ts",
     "build": "npx prisma generate && tsc && tsc-alias",
     "start": "node -r dotenv/config dist/backend/src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -30,7 +30,8 @@
     "tsc-alias": "^1.8.10",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.3",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

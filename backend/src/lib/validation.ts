@@ -47,3 +47,19 @@ export const completeDrillSchema = z.object({
     keystrokes: z.array(z.any()).optional(),
     idempotencyKey: z.string().optional(),
 });
+
+export const updateSettingsSchema = z.object({
+    soundEnabled: z.boolean().optional(),
+    reduceMotion: z.boolean().optional(),
+    fontScale: z.enum(['SM', 'MD', 'LG']).optional(),
+    strictAccuracy: z.boolean().optional(),
+    autoPauseIdle: z.boolean().optional(),
+    dailyGoalMinutes: z.number().min(5).max(1440).optional(),
+    defaultFocus: z.enum(['BALANCED', 'SPEED', 'ACCURACY', 'ENDURANCE']).optional(),
+    warmupSeconds: z.number().min(0).max(3600).optional(),
+    reviewSeconds: z.number().min(0).max(3600).optional(),
+    skillSeconds: z.number().min(0).max(3600).optional(),
+    cooldownSeconds: z.number().min(0).max(3600).optional(),
+    storeRawLogsPractice: z.boolean().optional(),
+    storeRawLogsCurriculum: z.boolean().optional(),
+});
