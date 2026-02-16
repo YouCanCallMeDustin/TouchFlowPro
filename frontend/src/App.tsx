@@ -741,7 +741,7 @@ function App() {
             {stage === 'orgs' && user && (
               <PageTransition key="orgs">
                 <Orgs
-                  onNavigate={(s) => setStage(s as Stage)}
+                  onNavigate={(s: string) => setStage(s as Stage)}
                   onViewReport={(orgId) => {
                     setReportOrgId(orgId);
                     setStage('sample_report');

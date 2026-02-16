@@ -12,7 +12,8 @@ import {
     TrendingUp,
     Target,
     Key,
-    FileText
+    FileText,
+    ArrowLeft
 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
@@ -35,10 +36,11 @@ interface Organization {
 }
 
 interface OrgsProps {
+    onNavigate: (stage: string) => void;
     onViewReport: (orgId: string) => void;
 }
 
-const Orgs: React.FC<OrgsProps> = ({ onViewReport }) => {
+const Orgs: React.FC<OrgsProps> = ({ onNavigate, onViewReport }) => {
 
     // ... inside return ...
 
@@ -134,6 +136,13 @@ const Orgs: React.FC<OrgsProps> = ({ onViewReport }) => {
                 <div className="relative overflow-hidden card group min-h-[220px] flex items-center bg-gradient-to-br from-primary/[0.03] to-secondary/[0.03] border border-white/10 p-8 sm:p-12">
                     <div className="relative z-10 w-full md:w-2/3">
                         <div className="flex items-center gap-3 mb-6">
+                            <button
+                                onClick={() => onNavigate('dashboard')}
+                                className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center border border-white/10 text-text-muted hover:text-primary hover:border-primary/30 transition-all mr-2"
+                                title="Back to Dashboard"
+                            >
+                                <ArrowLeft size={16} />
+                            </button>
                             <span className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center border border-primary/30">
                                 <Users size={18} className="text-primary" />
                             </span>
