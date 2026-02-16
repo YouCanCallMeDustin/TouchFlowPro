@@ -145,7 +145,7 @@ const Profile: React.FC<ProfileProps> = ({ userId, userEmail, onProfileUpdate })
             const formData = new FormData();
             formData.append('photo', file);
 
-            const response = await apiFetch('/api/upload/profile-photo', {
+            const response = await apiFetch('/api/upload', {
                 method: 'POST',
                 body: formData,
             });

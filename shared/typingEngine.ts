@@ -52,11 +52,13 @@ export class TypingEngine {
         // Gross WPM is based on total effort (Total Physical Keystrokes / 5) / Time
         const grossWPM = (totalPhysicalKeystrokes / 5) / minutes;
 
-        // Net WPM is Gross - (Uncorrected Errors / Time)
-        const netWPM = Math.max(0, grossWPM - (currentErrors / minutes));
+        // Net WPM: (Correct Characters Typed / 5) / Minutes
+        // This is more standard and less punishing than Gross - (Errors/Min) for short bursts
+        const correctChars = buffer.length - currentErrors;
+        const netWPM = (correctChars / 5) / minutes;
 
         // Accuracy is (Corrected Chars in Buffer / Total Chars in Buffer)
-        const accuracy = buffer.length > 0 ? ((buffer.length - currentErrors) / buffer.length) * 100 : 0;
+        const accuracy = buffer.length > 0 ? (correctChars / buffer.length) * 100 : 0;
 
         return {
             grossWPM: Math.round(grossWPM * 10) / 10,

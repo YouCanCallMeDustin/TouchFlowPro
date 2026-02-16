@@ -7,6 +7,7 @@ import { drillLibrary } from '@shared/drillLibrary';
 import { v4 as uuidv4 } from 'uuid';
 import { updateUserStats } from '../utils/userStats';
 import { assessmentSchema, completeLessonSchema } from '../lib/validation';
+import { getEffectiveSubscriptionStatus } from '../lib/subscription';
 
 const router = Router();
 
@@ -43,6 +44,7 @@ async function getUserProgress(userId: string): Promise<UserProgress | null> {
     }
 
     const unlockedLevels = user.unlockedLevels.split(',') as DifficultyLevel[];
+    const effectiveStatus = await getEffectiveSubscriptionStatus(userId);
 
     return {
         userId: user.id,
@@ -53,7 +55,7 @@ async function getUserProgress(userId: string): Promise<UserProgress | null> {
         lessonScores,
         currentLesson: user.currentLessonId || null,
         unlockedLevels,
-        subscriptionStatus: user.subscriptionStatus as 'free' | 'pro' | 'cancelled'
+        subscriptionStatus: effectiveStatus as 'free' | 'pro' | 'cancelled'
     };
 }
 

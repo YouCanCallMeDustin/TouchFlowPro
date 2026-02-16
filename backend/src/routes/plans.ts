@@ -343,21 +343,22 @@ router.post('/active/item/:itemId/complete', authenticateToken, async (req: Requ
         });
         if (!plan) return res.status(404).json({ error: 'No active plan' });
 
-        const today = new Date();
-        const startOfDay = new Date(today.setHours(0, 0, 0, 0));
-        const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+        // PROGRESSION LOGIC: Find the training day that contains this itemId
+        // We search all days for this plan because the user might be doing a past or future day
+        const allDays = await prisma.trainingDay.findMany({
+            where: { planId: plan.id }
+        });
 
-        const day = await prisma.trainingDay.findFirst({
-            where: {
-                planId: plan.id,
-                date: {
-                    gte: startOfDay,
-                    lte: endOfDay
-                }
+        const day = allDays.find(d => {
+            try {
+                const items = JSON.parse(d.itemsJson);
+                return items.some((item: any) => item.id === itemId);
+            } catch (e) {
+                return false;
             }
         });
 
-        if (!day) return res.status(404).json({ error: 'No training day found for today' });
+        if (!day) return res.status(404).json({ error: 'No training day found containing this item' });
 
         const completedIds = JSON.parse((day as any).completedItemIds || '[]');
         if (!completedIds.includes(itemId)) {

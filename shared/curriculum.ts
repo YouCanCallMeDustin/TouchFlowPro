@@ -20,7 +20,7 @@ export interface UserProgress {
     lessonScores: Record<string, TypingMetrics>;
     currentLesson: string | null;
     unlockedLevels: DifficultyLevel[];
-    subscriptionStatus: 'free' | 'pro' | 'cancelled';
+    subscriptionStatus: 'free' | 'pro' | 'cancelled' | 'enterprise' | 'STARTER' | 'starter' | 'PRO' | 'ENTERPRISE';
 }
 
 export interface LessonResult {

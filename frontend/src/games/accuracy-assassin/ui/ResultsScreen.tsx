@@ -8,12 +8,13 @@ import { exportLastRunJSON } from '../engine/analyticsLogger';
 interface ResultsScreenProps {
     summary: RunSummary;
     currentRunSummary: RunSummary | null;
+    submissionResult: { rank: number; isPersonalBest: boolean } | null;
     reduceMotion: boolean;
     onRetry: () => void;
     onBack: () => void;
 }
 
-export function ResultsScreen({ summary, currentRunSummary, reduceMotion, onRetry, onBack }: ResultsScreenProps) {
+export function ResultsScreen({ summary, currentRunSummary, submissionResult, reduceMotion, onRetry, onBack }: ResultsScreenProps) {
     const levelName = DIFFICULTY_LEVELS[summary.difficultyLevelReached as keyof typeof DIFFICULTY_LEVELS]?.name ?? '?';
     const isSessionBest = currentRunSummary != null && currentRunSummary.score < summary.score;
 
@@ -27,6 +28,10 @@ export function ResultsScreen({ summary, currentRunSummary, reduceMotion, onRetr
         { label: 'Chars Typed', value: String(summary.totalCharsTyped) },
         { label: 'Duration', value: `${(summary.durationMs / 1000).toFixed(1)}s` },
     ];
+
+    if (submissionResult) {
+        stats.splice(1, 0, { label: 'Global Rank', value: `#${submissionResult.rank}` });
+    }
 
     return (
         <motion.div
@@ -43,6 +48,24 @@ export function ResultsScreen({ summary, currentRunSummary, reduceMotion, onRetr
                 <p className="text-yellow-400 text-[10px] uppercase tracking-[0.3em] font-black mb-1">
                     ⭐ Showing your best run this session
                 </p>
+            )}
+            {submissionResult?.isPersonalBest && (
+                <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="inline-block px-3 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/20 mb-4"
+                >
+                    <p className="text-yellow-400 text-[9px] uppercase tracking-[0.2em] font-black">
+                        🏆 New Personal Best!
+                    </p>
+                </motion.div>
+            )}
+            {submissionResult && (
+                <div className="mb-4">
+                    <p className="text-primary text-[10px] uppercase tracking-[0.4em] font-black">
+                        Global Rank: #{submissionResult.rank}
+                    </p>
+                </div>
             )}
             <p className="text-text-muted text-xs uppercase tracking-[0.3em] font-bold mb-8">
                 Accuracy Assassin — Arcade Mode

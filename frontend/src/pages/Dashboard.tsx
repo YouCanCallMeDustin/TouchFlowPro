@@ -33,6 +33,7 @@ import { RecommendationsWidget } from '../components/RecommendationsWidget';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 
+import { useSettings } from '../context/SettingsContext';
 import { useLaunchStore } from '../state/launchStore';
 import { drillLibrary } from '@shared/drillLibrary';
 
@@ -88,7 +89,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
     const [plateau, setPlateau] = useState<any>(null);
     const [activePlan, setActivePlan] = useState<any>(null);
     const [todaysPlan, setTodaysPlan] = useState<any>(null);
-    const [userSettings, setUserSettings] = useState<any>(null);
+    const { settings: userSettings } = useSettings();
     const [showCreatePlan, setShowCreatePlan] = useState(false);
     const [loading, setLoading] = useState(true);
 
@@ -140,14 +141,13 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
     const fetchDashboardData = async () => {
         try {
             setLoading(true);
-            const [summaryRes, streakRes, achievementsRes, trendsRes, plateauRes, planRes, settingsRes] = await Promise.all([
+            const [summaryRes, streakRes, achievementsRes, trendsRes, plateauRes, planRes] = await Promise.all([
                 apiFetch(`/api/analytics/${userId}/summary`),
                 apiFetch(`/api/streaks/${userId}`),
                 apiFetch(`/api/achievements/${userId}`),
                 apiFetch(`/api/analytics/${userId}/trends?days=7`),
                 apiFetch(`/api/analytics/${userId}/insights/plateau`),
-                apiFetch(`/api/plans/active`),
-                apiFetch('/api/me/settings')
+                apiFetch(`/api/plans/active`)
             ]);
 
             const summaryData = await summaryRes.json();
@@ -155,7 +155,6 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
             const achievementsData = await achievementsRes.json();
             const trendsData = await trendsRes.json();
             const plateauData = await plateauRes.json();
-            const settingsData = settingsRes.ok ? await settingsRes.json() : null;
 
             if (planRes.ok) {
                 const plan = await planRes.json();
@@ -177,7 +176,6 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
 
             setStreak(streakData);
             setPlateau(plateauData);
-            if (settingsData) setUserSettings(settingsData);
 
             if (achievementsData.achievements) {
                 const recent = achievementsData.achievements
@@ -276,7 +274,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
-                className="max-w-7xl mx-auto p-4 sm:p-10 space-y-16"
+                className="max-w-7xl mx-auto p-4 sm:p-8 space-y-12"
             >
                 {/* Hero section */}
                 <MotionCard variants={itemVariants} className="relative overflow-hidden group min-h-[220px] flex items-center bg-gradient-to-br from-[var(--primary)]/5 to-[var(--secondary)]/5 p-0">
@@ -313,9 +311,9 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                     </div>
                 </MotionCard>
 
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                     {/* Main Content Column */}
-                    <div className="lg:col-span-8 space-y-12">
+                    <div className="lg:col-span-8 space-y-8">
                         {/* Training Plan Section - NEW */}
                         <motion.div variants={itemVariants}>
                             {!activePlan ? (
@@ -399,7 +397,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                                         </div>
                                     )}
 
-                                    <div className="p-6 space-y-4">
+                                    <div className="p-6 space-y-3">
                                         {todaysPlan?.items && todaysPlan.items.map((item: any, idx: number) => (
                                             <div key={idx} className="flex items-center gap-4 p-4 rounded-xl bg-surface border border-border">
                                                 <div className="p-3 rounded-lg bg-surface-2">
@@ -408,6 +406,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                                                             {item.blockType === 'WARMUP' && <Flame size={18} />}
                                                             {item.blockType === 'REVIEW' && <History size={18} />}
                                                             {item.blockType === 'SKILL' && <Zap size={18} />}
+                                                            {item.blockType === 'PRACTICE' && <Target size={18} />}
                                                             {item.blockType === 'COOLDOWN' && <Clock size={18} />}
                                                         </>
                                                     )}
@@ -462,6 +461,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                                                             planId: activePlan.id,
                                                             planItemId: item.id,
                                                             mode: modeConfig,
+                                                            minutes: item.minutes,
                                                             recommendedSeconds: item.recommendedSeconds,
                                                             launch: launchConfig,
                                                             title: titleConfig
@@ -519,8 +519,8 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
 
                         {plateau && plateau.plateau && (
                             <motion.div variants={itemVariants}>
-                                <Card className="bg-orange-500/5 border-orange-500/20">
-                                    <div className="flex items-start gap-4 p-6">
+                                <Card className="bg-orange-500/5 border-orange-500/20 p-6">
+                                    <div className="flex items-start gap-4">
                                         <div className="p-3 rounded-xl bg-orange-500/10 text-orange-500">
                                             <Activity size={24} />
                                         </div>
@@ -550,12 +550,12 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                             />
                         </motion.div>
 
-                        <motion.div variants={itemVariants} className="space-y-6">
-                            <div className="flex items-center justify-between px-2">
-                                <h2 className="flex items-center gap-4 text-2xl tracking-tighter">
+                        <motion.div variants={itemVariants} className="space-y-4">
+                            <div className="flex items-center justify-between px-1">
+                                <h2 className="flex items-center gap-4 text-xl font-bold tracking-tight">
                                     Activity Overview
                                 </h2>
-                                <span className="text-[10px] font-black text-text-muted uppercase tracking-widest">Live Metrics</span>
+                                <span className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em]">Live Metrics</span>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                 <AnimatedStatCard
@@ -649,15 +649,15 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                     </div>
 
                     {/* Sidebar Column */}
-                    <div className="lg:col-span-4 space-y-12">
+                    <div className="lg:col-span-4 space-y-8">
                         {streak && (
-                            <MotionCard variants={itemVariants} className="relative overflow-hidden group border-orange-500/10 dark:border-orange-500/5 bg-gradient-to-br from-orange-500/[0.02] to-transparent">
+                            <MotionCard variants={itemVariants} className="relative overflow-hidden group border-orange-500/10 dark:border-orange-500/5 bg-gradient-to-br from-orange-500/[0.02] to-transparent p-6">
                                 <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:scale-110 group-hover:opacity-10 transition-all duration-700">
                                     <Flame size={80} strokeWidth={1} />
                                 </div>
                                 <div className="flex items-center gap-3 mb-6">
                                     <Flame size={14} className="text-orange-500" />
-                                    <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-[var(--muted)]">Streak Consistency</h3>
+                                    <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--muted)]">Streak Consistency</h3>
                                 </div>
                                 <div className="text-[6xl] font-black mb-2 tracking-tighter">
                                     {streak.currentStreak} <span className="text-xl font-bold opacity-30 tracking-normal">Days</span>
@@ -680,9 +680,9 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                             </MotionCard>
                         )}
 
-                        <MotionCard variants={itemVariants}>
+                        <MotionCard variants={itemVariants} className="p-6">
                             <div className="flex justify-between items-center mb-8 border-b border-[var(--border)] pb-6">
-                                <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-[var(--muted)]">Recent Milestones</h3>
+                                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--muted)]">Recent Milestones</h3>
                                 <Button
                                     onClick={() => onNavigate('achievements')}
                                     size="sm"
@@ -719,7 +719,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                         </MotionCard>
 
                         <motion.div variants={itemVariants} className="space-y-6">
-                            <h3 className="text-[11px] font-black uppercase tracking-[0.3em] text-[var(--muted)] px-4">Quick Access</h3>
+                            <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[var(--muted)] px-6">Quick Access</h3>
                             <div className="grid grid-cols-2 gap-4">
                                 {[
                                     { id: 'practice', label: 'Practice', icon: Target },

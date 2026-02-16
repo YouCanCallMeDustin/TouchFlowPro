@@ -29,6 +29,7 @@ import recommendationsRoutes from './routes/recommendations';
 // Phase 4 routes
 import sessionsRoutes from './routes/sessions';
 import leaderboardRoutes from './routes/leaderboard';
+import gamesRoutes from './routes/games';
 
 const app = express();
 
@@ -111,6 +112,7 @@ app.use('/api/certificates', certificatesRoutes);
 
 import billingRoutes from './routes/billing';
 app.use('/api/billing', billingRoutes);
+app.use('/api/games', gamesRoutes);
 
 
 

@@ -5,6 +5,7 @@ import type { KeystrokeEvent, TypingMetrics, LiveMetrics } from '@shared/types';
 import { DictationUI } from './DictationMode';
 import { VirtualKeyboard } from './VirtualKeyboard';
 import { soundManager } from '../utils/soundManager';
+import { useSettings } from '../context/SettingsContext';
 
 interface Props {
     text: string;
@@ -141,6 +142,8 @@ const TypingTest: React.FC<Props> = ({
         inputRef.current?.focus();
     }, []);
 
+    const { settings } = useSettings();
+
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (isFailed) return;
         if (timeLeft === 0 && timeLimit) return;
@@ -152,6 +155,13 @@ const TypingTest: React.FC<Props> = ({
 
         if (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Shift') {
             const isCorrect = e.key === text[userInput.length];
+
+            // Strict Accuracy Mode: Prevents typing any other key if there's an error at the current position
+            // (Unless it's backspace or shift)
+            if (settings?.strictAccuracy && !isCorrect && e.key !== 'Backspace' && e.key !== 'Shift') {
+                soundManager.playError();
+                return;
+            }
 
             if (suddenDeath && !isCorrect && e.key !== 'Backspace' && e.key !== 'Shift') {
                 soundManager.playError();
@@ -200,6 +210,10 @@ const TypingTest: React.FC<Props> = ({
     };
 
     const renderText = () => {
+        const fontSizeClass = settings?.fontScale === 'SM' ? 'text-lg sm:text-xl' :
+            settings?.fontScale === 'LG' ? 'text-3xl sm:text-4xl leading-relaxed' :
+                'text-xl sm:text-2xl';
+
         return text.split('').map((char, index) => {
             const isTyped = index < userInput.length;
             const isCurrent = index === userInput.length;
@@ -213,16 +227,28 @@ const TypingTest: React.FC<Props> = ({
                     animate={{
                         color: isError ? 'var(--accent)' : isCorrect ? 'var(--primary)' : 'var(--text-muted)',
                         opacity: isTyped ? 1 : 0.4,
-                        scale: isCurrent ? 1.1 : 1,
+                        scale: isCurrent && !settings?.reduceMotion ? 1.1 : 1,
                     }}
-                    className={`inline-block font-mono text-xl sm:text-2xl transition-all relative ${isCurrent ? 'font-black' : 'font-medium'}`}
+                    transition={settings?.reduceMotion ? { duration: 0 } : undefined}
+                    className={`inline-block font-mono ${fontSizeClass} transition-all relative ${isCurrent ? 'font-black' : 'font-medium'}`}
                 >
-                    {char === ' ' ? '\u00A0' : char}
+                    {isError && char === ' ' ? (
+                        <span className="relative inline-block w-[0.6em] text-center">
+                            <span className="opacity-0"> </span>
+                            <span className="absolute inset-0 flex items-center justify-center text-[0.8em] font-black leading-none">
+                                ␣
+                            </span>
+                        </span>
+                    ) : char === ' ' ? (
+                        '\u00A0'
+                    ) : (
+                        char
+                    )}
                     {isCurrent && (
                         <motion.div
                             layoutId="cursor"
                             className="absolute -bottom-1 left-0 w-full h-1 bg-primary rounded-full"
-                            transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                            transition={settings?.reduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 500, damping: 30 }}
                         />
                     )}
                 </motion.span>
@@ -241,7 +267,7 @@ const TypingTest: React.FC<Props> = ({
     return (
         <div className="w-full max-w-5xl mx-auto space-y-8">
             {/* Header Metrics */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className={`grid grid-cols-1 md:grid-cols-4 gap-4 ${settings?.reduceMotion ? '' : 'animate-in fade-in slide-in-from-bottom-4 duration-500'}`}>
                 {[
                     { label: 'Velocity', value: liveWPM, unit: 'WPM', color: 'text-primary' },
                     { label: 'Precision', value: metrics.accuracy, unit: '%', color: 'text-secondary' },
@@ -255,9 +281,9 @@ const TypingTest: React.FC<Props> = ({
                 ].map((stat, i) => (
                     <motion.div
                         key={i}
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={settings?.reduceMotion ? false : { opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.1 }}
+                        transition={settings?.reduceMotion ? { duration: 0 } : { delay: i * 0.1 }}
                         className="card p-2 flex flex-col items-center justify-center space-y-0.5"
                     >
                         <span className="text-[9px] font-black uppercase tracking-widest text-text-muted">{stat.label}</span>
@@ -274,9 +300,9 @@ const TypingTest: React.FC<Props> = ({
             <AnimatePresence>
                 {isStarted && !isFailed && (
                     <motion.div
-                        initial={{ opacity: 0, y: 5 }}
+                        initial={settings?.reduceMotion ? false : { opacity: 0, y: 5 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 5 }}
+                        exit={settings?.reduceMotion ? { opacity: 0 } : { opacity: 0, y: 5 }}
                         className="flex justify-end px-2"
                     >
                         <div className="bg-slate-900/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 flex items-center gap-2 shadow-lg">
@@ -285,6 +311,7 @@ const TypingTest: React.FC<Props> = ({
                                 <motion.div
                                     className="h-full bg-secondary"
                                     animate={{ width: `${metrics.accuracy}%` }}
+                                    transition={settings?.reduceMotion ? { duration: 0 } : undefined}
                                 />
                             </div>
                         </div>
@@ -294,7 +321,7 @@ const TypingTest: React.FC<Props> = ({
 
             <div
                 ref={containerRef}
-                className={`relative card p-6 transition-all duration-500 overflow-hidden ${accuracyGlow}`}
+                className={`relative card p-6 transition-all duration-500 overflow-hidden ${accuracyGlow} ${settings?.fontScale === 'LG' ? 'p-10' : ''}`}
             >
                 {/* Sudden Death Effects */}
                 <AnimatePresence>
@@ -306,7 +333,7 @@ const TypingTest: React.FC<Props> = ({
                             className="absolute inset-0 z-50 bg-accent/20 backdrop-blur-md flex items-center justify-center"
                         >
                             <motion.div
-                                initial={{ scale: 0.8 }}
+                                initial={settings?.reduceMotion ? false : { scale: 0.8 }}
                                 animate={{ scale: 1 }}
                                 className="bg-white dark:bg-slate-900 px-12 py-8 rounded-[2rem] shadow-2xl border-4 border-accent text-center"
                             >
@@ -323,7 +350,7 @@ const TypingTest: React.FC<Props> = ({
                     <motion.div
                         className="h-full bg-gradient-to-r from-primary to-secondary shadow-[0_0_20px_rgba(var(--primary-rgb),0.3)]"
                         animate={{ width: `${(userInput.length / text.length) * 100}%` }}
-                        transition={{ type: 'spring', stiffness: 100, damping: 20 }}
+                        transition={settings?.reduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 100, damping: 20 }}
                     />
                 </div>
 
@@ -337,7 +364,7 @@ const TypingTest: React.FC<Props> = ({
                             currentSpeed={dictationSpeed}
                         />
                     ) : (
-                        <div className={`min-h-[100px] leading-relaxed select-none ${mode === 'code' ? 'whitespace-pre-wrap break-all font-mono text-left' : 'flex flex-wrap gap-x-0.5 gap-y-4'}`}>
+                        <div className={`min-h-[100px] leading-relaxed select-none ${mode === 'code' ? 'whitespace-pre-wrap break-all font-mono text-left' : 'flex flex-wrap gap-x-0.5 gap-y-4 justify-center'}`}>
                             {renderText()}
                         </div>
                     )}
@@ -365,14 +392,12 @@ const TypingTest: React.FC<Props> = ({
                         </div>
                     </div>
                 </div>
-
-                {/* Tactical Stats Overlay (Floating when typing) */}
             </div>
 
             {/* Virtual Keyboard Bridge */}
             {showVirtualKeyboard && (
                 <motion.div
-                    initial={{ opacity: 0 }}
+                    initial={settings?.reduceMotion ? false : { opacity: 0 }}
                     animate={{ opacity: 1 }}
                     className="card p-4 bg-slate-900/[0.02] dark:bg-white/[0.02]"
                 >

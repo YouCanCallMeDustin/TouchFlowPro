@@ -1,26 +1,11 @@
 import express from 'express';
-import Stripe from 'stripe';
-import { PrismaClient } from '@prisma/client';
+import stripe from '../lib/stripe';
+import prisma from '../lib/db';
 import { authenticateToken } from '../middleware/auth';
+import { syncUserWithStripe } from '../lib/stripeSync';
+import { FRONTEND_URL } from '../config';
 
 const router = express.Router();
-const prisma = new PrismaClient();
-
-import { STRIPE_SECRET_KEY, STRIPE_PRO_PRICE_ID, FRONTEND_URL } from '../config';
-
-// Initialize Stripe lazily or ensure dotenv is loaded
-let stripe: Stripe;
-const getStripe = () => {
-    if (!stripe) {
-        if (!STRIPE_SECRET_KEY) {
-            console.error('FATAL: Stripe Secret Key is missing in config!');
-        }
-        stripe = new Stripe(STRIPE_SECRET_KEY, {
-            apiVersion: '2025-02-24.acacia' as any,
-        });
-    }
-    return stripe;
-};
 
 // POST /api/subscriptions/verify-session
 router.post('/verify-session', authenticateToken, async (req: any, res) => {
@@ -31,7 +16,9 @@ router.post('/verify-session', authenticateToken, async (req: any, res) => {
         if (!userId) return res.status(401).json({ error: 'Unauthorized' });
         if (!sessionId) return res.status(400).json({ error: 'Session ID required' });
 
-        const session = await getStripe().checkout.sessions.retrieve(sessionId);
+        const session = await stripe.checkout.sessions.retrieve(sessionId, {
+            expand: ['line_items']
+        });
 
         if (!session) {
             return res.status(404).json({ error: 'Session not found' });
@@ -43,12 +30,38 @@ router.post('/verify-session', authenticateToken, async (req: any, res) => {
         }
 
         if (session.payment_status === 'paid') {
+            const planType = session.metadata?.planType;
+            let newStatus = 'pro';
+
+            if (planType === 'STARTER') newStatus = 'starter';
+            else if (planType === 'PRO') newStatus = 'pro';
+            else if (planType === 'ENTERPRISE') newStatus = 'enterprise';
+
             // Update user status
             await prisma.user.update({
                 where: { id: userId },
-                data: { subscriptionStatus: 'pro' }
+                data: { subscriptionStatus: newStatus }
             });
-            return res.json({ status: 'pro', updated: true });
+
+            // Update Organization if applicable
+            if (session.metadata?.orgId) {
+                const orgId = session.metadata.orgId;
+                const seatLimit = planType === 'ENTERPRISE' ? 100 : 10;
+                const priceId = session.line_items?.data[0]?.price?.id;
+
+                await prisma.organization.update({
+                    where: { id: orgId },
+                    data: {
+                        planTier: (planType || 'PRO') as any, // Cast to any to match Enum
+                        seatLimit: seatLimit,
+                        planStatus: 'ACTIVE',
+                        stripeSubscriptionId: typeof session.subscription === 'string' ? session.subscription : (session.subscription as any)?.id,
+                        stripePriceId: priceId
+                    } as any
+                });
+            }
+
+            return res.json({ status: newStatus, updated: true });
         }
 
         res.json({ status: 'pending', updated: false });
@@ -81,6 +94,8 @@ router.get('/status', authenticateToken, async (req: any, res) => {
 router.post('/create-checkout-session', authenticateToken, async (req: any, res) => {
     try {
         const userId = req.user?.id;
+        const { planType, orgId } = req.body; // planType: 'STARTER', 'PRO', 'ENTERPRISE'
+
         if (!userId) return res.status(401).json({ error: 'Unauthorized' });
 
         const user = await prisma.user.findUnique({ where: { id: userId } });
@@ -90,7 +105,7 @@ router.post('/create-checkout-session', authenticateToken, async (req: any, res)
 
         // Create Stripe customer if not exists
         if (!customerId) {
-            const customer = await getStripe().customers.create({
+            const customer = await stripe.customers.create({
                 email: user.email,
                 metadata: { userId: user.id }
             });
@@ -101,19 +116,51 @@ router.post('/create-checkout-session', authenticateToken, async (req: any, res)
             });
         }
 
-        const session = await getStripe().checkout.sessions.create({
+        let priceId;
+        let successUrl = `${FRONTEND_URL}/dashboard?session_id={CHECKOUT_SESSION_ID}`;
+        let cancelUrl = `${FRONTEND_URL}/pricing`;
+        const metadata: any = { userId };
+
+        switch (planType) {
+            case 'STARTER':
+                priceId = process.env.STRIPE_PRICE_STARTER;
+                cancelUrl = `${FRONTEND_URL}/dashboard`; // Or wherever
+                break;
+            case 'PRO': // Team Pro
+                priceId = process.env.STRIPE_PRICE_TEAM_PRO || process.env.STRIPE_PRO_PRICE_ID; // Fallback for backward compat
+                metadata.orgId = orgId;
+                if (!orgId) return res.status(400).json({ error: 'Organization ID required for Pro plan' });
+                break;
+            case 'ENTERPRISE': // Team Enterprise
+                priceId = process.env.STRIPE_PRICE_TEAM_ENTERPRISE;
+                metadata.orgId = orgId;
+                if (!orgId) return res.status(400).json({ error: 'Organization ID required for Enterprise plan' });
+                break;
+            default:
+                // Default fallback to old behavior if no planType provided, or error?
+                // Let's assume 'PRO' was the old default if we want backward compatibility, 
+                // but better to be explicit.
+                return res.status(400).json({ error: 'Invalid plan type' });
+        }
+
+        if (!priceId) {
+            return res.status(500).json({ error: 'Price ID not configured for this plan' });
+        }
+
+        const session = await stripe.checkout.sessions.create({
             customer: customerId,
             line_items: [
                 {
-                    price: STRIPE_PRO_PRICE_ID,
+                    price: priceId,
                     quantity: 1,
                 },
             ],
             mode: 'subscription',
-            success_url: `${FRONTEND_URL}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${FRONTEND_URL}/pricing`,
+            success_url: successUrl,
+            cancel_url: cancelUrl,
             metadata: {
-                userId: userId
+                ...metadata,
+                planType
             }
         });
 
@@ -124,14 +171,62 @@ router.post('/create-checkout-session', authenticateToken, async (req: any, res)
             error: 'Failed to create checkout session',
             debug: {
                 message: error instanceof Error ? error.message : 'Unknown error',
-                stripeKeyConfigured: !!STRIPE_SECRET_KEY,
-                priceIdConfigured: !!STRIPE_PRO_PRICE_ID,
-                priceIdValue: STRIPE_PRO_PRICE_ID ? `${STRIPE_PRO_PRICE_ID.substring(0, 5)}...` : 'missing'
             }
         });
     }
 });
 
 // Webhook is handled in routes/webhooks.ts
+
+// POST /api/subscriptions/create-portal-session
+router.post('/create-portal-session', authenticateToken, async (req: any, res) => {
+    try {
+        const userId = req.user?.id;
+        if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+
+        const user = await prisma.user.findUnique({ where: { id: userId } });
+        if (!user || !user.stripeCustomerId) {
+            return res.status(404).json({ error: 'No subscription found' });
+        }
+
+        const session = await stripe.billingPortal.sessions.create({
+            customer: user.stripeCustomerId,
+            return_url: `${FRONTEND_URL}/settings`,
+        });
+
+        res.json({ url: session.url });
+    } catch (error) {
+        console.error('Error creating portal session:', error);
+        res.status(500).json({ error: 'Failed to create portal session' });
+    }
+});
+
+// POST /api/subscriptions/sync
+router.post('/sync', authenticateToken, async (req: any, res) => {
+    try {
+        const userId = req.user?.id;
+        if (!userId) return res.status(401).json({ error: 'Unauthorized' });
+
+        const user = await prisma.user.findUnique({ where: { id: userId } });
+        if (!user) return res.status(404).json({ error: 'User not found' });
+
+        // Use the centralized sync utility
+        const result = await syncUserWithStripe(userId, user.email);
+
+        if (!result) {
+            return res.status(500).json({ error: 'Failed to sync subscription' });
+        }
+
+        res.json({
+            status: result.status,
+            updated: result.updated,
+            message: result.updated ? 'Subscription updated' : 'Subscription already up to date'
+        });
+
+    } catch (error) {
+        console.error('Error syncing subscription:', error);
+        res.status(500).json({ error: 'Failed to sync subscription' });
+    }
+});
 
 export default router;

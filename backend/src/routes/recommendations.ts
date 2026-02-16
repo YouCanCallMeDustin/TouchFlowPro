@@ -17,6 +17,13 @@ router.get('/next', authenticateToken, async (req, res, next) => {
             return res.status(401).json({ error: 'Unauthorized' });
         }
 
+        // 0. Get dismissed recommendations to filter them out
+        const dismissedRecs = await prisma.recommendation.findMany({
+            where: { userId, dismissed: true },
+            select: { drillId: true }
+        });
+        const dismissedSet = new Set(dismissedRecs.map(r => r.drillId).filter(Boolean));
+
         // 1. Check Fatigue (Last 30 mins)
         // Look for recent DrillResults with high fatigueScore
         const thirtyMinsAgo = new Date(Date.now() - 30 * 60 * 1000);
@@ -64,13 +71,14 @@ router.get('/next', authenticateToken, async (req, res, next) => {
             const item = overdueItems[0];
             const drill = drillLibrary.find(d => d.id === item.drillId);
 
-            if (drill) {
+            if (drill && !dismissedSet.has(drill.id)) {
                 return res.json({
                     next: {
                         drillId: drill.id,
                         mode: 'drill',
                         estimatedMinutes: 2, // Estimate
                         title: drill.title,
+                        content: drill.content,
                         reasons: ['OVERDUE_REVIEW', 'SPACED_REPETITION'],
                         focus: {}
                     }
@@ -90,7 +98,7 @@ router.get('/next', authenticateToken, async (req, res, next) => {
         });
         const doneSet = new Set(userSpacedIds.map(i => i.drillId));
 
-        const newDrill = drillLibrary.find(d => !doneSet.has(d.id));
+        const newDrill = drillLibrary.find(d => !doneSet.has(d.id) && !dismissedSet.has(d.id));
 
         if (newDrill) {
             return res.json({
@@ -99,6 +107,7 @@ router.get('/next', authenticateToken, async (req, res, next) => {
                     mode: 'drill',
                     estimatedMinutes: 2,
                     title: newDrill.title,
+                    content: newDrill.content,
                     reasons: ['NEW_CONTENT', 'PROGRESSION'],
                     focus: {}
                 }
@@ -113,6 +122,7 @@ router.get('/next', authenticateToken, async (req, res, next) => {
                 mode: 'drill',
                 estimatedMinutes: 2,
                 title: randomDrill.title,
+                content: randomDrill.content,
                 reasons: ['RANDOM_PRACTICE'],
                 focus: {}
             }
@@ -170,6 +180,55 @@ router.get('/:userId/level', authenticateToken, async (req: Request, res: Respon
     } catch (error) {
         console.error('Level info error:', error);
         res.status(500).json({ error: 'Failed to fetch level info' });
+    }
+});
+
+/**
+ * POST /api/recommendations/:userId/dismiss/:recId
+ * Marks a recommendation (or a drillId) as dismissed.
+ */
+router.post('/:userId/dismiss/:recId', authenticateToken, async (req: Request, res: Response) => {
+    try {
+        const userId = req.params.userId as string;
+        const recId = req.params.recId as string;
+        const { id: requesterId } = (req as AuthRequest).user!;
+
+        if (userId !== requesterId) {
+            return res.status(403).json({ error: 'Access denied' });
+        }
+
+        // recId could be a Recommendation.id OR a drillId
+        // We handle both. If it's a drillId, we create a record if not exists.
+
+        // Try finding by drillId first (as most common case for 'next' generation)
+        const existing = await prisma.recommendation.findFirst({
+            where: { userId, drillId: recId }
+        });
+
+        if (existing) {
+            await prisma.recommendation.update({
+                where: { id: existing.id },
+                data: { dismissed: true }
+            });
+        } else {
+            // Create a "stub" recommendation to mark it dismissed
+            await prisma.recommendation.create({
+                data: {
+                    userId,
+                    drillId: recId,
+                    dismissed: true,
+                    type: 'MANUAL_DISMISS',
+                    title: 'Dismissed Drill',
+                    reason: 'USER_SKIP',
+                    priority: 0
+                }
+            });
+        }
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Dismiss recommendation error:', error);
+        res.status(500).json({ error: 'Failed to dismiss recommendation' });
     }
 });
 

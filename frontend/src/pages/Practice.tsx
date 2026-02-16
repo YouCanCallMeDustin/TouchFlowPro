@@ -54,10 +54,10 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
     const { user } = useAuth(); // Get user from context
 
     // Store Integration for Training Plans
-    const { pendingLaunch } = useLaunchStore();
+    const { pendingLaunch, clearPendingLaunch } = useLaunchStore();
 
     useEffect(() => {
-        if (pendingLaunch && pendingLaunch.source === 'trainingPlan' && !activeDrill) {
+        if (pendingLaunch && (pendingLaunch.source === 'trainingPlan' || pendingLaunch.source === 'analytics') && !activeDrill) {
             // Auto-launch the plan item
             if (pendingLaunch.launch.kind === 'DRILL' && pendingLaunch.launch.drillId) {
                 const drill = drillLibrary.find(d => d.id === pendingLaunch.launch.drillId);
@@ -68,11 +68,12 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
                         practiceLesson.content = pendingLaunch.launch.promptText;
                     }
                     setActiveDrill(practiceLesson);
+                    clearPendingLaunch();
                 }
             } else if (pendingLaunch.launch.kind === 'CUSTOM_TEXT' && pendingLaunch.launch.promptText) {
                 // Create custom lesson on the fly
                 const customLesson: Lesson = {
-                    id: `plan-${pendingLaunch.planItemId}`,
+                    id: `plan-${pendingLaunch.planItemId || 'analytics'}`,
                     title: pendingLaunch.title || 'Training Plan Lesson',
                     content: pendingLaunch.launch.promptText,
                     category: 'Training Plan',
@@ -86,9 +87,10 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
                     description: 'Scheduled training task'
                 };
                 setActiveDrill(customLesson);
+                clearPendingLaunch();
             }
         }
-    }, [pendingLaunch, activeDrill]);
+    }, [pendingLaunch, activeDrill, clearPendingLaunch]);
 
     const handleStartDrill = (drill: Drill) => {
         const isPro = user?.subscriptionStatus === 'pro';

@@ -21,6 +21,8 @@ frontend/dist/
 
 # Data
 db.json
+backend/prisma/dev.db
+backend/prisma/dev.db-journal
 error.log
 error2.log
 error3.log

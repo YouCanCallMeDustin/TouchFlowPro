@@ -3,6 +3,7 @@ import { z } from 'zod';
 import db from '../lib/db';
 import { updateSettingsSchema } from '../lib/validation';
 import { authenticateToken } from '../middleware/auth';
+import { getEffectiveSubscriptionStatus } from '../lib/subscription';
 
 const router = Router();
 
@@ -104,13 +105,19 @@ router.get('/export', authenticateToken, async (req: Request, res: Response) => 
             prisma.keyStats.findMany({ where: { userId } })
         ]);
 
+        // Resolve effective status (including inheritance)
+        const effectiveStatus = await getEffectiveSubscriptionStatus(userId);
+
         const exportData = {
             metadata: {
                 version: '1.0',
                 exportDate: new Date().toISOString(),
                 userId: userId
             },
-            profile: user,
+            profile: {
+                ...user,
+                subscriptionStatus: effectiveStatus
+            },
             settings: {
                 ...settings,
                 preferences

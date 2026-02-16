@@ -52,8 +52,19 @@ export class TypingEngine {
         // Gross WPM is based on total effort (Total Physical Keystrokes / 5) / Time
         const grossWPM = (totalPhysicalKeystrokes / 5) / minutes;
 
-        // Net WPM is Gross - (Uncorrected Errors / Time)
-        const netWPM = Math.max(0, grossWPM - (currentErrors / minutes));
+        // Net WPM calculation
+        let netWPM: number;
+
+        // For very short strings (like warmup steps), a single error often drops WPM to 0
+        // because the penalty is "1 word per mistake".
+        // Instead, we use an accuracy-weighted speed for segments < 25 chars.
+        if (expectedText.length < 25) {
+            const currentAccuracy = buffer.length > 0 ? ((buffer.length - currentErrors) / buffer.length) : 0;
+            netWPM = grossWPM * currentAccuracy;
+        } else {
+            // Standard Net WPM formula: Gross - (Uncorrected Errors / Time)
+            netWPM = Math.max(0, grossWPM - (currentErrors / minutes));
+        }
 
         // Accuracy is (Corrected Chars in Buffer / Total Chars in Buffer)
         const accuracy = buffer.length > 0 ? ((buffer.length - currentErrors) / buffer.length) * 100 : 0;

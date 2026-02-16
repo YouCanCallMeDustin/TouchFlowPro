@@ -13,6 +13,7 @@ import { attachInputHandler } from '../input/inputHandler';
 import { SoundManager } from '../audio/soundManager';
 import { PromptRenderer } from '../render/PromptRenderer';
 import { useGameEffects, getIntensityClass } from '../render/Effects';
+import { submitScore } from '../engine/api';
 import { PreGame } from './PreGame';
 import { HUD } from './HUD';
 import { DeathScreen } from './DeathScreen';
@@ -44,6 +45,7 @@ export function AccuracyAssassinPage({ onBack }: AccuracyAssassinPageProps) {
     // Snapshot captured at the moment of death (survives restart)
     const [deathSnapshot, setDeathSnapshot] = useState<GameSnapshot | null>(null);
     const [deathSummary, setDeathSummary] = useState<RunSummary | null>(null);
+    const [submissionResult, setSubmissionResult] = useState<{ rank: number; isPersonalBest: boolean } | null>(null);
 
     // ── Refs (not in React render path) ──
     const engineRef = useRef<GameEngine | null>(null);
@@ -127,6 +129,12 @@ export function AccuracyAssassinPage({ onBack }: AccuracyAssassinPageProps) {
                     updateSessionBest(summary);
                     // Save analytics
                     saveRun(summary, engine.getKeystrokeLogs());
+                    // ── WIRE TO BACKED LEADERBOARD ──
+                    submitScore(summary).then(res => {
+                        if (res.success) {
+                            setSubmissionResult({ rank: res.rank!, isPersonalBest: !!res.isPersonalBest });
+                        }
+                    });
                     // Effects
                     triggerDeath();
                     soundRef.current?.play('death');
@@ -155,6 +163,7 @@ export function AccuracyAssassinPage({ onBack }: AccuracyAssassinPageProps) {
                 setSnapshot(engine.getSnapshot());
             },
             onCountdownTick: (val: number) => {
+                if (val === 3) setSubmissionResult(null); // Reset on start
                 setCountdownVal(val);
                 soundRef.current?.play(val > 0 ? 'countdown' : 'go');
             },
@@ -348,6 +357,7 @@ export function AccuracyAssassinPage({ onBack }: AccuracyAssassinPageProps) {
                         key="results"
                         summary={(sessionBest && (!runSummary || sessionBest.score >= runSummary.score)) ? sessionBest : runSummary!}
                         currentRunSummary={deathSummary}
+                        submissionResult={submissionResult}
                         reduceMotion={settings.reduceMotion}
                         onRetry={handleRestart}
                         onBack={onBack}

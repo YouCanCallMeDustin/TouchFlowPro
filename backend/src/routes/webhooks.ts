@@ -44,20 +44,39 @@ router.post('/stripe', express.raw({ type: 'application/json' }), async (req, re
             }
             case 'checkout.session.completed':
                 const session = event.data.object as Stripe.Checkout.Session;
-                if (session.metadata?.userId) {
+                if (session.metadata?.userId && !session.metadata.orgId) {
+                    // Update User Subscription (Starter)
                     await prisma.user.update({
                         where: { id: session.metadata.userId },
-                        data: { subscriptionStatus: 'pro' }
+                        data: { subscriptionStatus: 'starter' }
                     });
                 }
                 // Handle Org Checkout
                 if (session.subscription) {
                     const subId = typeof session.subscription === 'string' ? session.subscription : session.subscription.id;
                     const sub = await stripe.subscriptions.retrieve(subId);
-                    const customerId = typeof sub.customer === 'string' ? sub.customer : sub.customer.id;
-                    const org = await prisma.organization.findFirst({ where: { stripeCustomerId: customerId } });
-                    if (org) {
-                        await handleOrgSubscriptionUpdate(sub, org);
+
+                    // Check if Org ID was passed in metadata (Preferred)
+                    if (session.metadata?.orgId) {
+                        const org = await prisma.organization.findUnique({ where: { id: session.metadata.orgId } });
+                        if (org) {
+                            // Link customer to org if not already
+                            if (!org.stripeCustomerId) {
+                                const customerId = typeof sub.customer === 'string' ? sub.customer : sub.customer.id;
+                                await prisma.organization.update({
+                                    where: { id: org.id },
+                                    data: { stripeCustomerId: customerId }
+                                });
+                            }
+                            await handleOrgSubscriptionUpdate(sub, org);
+                        }
+                    } else {
+                        // Fallback: look up by customer ID if we already know it
+                        const customerId = typeof sub.customer === 'string' ? sub.customer : sub.customer.id;
+                        const org = await prisma.organization.findFirst({ where: { stripeCustomerId: customerId } });
+                        if (org) {
+                            await handleOrgSubscriptionUpdate(sub, org);
+                        }
                     }
                 }
                 break;
@@ -82,7 +101,7 @@ router.post('/stripe', express.raw({ type: 'application/json' }), async (req, re
                     // User subscription
                     await prisma.user.update({
                         where: { stripeCustomerId: customerId },
-                        data: { subscriptionStatus: 'cancelled', subscriptionEndDate: new Date() }
+                        data: { subscriptionStatus: 'free', subscriptionEndDate: new Date() }
                     });
                 }
                 break;
@@ -105,20 +124,16 @@ async function handleOrgSubscriptionUpdate(sub: any, org: any) {
     let seatLimit = org.seatLimit;
 
     // Map Price ID to Tier
-    if (priceId === process.env.STRIPE_PRICE_PRO) {
+    if (priceId === process.env.STRIPE_PRICE_TEAM_PRO || priceId === process.env.STRIPE_PRO_PRICE_ID) {
         planTier = 'PRO';
-        seatLimit = 20;
-    } else if (priceId === process.env.STRIPE_PRICE_ENTERPRISE) {
+        seatLimit = 10;
+    } else if (priceId === process.env.STRIPE_PRICE_TEAM_ENTERPRISE) {
         planTier = 'ENTERPRISE';
         seatLimit = 100;
     }
 
     // Downgrade if not active/trialing
     if (['canceled', 'unpaid', 'past_due'].includes(status)) {
-        // Option: Don't downgrade immediately on past_due, but let's be strict or lenient?
-        // User requirements: "planStatus" field exists.
-        // We will store the planStatus.
-        // But planTier should reflect access.
         if (status === 'canceled' || status === 'unpaid') {
             planTier = 'FREE';
             seatLimit = 5;

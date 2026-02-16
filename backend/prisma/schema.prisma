@@ -35,6 +35,7 @@ model User {
   preferences         UserPreferences?
   progress            UserProgress?
   settings            UserSettings?
+  gameScores          GameScore[]
 }
 
 model DrillResult {
@@ -226,6 +227,7 @@ model Recommendation {
   reason    String
   priority  Int
   content   String?
+  drillId   String?
   dismissed Boolean  @default(false)
   completed Boolean  @default(false)
   createdAt DateTime @default(now())
@@ -306,4 +308,23 @@ model UserSettings {
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
   user                  User     @relation(fields: [userId], references: [id])
+}
+model GameScore {
+  id              String   @id @default(uuid())
+  userId          String
+  gameId          String   // e.g. "accuracy-assassin"
+  mode            String   // e.g. "arcade"
+  score           Int
+  roundsCleared   Int
+  longestStreak   Int
+  avgWpm          Float
+  accuracy        Float
+  difficultyLevel Int
+  charsTyped      Int
+  durationSeconds Float
+  timestamp       DateTime @default(now())
+  user            User     @relation(fields: [userId], references: [id])
+
+  @@index([gameId, mode, score])
+  @@index([userId, gameId])
 }

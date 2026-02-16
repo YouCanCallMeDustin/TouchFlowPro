@@ -43,6 +43,7 @@ export const SkillAssessment: React.FC<SkillAssessmentProps> = ({ onComplete }) 
                     onComplete={handleTestComplete}
                     showLiveMetrics={true}
                     showVirtualKeyboard={false}
+                    timeLimit={1}
                 />
             </Card>
 

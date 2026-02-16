@@ -128,7 +128,8 @@ export const RecommendationsWidget: React.FC<Props> = ({ userId, onStartPractice
                                 initial={{ opacity: 0, scale: 0.95 }}
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, x: -20 }}
-                                className="group relative bg-white/5 border border-white/5 rounded-3xl p-6 hover:border-primary/20 hover:bg-white/[0.08] transition-all"
+                                onClick={() => handleStart(rec)}
+                                className="group relative bg-white/5 border border-white/5 rounded-3xl p-6 hover:border-primary/40 hover:bg-white/[0.08] transition-all cursor-pointer hover:scale-[1.01] active:scale-[0.99] shadow-inner"
                             >
                                 <div className="flex items-start gap-6">
                                     <div className={`p-4 rounded-2xl bg-white/5 ${color} group-hover:scale-110 transition-transform duration-500`}>
@@ -137,24 +138,24 @@ export const RecommendationsWidget: React.FC<Props> = ({ userId, onStartPractice
 
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-3 mb-1">
-                                            <h4 className="text-lg font-black text-text-main truncate uppercase tracking-tight">{rec.title}</h4>
+                                            <h4 className="text-lg font-black text-text-main truncate uppercase tracking-tight group-hover:text-primary transition-colors">{rec.title}</h4>
                                             <span className="text-[9px] font-black text-primary bg-primary/10 px-2 py-0.5 rounded-md uppercase tracking-widest">{rec.type}</span>
                                         </div>
                                         <p className="text-[11px] font-black text-text-muted uppercase tracking-widest opacity-50 mb-6">{rec.reason}</p>
 
                                         <div className="flex items-center gap-3">
                                             {rec.content && onStartPractice && (
-                                                <button
-                                                    onClick={() => handleStart(rec)}
-                                                    className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-xl font-black text-[10px] uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg shadow-primary/20"
-                                                >
+                                                <div className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-xl font-black text-[10px] uppercase tracking-widest shadow-lg shadow-primary/20">
                                                     Start Session
                                                     <ArrowRight size={12} />
-                                                </button>
+                                                </div>
                                             )}
                                             <button
-                                                onClick={() => handleDismiss(rec.id)}
-                                                className="p-2.5 text-text-muted hover:text-text-main hover:bg-white/5 rounded-xl transition-all"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleDismiss(rec.id);
+                                                }}
+                                                className="p-2.5 text-text-muted hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-all relative z-10"
                                                 title="Dismiss Suggestion"
                                             >
                                                 <X size={16} />

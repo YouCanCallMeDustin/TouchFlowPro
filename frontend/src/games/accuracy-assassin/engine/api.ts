@@ -14,31 +14,46 @@ export interface LeaderboardEntry {
     timestamp: number;
 }
 
+import { apiFetch } from '../../../utils/api';
+
 /**
  * Submit a run score to the backend leaderboard.
- *
- * To wire to backend:
- * 1. POST to `/api/games/accuracy-assassin/scores`
- * 2. Body: `{ userId, runSummary }`
- * 3. Backend validates and inserts into `GameScore` Prisma model
- * 4. Returns `{ success: boolean, rank: number }`
  */
-export async function submitScore(_runSummary: RunSummary): Promise<{ success: boolean; rank?: number }> {
-    // No-op for V1
-    console.log('[AccuracyAssassin] submitScore stub called — backend not wired yet');
-    return { success: false };
+export async function submitScore(runSummary: RunSummary): Promise<{ success: boolean; rank?: number; isPersonalBest?: boolean }> {
+    try {
+        const response = await apiFetch(`/api/games/accuracy-assassin/scores`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ summary: runSummary })
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            return {
+                success: true,
+                rank: result.rank,
+                isPersonalBest: result.isPersonalBest
+            };
+        }
+        return { success: false };
+    } catch (error) {
+        console.error('[AccuracyAssassin] Failed to submit score:', error);
+        return { success: false };
+    }
 }
 
 /**
  * Fetch the leaderboard for a given game mode.
- *
- * To wire to backend:
- * 1. GET `/api/games/accuracy-assassin/leaderboard?mode={mode}&limit=50`
- * 2. Backend queries `GameScore` model ordered by score DESC
- * 3. Returns `LeaderboardEntry[]`
  */
-export async function fetchLeaderboard(_mode: string): Promise<LeaderboardEntry[]> {
-    // No-op for V1
-    console.log('[AccuracyAssassin] fetchLeaderboard stub called — backend not wired yet');
-    return [];
+export async function fetchLeaderboard(mode: string): Promise<LeaderboardEntry[]> {
+    try {
+        const response = await apiFetch(`/api/games/accuracy-assassin/leaderboard?mode=${mode}&limit=10`);
+        if (response.ok) {
+            return await response.json();
+        }
+        return [];
+    } catch (error) {
+        console.error('[AccuracyAssassin] Failed to fetch leaderboard:', error);
+        return [];
+    }
 }

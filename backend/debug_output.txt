@@ -1,0 +1,13 @@
+--- Debugging Subscription State ---
+
+1. Checking Organization "Fastest In The World"
+Org ID: 06297041-3c96-4160-a266-c4b82984d9fc
+Plan Tier: PRO
+Seat Limit: 10
+Members:
+ - dustinshoemake@hotmail.com (MEMBER) -> Status: free
+ - touchflowpro@gmail.com (ADMIN) -> Status: pro
+
+2. Checking specific users
+User: dustinshoemake@hotmail.com, Status: free, StripeId: null
+User: touchflowpro@gmail.com, Status: pro, StripeId: cus_TwNI0joHSaqfGm

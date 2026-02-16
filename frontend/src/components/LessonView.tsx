@@ -249,7 +249,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
             {/* PLAN TIMER OVERLAY */}
             {isPlanLauncher && pendingLaunch && planTimerActive && mode === 'practice' && (
                 <PlanTimer
-                    durationSeconds={pendingLaunch.recommendedSeconds || 300}
+                    durationSeconds={pendingLaunch.recommendedSeconds || (pendingLaunch as any).minutes * 60 || 300}
                     onComplete={() => setForceFinishTest(true)}
                     isActive={!planTimerPaused}
                     onPauseToggle={(paused: boolean) => setPlanTimerPaused(paused)}

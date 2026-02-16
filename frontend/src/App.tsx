@@ -43,7 +43,7 @@ import type { UserProgress, Lesson } from '@shared/curriculum'
 import type { DifficultyLevel, PlacementResult } from '@shared/placement'
 import Orgs from './pages/Orgs'
 import Settings from './pages/Settings'
-import { soundManager } from './utils/soundManager'
+import { useSettings } from './context/SettingsContext'
 import {
   LayoutDashboard,
   BookOpen,
@@ -61,7 +61,9 @@ import {
 
 import { apiFetch } from './utils/api';
 
-type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension' | 'games' | 'games_accuracy_assassin' | 'games_burner_burst' | 'games_spell_rush' | 'orgs' | 'settings'
+import SampleReport from './pages/SampleReport'
+
+type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension' | 'games' | 'games_accuracy_assassin' | 'games_burner_burst' | 'games_spell_rush' | 'orgs' | 'settings' | 'sample_report'
 
 function App() {
   const { user, loading, logout } = useAuth()
@@ -76,7 +78,8 @@ function App() {
   const [selectedLessonForDrills, setSelectedLessonForDrills] = useState<Lesson | null>(null)
   const [isFetchingProgress, setIsFetchingProgress] = useState(false)
   const [showAchievement, setShowAchievement] = useState<{ type?: string, isLevel?: boolean, level?: number } | null>(null)
-  const [userSettings, _setUserSettings] = useState<any>(null);
+  const { settings: userSettings } = useSettings()
+  const [reportOrgId, setReportOrgId] = useState<string | null>(null);
 
   useEffect(() => {
     // Force permanent dark mode (nighttime mode)
@@ -128,26 +131,6 @@ function App() {
     }
   }, [user, loading, fetchProgress])
 
-  // Fetch user settings
-  useEffect(() => {
-    if (user) {
-      apiFetch('/api/me/settings')
-        .then(res => {
-          if (res.ok) return res.json();
-          throw new Error('Failed to fetch settings');
-        })
-        .then(settings => {
-          if (settings && typeof settings.soundEnabled === 'boolean') {
-            soundManager.setEnabled(settings.soundEnabled);
-          }
-        })
-        .catch(err => {
-          console.error('Failed to load settings:', err);
-          // Default to true if fetch fails or no settings
-          soundManager.setEnabled(true);
-        });
-    }
-  }, [user]);
 
   const [activeVariationId, setActiveVariationId] = useState<string | null>(null)
 
@@ -187,13 +170,49 @@ function App() {
   }
 
   useEffect(() => {
-    const handleNav = (e: any) => {
+    const handlePricingNav = (e: any) => {
       if (e.detail?.stage) setStage(e.detail.stage);
       else setStage('pricing');
     };
-    window.addEventListener('navigate-to-pricing' as any, handleNav);
-    return () => window.removeEventListener('navigate-to-pricing' as any, handleNav);
+    const handlePracticeNav = () => {
+      setStage('practice');
+    };
+    window.addEventListener('navigate-to-pricing' as any, handlePricingNav);
+    window.addEventListener('navigate-to-practice' as any, handlePracticeNav);
+    return () => {
+      window.removeEventListener('navigate-to-pricing' as any, handlePricingNav);
+      window.removeEventListener('navigate-to-practice' as any, handlePracticeNav);
+    };
   }, []);
+
+  // Handle Stripe Success Redirect
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get('session_id');
+
+    if (sessionId && user && !loading) {
+      const verifySubscription = async () => {
+        try {
+          const { apiFetch } = await import('./utils/api');
+          await apiFetch('/api/subscriptions/verify-session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionId })
+          });
+
+          // Clean URL
+          window.history.replaceState({}, '', '/');
+
+          // Force reload to ensure AuthContext picks up new Pro status
+          // Or we could try to just update state, but a refresh ensures clean slate
+          window.location.href = '/';
+        } catch (error) {
+          console.error('Failed to verify session:', error);
+        }
+      };
+      verifySubscription();
+    }
+  }, [user, loading]);
 
   const updateKeystrokeStats = async (userId: string, keystrokes: KeystrokeEvent[], text: string) => {
     if (!keystrokes || keystrokes.length === 0) return;
@@ -383,6 +402,22 @@ function App() {
             </div>
 
             <div className="flex items-center gap-4 sm:gap-8">
+              {!user && (
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={() => setStage('auth_login')}
+                    className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted hover:text-primary transition-colors"
+                  >
+                    Login
+                  </button>
+                  <button
+                    onClick={() => setStage('auth_signup')}
+                    className="px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-white/10 transition-all active:scale-95"
+                  >
+                    Sign Up
+                  </button>
+                </div>
+              )}
               {user && (
                 <>
                   <div
@@ -492,7 +527,16 @@ function App() {
               <PageTransition key="welcome">
                 <LandingPage
                   onStartAssessment={() => setStage('assessment')}
-                  onLogin={() => setStage('auth_login')}
+                  onViewSampleReport={() => setStage('sample_report')}
+                />
+              </PageTransition>
+            )}
+
+            {stage === 'sample_report' && (
+              <PageTransition key="sample_report">
+                <SampleReport
+                  onBack={() => setStage('orgs')}
+                  orgId={reportOrgId || undefined}
                 />
               </PageTransition>
             )}
@@ -635,7 +679,7 @@ function App() {
 
             {stage === 'settings' && user && (
               <PageTransition key="settings">
-                <Settings />
+                <Settings onNavigate={(s) => setStage(s as Stage)} />
               </PageTransition>
             )}
 
@@ -666,7 +710,7 @@ function App() {
 
             {stage === 'pricing' && user && (
               <PageTransition key="pricing">
-                <PricingPage />
+                <PricingPage onNavigate={(stage) => setStage(stage as Stage)} />
               </PageTransition>
             )}
 
@@ -696,7 +740,13 @@ function App() {
 
             {stage === 'orgs' && user && (
               <PageTransition key="orgs">
-                <Orgs userId={user.id} />
+                <Orgs
+                  onNavigate={(s) => setStage(s as Stage)}
+                  onViewReport={(orgId) => {
+                    setReportOrgId(orgId);
+                    setStage('sample_report');
+                  }}
+                />
               </PageTransition>
             )}
 

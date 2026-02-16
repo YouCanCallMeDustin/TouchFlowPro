@@ -211,9 +211,8 @@ export const Curriculum: React.FC<CurriculumProps> = ({
                             const isSpecialistForMember = level === 'Specialist' && userId !== 'guest';
                             const isProgressionUnlocked = userId === 'guest' || userId === 'admin' || progress.unlockedLevels.includes(level) || isSpecialistForMember;
 
-                            // Intermediate, Professional, and Specialist require Pro status
                             const isProRequired = level !== 'Beginner';
-                            const isPro = progress.subscriptionStatus === 'pro';
+                            const isPro = ['pro', 'enterprise', 'PRO', 'ENTERPRISE', 'starter', 'STARTER'].includes(progress.subscriptionStatus);
                             const isPaywalled = isProRequired && !isPro;
 
                             // Locked if: Not unlocked by skill OR (Unlocked by skill but Paywalled)

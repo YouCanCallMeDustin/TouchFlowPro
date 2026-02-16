@@ -28,20 +28,20 @@ const AnimatedStatCard = ({
                 y: -5,
                 transition: { duration: 0.3 }
             }}
-            className="card relative overflow-hidden group border border-white/10 dark:border-white/5 active:scale-95 transition-transform"
+            className="card relative overflow-hidden group border border-white/10 dark:border-white/5 active:scale-95 transition-transform p-6"
         >
             <div className="flex items-start justify-between relative z-10">
                 <div className="space-y-4">
                     <div className="flex items-center gap-3">
                         <div className="p-2 rounded-xl bg-primary/10 text-primary border border-primary/20 group-hover:bg-primary group-hover:text-white transition-all duration-300">
-                            {icon}
+                            {React.isValidElement(icon) ? React.cloneElement(icon as React.ReactElement<any>, { size: 18 }) : icon}
                         </div>
-                        <span className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em] group-hover:text-text-main transition-colors">
+                        <span className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] group-hover:text-text-main transition-colors">
                             {title}
                         </span>
                     </div>
 
-                    <div className="text-4xl font-black text-text-main tracking-tighter">
+                    <div className="text-3xl font-black text-text-main tracking-tighter">
                         <CountUp
                             end={value}
                             duration={2}
