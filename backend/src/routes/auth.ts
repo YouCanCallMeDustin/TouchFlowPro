@@ -82,36 +82,45 @@ router.post('/login', async (req, res, next) => {
         });
 
         if (!user || !user.passwordHash) {
-            // Standardize auth failure
+            console.warn(`[AuthRoute] Login failed: User not found or no password hash for ${email}`);
             return res.status(401).json({
                 error: { code: 'AUTH_FAILED', message: 'Invalid email or password' }
             });
         }
 
-        const validPassword = await bcrypt.compare(password, user.passwordHash);
-        if (!validPassword) {
+        console.log(`[AuthRoute] Found user ${user.id}, verifying password...`);
+
+        const isPasswordCorrect = await bcrypt.compare(password, user.passwordHash);
+        if (!isPasswordCorrect) {
+            console.warn(`[AuthRoute] Invalid password for ${email}`);
             return res.status(401).json({
                 error: { code: 'AUTH_FAILED', message: 'Invalid email or password' }
             });
         }
 
-        // DEBUG: Log secret length being used for signing
-        console.log(`[AuthRoute] Signing token with secret len: ${JWT_SECRET.length}`);
+        console.log(`[AuthRoute] Password valid for ${email}. Triggering Stripe Sync...`);
 
-        // Trigger Stripe Sync proactively
-        await syncUserWithStripe(user.id, user.email);
+        // Trigger Stripe Sync proactively - but NON-BLOCKING to prevent login failures
+        syncUserWithStripe(user.id, user.email).catch(err => {
+            console.error('[AuthRoute] Background Stripe Sync failed:', err);
+        });
 
+        console.log(`[AuthRoute] Fetching fresh user data...`);
         // Refetch user to get updated status
         const updatedUser = await prisma.user.findUnique({ where: { id: user.id } }) || user;
 
+        console.log(`[AuthRoute] Signing token...`);
         const token = jwt.sign(
             { id: updatedUser.id, email: updatedUser.email },
             JWT_SECRET,
             { expiresIn: '24h' }
         );
 
+        console.log(`[AuthRoute] Resolving effective status...`);
         // Resolve effective status (including inheritance)
         const effectiveStatus = await getEffectiveSubscriptionStatus(updatedUser.id);
+
+        console.log(`[AuthRoute] Login successful for ${email}`);
 
         res.json({
             token,
@@ -125,6 +134,7 @@ router.post('/login', async (req, res, next) => {
             }
         });
     } catch (error) {
+        console.error('[AuthRoute] Unexpected error during login logic:', error);
         next(error);
     }
 });
