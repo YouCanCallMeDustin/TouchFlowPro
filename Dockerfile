@@ -19,4 +19,14 @@ COPY . .
 # Build: Prisma generate + compile both workspaces
 RUN cd backend && npx prisma generate && cd .. && npm run build
 
-CMD ["sh", "-c", "cd backend && npx prisma db push --accept-data-loss && cd .. && npm start --workspace=backend"]
+# Expose the API port
+EXPOSE 3001
+
+# Production Environment Variables
+ENV NODE_ENV=production
+ENV DATABASE_URL="file:/app/backend/prisma/dev.db"
+ENV PORT=3001
+
+# Run migrations/seed and start
+# We ensure the prisma folder exists and is writable
+CMD ["sh", "-c", "mkdir -p backend/prisma && cd backend && npx prisma db push --accept-data-loss && cd .. && npm start --workspace=backend"]
