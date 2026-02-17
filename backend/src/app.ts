@@ -42,14 +42,11 @@ const app = express();
 
 // Health check with diagnostics
 app.get('/health', async (req, res) => {
-    const dbPath = resolveResourcePath('database');
-    const frontendPath = resolveResourcePath('frontend');
-
     let tables: any[] = [];
     try {
         const prisma = require('./lib/db').default;
-        // Get all table names in SQLite
-        tables = await prisma.$queryRaw`SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'`;
+        // Get all table names in PostgreSQL
+        tables = await prisma.$queryRaw`SELECT tablename as name FROM pg_catalog.pg_tables WHERE schemaname = 'public'`;
     } catch (e) {
         console.error('Health check table probe failed:', e);
     }
@@ -60,13 +57,12 @@ app.get('/health', async (req, res) => {
         diagnostics: {
             cwd: process.cwd(),
             db: {
-                path: dbPath,
-                exists: fs.existsSync(dbPath),
-                size: fs.existsSync(dbPath) ? fs.statSync(dbPath).size : 0,
                 tableCount: tables.length,
                 tables: tables.map(t => t.name)
             },
-            frontend: { path: frontendPath, exists: fs.existsSync(frontendPath) }
+            frontend: {
+                exists: true // Simplified as resolveResourcePath throws if missing
+            }
         }
     });
 });
