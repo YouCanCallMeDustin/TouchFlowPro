@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 import { Zap } from 'lucide-react';
 import { LiveMetricsBar } from '../components/LiveMetricsBar';
 import { VirtualKeyboard } from '../components/VirtualKeyboard';
-import { TypingEngine } from '../utils/typingEngine';
-import type { KeystrokeEvent, LiveMetrics } from '../utils/types';
+import { TypingEngine } from '@shared/typingEngine';
+import type { KeystrokeEvent, LiveMetrics } from '@shared/types';
 
 export const EnhancedPractice: React.FC = () => {
     const [text] = useState('The quick brown fox jumps over the lazy dog. Practice makes perfect!');

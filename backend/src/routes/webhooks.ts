@@ -26,12 +26,16 @@ router.post('/stripe', express.raw({ type: 'application/json' }), async (req, re
     }
 
     try {
+        console.log(`[Stripe Webhook] Received event: ${event.type} (ID: ${event.id})`);
+
         switch (event.type) {
             case 'customer.subscription.updated':
             case 'customer.subscription.created': {
                 const sub = event.data.object as Stripe.Subscription;
-                // Check if this is an Organization subscription (has orgId in metadata or mapped to an Org)
                 const customerId = typeof sub.customer === 'string' ? sub.customer : sub.customer.id;
+                console.log(`[Stripe Webhook] Processing subscription ${sub.id} for customer ${customerId}`);
+
+                // Check if this is an Organization subscription (has orgId in metadata or mapped to an Org)
                 const org = await prisma.organization.findFirst({ where: { stripeCustomerId: customerId } });
 
                 if (org) {
@@ -44,6 +48,7 @@ router.post('/stripe', express.raw({ type: 'application/json' }), async (req, re
             }
             case 'checkout.session.completed':
                 const session = event.data.object as Stripe.Checkout.Session;
+                console.log(`[Stripe Webhook] Checkout completed (ID: ${session.id}, User: ${session.metadata?.userId}, Org: ${session.metadata?.orgId})`);
                 if (session.metadata?.userId && !session.metadata.orgId) {
                     // Update User Subscription (Starter)
                     await prisma.user.update({
@@ -83,6 +88,7 @@ router.post('/stripe', express.raw({ type: 'application/json' }), async (req, re
             case 'customer.subscription.deleted':
                 const subscription = event.data.object as Stripe.Subscription;
                 const customerId = typeof subscription.customer === 'string' ? subscription.customer : subscription.customer.id;
+                console.log(`[Stripe Webhook] Subscription deleted: ${subscription.id} (Customer: ${customerId})`);
 
                 // Check if it's an Org
                 const org = await prisma.organization.findFirst({ where: { stripeCustomerId: customerId } });

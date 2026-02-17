@@ -245,12 +245,6 @@ const Settings: React.FC<SettingsProps> = ({ onNavigate }) => {
                             onChange={(v) => updateSetting('soundEnabled', v)}
                         />
                         <Toggle
-                            label="Strict Velocity"
-                            helpText="When enabled, you cannot proceed to the next character until the current one is corrected."
-                            value={localSettings.strictAccuracy}
-                            onChange={(v) => updateSetting('strictAccuracy', v)}
-                        />
-                        <Toggle
                             label="Auto-Pause"
                             helpText="Halts the session timer automatically after 5 seconds of inactivity."
                             value={localSettings.autoPauseIdle}

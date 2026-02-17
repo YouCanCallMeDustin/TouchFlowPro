@@ -1,8 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import type { TypingMetrics, EnhancedKeystrokeEvent } from '../utils/types';
-
-import { TypingEngine } from '../utils/typingEngine';
+import type { TypingMetrics, EnhancedKeystrokeEvent } from '@shared/types';
+import { TypingEngine } from '@shared/typingEngine';
 
 interface SessionInsightsProps {
     metrics: TypingMetrics;

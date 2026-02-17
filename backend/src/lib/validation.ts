@@ -52,7 +52,6 @@ export const updateSettingsSchema = z.object({
     soundEnabled: z.boolean().optional(),
     reduceMotion: z.boolean().optional(),
     fontScale: z.enum(['SM', 'MD', 'LG']).optional(),
-    strictAccuracy: z.boolean().optional(),
     autoPauseIdle: z.boolean().optional(),
     dailyGoalMinutes: z.number().min(5).max(1440).optional(),
     defaultFocus: z.enum(['BALANCED', 'SPEED', 'ACCURACY', 'ENDURANCE']).optional(),

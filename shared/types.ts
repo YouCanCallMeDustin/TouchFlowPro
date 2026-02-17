@@ -10,10 +10,11 @@ export interface TypingMetrics {
     grossWPM: number;
     netWPM: number;
     accuracy: number;
-    charsTyped?: number;
-    errors?: number;
+    charsTyped: number;
+    errors: number;
+    totalMistakes: number;
     durationMs: number;
-    errorMap?: Record<string, number>;
+    errorMap: Record<string, number>;
 }
 
 export interface DrillResult {

@@ -41,6 +41,7 @@ const TypingTest: React.FC<Props> = ({
         accuracy: 0,
         charsTyped: 0,
         errors: 0,
+        totalMistakes: 0,
         durationMs: 0,
         errorMap: {}
     });
@@ -70,6 +71,7 @@ const TypingTest: React.FC<Props> = ({
             accuracy: 0,
             charsTyped: 0,
             errors: 0,
+            totalMistakes: 0,
             durationMs: 0,
             errorMap: {}
         });
@@ -156,12 +158,6 @@ const TypingTest: React.FC<Props> = ({
         if (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Shift') {
             const isCorrect = e.key === text[userInput.length];
 
-            // Strict Accuracy Mode: Prevents typing any other key if there's an error at the current position
-            // (Unless it's backspace or shift)
-            if (settings?.strictAccuracy && !isCorrect && e.key !== 'Backspace' && e.key !== 'Shift') {
-                soundManager.playError();
-                return;
-            }
 
             if (suddenDeath && !isCorrect && e.key !== 'Backspace' && e.key !== 'Shift') {
                 soundManager.playError();

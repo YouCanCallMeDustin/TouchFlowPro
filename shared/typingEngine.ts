@@ -7,7 +7,7 @@ export class TypingEngine {
         expectedText: string
     ): TypingMetrics {
         if (keystrokes.length === 0) {
-            return { grossWPM: 0, netWPM: 0, accuracy: 0, charsTyped: 0, errors: 0, durationMs: 0, errorMap: {} };
+            return { grossWPM: 0, netWPM: 0, accuracy: 0, charsTyped: 0, errors: 0, totalMistakes: 0, durationMs: 0, errorMap: {} };
         }
 
         const startTime = keystrokes[0].timestamp;
@@ -16,56 +16,65 @@ export class TypingEngine {
         const minutes = durationMs / 60000 || 0.01;
 
         let totalPhysicalKeystrokes = 0;
+        let totalMistakes = 0;
         const buffer: string[] = [];
         const errorMap: Record<string, number> = {};
 
-        // Simulate the visual buffer the user sees
+        // Track mistakes by comparing each keypress to the expected character at that position
         keystrokes.forEach(event => {
             if (event.eventType === 'keydown') {
-                // Count every physical press as a "character typed" for Gross WPM
-                // except potentially modifiers like Shift which usually don't count towards WPM
-                // but backspaces definitely count as labor.
-                if (event.key.length === 1 || event.key === 'Backspace') {
-                    totalPhysicalKeystrokes++;
-                }
+                const currentPos = buffer.length;
 
                 if (event.key.length === 1) {
+                    totalPhysicalKeystrokes++;
+
+                    const expectedChar = expectedText[currentPos];
+                    if (event.key !== expectedChar) {
+                        totalMistakes++;
+                        const targetChar = expectedChar || 'extra';
+                        errorMap[targetChar] = (errorMap[targetChar] || 0) + 1;
+                    }
+
                     buffer.push(event.key);
                 } else if (event.key === 'Backspace') {
-                    buffer.pop();
+                    totalPhysicalKeystrokes++;
+                    if (buffer.length > 0) {
+                        buffer.pop();
+                    }
                 }
             }
         });
 
         const expectedChars = expectedText.split('');
-        let currentErrors = 0;
+        let currentUncorrectedErrors = 0;
 
-        // Calculate accuracy based on CURRENT state of the buffer
+        // Calculate current uncorrected errors for Net WPM
         for (let i = 0; i < buffer.length; i++) {
             if (i >= expectedChars.length || buffer[i] !== expectedChars[i]) {
-                currentErrors++;
-                const targetChar = expectedChars[i] || 'unknown';
-                errorMap[targetChar] = (errorMap[targetChar] || 0) + 1;
+                currentUncorrectedErrors++;
             }
         }
 
         // Gross WPM is based on total effort (Total Physical Keystrokes / 5) / Time
         const grossWPM = (totalPhysicalKeystrokes / 5) / minutes;
 
-        // Net WPM: (Correct Characters Typed / 5) / Minutes
-        // This is more standard and less punishing than Gross - (Errors/Min) for short bursts
-        const correctChars = buffer.length - currentErrors;
-        const netWPM = (correctChars / 5) / minutes;
+        // Net WPM: (Correct Characters in Buffer / 5) / Minutes
+        const correctCharsInBuffer = buffer.length - currentUncorrectedErrors;
+        const netWPM = (correctCharsInBuffer / 5) / minutes;
 
-        // Accuracy is (Corrected Chars in Buffer / Total Chars in Buffer)
-        const accuracy = buffer.length > 0 ? (correctChars / buffer.length) * 100 : 0;
+        // NEW Accuracy Calculation: (Chars Typed - Total Mistakes) / Chars Typed
+        // This is much more intuitive and standard.
+        // Chars typed here is how many characters the user ADDED to the buffer.
+        const charsAdded = keystrokes.filter(k => k.eventType === 'keydown' && k.key.length === 1).length;
+        const accuracy = charsAdded > 0 ? Math.max(0, (charsAdded - totalMistakes) / charsAdded) * 100 : 100;
 
         return {
             grossWPM: Math.round(grossWPM * 10) / 10,
             netWPM: Math.round(netWPM * 10) / 10,
             accuracy: Math.round(accuracy * 10) / 10,
             charsTyped: totalPhysicalKeystrokes,
-            errors: currentErrors,
+            errors: currentUncorrectedErrors, // Renaming this mentally to uncorrected errors
+            totalMistakes,
             durationMs,
             errorMap
         };

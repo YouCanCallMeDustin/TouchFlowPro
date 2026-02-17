@@ -8,7 +8,6 @@ export interface UserSettings {
     soundEnabled: boolean;
     reduceMotion: boolean;
     fontScale: 'SM' | 'MD' | 'LG';
-    strictAccuracy: boolean;
     autoPauseIdle: boolean;
     dailyGoalMinutes: number;
     defaultFocus: 'BALANCED' | 'SPEED' | 'ACCURACY' | 'ENDURANCE';

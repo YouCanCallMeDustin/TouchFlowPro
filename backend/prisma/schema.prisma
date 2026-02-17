@@ -295,7 +295,6 @@ model UserSettings {
   soundEnabled          Boolean  @default(true)
   reduceMotion          Boolean  @default(false)
   fontScale             String   @default("MD") // SM, MD, LG
-  strictAccuracy        Boolean  @default(true)
   autoPauseIdle         Boolean  @default(true)
   dailyGoalMinutes      Int      @default(30)
   defaultFocus          String   @default("BALANCED") // BALANCED, SPEED, ACCURACY, ENDURANCE

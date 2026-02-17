@@ -479,7 +479,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                         </div>
                         <div className="bg-slate-500/5 dark:bg-white/5 border border-slate-200/50 dark:border-white/5 p-3 rounded-[1rem]">
                             <div className="text-[9px] font-black text-text-muted uppercase tracking-[0.3em] mb-2 opacity-40">Mistakes</div>
-                            <div className="text-2xl sm:text-3xl font-black text-text-main mb-1 tracking-tighter">{testMetrics.errors}</div>
+                            <div className="text-2xl sm:text-3xl font-black text-text-main mb-1 tracking-tighter">{testMetrics.totalMistakes}</div>
                         </div>
                     </div>
 
