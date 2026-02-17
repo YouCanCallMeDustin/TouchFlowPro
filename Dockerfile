@@ -15,7 +15,8 @@ COPY frontend ./frontend
 COPY shared ./shared
 
 # Install ALL dependencies (including devDependencies for build)
-RUN npm install
+# We use --legacy-peer-deps or simply remove the lockfile to avoid the rollup-linux-x64-gnu bug
+RUN rm -f package-lock.json && npm install
 
 # Set build context variable
 ENV DATABASE_URL="file:///app/backend/prisma/dev.db"
