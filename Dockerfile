@@ -6,11 +6,6 @@ RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Set Production Environment Variables BEFORE build
-ENV NODE_ENV=production
-ENV DATABASE_URL="file:///app/backend/prisma/dev.db"
-ENV PORT=3001
-
 # Copy root config files
 COPY package.json package-lock.json ./
 
@@ -19,14 +14,21 @@ COPY backend ./backend
 COPY frontend ./frontend
 COPY shared ./shared
 
-# Install dependencies
+# Install ALL dependencies (including devDependencies for build)
 RUN npm install
+
+# Set build context variable
+ENV DATABASE_URL="file:///app/backend/prisma/dev.db"
 
 # Build: Prisma generate + compile both workspaces
 RUN cd backend && npx prisma generate && cd .. && npm run build
 
 # Expose the API port
 EXPOSE 3001
+
+# Final Production Environment Variables
+ENV NODE_ENV=production
+ENV PORT=3001
 
 # Run migrations/seed and start
 # We ensure the prisma folder exists and is writable
