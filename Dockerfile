@@ -1,20 +1,26 @@
-FROM node:20-slim
+# Base image
+FROM node:18-slim
 
+# Install OpenSSL for Prisma
 RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Only copy package.json files - NO lockfile so npm resolves Linux-native deps fresh
-COPY package.json ./
-COPY backend/package.json ./backend/
-COPY frontend/package.json ./frontend/
+# Set Production Environment Variables BEFORE build
+ENV NODE_ENV=production
+ENV DATABASE_URL="file:///app/backend/prisma/dev.db"
+ENV PORT=3001
 
-# Cache bust: change this value to force a fresh npm install (bypasses Docker layer cache)
-ARG CACHEBUST=2
+# Copy root config files
+COPY package.json package-lock.json ./
+
+# Copy workspaces
+COPY backend ./backend
+COPY frontend ./frontend
+COPY shared ./shared
+
+# Install dependencies
 RUN npm install
-
-# Copy source
-COPY . .
 
 # Build: Prisma generate + compile both workspaces
 RUN cd backend && npx prisma generate && cd .. && npm run build
@@ -22,11 +28,7 @@ RUN cd backend && npx prisma generate && cd .. && npm run build
 # Expose the API port
 EXPOSE 3001
 
-# Production Environment Variables
-ENV NODE_ENV=production
-ENV DATABASE_URL="file:/app/backend/prisma/dev.db"
-ENV PORT=3001
-
 # Run migrations/seed and start
 # We ensure the prisma folder exists and is writable
-CMD ["sh", "-c", "mkdir -p backend/prisma && cd backend && npx prisma db push --accept-data-loss && cd .. && npm start --workspace=backend"]
+# We also log the DB URL being used for push to verify context
+CMD ["sh", "-c", "mkdir -p backend/prisma && echo 'Running DB Push against: '$DATABASE_URL && cd backend && npx prisma db push --accept-data-loss && cd .. && npm start --workspace=backend"]

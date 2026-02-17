@@ -45,12 +45,11 @@ app.get('/health', async (req, res) => {
     const dbPath = resolveResourcePath('database');
     const frontendPath = resolveResourcePath('frontend');
 
-    let tables = [];
+    let tables: any[] = [];
     try {
         const prisma = require('./lib/db').default;
-        // Check for User table exists using SQLite master table
-        const result: any = await prisma.$queryRaw`SELECT name FROM sqlite_master WHERE type='table' AND name='User'`;
-        tables = result;
+        // Get all table names in SQLite
+        tables = await prisma.$queryRaw`SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'`;
     } catch (e) {
         console.error('Health check table probe failed:', e);
     }
@@ -64,7 +63,8 @@ app.get('/health', async (req, res) => {
                 path: dbPath,
                 exists: fs.existsSync(dbPath),
                 size: fs.existsSync(dbPath) ? fs.statSync(dbPath).size : 0,
-                hasUserTable: tables.length > 0
+                tableCount: tables.length,
+                tables: tables.map(t => t.name)
             },
             frontend: { path: frontendPath, exists: fs.existsSync(frontendPath) }
         }
