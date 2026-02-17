@@ -34,10 +34,52 @@ import gamesRoutes from './routes/games';
 
 const app = express();
 
-// Health check - Mounted early to avoid middleware issues
-app.get('/health', (req, res) => {
-    console.log('Health check passed');
-    res.json({ status: 'ok', message: 'TouchFlow Pro API is healthy' });
+// Health check - Enhanced with production diagnostics
+app.get('/health', async (req, res) => {
+    console.log('Health check called');
+    const dbStatus = {
+        path: 'unknown',
+        exists: false,
+        size: 0
+    };
+
+    try {
+        const prismaLib = require('./lib/db').default;
+        // This is a bit hacky to get the resolved path from our db.ts logic
+        // We'll just re-check the possible paths here for the health report specifically
+        const possibleDbPaths = [
+            path.resolve(process.cwd(), 'backend/prisma/dev.db'),
+            path.resolve(process.cwd(), 'prisma/dev.db'),
+            path.resolve(__dirname, '../../../prisma/dev.db'),
+            '/app/backend/prisma/dev.db'
+        ];
+
+        for (const p of possibleDbPaths) {
+            if (fs.existsSync(p)) {
+                dbStatus.path = p;
+                dbStatus.exists = true;
+                dbStatus.size = fs.statSync(p).size;
+                break;
+            }
+        }
+    } catch (e) {
+        console.error('Health check DB probe failed:', e);
+    }
+
+    res.json({
+        status: 'ok',
+        message: 'TouchFlow Pro API is healthy',
+        diagnostics: {
+            cwd: process.cwd(),
+            dirname: __dirname,
+            nodeEnv: process.env.NODE_ENV,
+            db: dbStatus,
+            frontendDist: {
+                path: path.resolve(process.cwd(), process.cwd().endsWith('backend') ? '../frontend/dist' : 'frontend/dist'),
+                exists: fs.existsSync(path.resolve(process.cwd(), process.cwd().endsWith('backend') ? '../frontend/dist' : 'frontend/dist'))
+            }
+        }
+    });
 });
 
 import webhooksRoutes from './routes/webhooks';
