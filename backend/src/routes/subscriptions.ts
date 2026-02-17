@@ -127,7 +127,7 @@ router.post('/create-checkout-session', authenticateToken, async (req: any, res)
                 cancelUrl = `${FRONTEND_URL}/dashboard`; // Or wherever
                 break;
             case 'PRO': // Team Pro
-                priceId = process.env.STRIPE_PRICE_TEAM_PRO || process.env.STRIPE_PRO_PRICE_ID; // Fallback for backward compat
+                priceId = process.env.STRIPE_PRICE_TEAM_PRO || process.env.STRIPE_PRO_PRICE_ID || 'price_1T1FGxIPOGZ3hiJyx8tGWxvx'; // Fallback for backward compat
                 metadata.orgId = orgId;
                 if (!orgId) return res.status(400).json({ error: 'Organization ID required for Pro plan' });
                 break;

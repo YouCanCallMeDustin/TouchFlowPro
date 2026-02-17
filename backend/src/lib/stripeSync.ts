@@ -79,7 +79,7 @@ export async function syncUserWithStripe(userId: string, email: string) {
                 status = 'starter';
                 planTier = 'FREE';
                 seatLimit = 1;
-            } else if (priceId === process.env.STRIPE_PRICE_TEAM_PRO || priceId === process.env.STRIPE_PRO_PRICE_ID) {
+            } else if (priceId === process.env.STRIPE_PRICE_TEAM_PRO || priceId === process.env.STRIPE_PRO_PRICE_ID || priceId === 'price_1T1FGxIPOGZ3hiJyx8tGWxvx') {
                 status = 'pro';
                 planTier = 'PRO';
                 seatLimit = 10;
