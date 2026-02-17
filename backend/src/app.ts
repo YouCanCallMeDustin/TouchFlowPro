@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import fs from 'fs';
 import { requestLogger } from './middleware/requestLogger';
 import { errorHandler } from './middleware/errorHandler';
 
@@ -120,9 +121,22 @@ app.use('/api/games', gamesRoutes);
 app.use('/api/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // Serve frontend static files (built by Vite)
-// When running from root (/app), dist is at ./frontend/dist
-const frontendDist = path.resolve(process.cwd(), 'frontend/dist');
-console.log(`[Static] Serving frontend from: ${frontendDist}`);
+const possibleFrontendPaths = [
+    path.resolve(process.cwd(), 'frontend/dist'),
+    path.resolve(process.cwd(), '../frontend/dist'),
+    path.resolve(__dirname, '../../../../frontend/dist'),
+    '/app/frontend/dist'
+];
+
+let frontendDist = possibleFrontendPaths[0];
+for (const p of possibleFrontendPaths) {
+    if (fs.existsSync(path.join(p, 'index.html'))) {
+        frontendDist = p;
+        break;
+    }
+}
+
+console.log(`[Static] Serving frontend from: ${frontendDist} (CWD: ${process.cwd()})`);
 app.use(express.static(frontendDist));
 
 // SPA catch-all: any non-API route serves index.html

@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import path from 'path';
+import fs from 'fs';
 
 const prisma = new PrismaClient({
     log: [
@@ -42,9 +43,26 @@ prisma.$on('error', (e) => {
 
 // In Docker (root /app), the DB is at /app/backend/prisma/dev.db
 // If running from backend folder, it's at ./prisma/dev.db
-const dbUrl = process.env.DATABASE_URL || `file:${path.resolve(process.cwd(), 'backend/prisma/dev.db')}`;
+const possibleDbPaths = [
+    path.resolve(process.cwd(), 'backend/prisma/dev.db'),
+    path.resolve(process.cwd(), 'prisma/dev.db'),
+    path.resolve(__dirname, '../../../prisma/dev.db'),
+    '/app/backend/prisma/dev.db'
+];
+
+let finalDbPath = possibleDbPaths[0];
+for (const p of possibleDbPaths) {
+    if (fs.existsSync(p)) {
+        finalDbPath = p;
+        break;
+    }
+}
+
+const dbUrl = process.env.DATABASE_URL || `file:${finalDbPath}`;
+
 console.log(`[Prisma] Initializing with DB URL: ${dbUrl}`);
 console.log(`[Prisma] Current Working Directory: ${process.cwd()}`);
+console.log(`[Prisma] __dirname: ${__dirname}`);
 
 prisma.$connect()
     .then(() => console.log('Prisma connected successfully'))
