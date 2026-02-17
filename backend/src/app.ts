@@ -45,11 +45,27 @@ app.get('/health', async (req, res) => {
     const dbPath = resolveResourcePath('database');
     const frontendPath = resolveResourcePath('frontend');
 
+    let tables = [];
+    try {
+        const prisma = require('./lib/db').default;
+        // Check for User table exists using SQLite master table
+        const result: any = await prisma.$queryRaw`SELECT name FROM sqlite_master WHERE type='table' AND name='User'`;
+        tables = result;
+    } catch (e) {
+        console.error('Health check table probe failed:', e);
+    }
+
     res.json({
         status: 'ok',
+        message: 'TouchFlow Pro API is healthy',
         diagnostics: {
             cwd: process.cwd(),
-            db: { path: dbPath, exists: fs.existsSync(dbPath), size: fs.existsSync(dbPath) ? fs.statSync(dbPath).size : 0 },
+            db: {
+                path: dbPath,
+                exists: fs.existsSync(dbPath),
+                size: fs.existsSync(dbPath) ? fs.statSync(dbPath).size : 0,
+                hasUserTable: tables.length > 0
+            },
             frontend: { path: frontendPath, exists: fs.existsSync(frontendPath) }
         }
     });

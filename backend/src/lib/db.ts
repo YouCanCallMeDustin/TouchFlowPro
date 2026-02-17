@@ -28,8 +28,14 @@ prisma.$on('error', (e) => {
     console.error('Error: ' + e.message);
 });
 
-const finalDbPath = resolveResourcePath('database');
-const dbUrl = process.env.DATABASE_URL || `file:${finalDbPath}`;
+const discoveredDbPath = resolveResourcePath('database');
+let dbUrl = process.env.DATABASE_URL || `file:${discoveredDbPath}`;
+
+// If it's a relative SQLite path, force it to be absolute based on discovery
+if (dbUrl.startsWith('file:./') || dbUrl.startsWith('file:../')) {
+    console.log(`[Prisma] Resolving relative DB URL: ${dbUrl}`);
+    dbUrl = `file:${discoveredDbPath}`;
+}
 
 console.log(`[Prisma] Initializing with DB URL: ${dbUrl}`);
 
