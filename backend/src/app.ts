@@ -120,7 +120,9 @@ app.use('/api/games', gamesRoutes);
 app.use('/api/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 // Serve frontend static files (built by Vite)
-const frontendDist = path.join(process.cwd(), '..', 'frontend', 'dist');
+// When running from root (/app), dist is at ./frontend/dist
+const frontendDist = path.resolve(process.cwd(), 'frontend/dist');
+console.log(`[Static] Serving frontend from: ${frontendDist}`);
 app.use(express.static(frontendDist));
 
 // SPA catch-all: any non-API route serves index.html

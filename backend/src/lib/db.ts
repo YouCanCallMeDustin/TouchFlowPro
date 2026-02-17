@@ -40,8 +40,11 @@ prisma.$on('error', (e) => {
     console.error('Error: ' + e.message);
 });
 
-const dbUrl = process.env.DATABASE_URL || `file:${path.join(process.cwd(), 'prisma', 'dev.db')}`;
+// In Docker (root /app), the DB is at /app/backend/prisma/dev.db
+// If running from backend folder, it's at ./prisma/dev.db
+const dbUrl = process.env.DATABASE_URL || `file:${path.resolve(process.cwd(), 'backend/prisma/dev.db')}`;
 console.log(`[Prisma] Initializing with DB URL: ${dbUrl}`);
+console.log(`[Prisma] Current Working Directory: ${process.cwd()}`);
 
 prisma.$connect()
     .then(() => console.log('Prisma connected successfully'))
