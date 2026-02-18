@@ -1,5 +1,5 @@
 # Base image
-FROM node:18-slim
+FROM node:22-slim
 
 # Install OpenSSL for Prisma
 RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
