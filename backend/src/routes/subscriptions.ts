@@ -5,6 +5,8 @@ import { authenticateToken } from '../middleware/auth';
 import { syncUserWithStripe } from '../lib/stripeSync';
 import { FRONTEND_URL } from '../config';
 
+import { getEffectiveSubscriptionStatus } from '../lib/subscription';
+
 const router = express.Router();
 
 // POST /api/subscriptions/verify-session
@@ -75,15 +77,22 @@ router.post('/verify-session', authenticateToken, async (req: any, res) => {
 // GET /api/subscriptions/status
 router.get('/status', authenticateToken, async (req: any, res) => {
     try {
-        const userId = req.user?.id; // Assuming auth middleware populates req.user
+        const userId = req.user?.id;
         if (!userId) return res.status(401).json({ error: 'Unauthorized' });
 
-        const user = await prisma.user.findUnique({
+        const userPromise = prisma.user.findUnique({
             where: { id: userId },
-            select: { subscriptionStatus: true, subscriptionEndDate: true }
+            select: { subscriptionEndDate: true }
         });
 
-        res.json(user);
+        const statusPromise = getEffectiveSubscriptionStatus(userId);
+
+        const [user, status] = await Promise.all([userPromise, statusPromise]);
+
+        res.json({
+            subscriptionStatus: status,
+            subscriptionEndDate: user?.subscriptionEndDate
+        });
     } catch (error) {
         console.error('Error fetching subscription status:', error);
         res.status(500).json({ error: 'Failed to fetch status' });

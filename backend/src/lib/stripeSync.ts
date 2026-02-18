@@ -1,6 +1,7 @@
 import prisma from './db';
 import stripe from './stripe';
 import { v4 as uuidv4 } from 'uuid';
+import { getEffectiveSubscriptionStatus } from './subscription';
 
 /**
  * Synchronizes a local user account with their existing Stripe subscription status.
@@ -39,7 +40,8 @@ export async function syncUserWithStripe(userId: string, email: string) {
                 });
             } else {
                 console.log(`[StripeSync] No Stripe customer found for ${email}`);
-                return { status: user.subscriptionStatus, updated: false };
+                const finalStatus = await getEffectiveSubscriptionStatus(userId);
+                return { status: finalStatus, updated: false };
             }
         }
 
@@ -52,9 +54,8 @@ export async function syncUserWithStripe(userId: string, email: string) {
 
         if (subscriptions.data.length === 0) {
             console.log(`[StripeSync] No active subscriptions for ${email}`);
-            // If local status is not free but Stripe has nothing, we might want to downgrade,
-            // but for now let's just return current status unless we're sure.
-            return { status: user.subscriptionStatus, updated: false };
+            const finalStatus = await getEffectiveSubscriptionStatus(userId);
+            return { status: finalStatus, updated: false };
         }
 
         const sub = subscriptions.data[0];
@@ -63,7 +64,7 @@ export async function syncUserWithStripe(userId: string, email: string) {
             const priceId = price.id;
             console.log(`[StripeSync] Found active subscription with Price ID: ${priceId}`);
 
-            // Log what we have in ENV (masked)
+            // ... log existing price IDs ...
             console.log(`[StripeSync] Configured Price IDs: 
                 STARTER: ${process.env.STRIPE_PRICE_STARTER ? 'SET' : 'MISSING'}
                 TEAM_PRO: ${process.env.STRIPE_PRICE_TEAM_PRO ? 'SET' : 'MISSING'}
@@ -96,16 +97,19 @@ export async function syncUserWithStripe(userId: string, email: string) {
             console.log(`[StripeSync] Identified plan: ${status} Tier: ${planTier}`);
 
             // 4. Update User Status
-            await prisma.user.update({
-                where: { id: userId },
-                data: {
-                    subscriptionStatus: status,
-                    // If they were Starter but now Pro, or vice versa
-                }
-            });
+            if (user.subscriptionStatus !== status) {
+                await prisma.user.update({
+                    where: { id: userId },
+                    data: {
+                        subscriptionStatus: status,
+                    }
+                });
+                console.log(`[StripeSync] Updated user ${userId} status to ${status}`);
+            }
 
             // 5. Handle Organization for Team Plans
             if (status === 'pro' || status === 'enterprise') {
+                // ... same org logic ...
                 console.log(`[StripeSync] Handling Organization for team plan...`);
 
                 // Try to find if this Stripe Customer is linked to any Org already
@@ -169,10 +173,12 @@ export async function syncUserWithStripe(userId: string, email: string) {
                 }
             }
 
-            return { status, updated: true };
+            const finalStatus = await getEffectiveSubscriptionStatus(userId);
+            return { status: finalStatus, updated: finalStatus !== user.subscriptionStatus };
         }
 
-        return { status: user.subscriptionStatus, updated: false };
+        const finalStatus = await getEffectiveSubscriptionStatus(userId);
+        return { status: finalStatus, updated: false };
 
     } catch (error) {
         console.error('[StripeSync] Critical error during synchronization:', error);

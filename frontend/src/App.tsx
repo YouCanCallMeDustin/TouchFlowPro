@@ -401,6 +401,13 @@ function App() {
               <div className="h-6 w-px bg-slate-200 dark:bg-white/10 hidden sm:block" />
             </div>
 
+            {/* Center Branding */}
+            <div className="hidden lg:flex flex-1 justify-center items-center pointer-events-none">
+              <span className="text-2xl font-black uppercase tracking-[0.3em] bg-gradient-to-r from-primary via-white to-secondary bg-clip-text text-transparent opacity-90 drop-shadow-sm italic">
+                TouchFlow Pro
+              </span>
+            </div>
+
             <div className="flex items-center gap-4 sm:gap-8">
               {!user && (
                 <div className="flex items-center gap-4">

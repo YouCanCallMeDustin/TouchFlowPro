@@ -345,15 +345,16 @@ const Settings: React.FC<SettingsProps> = ({ onNavigate }) => {
                                         try {
                                             const { apiFetch } = await import('../utils/api');
                                             const res = await apiFetch('/api/subscriptions/sync', { method: 'POST' });
-                                            if (res.updated) {
-                                                alert(`Subscription synced: ${res.status.toUpperCase()}`);
-                                                window.location.reload();
-                                            } else {
-                                                alert(res.message || 'Sync complete');
-                                            }
+
+                                            // Even if not "updated" in DB, the effective status might have changed (e.g. joined team)
+                                            // or we just want to ensure the frontend is fresh.
+                                            alert(`Subscription Synchronization Complete.\nResolved Status: ${res.status.toUpperCase()}${res.updated ? '\n(Database updated)' : ''}`);
+
+                                            // Hard reload to refresh all contexts (Auth, User, etc)
+                                            window.location.reload();
                                         } catch (e) {
-                                            console.error(e);
-                                            alert('Failed to sync');
+                                            console.error('Sync failed:', e);
+                                            alert('Failed to synchronize subscription status. Please try logging out and back in if the issue persists.');
                                         }
                                     }}
                                     className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border border-white/5 w-full flex items-center justify-center gap-2"
