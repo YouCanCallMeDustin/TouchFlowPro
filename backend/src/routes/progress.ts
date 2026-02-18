@@ -28,6 +28,7 @@ async function getUserProgress(userId: string): Promise<UserProgress | null> {
             accuracy: result.accuracy,
             charsTyped: 0,
             errors: 0,
+            totalMistakes: 0,
             durationMs: result.durationMs,
             errorMap: {}
         };
@@ -64,7 +65,15 @@ router.post('/assessment', async (req, res, next) => {
     try {
         const { userId, metrics } = assessmentSchema.parse(req.body);
 
-        const placement = PlacementEngine.calculatePlacement(metrics);
+        const fullMetrics: TypingMetrics = {
+            ...metrics,
+            charsTyped: 0,
+            errors: 0,
+            totalMistakes: 0,
+            errorMap: {}
+        };
+
+        const placement = PlacementEngine.calculatePlacement(fullMetrics);
 
         let user = await prisma.user.findUnique({ where: { id: userId } });
 
@@ -136,11 +145,19 @@ router.post('/:userId/lesson/:lessonId/complete', async (req, res, next) => {
             }
         });
 
+        const fullMetrics: TypingMetrics = {
+            ...metrics,
+            charsTyped: 0,
+            errors: 0,
+            totalMistakes: 0,
+            errorMap: {}
+        };
+
         // 2b. Sync aggregate stats for dashboard/recommendations
-        await updateUserStats(userId, metrics);
+        await updateUserStats(userId, fullMetrics);
 
         // 3. Check Mastery
-        const passed = Curriculum.checkMastery(lesson, metrics);
+        const passed = Curriculum.checkMastery(lesson, fullMetrics);
 
         // 4. Update User state
         const progress = await getUserProgress(userId);
@@ -186,7 +203,13 @@ router.post('/:userId/lesson/:lessonId/complete', async (req, res, next) => {
         const result: LessonResult = {
             lessonId,
             passed,
-            metrics,
+            metrics: {
+                ...metrics,
+                charsTyped: 0,
+                errors: 0,
+                totalMistakes: 0,
+                errorMap: {}
+            },
             timestamp: new Date()
         };
 

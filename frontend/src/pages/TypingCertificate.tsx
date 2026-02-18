@@ -544,7 +544,10 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
                                             accuracy: cert.accuracy,
                                             grossWPM: cert.wpm, // Fallback
                                             errors: 0,
-                                            durationMs: 0
+                                            charsTyped: 0,
+                                            totalMistakes: 0,
+                                            durationMs: 0,
+                                            errorMap: {}
                                         })
                                         setTestDate(new Date(cert.testDate))
                                         // Try to find matching duration label or default
