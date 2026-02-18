@@ -39,16 +39,26 @@ export const apiFetch = async <T = any>(endpoint: string, options: RequestInit =
             throw new ApiError(response.statusText, 'UNKNOWN_ERROR', response.status);
         }
 
-        if (errorData?.error) {
-            throw new ApiError(
-                errorData.error.message,
-                errorData.error.code || 'API_ERROR',
-                response.status,
-                errorData.error.details
-            );
+        // Robust error extraction
+        let message = response.statusText;
+        let code = 'API_ERROR';
+        let details = undefined;
+
+        if (typeof errorData === 'string') {
+            message = errorData;
+        } else if (errorData?.error) {
+            if (typeof errorData.error === 'string') {
+                message = errorData.error;
+            } else {
+                message = errorData.error.message || message;
+                code = errorData.error.code || code;
+                details = errorData.error.details;
+            }
+        } else if (errorData?.message) {
+            message = errorData.message;
         }
 
-        throw new ApiError(response.statusText, 'UNKNOWN_ERROR', response.status);
+        throw new ApiError(message, code, response.status, details);
     }
 
     let data: T;

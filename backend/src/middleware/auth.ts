@@ -30,8 +30,14 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
                 return next();
             } catch (legacyErr) {
                 return res.status(403).json({
-                    error: `Invalid token: ${err.message}`, // Return original error
-                    debug: `Secret len: ${JWT_SECRET.length}, Token len: ${token.length}`
+                    error: {
+                        message: `Invalid token: ${err.message}`,
+                        code: 'INVALID_TOKEN',
+                        details: {
+                            secretLength: JWT_SECRET.length,
+                            tokenLength: token.length
+                        }
+                    }
                 });
             }
         }

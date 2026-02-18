@@ -40,7 +40,9 @@ const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
             }
         } catch (error: any) {
             console.error('Subscription error:', error);
-            alert(`Failed to start checkout: ${error.message}`);
+            const debugInfo = error.details ? `\n\nDebug Info: ${JSON.stringify(error.details, null, 2)}` : '';
+            const errorCode = error.code ? ` (${error.code})` : '';
+            alert(`Failed to start checkout${errorCode}: ${error.message}${debugInfo}`);
         } finally {
             setLoading(false);
         }

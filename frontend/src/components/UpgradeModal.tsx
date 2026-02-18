@@ -14,7 +14,7 @@ const UpgradeModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
     const handleUpgrade = async () => {
         try {
-            const response = await apiFetch(`/api/subscriptions/create-checkout-session`, {
+            const data = await apiFetch(`/api/subscriptions/create-checkout-session`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -22,10 +22,18 @@ const UpgradeModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 }
             });
 
-            if (response.status === 403 || response.status === 401) {
-                const errData = await response.json();
-                console.error('Auth error:', errData);
-                alert(`Authentication failed: ${errData.error || 'Unknown error'}`);
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                console.error('No checkout URL returned:', data);
+                alert('Checkout failed: No URL returned from server.');
+            }
+        } catch (error: any) {
+            console.error('Error during upgrade:', error);
+
+            if (error.status === 401 || error.status === 403) {
+                const debugInfo = error.details ? `\n\nDebug Info: ${JSON.stringify(error.details, null, 2)}` : '';
+                alert(`Authentication failed: ${error.message}${debugInfo}`);
 
                 // Force logout and redirect
                 localStorage.removeItem('tfp_token');
@@ -33,22 +41,9 @@ const UpgradeModal: React.FC<Props> = ({ isOpen, onClose }) => {
                 return;
             }
 
-            if (!response.ok) {
-                const errData = await response.json();
-                console.error('Checkout error:', errData);
-                const debugInfo = errData.debug ? `\nDebug: ${JSON.stringify(errData.debug, null, 2)}` : '';
-                alert(`Failed to start checkout: ${errData.error || 'Unknown error'}${debugInfo}`);
-                throw new Error('Failed to create checkout session');
-            }
-
-            const data = await response.json();
-            if (data.url) {
-                window.location.href = data.url;
-            } else {
-                console.error('Failed to start checkout', data);
-            }
-        } catch (err) {
-            console.error('Error during upgrade:', err);
+            const debugInfo = error.details ? `\n\nDebug Info: ${JSON.stringify(error.details, null, 2)}` : '';
+            const errorCode = error.code ? ` (${error.code})` : '';
+            alert(`Failed to start checkout${errorCode}: ${error.message}${debugInfo}`);
         }
     };
 

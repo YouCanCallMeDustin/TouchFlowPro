@@ -144,7 +144,14 @@ router.post('/create-checkout-session', authenticateToken, async (req: any, res)
         }
 
         if (!priceId) {
-            return res.status(500).json({ error: 'Price ID not configured for this plan' });
+            console.error(`[Stripe] Price ID not configured for plan: ${planType}. Check your environment variables.`);
+            return res.status(500).json({
+                error: {
+                    message: 'Payment configuration error: Price ID not found for this plan.',
+                    code: 'MISSING_PRICE_ID',
+                    details: { planType }
+                }
+            });
         }
 
         const session = await stripe.checkout.sessions.create({
@@ -165,12 +172,13 @@ router.post('/create-checkout-session', authenticateToken, async (req: any, res)
         });
 
         res.json({ url: session.url });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error creating checkout session:', error);
-        res.status(500).json({
-            error: 'Failed to create checkout session',
-            debug: {
-                message: error instanceof Error ? error.message : 'Unknown error',
+        res.status(error.status || 500).json({
+            error: {
+                message: error.message || 'Failed to create checkout session',
+                code: error.code || 'STRIPE_ERROR',
+                details: error.raw || error
             }
         });
     }
