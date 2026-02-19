@@ -1,13 +1,12 @@
-Checking for existing user with email: admin@admin.com...
-CRITICAL ERROR creating admin user:
+--- Comprehensive Database Inspection ---
 PrismaClientInitializationError: 
-Invalid `prisma.user.findUnique()` invocation in
-C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\backend\src\scripts\create_admin.ts:13:44
+Invalid `prisma.drillResult.count()` invocation in
+C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\backend\src\scripts\inspect_db.ts:8:51
 
-  10 const password = 'admin123';
-  11 
-  12 console.log(`Checking for existing user with email: ${email}...`);
-ΓåÆ 13 const existingUser = await prisma.user.findUnique(
+  5 
+  6 async function main() {
+  7     console.log('--- Comprehensive Database Inspection ---');
+ΓåÆ 8     const totalResults = await prisma.drillResult.count(
 error: Error validating datasource `db`: the URL must start with the protocol `postgresql://` or `postgres://`.
   -->  schema.prisma:7
    | 
@@ -20,7 +19,7 @@ Validation Error Count: 1
     at ei.handleAndLogRequestError (C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\node_modules\@prisma\client\src\runtime\RequestHandler.ts:174:12)
     at ei.request (C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\node_modules\@prisma\client\src\runtime\RequestHandler.ts:143:12)
     at async a (C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:833:24)
-    at async main (C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\backend\src\scripts\create_admin.ts:13:26) {
+    at async main (C:\Users\dusti\OneDrive\Desktop\TouchFlow Pro\backend\src\scripts\inspect_db.ts:8:26) {
   clientVersion: '6.19.2',
   errorCode: undefined,
   retryable: undefined

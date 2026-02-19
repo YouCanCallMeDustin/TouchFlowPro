@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { apiFetch } from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
-import { Mail, Lock, Shield, ArrowRight, Zap } from 'lucide-react';
+import { Mail, Lock, Shield, ArrowRight } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Card } from '../ui/Card';
@@ -103,22 +103,6 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup }) => {
                 </form>
 
                 <div className="mt-12 pt-10 border-t border-[var(--border)] flex flex-col gap-6">
-                    <Button
-                        variant="ghost"
-                        onClick={() => login('dev-bypass-token', {
-                            id: 'admin',
-                            email: 'admin@touchflow.pro',
-                            name: 'Administrator',
-                            assignedLevel: 'Beginner',
-                            currentLessonId: 'b1',
-                            subscriptionStatus: 'pro'
-                        })}
-                        className="w-full py-4 text-[10px] uppercase tracking-[0.3em] border border-[var(--border)]"
-                    >
-                        <Zap size={14} className="text-primary mr-3" />
-                        Admin Access
-                    </Button>
-
                     <div className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted/40">
                         New Professional? <span
                             onClick={onSwitchToSignup}
