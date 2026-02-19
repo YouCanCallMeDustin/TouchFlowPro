@@ -12,6 +12,7 @@ const router = Router();
 const SEO_PAGES: { slug: string; lastmod: string; priority: string }[] = [
     { slug: 'how-to-type-faster', lastmod: '2026-02-19', priority: '0.8' },
     { slug: 'increase-wpm-from-60-to-100', lastmod: '2026-02-19', priority: '0.8' },
+    { slug: 'typing-speed-vs-accuracy', lastmod: '2026-02-19', priority: '0.8' },
 ];
 
 // Resolve the directory containing SEO HTML files.
