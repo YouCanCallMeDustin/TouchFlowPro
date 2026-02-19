@@ -61,6 +61,7 @@ router.post('/signup', async (req, res, next) => {
             user: {
                 id: updatedUser.id,
                 email: updatedUser.email,
+                name: (updatedUser as any).name || null,
                 assignedLevel: updatedUser.assignedLevel,
                 currentLessonId: updatedUser.currentLessonId,
                 subscriptionStatus: effectiveStatus as any,
@@ -127,6 +128,7 @@ router.post('/login', async (req, res, next) => {
             user: {
                 id: updatedUser.id,
                 email: updatedUser.email,
+                name: (updatedUser as any).name || null,
                 assignedLevel: updatedUser.assignedLevel,
                 currentLessonId: updatedUser.currentLessonId,
                 subscriptionStatus: effectiveStatus as any,

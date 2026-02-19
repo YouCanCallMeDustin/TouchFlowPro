@@ -75,7 +75,10 @@ app.use(cors({
         'http://localhost:3000',
         'http://localhost:4000',
         'https://youcancallmedustin.github.io',
-        'https://touchflowpro-production.up.railway.app'
+        'https://touchflowpro.com',
+        'https://www.touchflowpro.com',
+        'https://api.touchflowpro.com',
+        'https://touchflow-pro-production.up.railway.app'
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],

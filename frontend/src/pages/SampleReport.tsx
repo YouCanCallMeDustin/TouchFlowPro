@@ -26,6 +26,8 @@ import {
     Tooltip,
     ResponsiveContainer
 } from 'recharts';
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 interface SampleReportProps {
     onBack: () => void;
@@ -89,39 +91,94 @@ const SampleReport: React.FC<SampleReportProps> = ({ onBack, orgId }) => {
     const subjectId = isRealData ? (orgId?.slice(0, 8).toUpperCase() || 'UNKNOWN') : 'TF-ALPHA-082';
 
     const handleDownloadPDF = () => {
-        const content = `
-TOUCHFLOW PRO - PERFORMANCE DIAGNOSTICS
----------------------------------------
-Subject ID: ${subjectId}
-Generated: ${new Date().toLocaleDateString()}
-Audit Window: 30 Days
+        const doc = new jsPDF();
+        const timestamp = new Date().toLocaleDateString();
 
-KEY METRICS:
-- Net Velocity: ${data.velocity} WPM
-- Precision: ${data.accuracy}%
-- Fatigue Floor: ${data.fatigue}/100
-- Total Volume: ${data.volume} Keystrokes
-- Members Audited: ${data.totalMembers || 'N/A'}
+        // 1. Header & Branding
+        doc.setFillColor(10, 10, 10);
+        doc.rect(0, 0, 210, 40, 'F');
 
-TREND ANALYSIS:
-${data.trendData.map((d: any) => `${d.date}: ${d.wpm} WPM / ${d.accuracy}% Acc`).join('\n')}
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(22);
+        doc.setFont("helvetica", "bold");
+        doc.text("TOUCHFLOW PRO", 15, 20);
 
-AUDIT LOG (Recent):
-${data.auditLog.map((l: any) => `${l.date} - ${l.type} - ${l.wpm} WPM - ${l.acc}`).join('\n')}
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "normal");
+        doc.text("PERFORMANCE DIAGNOSTICS & AUDIT REPORT", 15, 30);
 
----------------------------------------
-CONFIDENTIAL - FOR AUTHORIZED EYES ONLY
-        `.trim();
+        // 2. Metadata Section
+        doc.setTextColor(100, 100, 100);
+        doc.setFontSize(10);
+        doc.text(`Subject ID: ${subjectId}`, 15, 50);
+        doc.text(`Generated: ${timestamp}`, 15, 55);
+        doc.text(`Audit Window: 30 Days`, 15, 60);
 
-        const blob = new Blob([content], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `TF_REPORT_${subjectId}_${new Date().toISOString().split('T')[0]}.txt`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        doc.setDrawColor(230, 230, 230);
+        doc.line(15, 65, 195, 65);
+
+        // 3. Key Metrics Grid
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(14);
+        doc.setFont("helvetica", "bold");
+        doc.text("KEY PERFORMANCE INDICATORS", 15, 75);
+
+        const kpiData = [
+            ["Metric", "Value", "Status"],
+            ["Net Velocity", `${data.velocity} WPM`, "Elite"],
+            ["Precision", `${data.accuracy}%`, "High"],
+            ["Fatigue Floor", `${data.fatigue}/100`, "Low Risk"],
+            ["Total Volume", data.volume, "Standard"]
+        ];
+
+        autoTable(doc, {
+            startY: 80,
+            head: [kpiData[0]],
+            body: kpiData.slice(1),
+            theme: 'striped',
+            headStyles: { fillColor: [50, 50, 50] },
+            styles: { fontSize: 10, cellPadding: 5 }
+        });
+
+        // 4. Trend Summary
+        const finalY = (doc as any).lastAutoTable.finalY + 15;
+        doc.setFontSize(14);
+        doc.setFont("helvetica", "bold");
+        doc.text("AUDIT LOG (30-DAY WINDOW)", 15, finalY);
+
+        // 5. Audit Log Table
+        autoTable(doc, {
+            startY: finalY + 5,
+            head: [['Date', 'Type', 'WPM', 'Accuracy', 'Status', 'User']],
+            body: data.auditLog.map((l: any) => [
+                l.date.split(',')[0],
+                l.type,
+                l.wpm,
+                l.acc,
+                l.status,
+                l.userEmail?.split('@')[0] || 'N/A'
+            ]),
+            theme: 'grid',
+            headStyles: { fillColor: [79, 70, 229] }, // Brand Primary Color
+            styles: { fontSize: 8 }
+        });
+
+        // 6. Footer
+        const pageCount = (doc as any).internal.getNumberOfPages();
+        for (let i = 1; i <= pageCount; i++) {
+            doc.setPage(i);
+            doc.setFontSize(8);
+            doc.setTextColor(150, 150, 150);
+            doc.text(
+                "CONFIDENTIAL - TOUCHFLOW PRO ENTERPRISE AUDIT SYSTEM",
+                doc.internal.pageSize.width / 2,
+                doc.internal.pageSize.height - 10,
+                { align: 'center' }
+            );
+            doc.text(`Page ${i} of ${pageCount}`, doc.internal.pageSize.width - 25, doc.internal.pageSize.height - 10);
+        }
+
+        doc.save(`TF_AUDIT_REPORT_${subjectId}.pdf`);
     };
 
     const handleDownloadCSV = () => {

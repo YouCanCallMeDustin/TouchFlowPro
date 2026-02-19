@@ -401,12 +401,8 @@ function App() {
               <div className="h-6 w-px bg-slate-200 dark:bg-white/10 hidden sm:block" />
             </div>
 
-            {/* Center Branding */}
-            <div className="hidden lg:flex flex-1 justify-center items-center pointer-events-none">
-              <span className="text-2xl font-black uppercase tracking-[0.3em] bg-gradient-to-r from-primary via-white to-secondary bg-clip-text text-transparent opacity-90 drop-shadow-sm italic">
-                TouchFlow Pro
-              </span>
-            </div>
+            {/* Center Branding - Removed per user request */}
+            <div className="hidden lg:flex flex-1 justify-center items-center pointer-events-none" />
 
             <div className="flex items-center gap-4 sm:gap-8">
               {!user && (
@@ -735,7 +731,10 @@ function App() {
 
             {stage === 'certificate' && user && (
               <PageTransition key="certificate">
-                <TypingCertificate userId={user.id} userName={user.name || user.email} />
+                <TypingCertificate
+                  userId={user.id}
+                  userName={userProgress?.name || user.name || user.email}
+                />
               </PageTransition>
             )}
 

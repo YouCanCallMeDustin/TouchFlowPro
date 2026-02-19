@@ -62,7 +62,7 @@ export function activate(context: vscode.ExtensionContext) {
                 if (selection === 'Reset Session') {
                     tracker.reset();
                 } else if (selection === 'Visit TouchFlow Pro') {
-                    vscode.env.openExternal(vscode.Uri.parse('https://touchflow-pro-production.up.railway.app')); // Update with real URL
+                    vscode.env.openExternal(vscode.Uri.parse('https://touchflowpro.com')); // Updated to new domain
                 }
             });
         })

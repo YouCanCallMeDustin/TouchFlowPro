@@ -315,43 +315,85 @@ export function BurnerBurstPage({ onBack }: TypeToOrbitPageProps) {
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-md pointer-events-auto"
+                        className="absolute inset-0 flex items-center justify-center bg-black/90 backdrop-blur-xl pointer-events-auto"
+                        onAnimationStart={() => setEventMessage(null)} // Clear overlap
                     >
-                        <div className="bg-slate-900 border border-white/10 p-12 rounded-3xl text-center max-w-2xl w-full shadow-2xl relative overflow-hidden">
-                            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500" />
+                        <div className="bg-slate-900/50 border border-white/10 p-10 rounded-[2.5rem] text-center max-w-2xl w-full shadow-2xl relative overflow-hidden backdrop-blur-md">
+                            <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500" />
 
-                            <Trophy className="w-24 h-24 text-yellow-500 mx-auto mb-6 drop-shadow-[0_0_30px_rgba(234,179,8,0.4)]" />
+                            <motion.div
+                                initial={{ scale: 0.8, y: 20 }}
+                                animate={{ scale: 1, y: 0 }}
+                                className="mb-8"
+                            >
+                                <Trophy className="w-16 h-16 text-yellow-500 mx-auto mb-4 drop-shadow-[0_0_20px_rgba(234,179,8,0.3)]" />
+                                <h2 className="text-4xl font-black text-white italic tracking-tighter uppercase">Mission Complete</h2>
+                                <p className="text-blue-400 text-[10px] font-black uppercase tracking-[0.3em] opacity-80 mt-1">Orbital Insertion Successful</p>
+                            </motion.div>
 
-                            <h2 className="text-5xl font-black text-white italic mb-2">MISSION COMPLETE</h2>
-                            <p className="text-slate-400 mb-12 uppercase tracking-widest font-bold">Orbital Insertion Successful</p>
-
-                            <div className="grid grid-cols-3 gap-8 mb-12">
-                                <div>
-                                    <div className="text-4xl font-black text-white mb-2">{Math.floor(snapshot.player.wpm)}</div>
-                                    <div className="text-xs text-slate-500 font-bold uppercase tracking-widest">WPM</div>
-                                </div>
-                                <div>
-                                    <div className="text-4xl font-black text-blue-400 mb-2">{snapshot.player.accuracy}%</div>
-                                    <div className="text-xs text-slate-500 font-bold uppercase tracking-widest">Accuracy</div>
-                                </div>
-                                <div>
-                                    <div className="text-4xl font-black text-purple-400 mb-2">
-                                        {((snapshot.endTime! - snapshot.startTime) / 1000).toFixed(1)}s
+                            {/* Performance Grid */}
+                            <div className="grid grid-cols-3 gap-4 mb-10">
+                                {[
+                                    { label: 'Velocity', value: Math.floor(snapshot.player.wpm), suffix: 'WPM', color: 'text-white' },
+                                    { label: 'Precision', value: snapshot.player.accuracy, suffix: '%', color: 'text-blue-400' },
+                                    { label: 'Insertion', value: ((snapshot.endTime! - snapshot.startTime) / 1000).toFixed(1), suffix: 's', color: 'text-purple-400' }
+                                ].map((stat, i) => (
+                                    <div key={i} className="bg-white/5 p-4 rounded-2xl border border-white/5">
+                                        <div className="text-2xl font-black text-white">{stat.value}<span className="text-xs ml-0.5 opacity-40">{stat.suffix}</span></div>
+                                        <div className="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-1">{stat.label}</div>
                                     </div>
-                                    <div className="text-xs text-slate-500 font-bold uppercase tracking-widest">Time</div>
+                                ))}
+                            </div>
+
+                            {/* Leaderboard Section */}
+                            <div className="mb-10 text-left">
+                                <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4 flex items-center gap-2 px-2">
+                                    <div className="w-1 h-1 rounded-full bg-blue-500" /> Final Standings (Top 5)
+                                </div>
+                                <div className="space-y-2">
+                                    {snapshot.racers
+                                        .sort((a, b) => a.rank - b.rank)
+                                        .slice(0, 5)
+                                        .map((racer, idx) => (
+                                            <motion.div
+                                                key={racer.id}
+                                                initial={{ opacity: 0, x: -10 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                transition={{ delay: idx * 0.1 }}
+                                                className={`flex items-center justify-between p-3 rounded-xl border ${racer.isPlayer
+                                                        ? 'bg-blue-500/10 border-blue-500/30'
+                                                        : 'bg-white/[0.02] border-white/5'
+                                                    }`}
+                                            >
+                                                <div className="flex items-center gap-4">
+                                                    <span className={`text-xs font-black italic w-4 text-center ${idx === 0 ? 'text-yellow-500' : idx === 1 ? 'text-slate-300' : idx === 2 ? 'text-amber-600' : 'text-slate-600'
+                                                        }`}>
+                                                        {idx + 1}
+                                                    </span>
+                                                    <span className={`text-xs font-bold uppercase tracking-wide ${racer.isPlayer ? 'text-blue-400' : 'text-slate-300'}`}>
+                                                        {racer.name} {racer.isPlayer && "(YOU)"}
+                                                    </span>
+                                                </div>
+                                                <div className="text-xs font-black text-white/60">
+                                                    {Math.floor(racer.wpm)} <span className="text-[9px] font-bold opacity-30">WPM</span>
+                                                </div>
+                                            </motion.div>
+                                        ))}
                                 </div>
                             </div>
 
                             <button
                                 onClick={handleLobby}
-                                className="group px-12 py-4 bg-white text-slate-900 hover:bg-blue-50 font-black uppercase tracking-widest rounded-xl transition-all hover:scale-105 shadow-xl flex items-center gap-3 mx-auto relative"
+                                className="group w-full py-5 bg-white text-slate-900 hover:bg-blue-50 font-black uppercase tracking-[0.2em] rounded-2xl transition-all hover:scale-[1.02] active:scale-[0.98] shadow-2xl flex items-center justify-center gap-3 relative overflow-hidden"
                             >
-                                <RotateCcw size={20} className="group-hover:-rotate-180 transition-transform duration-500" />
-                                <span>Race Again</span>
-                                <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] text-slate-500 font-bold opacity-60 whitespace-nowrap">
-                                    PRESS <span className="border border-slate-500 px-1 rounded">ENTER</span>
-                                </div>
+                                <RotateCcw size={18} className="group-hover:-rotate-180 transition-transform duration-500" />
+                                <span className="text-xs">Race Again</span>
+                                <div className="absolute -bottom-1 left-0 w-full h-1 bg-slate-200" />
                             </button>
+
+                            <p className="mt-6 text-[10px] text-slate-500 font-bold opacity-40 uppercase tracking-widest">
+                                Press <span className="bg-slate-800 px-1.5 py-0.5 rounded text-slate-300 border border-white/5">ENTER</span> to Return to Lobby
+                            </p>
                         </div>
                     </motion.div>
                 )}
