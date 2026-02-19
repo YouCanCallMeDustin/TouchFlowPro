@@ -5,6 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { requestLogger } from './middleware/requestLogger';
 import { errorHandler } from './middleware/errorHandler';
+import { wwwRedirect } from './middleware/wwwRedirect';
 import { resolveResourcePath } from './lib/pathUtils';
 
 // Route Imports
@@ -37,6 +38,7 @@ import orgsRoutes from './routes/orgs';
 import orgInvitesRoutes from './routes/orgInvites';
 import certificatesRoutes from './routes/certificates';
 import billingRoutes from './routes/billing';
+import seoRoutes from './routes/seo';
 
 const app = express();
 
@@ -86,6 +88,10 @@ app.use(cors({
 }));
 app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(requestLogger);
+app.use(wwwRedirect);
+
+// SEO routes (before API and SPA fallback)
+app.use(seoRoutes);
 
 // Webhooks before json parsing
 app.use('/api/webhooks', webhooksRoutes);

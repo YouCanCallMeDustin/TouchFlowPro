@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon -r tsconfig-paths/register src/index.ts",
-    "build": "npx prisma generate && tsc && tsc-alias",
+    "build": "npx prisma generate && tsc && tsc-alias && node -e \"const fs=require('fs');const p=require('path');const src='src/seo';const dst='dist/backend/src/seo';fs.mkdirSync(dst,{recursive:true});fs.readdirSync(src).filter(f=>f.endsWith('.html')).forEach(f=>fs.copyFileSync(p.join(src,f),p.join(dst,f)));console.log('SEO HTML copied to dist')\"",
     "start": "node -r dotenv/config dist/backend/src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
