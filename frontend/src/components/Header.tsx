@@ -17,10 +17,14 @@ import {
     Settings as SettingsIcon,
     LogOut,
     User as UserIcon,
-    Home
+    Home,
+    Briefcase,
+    Stethoscope,
+    Scale
 } from 'lucide-react';
 import { Breadcrumbs } from './Breadcrumbs';
 import { Button } from './ui/Button';
+import { Dropdown } from './ui/Dropdown';
 
 // Types (Mirrors App.tsx)
 import type { Stage } from '../App';
@@ -59,19 +63,60 @@ export const Header: React.FC<HeaderProps> = ({
         return () => window.removeEventListener('keydown', handleEsc);
     }, []);
 
-    const navItems = [
-        { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-        { id: 'curriculum', label: 'Learn', icon: BookOpen },
-        { id: 'practice', label: 'Practice', icon: Zap },
-        { id: 'games', label: 'Games', icon: Gamepad2 },
-        { id: 'orgs', label: 'Teams', icon: Users },
-        { id: 'code_practice', label: 'Code', icon: Compass },
-        { id: 'analytics', label: 'Stats', icon: BarChart3 },
-        { id: 'achievements', label: 'Awards', icon: Award },
-        { id: 'leaderboard', label: 'Ranks', icon: Trophy },
-        { id: 'certificate', label: 'Certify', icon: Shield },
-        { id: 'extension', label: 'VS Code', icon: Code },
-        { id: 'settings', label: 'Settings', icon: SettingsIcon },
+    const navigationLinks = [
+        {
+            type: 'link',
+            id: 'dashboard',
+            label: 'Dashboard',
+            icon: LayoutDashboard
+        },
+        {
+            type: 'dropdown',
+            id: 'training_dropdown',
+            label: 'Training',
+            icon: Zap,
+            items: [
+                { id: 'curriculum', label: 'Learn', icon: BookOpen },
+                { id: 'practice', label: 'Practice', icon: Zap },
+                { id: 'games', label: 'Games', icon: Gamepad2 },
+                { id: 'code_practice', label: 'Code', icon: Compass },
+                { id: 'certificate', label: 'Certify', icon: Shield },
+            ]
+        },
+        {
+            type: 'dropdown',
+            id: 'careers_dropdown',
+            label: 'Careers',
+            icon: Briefcase,
+            items: [
+                { id: 'medicalTrack', label: 'Medical Track', icon: Stethoscope },
+                { id: 'legalTrack', label: 'Legal Track', icon: Scale },
+                { id: 'codingTrack', label: 'Coding Track', icon: Code },
+            ]
+        },
+        {
+            type: 'link',
+            id: 'orgs',
+            label: 'Teams',
+            icon: Users
+        },
+        {
+            type: 'dropdown',
+            id: 'analytics_dropdown',
+            label: 'Analytics',
+            icon: BarChart3,
+            items: [
+                { id: 'analytics', label: 'Stats', icon: BarChart3 },
+                { id: 'achievements', label: 'Awards', icon: Award },
+                { id: 'leaderboard', label: 'Ranks', icon: Trophy },
+            ]
+        },
+        {
+            type: 'link',
+            id: 'settings',
+            label: 'Settings',
+            icon: SettingsIcon
+        }
     ] as const;
 
     const isActive = (id: string) => {
@@ -158,21 +203,39 @@ export const Header: React.FC<HeaderProps> = ({
 
                 {/* SECONDARY NAV (Desktop/Tablet preferred, but scrollable on mobile if logged in) */}
                 {user && userProgress && stage !== 'auth_login' && stage !== 'auth_signup' && stage !== 'welcome' && (
-                    <div className="max-w-7xl mx-auto mt-2">
-                        <nav className="flex items-center gap-1 nav-container overflow-x-auto scrollbar-none pb-2 md:pb-0">
-                            {navItems.map((item) => (
-                                <button
-                                    key={item.id}
-                                    onClick={() => setStage(item.id as Stage)}
-                                    className={`flex items-center gap-2 px-3.5 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-300 relative group overflow-hidden whitespace-nowrap ${isActive(item.id)
+                    <div className="max-w-7xl mx-auto mt-2 hidden md:block">
+                        <nav className="flex items-center gap-1 nav-container overflow-x-visible pb-2 md:pb-0">
+                            {navigationLinks.map((navItem) => {
+                                if (navItem.type === 'dropdown') {
+                                    return (
+                                        <Dropdown
+                                            key={navItem.id}
+                                            label={navItem.label}
+                                            icon={navItem.icon}
+                                            isActive={navItem.items.some(subItem => isActive(subItem.id))}
+                                            items={navItem.items.map(subItem => ({
+                                                id: subItem.id,
+                                                label: subItem.label,
+                                                icon: subItem.icon,
+                                                onClick: () => setStage(subItem.id as Stage)
+                                            }))}
+                                        />
+                                    );
+                                }
+                                return (
+                                    <button
+                                        key={navItem.id}
+                                        onClick={() => setStage(navItem.id as Stage)}
+                                        className={`flex flex-shrink-0 items-center gap-2 px-3.5 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-300 relative group overflow-hidden whitespace-nowrap ${isActive(navItem.id)
                                             ? 'bg-primary text-white shadow-lg shadow-primary/30 scale-105 active:scale-95'
                                             : 'bg-transparent text-slate-500 dark:text-slate-400 hover:bg-slate-500/10 dark:hover:bg-white/5 hover:text-text-main hover:translate-y-[-1px]'
-                                        }`}
-                                >
-                                    <item.icon size={14} strokeWidth={2.5} className={`${isActive(item.id) ? 'opacity-100' : 'opacity-40 group-hover:opacity-100'} transition-all`} />
-                                    <span className="relative z-10">{item.label}</span>
-                                </button>
-                            ))}
+                                            }`}
+                                    >
+                                        <navItem.icon size={14} strokeWidth={2.5} className={`${isActive(navItem.id) ? 'opacity-100' : 'opacity-40 group-hover:opacity-100'} transition-all`} />
+                                        <span className="relative z-10">{navItem.label}</span>
+                                    </button>
+                                );
+                            })}
                         </nav>
 
                         <div className="px-2 border-t border-white/5 pt-4">
@@ -222,33 +285,33 @@ export const Header: React.FC<HeaderProps> = ({
                                 </button>
                             </div>
 
-                            <div className="flex-1 flex flex-col gap-6 overflow-y-auto">
+                            <div className="flex-1 flex flex-col gap-6 overflow-y-auto pb-8">
                                 {!user ? (
                                     // GUEST MENU
                                     <div className="flex flex-col gap-4">
                                         <Button
-                                            onClick={() => setStage('welcome')}
+                                            onClick={() => { setStage('welcome'); setIsMenuOpen(false); }}
                                             className="justify-start text-left bg-transparent border-0 hover:bg-white/5 p-4 h-auto"
                                         >
                                             <Home className="mr-3" size={18} />
                                             <span className="font-bold uppercase tracking-wider text-sm">Home</span>
                                         </Button>
                                         <Button
-                                            onClick={() => setStage('pricing')}
+                                            onClick={() => { setStage('pricing'); setIsMenuOpen(false); }}
                                             className="justify-start text-left bg-transparent border-0 hover:bg-white/5 p-4 h-auto"
                                         >
                                             <Zap className="mr-3" size={18} />
                                             <span className="font-bold uppercase tracking-wider text-sm">Pricing</span>
                                         </Button>
                                         <Button
-                                            onClick={() => setStage('auth_login')}
+                                            onClick={() => { setStage('auth_login'); setIsMenuOpen(false); }}
                                             variant="outline"
                                             className="w-full justify-center mt-4 border-white/10"
                                         >
                                             LOGIN
                                         </Button>
                                         <Button
-                                            onClick={() => setStage('auth_signup')}
+                                            onClick={() => { setStage('auth_signup'); setIsMenuOpen(false); }}
                                             className="w-full justify-center"
                                         >
                                             SIGN UP
@@ -270,39 +333,83 @@ export const Header: React.FC<HeaderProps> = ({
                                             </div>
                                         </div>
 
-                                        <Button
-                                            onClick={() => setStage('dashboard')}
-                                            className="justify-start text-left bg-transparent border-0 hover:bg-white/5 p-3 h-auto"
-                                        >
-                                            <LayoutDashboard className="mr-3 text-primary" size={18} />
-                                            <span className="font-bold uppercase tracking-wider text-[11px]">Dashboard</span>
-                                        </Button>
+                                        {/* Main Navigation Links */}
+                                        {navigationLinks.map((navItem) => {
+                                            if (navItem.type === 'dropdown') {
+                                                return (
+                                                    <div key={navItem.id} className="mb-2">
+                                                        <div className="flex items-center gap-3 px-3 py-2 text-[10px] font-black uppercase tracking-[0.15em] text-text-muted mt-2 border-b border-white/5 pb-2">
+                                                            <navItem.icon size={14} />
+                                                            {navItem.label}
+                                                        </div>
+                                                        <div className="flex flex-col gap-1 mt-2">
+                                                            {navItem.items.map(subItem => (
+                                                                <Button
+                                                                    key={subItem.id}
+                                                                    onClick={() => {
+                                                                        setStage(subItem.id as Stage);
+                                                                        setIsMenuOpen(false);
+                                                                    }}
+                                                                    className={`justify-start text-left bg-transparent border-0 hover:bg-white/5 p-3 h-auto ${isActive(subItem.id) ? 'text-primary' : 'text-slate-400'}`}
+                                                                >
+                                                                    <div className="w-8 flex items-center justify-center">
+                                                                        <subItem.icon size={16} />
+                                                                    </div>
+                                                                    <span className={`font-bold uppercase tracking-wider text-[11px]`}>{subItem.label}</span>
+                                                                </Button>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                );
+                                            }
+                                            return (
+                                                <Button
+                                                    key={navItem.id}
+                                                    onClick={() => {
+                                                        setStage(navItem.id as Stage);
+                                                        setIsMenuOpen(false);
+                                                    }}
+                                                    className={`justify-start text-left bg-transparent border-0 hover:bg-white/5 p-3 h-auto ${isActive(navItem.id) ? 'bg-primary/10 text-primary' : 'text-slate-400'}`}
+                                                >
+                                                    <div className="w-8 flex items-center justify-center">
+                                                        <navItem.icon size={18} />
+                                                    </div>
+                                                    <span className="font-bold uppercase tracking-wider text-[11px]">{navItem.label}</span>
+                                                </Button>
+                                            );
+                                        })}
+
+                                        <div className="h-px bg-white/10 my-4" />
 
                                         <Button
-                                            onClick={() => setStage('profile')}
+                                            onClick={() => { setStage('profile'); setIsMenuOpen(false); }}
                                             className="justify-start text-left bg-transparent border-0 hover:bg-white/5 p-3 h-auto"
                                         >
-                                            <UserIcon className="mr-3 text-text-muted" size={18} />
-                                            <span className="font-bold uppercase tracking-wider text-[11px]">My Profile</span>
+                                            <div className="w-8 flex items-center justify-center">
+                                                <UserIcon className="text-text-muted" size={18} />
+                                            </div>
+                                            <span className="font-bold uppercase tracking-wider text-[11px] text-slate-400">My Profile</span>
                                         </Button>
 
                                         {user.subscriptionStatus !== 'pro' && (
                                             <Button
-                                                onClick={() => setStage('pricing')}
+                                                onClick={() => { setStage('pricing'); setIsMenuOpen(false); }}
                                                 className="justify-start text-left bg-gradient-to-r from-primary/10 to-secondary/10 border border-primary/20 hover:border-primary/50 p-3 h-auto mt-2"
                                             >
-                                                <Zap className="mr-3 text-primary" size={18} />
+                                                <div className="w-8 flex items-center justify-center">
+                                                    <Zap className="text-primary" size={18} />
+                                                </div>
                                                 <span className="font-bold uppercase tracking-wider text-[11px] text-primary">Upgrade to Pro</span>
                                             </Button>
                                         )}
 
-                                        <div className="h-px bg-white/10 my-2" />
-
                                         <Button
-                                            onClick={logout}
-                                            className="justify-start text-left bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 p-3 h-auto text-red-400"
+                                            onClick={() => { logout(); setIsMenuOpen(false); }}
+                                            className="justify-start text-left bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 p-3 h-auto text-red-400 mt-2"
                                         >
-                                            <LogOut className="mr-3" size={18} />
+                                            <div className="w-8 flex items-center justify-center">
+                                                <LogOut size={18} />
+                                            </div>
                                             <span className="font-bold uppercase tracking-wider text-[11px]">Logout</span>
                                         </Button>
 
