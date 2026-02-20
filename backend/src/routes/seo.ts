@@ -1,8 +1,53 @@
 import { Router, Request, Response } from 'express';
 import path from 'path';
 import fs from 'fs';
+import { resolveResourcePath } from '../lib/pathUtils';
 
 const router = Router();
+const seoDir = path.resolve(__dirname, '..', 'seo');
+
+// ---------------------------------------------------------------------------
+// Homepage SEO Injection
+// ---------------------------------------------------------------------------
+router.get('/', (_req: Request, res: Response, next) => {
+    try {
+        const frontendDist = resolveResourcePath('frontend');
+        const indexPath = path.join(frontendDist, 'index.html');
+
+        if (fs.existsSync(indexPath)) {
+            let html = fs.readFileSync(indexPath, 'utf-8');
+
+            // Inject the SEO section before the closing body tag
+            // This ensures it's part of the static HTML response for crawlers
+            const seoSection = `
+    <section id="typing-resources" style="background:#111827; padding:4rem 2rem; border-top:1px solid #1e293b; text-align:center;">
+      <div style="max-width:900px; margin:0 auto;">
+        <h2 style="color:#e2e8f0; font-size:1.8rem; margin-bottom:2rem; font-family:'Segoe UI',system-ui,sans-serif;">Typing Science Resources</h2>
+        <ul style="list-style:none; padding:0; display:flex; flex-wrap:wrap; justify-content:center; gap:2rem;">
+          <li><a href="https://touchflowpro.com/how-to-type-faster" style="color:#818cf8; text-decoration:none; font-size:1.1rem; font-weight:500;">How to Type Faster</a></li>
+          <li><a href="https://touchflowpro.com/increase-wpm-from-60-to-100" style="color:#818cf8; text-decoration:none; font-size:1.1rem; font-weight:500;">Increase WPM from 60 to 100</a></li>
+          <li><a href="https://touchflowpro.com/typing-speed-vs-accuracy" style="color:#818cf8; text-decoration:none; font-size:1.1rem; font-weight:500;">Typing Speed vs Accuracy</a></li>
+        </ul>
+      </div>
+    </section>
+            `;
+
+            if (html.includes('</body>')) {
+                html = html.replace('</body>', `${seoSection}</body>`);
+            } else {
+                html += seoSection;
+            }
+
+            res.send(html);
+        } else {
+            // If index.html is missing, fall through to next middleware (which might 404 or handle it)
+            next();
+        }
+    } catch (error) {
+        console.error('[SEO] Failed to inject homepage content:', error);
+        next();
+    }
+});
 
 // ---------------------------------------------------------------------------
 // SEO Page Registry
@@ -18,7 +63,9 @@ const SEO_PAGES: { slug: string; lastmod: string; priority: string }[] = [
 // Resolve the directory containing SEO HTML files.
 // In dev (ts-node):  __dirname = backend/src/routes  → ../seo
 // In prod (compiled): __dirname = dist/backend/src/routes → ../seo
-const seoDir = path.resolve(__dirname, '..', 'seo');
+// Resolve the directory containing SEO HTML files.
+// In dev (ts-node):  __dirname = backend/src/routes  → ../seo
+// In prod (compiled): __dirname = dist/backend/src/routes → ../seo
 
 // ---------------------------------------------------------------------------
 // robots.txt

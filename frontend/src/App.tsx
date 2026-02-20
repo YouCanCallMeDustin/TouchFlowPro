@@ -5,7 +5,7 @@ import { Card } from './components/ui/Card'
 import { Button } from './components/ui/Button'
 import './App.css'
 import './games/accuracy-assassin/ui/accuracy-assassin.css'
-import { Breadcrumbs } from './components/Breadcrumbs'
+
 import PageTransition from './components/PageTransition'
 import { Curriculum } from './components/Curriculum'
 import LessonView from './components/LessonView'
@@ -44,26 +44,15 @@ import type { DifficultyLevel, PlacementResult } from '@shared/placement'
 import Orgs from './pages/Orgs'
 import Settings from './pages/Settings'
 import { useSettings } from './context/SettingsContext'
-import {
-  LayoutDashboard,
-  BookOpen,
-  Zap,
-  BarChart3,
-  Award,
-  Trophy,
-  Compass,
-  Shield,
-  Code,
-  Gamepad2,
-  Users,
-  Settings as SettingsIcon
-} from 'lucide-react'
+
 
 import { apiFetch } from './utils/api';
 
 import SampleReport from './pages/SampleReport'
 
-type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension' | 'games' | 'games_accuracy_assassin' | 'games_burner_burst' | 'games_spell_rush' | 'orgs' | 'settings' | 'sample_report'
+import { Header } from './components/Header';
+
+export type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension' | 'games' | 'games_accuracy_assassin' | 'games_burner_burst' | 'games_spell_rush' | 'orgs' | 'settings' | 'sample_report'
 
 function App() {
   const { user, loading, logout } = useAuth()
@@ -389,117 +378,14 @@ function App() {
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-bg-main selection:bg-primary/20 relative">
-        <header className="glass-header rounded-b-[2rem] px-6 sm:px-12 py-2">
-          <div className="max-w-7xl mx-auto flex justify-between items-center gap-4">
-            <div className="flex items-center gap-8">
-              <img
-                src={`${import.meta.env.BASE_URL}logo.png`}
-                alt="TouchFlow Pro"
-                className="h-10 w-auto cursor-pointer active:scale-95 transition-all hover:brightness-110"
-                onClick={() => userProgress && setStage('dashboard')}
-              />
-              <div className="h-6 w-px bg-slate-200 dark:bg-white/10 hidden sm:block" />
-            </div>
-
-            {/* Center Branding - Removed per user request */}
-            <div className="hidden lg:flex flex-1 justify-center items-center pointer-events-none" />
-
-            <div className="flex items-center gap-4 sm:gap-8">
-              {!user && (
-                <div className="flex items-center gap-4">
-                  <button
-                    onClick={() => setStage('auth_login')}
-                    className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted hover:text-primary transition-colors"
-                  >
-                    Login
-                  </button>
-                  <button
-                    onClick={() => setStage('auth_signup')}
-                    className="px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-white/10 transition-all active:scale-95"
-                  >
-                    Sign Up
-                  </button>
-                </div>
-              )}
-              {user && (
-                <>
-                  <div
-                    className="hidden md:flex flex-col items-end gap-1 cursor-pointer group"
-                    onClick={() => setStage('profile')}
-                  >
-                    <span className="text-[8px] font-black text-primary uppercase tracking-[0.4em] mb-0.5 group-hover:text-secondary transition-colors">Account ID</span>
-                    <span className="text-xs font-bold text-text-main leading-none group-hover:text-primary transition-colors">{user.email}</span>
-                  </div>
-
-                  {/* Upgrade Button */}
-                  {user.subscriptionStatus !== 'pro' && (
-                    <button
-                      onClick={() => setStage('pricing')}
-                      className="group relative px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/20 transition-all hover:scale-105 active:scale-95"
-                    >
-                      <span className="relative z-10 text-[9px] font-black uppercase tracking-[0.2em] flex items-center gap-2">
-                        <Zap size={12} fill="currentColor" /> Upgrade
-                      </span>
-                    </button>
-                  )}
-
-                  <button
-                    onClick={logout}
-                    className="group relative px-5 py-2.5 rounded-xl bg-red-500/5 border border-red-500/10 transition-all hover:bg-red-500 hover:text-white active:scale-95"
-                  >
-                    <span className="relative z-10 text-[9px] font-black uppercase tracking-[0.2em]">Logout</span>
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-
-          {user && userProgress && stage !== 'auth_login' && stage !== 'auth_signup' && stage !== 'welcome' && (
-            <div className="max-w-7xl mx-auto mt-2">
-              <nav className="flex items-center gap-1 nav-container overflow-x-auto scrollbar-none">
-                {[
-                  { id: 'dashboard' as Stage, label: 'Dashboard', icon: LayoutDashboard },
-                  { id: 'curriculum' as Stage, label: 'Learn', icon: BookOpen },
-                  { id: 'practice' as Stage, label: 'Practice', icon: Zap },
-                  { id: 'games' as Stage, label: 'Games', icon: Gamepad2 },
-                  { id: 'orgs' as Stage, label: 'Teams', icon: Users },
-                  { id: 'code_practice' as Stage, label: 'Code', icon: Compass },
-                  { id: 'analytics' as Stage, label: 'Stats', icon: BarChart3 },
-                  { id: 'achievements' as Stage, label: 'Awards', icon: Award },
-                  { id: 'leaderboard' as Stage, label: 'Ranks', icon: Trophy },
-                  { id: 'certificate' as Stage, label: 'Certify', icon: Shield },
-                  { id: 'extension' as Stage, label: 'VS Code', icon: Code },
-                  { id: 'settings' as Stage, label: 'Settings', icon: SettingsIcon },
-                ].map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => setStage(item.id)}
-                    className={`flex items-center gap-2 px-3.5 py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-300 relative group overflow-hidden ${stage === item.id || (item.id === 'curriculum' && (stage === 'lesson' || stage === 'levelup')) || (item.id === 'games' && stage === 'games_accuracy_assassin')
-                      ? 'bg-primary text-white shadow-lg shadow-primary/30 scale-105 active:scale-95'
-                      : 'bg-transparent text-slate-500 dark:text-slate-400 hover:bg-slate-500/10 dark:hover:bg-white/5 hover:text-text-main hover:translate-y-[-1px]'}`}
-                  >
-                    <item.icon size={14} strokeWidth={2.5} className={`${stage === item.id ? 'opacity-100' : 'opacity-40 group-hover:opacity-100'} transition-all`} />
-                    <span className="relative z-10">{item.label}</span>
-                  </button>
-                ))}
-              </nav>
-
-              <div className="px-2 border-t border-white/5 pt-4">
-                <Breadcrumbs
-                  items={[
-                    { label: 'Home', onClick: () => setStage('dashboard') },
-                    {
-                      label: stage === 'lesson' ? 'Curriculum' : stage.replace('_', ' '),
-                      onClick: stage === 'lesson' ? () => setStage('curriculum') : undefined,
-                      active: stage !== 'lesson'
-                    },
-                    stage === 'lesson' ? { label: currentLesson?.title || 'Active Session', active: true } : null
-                  ].filter((i): i is any => !!i)}
-                />
-              </div>
-            </div>
-          )}
-        </header>
+        <Header
+          user={user}
+          userProgress={userProgress}
+          stage={stage}
+          setStage={setStage}
+          logout={logout}
+          currentLesson={currentLesson}
+        />
 
         <main className="max-w-7xl mx-auto px-4 sm:px-6 py-20 flex justify-center w-full overflow-hidden">
           <AnimatePresence mode="wait">
@@ -777,12 +663,12 @@ function App() {
             {stage === 'games_spell_rush' && user && (
               <PageTransition key="games_spell_rush">
                 {/* SpellRush handles its own layout, but we might want a back button wrapper if it doesn't have one? 
-                     Current SpellRush implementation has strict layout. 
-                     Let's wrap it in a div with a back button overlay strictly for now or just render it. 
-                     The game supposedly has a "Game Over" screen with Retry. 
-                     But no "Exit" button in the HUD. 
-                     I should wrap it with a back button to 'games'. 
-                 */}
+                      Current SpellRush implementation has strict layout. 
+                      Let's wrap it in a div with a back button overlay strictly for now or just render it. 
+                      The game supposedly has a "Game Over" screen with Retry. 
+                      But no "Exit" button in the HUD. 
+                      I should wrap it with a back button to 'games'. 
+                  */}
                 <div className="relative w-full h-full">
                   <SpellRushGame />
                   <button
@@ -828,11 +714,11 @@ function App() {
         </footer>
 
         <style>{`
-          @keyframes shine {
-            from { transform: translateX(-100%); }
-            to { transform: translateX(200%); }
-          }
-        `}</style>
+            @keyframes shine {
+              from { transform: translateX(-100%); }
+              to { transform: translateX(200%); }
+            }
+          `}</style>
       </div>
     </ErrorBoundary>
   )

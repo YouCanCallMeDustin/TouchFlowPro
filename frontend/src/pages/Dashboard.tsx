@@ -29,7 +29,6 @@ import { format } from 'date-fns';
 import PageTransition from '../components/PageTransition';
 import AnimatedStatCard from '../components/AnimatedStatCard';
 import { LevelProgressBar } from '../components/LevelProgressBar';
-import { RecommendationsWidget } from '../components/RecommendationsWidget';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 
@@ -81,7 +80,7 @@ const getGreeting = () => {
     return 'Good Evening';
 };
 
-const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, userName: propUserName, onStartCustomSession }) => {
+const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, userName: propUserName }) => {
     const [todayStats, setTodayStats] = useState<TodayStats>({ drillsToday: 0, avgWPM: 0, practiceTimeMinutes: 0 });
     const [streak, setStreak] = useState<StreakData | null>(null);
     const [recentAchievements, setRecentAchievements] = useState<Achievement[]>([]);
@@ -543,12 +542,6 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                             </motion.div>
                         )}
 
-                        <motion.div variants={itemVariants}>
-                            <RecommendationsWidget
-                                userId={userId}
-                                onStartPractice={onStartCustomSession || (() => onNavigate('adaptive_practice'))}
-                            />
-                        </motion.div>
 
                         <motion.div variants={itemVariants} className="space-y-4">
                             <div className="flex items-center justify-between px-1">
