@@ -446,7 +446,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
             )}
 
             {mode === 'results' && testMetrics && (
-                <Card className="text-center relative overflow-hidden animate-in fade-in slide-in-from-bottom-10 duration-1000">
+                <Card className="text-center relative overflow-hidden animate-in fade-in slide-in-from-bottom-10 duration-1000 p-8 sm:p-12">
                     {/* ... (Results logic similar to original) ... */}
                     <div className={`absolute -top-24 -right-24 w-80 h-80 rounded-full blur-[120px] opacity-20 ${passed ? 'bg-primary' : 'bg-rose-500'}`}></div>
 

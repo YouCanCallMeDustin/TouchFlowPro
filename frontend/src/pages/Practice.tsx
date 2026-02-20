@@ -57,7 +57,7 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
     const { pendingLaunch, clearPendingLaunch } = useLaunchStore();
 
     useEffect(() => {
-        if (pendingLaunch && (pendingLaunch.source === 'trainingPlan' || pendingLaunch.source === 'analytics') && !activeDrill) {
+        if (pendingLaunch && (pendingLaunch.source === 'trainingPlan' || pendingLaunch.source === 'analytics' || pendingLaunch.source === 'manual') && !activeDrill) {
             // Auto-launch the plan item
             if (pendingLaunch.launch.kind === 'DRILL' && pendingLaunch.launch.drillId) {
                 const drill = drillLibrary.find(d => d.id === pendingLaunch.launch.drillId);
@@ -68,6 +68,35 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
                         practiceLesson.content = pendingLaunch.launch.promptText;
                     }
                     setActiveDrill(practiceLesson);
+                    clearPendingLaunch();
+                } else if (pendingLaunch.launch.promptText) {
+                    // Handle specialty drills (like Medical) not in the core drillLibrary
+                    // Extract longest words for dynamic warmups
+                    const words = pendingLaunch.launch.promptText.split(/[^a-zA-Z]+/);
+                    const uniqueWords = Array.from(new Set(words.filter((w: string) => w.length > 5).map((w: string) => w.toLowerCase())));
+                    const hardestWords = uniqueWords.sort((a, b) => b.length - a.length).slice(0, 10);
+
+                    const dynamicWarmupSteps = hardestWords.map(w => ({
+                        text: `${w} ${w} ${w} ${w} ${w}`,
+                        insight: `Mastery Repetition: ${w.toUpperCase()}`
+                    }));
+
+                    const customLesson: Lesson = {
+                        id: pendingLaunch.launch.drillId,
+                        title: pendingLaunch.title || 'Specialty Drill',
+                        content: pendingLaunch.launch.promptText,
+                        category: 'Specialty Practice',
+                        difficulty: 'Professional',
+                        order: 0,
+                        xpReward: 10,
+                        learningObjectives: ['Targeted Repetition', 'Specialty Terminology'],
+                        lessonNumber: 0,
+                        prerequisites: [],
+                        masteryThreshold: 0,
+                        description: 'Specialty track drill session',
+                        warmupSteps: dynamicWarmupSteps.length > 0 ? dynamicWarmupSteps : undefined
+                    };
+                    setActiveDrill(customLesson);
                     clearPendingLaunch();
                 }
             } else if (pendingLaunch.launch.kind === 'CUSTOM_TEXT' && pendingLaunch.launch.promptText) {

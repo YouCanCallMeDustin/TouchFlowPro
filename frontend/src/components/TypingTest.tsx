@@ -210,7 +210,7 @@ const TypingTest: React.FC<Props> = ({
             settings?.fontScale === 'LG' ? 'text-3xl sm:text-4xl leading-relaxed' :
                 'text-xl sm:text-2xl';
 
-        return text.split('').map((char, index) => {
+        const renderChar = (char: string, index: number) => {
             const isTyped = index < userInput.length;
             const isCurrent = index === userInput.length;
             const isCorrect = isTyped && userInput[index] === char;
@@ -248,6 +248,27 @@ const TypingTest: React.FC<Props> = ({
                         />
                     )}
                 </motion.span>
+            );
+        };
+
+        if (mode === 'code') {
+            return text.split('').map((char, index) => renderChar(char, index));
+        }
+
+        const words = text.split(' ');
+        let charIndex = 0;
+
+        return words.map((word, wIdx) => {
+            const hasSpace = wIdx < words.length - 1;
+            const wordChars = word + (hasSpace ? ' ' : '');
+
+            return (
+                <span key={wIdx} className="inline-flex whitespace-nowrap gap-x-0.5">
+                    {wordChars.split('').map((char) => {
+                        const index = charIndex++;
+                        return renderChar(char, index);
+                    })}
+                </span>
             );
         });
     };

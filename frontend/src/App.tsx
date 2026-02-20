@@ -44,6 +44,7 @@ import type { DifficultyLevel, PlacementResult } from '@shared/placement'
 import Orgs from './pages/Orgs'
 import Settings from './pages/Settings'
 import { useSettings } from './context/SettingsContext'
+import { useLaunchStore } from './state/launchStore'
 
 
 import { apiFetch } from './utils/api';
@@ -51,6 +52,9 @@ import { apiFetch } from './utils/api';
 import SampleReport from './pages/SampleReport'
 
 import { Header } from './components/Header';
+import { MedicalTrack } from './pages/MedicalTrack';
+import { LegalTrack } from './pages/LegalTrack';
+import { CodeTrack } from './pages/CodeTrack';
 
 export type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension' | 'games' | 'games_accuracy_assassin' | 'games_burner_burst' | 'games_spell_rush' | 'orgs' | 'settings' | 'sample_report' | 'medicalTrack' | 'legalTrack' | 'codingTrack'
 
@@ -75,6 +79,11 @@ function App() {
     document.documentElement.classList.add('dark');
     localStorage.setItem('theme', 'dark');
   }, []);
+
+  // Scroll to top on page change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [stage]);
 
   const fetchProgress = useCallback(async (id: string) => {
     setIsFetchingProgress(true)
@@ -638,6 +647,48 @@ function App() {
                     setReportOrgId(orgId);
                     setStage('sample_report');
                   }}
+                />
+              </PageTransition>
+            )}
+
+            {stage === 'medicalTrack' && user && (
+              <PageTransition key="medicalTrack">
+                <MedicalTrack
+                  setStage={setStage}
+                  setLaunchParams={(params: any) => useLaunchStore.getState().setPendingLaunch({
+                    source: 'manual',
+                    mode: 'quote',
+                    launch: params,
+                    title: params.title || 'Medical Drill'
+                  })}
+                />
+              </PageTransition>
+            )}
+
+            {stage === 'legalTrack' && user && (
+              <PageTransition key="legalTrack">
+                <LegalTrack
+                  setStage={setStage}
+                  setLaunchParams={(params: any) => useLaunchStore.getState().setPendingLaunch({
+                    source: 'manual',
+                    mode: 'quote',
+                    launch: params,
+                    title: params.title || 'Legal Drill'
+                  })}
+                />
+              </PageTransition>
+            )}
+
+            {stage === 'codingTrack' && user && (
+              <PageTransition key="codingTrack">
+                <CodeTrack
+                  setStage={setStage}
+                  setLaunchParams={(params: any) => useLaunchStore.getState().setPendingLaunch({
+                    source: 'manual',
+                    mode: 'code',
+                    launch: params,
+                    title: params.title || 'Code Drill'
+                  })}
                 />
               </PageTransition>
             )}

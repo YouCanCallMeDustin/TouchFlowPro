@@ -152,25 +152,44 @@ router.post('/update-sequence-stats', async (req, res) => {
         const { userId, sequences } = req.body;
 
         const updates = sequences.map(async (s: any) => {
-            return prisma.sequenceStats.upsert({
+            // Find existing to calculate proper average
+            const existing = await prisma.sequenceStats.findUnique({
                 where: {
                     userId_sequence: {
                         userId,
                         sequence: s.sequence
                     }
-                },
-                update: {
-                    attempts: { increment: 1 },
-                    avgSpeed: s.speed // simplified moving average or just last
-                },
-                create: {
-                    userId,
-                    sequence: s.sequence,
-                    type: s.type,
-                    attempts: 1,
-                    avgSpeed: s.speed
                 }
             });
+
+            if (existing) {
+                // Calculate moving average
+                const totalPriorSpeed = existing.avgSpeed * existing.attempts;
+                const newAvg = (totalPriorSpeed + s.speed) / (existing.attempts + 1);
+
+                return prisma.sequenceStats.update({
+                    where: {
+                        userId_sequence: {
+                            userId,
+                            sequence: s.sequence
+                        }
+                    },
+                    data: {
+                        attempts: { increment: 1 },
+                        avgSpeed: newAvg
+                    }
+                });
+            } else {
+                return prisma.sequenceStats.create({
+                    data: {
+                        userId,
+                        sequence: s.sequence,
+                        type: s.type,
+                        attempts: 1,
+                        avgSpeed: s.speed
+                    }
+                });
+            }
         });
 
         await Promise.all(updates);

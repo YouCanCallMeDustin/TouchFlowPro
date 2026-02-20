@@ -82,27 +82,40 @@ export const EnhancedPractice: React.FC = () => {
 
     // Render text with highlighting
     const renderText = () => {
-        return text.split('').map((char, index) => {
-            let className = 'text-2xl ';
+        const words = text.split(' ');
+        let charIndex = 0;
 
-            if (index < userInput.length) {
-                // Already typed
-                if (userInput[index] === char) {
-                    className += 'text-green-500';
-                } else {
-                    className += 'text-red-500 bg-red-900/30';
-                }
-            } else if (index === userInput.length) {
-                // Current character
-                className += 'text-white bg-blue-500/50 animate-pulse';
-            } else {
-                // Not yet typed
-                className += 'text-gray-500';
-            }
+        return words.map((word, wIdx) => {
+            const hasSpace = wIdx < words.length - 1;
+            const wordChars = word + (hasSpace ? ' ' : '');
 
             return (
-                <span key={index} className={className}>
-                    {char}
+                <span key={wIdx} className="inline-block whitespace-nowrap">
+                    {wordChars.split('').map((char) => {
+                        const index = charIndex++;
+                        let className = 'text-2xl ';
+
+                        if (index < userInput.length) {
+                            // Already typed
+                            if (userInput[index] === char) {
+                                className += 'text-green-500';
+                            } else {
+                                className += 'text-red-500 bg-red-900/30';
+                            }
+                        } else if (index === userInput.length) {
+                            // Current character
+                            className += 'text-white bg-blue-500/50 animate-pulse';
+                        } else {
+                            // Not yet typed
+                            className += 'text-gray-500';
+                        }
+
+                        return (
+                            <span key={index} className={className}>
+                                {char}
+                            </span>
+                        );
+                    })}
                 </span>
             );
         });

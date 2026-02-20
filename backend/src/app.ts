@@ -39,8 +39,12 @@ import orgInvitesRoutes from './routes/orgInvites';
 import certificatesRoutes from './routes/certificates';
 import billingRoutes from './routes/billing';
 import seoRoutes from './routes/seo';
+import medicalRoutes from './routes/medical';
+import legalRoutes from './routes/legal';
+import codeRoutes from './routes/code';
 
 const app = express();
+
 
 // Health check with diagnostics
 app.get('/health', async (req, res) => {
@@ -126,6 +130,9 @@ app.use('/api/org-invites', orgInvitesRoutes);
 app.use('/api/certificates', certificatesRoutes);
 app.use('/api/billing', billingRoutes);
 app.use('/api/games', gamesRoutes);
+app.use('/api/medical', medicalRoutes);
+app.use('/api/legal', legalRoutes);
+app.use('/api/code', codeRoutes);
 
 // Static Assets
 const frontendDist = resolveResourcePath('frontend');

@@ -3,6 +3,19 @@ import prisma from '../lib/db';
 import { TypingMetrics } from '@shared/types';
 import { calculateUserLevel } from '@shared/adaptiveEngine';
 import { updateUserStats } from '../utils/userStats';
+import { medicalDrillPacks } from '@shared/tracks/medical';
+
+// Pre-compute medical vocabulary from all drills
+const medicalVocabulary = new Set<string>();
+Object.values(medicalDrillPacks).forEach(pack => {
+    pack.forEach(drill => {
+        const words = drill.content.split(/\s+/).map(w => w.replace(/[^\w]/g, '').toLowerCase());
+        words.forEach(w => {
+            if (w.length >= 6) medicalVocabulary.add(w); // Include >= 6 chars as potential medical terms
+        });
+    });
+});
+
 
 const router = Router();
 
@@ -72,6 +85,104 @@ router.post('/complete', async (req, res) => {
                         liveMetrics: JSON.stringify(req.body.liveMetrics || [])
                     }
                 });
+
+                // Term Detection Logic for Medical Feature
+                let currentWordChars: string[] = [];
+                let currentWordHasError = false;
+
+                // Helper to process a word
+                const processWord = async (word: string, hasError: boolean) => {
+                    const cleanWord = word.replace(/[^\w]/g, '');
+                    if (!cleanWord) return;
+
+                    const lowerWord = cleanWord.toLowerCase();
+                    const isAbbreviation = cleanWord === cleanWord.toUpperCase() && cleanWord.length > 1 && /[A-Z]/.test(cleanWord);
+                    const isMedical = medicalVocabulary.has(lowerWord) || isAbbreviation;
+
+                    if (isMedical) {
+                        // Clamp mastery bounds (0 to 100)
+                        const masteryDelta = hasError ? -10 : 5;
+
+                        await tx.medicalWeakTerm.upsert({
+                            where: { userId_term: { userId, term: lowerWord } },
+                            create: {
+                                userId,
+                                term: lowerWord,
+                                mistakeCount: hasError ? 1 : 0,
+                                masteryScore: hasError ? 0 : 5,
+                                lastMistypedAt: hasError ? new Date() : new Date(0) // Safe fallback
+                            },
+                            update: {
+                                mistakeCount: hasError ? { increment: 1 } : undefined,
+                                masteryScore: { increment: masteryDelta },
+                                lastMistypedAt: hasError ? new Date() : undefined
+                            }
+                        });
+                    }
+
+                    // For Legal - capture terms >= 6 chars or explicit legal dict in future
+                    const isLegal = lowerWord.length >= 6; // Simple heuristic for now until dictionary is robust
+                    if (isLegal && drillId && drillId.startsWith('legal_')) {
+                        const masteryDelta = hasError ? -10 : 5;
+                        await tx.legalWeakTerm.upsert({
+                            where: { userId_term: { userId, term: lowerWord } },
+                            create: {
+                                userId,
+                                term: lowerWord,
+                                mistakeCount: hasError ? 1 : 0,
+                                masteryScore: hasError ? 0 : 5,
+                                lastMistypedAt: hasError ? new Date() : new Date(0)
+                            },
+                            update: {
+                                mistakeCount: hasError ? { increment: 1 } : undefined,
+                                masteryScore: { increment: masteryDelta },
+                                lastMistypedAt: hasError ? new Date() : undefined
+                            }
+                        });
+                    }
+
+                    // For Code - capture code keywords or syntax chars
+                    if (drillId && drillId.startsWith('code_') && cleanWord.length > 2) {
+                        const masteryDelta = hasError ? -10 : 5;
+                        await tx.codeWeakTerm.upsert({
+                            where: { userId_term: { userId, term: lowerWord } },
+                            create: {
+                                userId,
+                                term: lowerWord,
+                                mistakeCount: hasError ? 1 : 0,
+                                masteryScore: hasError ? 0 : 5,
+                                lastMistypedAt: hasError ? new Date() : new Date(0)
+                            },
+                            update: {
+                                mistakeCount: hasError ? { increment: 1 } : undefined,
+                                masteryScore: { increment: masteryDelta },
+                                lastMistypedAt: hasError ? new Date() : undefined
+                            }
+                        });
+                    }
+                };
+
+                for (const stroke of req.body.keystrokes) {
+                    if (stroke.expectedKey === ' ' || stroke.expectedKey === 'Enter') {
+                        if (currentWordChars.length > 0) {
+                            await processWord(currentWordChars.join(''), currentWordHasError);
+                        }
+                        currentWordChars = [];
+                        currentWordHasError = false;
+                    } else if (stroke.expectedKey && stroke.expectedKey.length === 1) {
+                        currentWordChars.push(stroke.expectedKey);
+                        if (!stroke.correct && stroke.correct !== undefined) {
+                            currentWordHasError = true;
+                        } else if (stroke.isError) {
+                            currentWordHasError = true;
+                        }
+                    }
+                }
+
+                // Process the last word if exists
+                if (currentWordChars.length > 0) {
+                    await processWord(currentWordChars.join(''), currentWordHasError);
+                }
             }
 
             // 2. Update User Progress

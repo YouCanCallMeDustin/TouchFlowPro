@@ -116,32 +116,45 @@ const BibleLessonView: React.FC<BibleLessonViewProps> = ({ verses, onComplete, o
     };
 
     const renderText = () => {
-        return currentVerse.text.split('').map((char, index) => {
-            const isTyped = index < userInput.length;
-            const isCurrent = index === userInput.length;
-            const isCorrect = isTyped && userInput[index] === char;
-            const isError = isTyped && !isCorrect;
+        const words = currentVerse.text.split(' ');
+        let charIndex = 0;
+
+        return words.map((word, wIdx) => {
+            const hasSpace = wIdx < words.length - 1;
+            const wordChars = word + (hasSpace ? ' ' : '');
 
             return (
-                <motion.span
-                    key={index}
-                    initial={false}
-                    animate={{
-                        color: isError ? 'var(--accent)' : isCorrect ? 'var(--primary)' : 'var(--text-muted)',
-                        opacity: isTyped ? 1 : 0.4,
-                        scale: isCurrent ? 1.05 : 1,
-                    }}
-                    className={`inline-block font-mono text-xl sm:text-2xl transition-all relative ${isCurrent ? 'font-black' : 'font-medium'}`}
-                >
-                    {char === ' ' ? '\u00A0' : char}
-                    {isCurrent && (
-                        <motion.div
-                            layoutId="cursor"
-                            className="absolute -bottom-1 left-0 w-full h-1 bg-primary rounded-full shadow-[0_0_10px_rgba(var(--primary-rgb),0.5)]"
-                            transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                        />
-                    )}
-                </motion.span>
+                <span key={wIdx} className="inline-flex whitespace-nowrap gap-x-0.5">
+                    {wordChars.split('').map((char) => {
+                        const index = charIndex++;
+                        const isTyped = index < userInput.length;
+                        const isCurrent = index === userInput.length;
+                        const isCorrect = isTyped && userInput[index] === char;
+                        const isError = isTyped && !isCorrect;
+
+                        return (
+                            <motion.span
+                                key={index}
+                                initial={false}
+                                animate={{
+                                    color: isError ? 'var(--accent)' : isCorrect ? 'var(--primary)' : 'var(--text-muted)',
+                                    opacity: isTyped ? 1 : 0.4,
+                                    scale: isCurrent ? 1.05 : 1,
+                                }}
+                                className={`inline-block font-mono text-xl sm:text-2xl transition-all relative ${isCurrent ? 'font-black' : 'font-medium'}`}
+                            >
+                                {char === ' ' ? '\u00A0' : char}
+                                {isCurrent && (
+                                    <motion.div
+                                        layoutId="cursor"
+                                        className="absolute -bottom-1 left-0 w-full h-1 bg-primary rounded-full shadow-[0_0_10px_rgba(var(--primary-rgb),0.5)]"
+                                        transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                                    />
+                                )}
+                            </motion.span>
+                        );
+                    })}
+                </span>
             );
         });
     };

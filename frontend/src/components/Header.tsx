@@ -127,7 +127,7 @@ export const Header: React.FC<HeaderProps> = ({
 
     return (
         <>
-            <header className="glass-header rounded-b-[2rem] px-6 sm:px-12 py-2 relative z-50">
+            <header className="glass-header rounded-b-[2rem] px-6 sm:px-12 py-2 sticky top-0 z-50">
                 <div className="max-w-7xl mx-auto flex justify-between items-center gap-4">
 
                     {/* LOGO AREA */}

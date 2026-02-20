@@ -9,6 +9,13 @@ export interface Drill {
     focusKeys?: string[]; // Specific keys targeted in this drill
     warmupSteps?: { text: string; insight: string }[]; // Sequential calibration steps
     practiceVariations?: string[]; // Optional array of practice texts
+
+    // Medical Competency Engine fields
+    specialty?: string;
+    tier?: 'CORE' | 'INTERMEDIATE' | 'SPECIALIST';
+    recommendedMinutes?: number;
+    focusType?: 'TERMINOLOGY' | 'ABBREVIATION' | 'REPORT' | 'ENDURANCE' | 'SYNTAX';
+    speedTargetWpm?: number;
 }
 
 export const drillLibrary: Drill[] = [

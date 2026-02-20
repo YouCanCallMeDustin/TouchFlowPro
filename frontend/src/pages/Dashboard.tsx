@@ -404,6 +404,8 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                                                         <>
                                                             {item.blockType === 'WARMUP' && <Flame size={18} />}
                                                             {item.blockType === 'REVIEW' && <History size={18} />}
+                                                            {item.blockType === 'HIGH_RISK_REVIEW' && <Activity size={18} className="text-red-500" />}
+                                                            {item.blockType === 'ENDURANCE' && <Clock size={18} className="text-purple-500" />}
                                                             {item.blockType === 'SKILL' && <Zap size={18} />}
                                                             {item.blockType === 'PRACTICE' && <Target size={18} />}
                                                             {item.blockType === 'COOLDOWN' && <Clock size={18} />}

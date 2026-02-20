@@ -3,6 +3,9 @@ import prisma from '../lib/db';
 import { authenticateToken, AuthRequest } from '../middleware/auth';
 import { z } from 'zod';
 import { drillLibrary } from '@shared/drillLibrary';
+import { getRandomMedicalDrill } from '@shared/tracks/medical';
+import { getRandomLegalDrill } from '@shared/tracks/legal';
+import { getRandomCodeDrill } from '@shared/tracks/code';
 
 const router = Router();
 
@@ -33,7 +36,7 @@ interface PlanItem {
 }
 
 // Helper to generate daily items based on track
-const generateDailyItems = (track: string, dayIndex: number, minutesPerDay: number, settings: any = null): PlanItem[] => {
+const generateDailyItems = async (userId: string, track: string, dayIndex: number, minutesPerDay: number, settings: any = null): Promise<PlanItem[]> => {
     const items: PlanItem[] = [];
     let currentMinutes = 0;
     const targetMinutes = minutesPerDay;
@@ -74,22 +77,79 @@ const generateDailyItems = (track: string, dayIndex: number, minutesPerDay: numb
     // 2. Main Skill (Track Specific)
     const skillMins = Math.ceil(skillSec / 60);
 
-    // Medical always gets Medical Terminology (p2) for now as requested
-    if (track === 'MEDICAL') {
-        const medicalDrill = drillLibrary.find(d => d.id === 'p2') || drillLibrary[0];
+    // Track Specific Logic
+    if (['MEDICAL', 'LEGAL', 'CODE'].includes(track)) {
+        // High Risk Term Review Block
+        let weakTerms: any[] = [];
+        if (track === 'MEDICAL') {
+            weakTerms = await prisma.medicalWeakTerm.findMany({
+                where: { userId, mistakeCount: { gte: 3 } },
+                orderBy: { mistakeCount: 'desc' },
+                take: 10
+            });
+        } else if (track === 'LEGAL') {
+            weakTerms = await prisma.legalWeakTerm.findMany({
+                where: { userId, mistakeCount: { gte: 3 } },
+                orderBy: { mistakeCount: 'desc' },
+                take: 10
+            });
+        } else if (track === 'CODE') {
+            weakTerms = await prisma.codeWeakTerm.findMany({
+                where: { userId, mistakeCount: { gte: 3 } },
+                orderBy: { mistakeCount: 'desc' },
+                take: 10
+            });
+        }
+
+        if (weakTerms && weakTerms.length > 0) {
+            const termList = weakTerms.map(t => t.term).join(' ');
+            const repeatedTerms = Array(15).fill(termList).join(' ');
+            const reviewBlockMins = Math.min(4, Math.max(2, Math.floor(targetMinutes * 0.15)));
+
+            items.push({
+                id: `high-risk-${dayIndex}`,
+                title: 'High-Risk Term Review',
+                blockType: 'HIGH_RISK_REVIEW',
+                minutes: reviewBlockMins,
+                recommendedSeconds: reviewBlockMins * 60,
+                mode: track === 'CODE' ? 'code' : 'quote',
+                launch: {
+                    kind: 'DRILL',
+                    drillId: 'custom',
+                    promptText: repeatedTerms
+                },
+                reason: ['Frequent terminology errors detected'],
+                isCompleted: false
+            });
+            currentMinutes += reviewBlockMins;
+        }
+
+        let specificDrill;
+        let defaultTitle = '';
+        if (track === 'MEDICAL') {
+            specificDrill = getRandomMedicalDrill('CORE') || drillLibrary.find(d => d.id === 'p2') || drillLibrary[0];
+            defaultTitle = 'Medical Terminology';
+        } else if (track === 'LEGAL') {
+            specificDrill = getRandomLegalDrill('CORE') || drillLibrary.find(d => d.id === 'p2') || drillLibrary[0];
+            defaultTitle = 'Legal Terminology';
+        } else {
+            specificDrill = getRandomCodeDrill('CORE') || drillLibrary.find(d => d.id === 'p2') || drillLibrary[0];
+            defaultTitle = 'Code Syntax Practice';
+        }
+
         items.push({
             id: `main-${dayIndex}`,
-            title: 'Medical Terminology',
+            title: specificDrill.title || defaultTitle,
             blockType: 'SKILL',
             minutes: skillMins,
             recommendedSeconds: skillSec,
-            mode: 'quote',
+            mode: track === 'CODE' ? 'code' : 'quote',
             launch: {
                 kind: 'DRILL',
-                drillId: medicalDrill.id,
-                promptText: medicalDrill.content
+                drillId: specificDrill.id,
+                promptText: specificDrill.content || (specificDrill as any).passage
             },
-            reason: ['Practice MEDICAL vocabulary', 'Build speed'],
+            reason: [`Practice ${track} vocabulary`, 'Build speed'],
             isCompleted: false
         });
         currentMinutes += skillMins;
@@ -128,27 +188,40 @@ const generateDailyItems = (track: string, dayIndex: number, minutesPerDay: numb
 
         if (duration <= 0) break;
 
-        // Find random drills for variety
         // Filter out beginner to make it harder
-        const challengeDrills = drillLibrary.filter(d => d.difficulty !== 'Beginner');
-        const randomDrill = challengeDrills[Math.floor(Math.random() * challengeDrills.length)];
+        let randomDrill;
+
+        if (track === 'MEDICAL') {
+            const randTier = Math.random() > 0.5 ? 'SPECIALIST' : 'INTERMEDIATE';
+            randomDrill = getRandomMedicalDrill(Math.random() > 0.5 ? 'SPECIALIST' : 'INTERMEDIATE') || drillLibrary[0];
+        } else if (track === 'LEGAL') {
+            randomDrill = getRandomLegalDrill(Math.random() > 0.5 ? 'SPECIALIST' : 'INTERMEDIATE') || drillLibrary[0];
+        } else if (track === 'CODE') {
+            randomDrill = getRandomCodeDrill(Math.random() > 0.5 ? 'SPECIALIST' : 'INTERMEDIATE') || drillLibrary[0];
+        } else {
+            const challengeDrills = drillLibrary.filter(d => d.difficulty !== 'Beginner');
+            randomDrill = challengeDrills[Math.floor(Math.random() * challengeDrills.length)];
+        }
 
         const types = ['Speed Drills', 'Endurance Block', 'Focus Interpretation'];
         const type = types[cycleIndex % types.length];
 
+        // Tag endurance specifically if it's long
+        const isEndurance = randomDrill.focusType === 'ENDURANCE' || duration >= 8;
+
         items.push({
             id: `block-${dayIndex}-${cycleIndex}`,
-            title: `${type}: ${randomDrill.title}`,
-            blockType: 'PRACTICE',
+            title: `${isEndurance ? 'Endurance' : type}: ${randomDrill.title}`,
+            blockType: isEndurance ? 'ENDURANCE' : 'PRACTICE',
             minutes: duration,
             recommendedSeconds: duration * 60,
             mode: track === 'CODE' ? 'code' : 'quote',
             launch: {
                 kind: 'DRILL',
                 drillId: randomDrill.id,
-                promptText: randomDrill.content
+                promptText: randomDrill.content || (randomDrill as any).passage
             },
-            reason: ['Build stamina', 'Increase volume'],
+            reason: [isEndurance ? 'Sustained typing stamina' : 'Build stamina', 'Increase volume'],
             isCompleted: false
         });
 
@@ -197,7 +270,7 @@ router.post('/', authenticateToken, async (req: Request, res: Response) => {
             const date = new Date();
             date.setDate(date.getDate() + i);
 
-            const items = generateDailyItems(track, i, minutesPerDay, settings);
+            const items = await generateDailyItems(userId, track, i, minutesPerDay, settings);
 
             daysToCreate.push({
                 planId: plan.id,
@@ -421,7 +494,7 @@ router.post('/active/sync', authenticateToken, async (req: Request, res: Respons
             const dayIndex = Math.floor((new Date(day.date).getTime() - new Date(plan.startDate).getTime()) / (1000 * 60 * 60 * 24));
 
             // Generate new items with NEW settings
-            const newItems = generateDailyItems(plan.track, dayIndex, settings.dailyGoalMinutes, settings);
+            const newItems = await generateDailyItems(userId, plan.track, dayIndex, settings.dailyGoalMinutes, settings);
 
             await prisma.trainingDay.update({
                 where: { id: day.id },
