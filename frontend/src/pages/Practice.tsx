@@ -1,6 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { drillLibrary, type Drill } from '@shared/drillLibrary';
+import { medicalDrillPacks } from '@shared/tracks/medical';
+import { legalDrillPacks } from '@shared/tracks/legal';
+import { codeDrillPacks } from '@shared/tracks/code';
 import { Curriculum, type Lesson } from '@shared/curriculum';
 import LessonView from '../components/LessonView';
 import type { TypingMetrics } from '@shared/types';
@@ -60,7 +63,18 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
         if (pendingLaunch && (pendingLaunch.source === 'trainingPlan' || pendingLaunch.source === 'analytics' || pendingLaunch.source === 'manual') && !activeDrill) {
             // Auto-launch the plan item
             if (pendingLaunch.launch.kind === 'DRILL' && pendingLaunch.launch.drillId) {
-                const drill = drillLibrary.find(d => d.id === pendingLaunch.launch.drillId);
+                let drill = drillLibrary.find(d => d.id === pendingLaunch.launch.drillId);
+
+                if (!drill) {
+                    if (pendingLaunch.launch.drillId.startsWith('med_')) {
+                        drill = Object.values(medicalDrillPacks).flat().find(d => d.id === pendingLaunch.launch.drillId);
+                    } else if (pendingLaunch.launch.drillId.startsWith('legal_')) {
+                        drill = Object.values(legalDrillPacks).flat().find(d => d.id === pendingLaunch.launch.drillId);
+                    } else if (pendingLaunch.launch.drillId.startsWith('code_')) {
+                        drill = Object.values(codeDrillPacks).flat().find(d => d.id === pendingLaunch.launch.drillId);
+                    }
+                }
+
                 if (drill) {
                     const practiceLesson = Curriculum.drillToLesson(drill, 0);
                     // Override content if promptText is provided (e.g. for custom warmups)
@@ -74,12 +88,22 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
                     // Extract longest words for dynamic warmups
                     const words = pendingLaunch.launch.promptText.split(/[^a-zA-Z]+/);
                     const uniqueWords = Array.from(new Set(words.filter((w: string) => w.length > 5).map((w: string) => w.toLowerCase())));
-                    const hardestWords = uniqueWords.sort((a, b) => b.length - a.length).slice(0, 10);
 
-                    const dynamicWarmupSteps = hardestWords.map(w => ({
-                        text: `${w} ${w} ${w} ${w} ${w}`,
-                        insight: `Mastery Repetition: ${w.toUpperCase()}`
-                    }));
+                    // Only use the top 1 hardest word to avoid 10 tiring warmup steps
+                    const hardestWord = uniqueWords.sort((a, b) => b.length - a.length)[0];
+
+                    let dynamicWarmupSteps: { text: string; insight: string }[] = [];
+
+                    if (hardestWord) {
+                        let repeats = 5;
+                        if (hardestWord.length > 7) repeats = 3;
+                        else if (hardestWord.length <= 5) repeats = 10;
+
+                        dynamicWarmupSteps.push({
+                            text: Array(repeats).fill(hardestWord).join(' '),
+                            insight: `Mastery Repetition: ${hardestWord.toUpperCase()}`
+                        });
+                    }
 
                     const customLesson: Lesson = {
                         id: pendingLaunch.launch.drillId,

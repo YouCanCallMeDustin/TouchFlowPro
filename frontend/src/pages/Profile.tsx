@@ -437,7 +437,22 @@ const Profile: React.FC<ProfileProps> = ({ userId, userEmail, onProfileUpdate })
                                 </button>
                             )}
                             {profile?.subscriptionStatus === 'pro' && (
-                                <button className="px-6 py-3 bg-slate-500/10 text-text-muted rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-500/20 transition-all">
+                                <button
+                                    onClick={async () => {
+                                        try {
+                                            const response = await apiFetch('/api/subscriptions/create-portal-session', { method: 'POST' });
+                                            if (response.url) {
+                                                window.location.href = response.url;
+                                            } else {
+                                                alert('Could not redirect to subscription portal.');
+                                            }
+                                        } catch (error) {
+                                            console.error('Portal error:', error);
+                                            alert('Failed to open subscription portal.');
+                                        }
+                                    }}
+                                    className="px-6 py-3 bg-slate-500/10 text-text-muted rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-slate-500/20 transition-all"
+                                >
                                     Manage Subscription
                                 </button>
                             )}

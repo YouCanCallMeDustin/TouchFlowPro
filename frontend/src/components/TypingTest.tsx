@@ -19,6 +19,7 @@ interface Props {
     onReset?: () => void;
     timeLimit?: number; // Minutes
     forceFinish?: boolean;
+    drillId?: string;
 }
 
 const TypingTest: React.FC<Props> = ({
@@ -31,6 +32,7 @@ const TypingTest: React.FC<Props> = ({
     showVirtualKeyboard = false,
     mode,
     timeLimit,
+    drillId,
     ...props
 }) => {
     const [userInput, setUserInput] = useState('');
@@ -379,6 +381,7 @@ const TypingTest: React.FC<Props> = ({
                             userInput={userInput}
                             onSpeedChange={setDictationSpeed}
                             currentSpeed={dictationSpeed}
+                            drillId={drillId}
                         />
                     ) : (
                         <div className={`min-h-[100px] leading-relaxed select-none ${mode === 'code' ? 'whitespace-pre-wrap break-all font-mono text-left' : 'flex flex-wrap gap-x-0.5 gap-y-4 justify-center'}`}>

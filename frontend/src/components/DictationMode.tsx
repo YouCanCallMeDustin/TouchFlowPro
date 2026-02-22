@@ -41,10 +41,43 @@ interface DictationUIProps {
     userInput: string;
     onSpeedChange: (speed: number) => void;
     currentSpeed: number;
+    drillId?: string;
 }
 
-export const DictationUI: React.FC<DictationUIProps> = ({ text, isStarted, userInput, onSpeedChange, currentSpeed }) => {
+export const DictationUI: React.FC<DictationUIProps> = ({ text, isStarted, userInput, onSpeedChange, currentSpeed, drillId }) => {
     const [showPeek, setShowPeek] = useState(false);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+
+    // Initialize audio
+    useEffect(() => {
+        if (drillId) {
+            const audio = new Audio(`/audio/drills/${drillId}.mp3`);
+            audioRef.current = audio;
+        }
+        return () => {
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current = null;
+            }
+        };
+    }, [drillId]);
+
+    // Handle play/pause based on isStarted
+    useEffect(() => {
+        if (isStarted && audioRef.current) {
+            audioRef.current.play().catch(e => console.error("Audio play failed", e));
+        } else if (!isStarted && audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.currentTime = 0;
+        }
+    }, [isStarted]);
+
+    // Handle speed changes
+    useEffect(() => {
+        if (audioRef.current) {
+            audioRef.current.playbackRate = currentSpeed;
+        }
+    }, [currentSpeed]);
 
     return (
         <div className="relative">

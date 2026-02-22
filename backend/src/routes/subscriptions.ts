@@ -198,7 +198,9 @@ router.post('/create-checkout-session', authenticateToken, async (req: any, res)
 // POST /api/subscriptions/create-portal-session
 router.post('/create-portal-session', authenticateToken, async (req: any, res) => {
     try {
+        console.log(`[API /subscriptions/create-portal-session POST] Received request headers:`, req.headers);
         const userId = req.user?.id;
+        console.log(`[API /subscriptions/create-portal-session POST] Authenticated user: ${userId}`);
         if (!userId) return res.status(401).json({ error: 'Unauthorized' });
 
         const user = await prisma.user.findUnique({ where: { id: userId } });

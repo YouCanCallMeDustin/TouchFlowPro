@@ -68,8 +68,9 @@ router.post('/', authenticateToken, async (req, res) => {
  */
 router.get('/', authenticateToken, async (req, res) => {
     try {
+        console.log(`[API /orgs GET] Received request headers:`, req.headers);
         const { id: userId } = (req as AuthRequest).user!;
-
+        console.log(`[API /orgs GET] Authenticated user: ${userId}`);
         const memberships = await prisma.orgMember.findMany({
             where: { userId },
             include: {

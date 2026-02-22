@@ -44,7 +44,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
     const [warmupStepMetrics, setWarmupStepMetrics] = useState<TypingMetrics | null>(null);
     const [isAdaptiveResult, setIsAdaptiveResult] = useState(false);
     const [suddenDeathEnabled, setSuddenDeathEnabled] = useState(false);
-    const [dictationEnabled] = useState(false);
+    const [dictationEnabled, setDictationEnabled] = useState(false);
     const [enhancedModeEnabled] = useState(true); // Enable enhanced mode by default
     const [showCelebration, setShowCelebration] = useState(false);
     const [forceFinishTest, setForceFinishTest] = useState(false);
@@ -407,9 +407,15 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                                 </div>
                             </div>
                             {/* Controls */}
-                            <div className="flex items-center bg-white/5 p-0.5 rounded-xl border border-white/10 hidden lg:flex">
-                                <button onClick={() => setSuddenDeathEnabled(true)} className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${suddenDeathEnabled ? 'bg-rose-500 text-white shadow-xl shadow-rose-500/20' : 'text-text-muted hover:text-text-main'}`}>Fatal Grip</button>
-                                <button onClick={() => setSuddenDeathEnabled(false)} className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${!suddenDeathEnabled ? 'bg-primary text-white shadow-xl shadow-primary/20' : 'text-text-muted hover:text-text-main'}`}>Soft Sync</button>
+                            <div className="flex items-center gap-4">
+                                <div className="flex items-center bg-white/5 p-0.5 rounded-xl border border-white/10 hidden lg:flex">
+                                    <button onClick={() => setDictationEnabled(true)} className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${dictationEnabled ? 'bg-secondary text-white shadow-xl shadow-secondary/20' : 'text-text-muted hover:text-text-main'}`}>Dictation</button>
+                                    <button onClick={() => setDictationEnabled(false)} className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${!dictationEnabled ? 'bg-primary text-white shadow-xl shadow-primary/20' : 'text-text-muted hover:text-text-main'}`}>Visual Text</button>
+                                </div>
+                                <div className="flex items-center bg-white/5 p-0.5 rounded-xl border border-white/10 hidden lg:flex">
+                                    <button onClick={() => setSuddenDeathEnabled(true)} className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${suddenDeathEnabled ? 'bg-rose-500 text-white shadow-xl shadow-rose-500/20' : 'text-text-muted hover:text-text-main'}`}>Fatal Grip</button>
+                                    <button onClick={() => setSuddenDeathEnabled(false)} className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${!suddenDeathEnabled ? 'bg-primary text-white shadow-xl shadow-primary/20' : 'text-text-muted hover:text-text-main'}`}>Soft Sync</button>
+                                </div>
                             </div>
                         </div>
                         <button onClick={() => { if (isPlanLauncher) { clearPendingLaunch(); onCancel(); } else { setMode('intro'); } }} className="text-[10px] font-black uppercase tracking-widest bg-slate-500/5 dark:bg-white/5 px-6 py-3 rounded-xl hover:bg-slate-500/10 dark:hover:bg-white/10 transition-all border border-slate-200/50 dark:border-white/10 text-text-muted hover:text-text-main relative z-10">
@@ -427,6 +433,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                         timeLimit={isPlanLauncher ? undefined : timeLimit}
                         forceFinish={forceFinishTest}
                         mode={lesson.category === 'Code' || lesson.category === 'Programming' ? 'code' : undefined}
+                        drillId={lesson.id}
                     />
                 </div>
             )}
@@ -441,6 +448,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                         showLiveMetrics={enhancedModeEnabled}
                         showVirtualKeyboard={enhancedModeEnabled}
                         mode={lesson.category === 'Code' || lesson.category === 'Programming' ? 'code' : undefined}
+                        drillId={lesson.id}
                     />
                 </div>
             )}

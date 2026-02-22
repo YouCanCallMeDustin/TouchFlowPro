@@ -1,0 +1,16 @@
+[
+  {
+    "email": "touchflowpro@gmail.com",
+    "id": "1fb30c30-fbb0-415c-b55b-ae1b8fdb7d8c",
+    "stripeCustomerId": "cus_TwNI0joHSaqfGm",
+    "subStatus": "pro",
+    "subEndDate": null,
+    "orgsCount": 1,
+    "orgs": [
+      {
+        "name": "TOUCHFLOWPRO's Team",
+        "tier": "PRO"
+      }
+    ]
+  }
+]

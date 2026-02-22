@@ -1,0 +1,23 @@
+[
+  {
+    "email": "dustinshoemake@hotmail.com",
+    "id": "0d35d71e-8a58-4572-8b3a-49ab234c2c4f",
+    "stripeCustomerId": "cus_TzHZppvM8BNmB3",
+    "subStatus": "free",
+    "orgsCount": 1
+  },
+  {
+    "email": "touchflowpro@gmail.com",
+    "id": "1fb30c30-fbb0-415c-b55b-ae1b8fdb7d8c",
+    "stripeCustomerId": "cus_TwNI0joHSaqfGm",
+    "subStatus": "pro",
+    "orgsCount": 1
+  },
+  {
+    "email": "jacobbrickner@ymail.com",
+    "id": "17450d88-9b42-41d0-af5d-d2b09da9dd81",
+    "stripeCustomerId": null,
+    "subStatus": "free",
+    "orgsCount": 0
+  }
+]

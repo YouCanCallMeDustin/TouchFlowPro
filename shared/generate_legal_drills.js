@@ -81,9 +81,25 @@ function generateText(template) {
 function generateDrills(specialtyKey, prefix, templatesArray, count) {
     const drills = [];
     for (let i = 1; i <= count; i++) {
-        const text = generateText(getRandom(templatesArray));
+        const baseText = generateText(getRandom(templatesArray));
 
-        let title = `${specialtyKey.charAt(0).toUpperCase() + specialtyKey.slice(1)} Practice ${i}`;
+        // Pick a random word from the text to serve as the "focus term"
+        const words = baseText.replace(/[^\w\s]/gi, '').split(/\s+/).filter(w => w.length > 3);
+        const focusTerm = words.length > 0 ? getRandom(words).toLowerCase() : "agreement";
+
+        // Repeat logic: >= 8 -> 3 times, <= 5 -> 10 times, else (6-7) -> 5 times
+        let repeats = 0;
+        if (focusTerm.length >= 8) {
+            repeats = 3;
+        } else if (focusTerm.length <= 5) {
+            repeats = 10;
+        } else {
+            repeats = 5;
+        }
+
+        const repetitionString = Array(repeats).fill(focusTerm).join(' ');
+
+        let title = `${specialtyKey.charAt(0).toUpperCase() + specialtyKey.slice(1)} Mastery ${i}`;
 
         drills.push({
             id: `legal_${prefix}_${i}`,
@@ -93,7 +109,13 @@ function generateDrills(specialtyKey, prefix, templatesArray, count) {
             recommendedMinutes: 5,
             focusType: Math.random() > 0.5 ? 'TERMINOLOGY' : 'ENDURANCE',
             speedTargetWpm: 70 + Math.floor(Math.random() * 20),
-            content: text,
+            content: baseText,
+            warmupSteps: [
+                {
+                    text: repetitionString,
+                    insight: `Focus on mastering the term: ${focusTerm}. Type it precisely.`
+                }
+            ],
             difficulty: 'Professional',
             category: 'Legal',
             description: `Auto-generated legal track drill for ${specialtyKey}.`
