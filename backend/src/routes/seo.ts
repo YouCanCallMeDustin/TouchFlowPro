@@ -22,12 +22,29 @@ router.get('/', (_req: Request, res: Response, next) => {
             const seoSection = `
     <section id="typing-resources" style="background:#111827; padding:4rem 2rem; border-top:1px solid #1e293b; text-align:center;">
       <div style="max-width:900px; margin:0 auto;">
-        <h2 style="color:#e2e8f0; font-size:1.8rem; margin-bottom:2rem; font-family:'Segoe UI',system-ui,sans-serif;">Typing Science Resources</h2>
-        <ul style="list-style:none; padding:0; display:flex; flex-wrap:wrap; justify-content:center; gap:2rem;">
-          <li><a href="https://touchflowpro.com/how-to-type-faster" style="color:#818cf8; text-decoration:none; font-size:1.1rem; font-weight:500;">How to Type Faster</a></li>
-          <li><a href="https://touchflowpro.com/increase-wpm-from-60-to-100" style="color:#818cf8; text-decoration:none; font-size:1.1rem; font-weight:500;">Increase WPM from 60 to 100</a></li>
-          <li><a href="https://touchflowpro.com/typing-speed-vs-accuracy" style="color:#818cf8; text-decoration:none; font-size:1.1rem; font-weight:500;">Typing Speed vs Accuracy</a></li>
-        </ul>
+        <h2 style="color:#e2e8f0; font-size:1.8rem; margin-bottom:2rem; font-family:'Segoe UI',system-ui,sans-serif;">Typing Performance Research</h2>
+        <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:2rem; text-align:left;">
+            <div style="flex: 1 1 300px; background:#1a2236; padding:1.5rem; border-radius:12px; border:1px solid #1e293b;">
+                <h3 style="color:#818cf8; font-size:1.2rem; margin-top:0; margin-bottom:0.8rem;">How to Type Faster</h3>
+                <p style="color:#94a3b8; font-size:0.95rem; margin-bottom:1rem;">Master advanced techniques, deliberate practice strategies, and neuromuscular optimization.</p>
+                <a href="https://touchflowpro.com/how-to-type-faster" style="color:#6366f1; text-decoration:none; font-weight:600;">Read More &rarr;</a>
+            </div>
+            <div style="flex: 1 1 300px; background:#1a2236; padding:1.5rem; border-radius:12px; border:1px solid #1e293b;">
+                <h3 style="color:#818cf8; font-size:1.2rem; margin-top:0; margin-bottom:0.8rem;">Increase WPM from 60 to 100</h3>
+                <p style="color:#94a3b8; font-size:0.95rem; margin-bottom:1rem;">A structured 3-phase training system featuring burst conditioning and rhythm acceleration.</p>
+                <a href="https://touchflowpro.com/increase-wpm-from-60-to-100" style="color:#6366f1; text-decoration:none; font-weight:600;">Read More &rarr;</a>
+            </div>
+            <div style="flex: 1 1 300px; background:#1a2236; padding:1.5rem; border-radius:12px; border:1px solid #1e293b;">
+                <h3 style="color:#818cf8; font-size:1.2rem; margin-top:0; margin-bottom:0.8rem;">Typing Speed vs Accuracy</h3>
+                <p style="color:#94a3b8; font-size:0.95rem; margin-bottom:1rem;">Discover why mechanical precision and high accuracy is the foundational driver of elite speed.</p>
+                <a href="https://touchflowpro.com/typing-speed-vs-accuracy" style="color:#6366f1; text-decoration:none; font-weight:600;">Read More &rarr;</a>
+            </div>
+            <div style="flex: 1 1 300px; background:#1a2236; padding:1.5rem; border-radius:12px; border:1px solid #1e293b;">
+                <h3 style="color:#818cf8; font-size:1.2rem; margin-top:0; margin-bottom:0.8rem;">How to Improve Typing Accuracy</h3>
+                <p style="color:#94a3b8; font-size:0.95rem; margin-bottom:1rem;">Learn how to correct errors and optimize your accuracy to stop slowing down your typing speed.</p>
+                <a href="https://touchflowpro.com/how-to-improve-typing-accuracy" style="color:#6366f1; text-decoration:none; font-weight:600;">Read More &rarr;</a>
+            </div>
+        </div>
       </div>
     </section>
             `;
@@ -58,6 +75,8 @@ const SEO_PAGES: { slug: string; lastmod: string; priority: string }[] = [
     { slug: 'how-to-type-faster', lastmod: '2026-02-19', priority: '0.8' },
     { slug: 'increase-wpm-from-60-to-100', lastmod: '2026-02-19', priority: '0.8' },
     { slug: 'typing-speed-vs-accuracy', lastmod: '2026-02-19', priority: '0.8' },
+    { slug: 'how-to-improve-typing-accuracy', lastmod: '2026-02-21', priority: '0.8' },
+    { slug: 'what-is-a-good-typing-speed', lastmod: '2026-02-21', priority: '0.7' },
 ];
 
 // Resolve the directory containing SEO HTML files.
@@ -112,21 +131,24 @@ router.get('/sitemap.xml', (_req: Request, res: Response) => {
 // SEO page routes
 // Each registered slug serves its corresponding HTML file directly.
 // ---------------------------------------------------------------------------
-for (const page of SEO_PAGES) {
-    router.get(`/${page.slug}`, (_req: Request, res: Response) => {
-        const filePath = path.join(seoDir, `${page.slug}.html`);
+router.get('/how-to-type-faster', (_req: Request, res: Response) => {
+    res.sendFile(path.resolve(__dirname, '../seo/how-to-type-faster.html'));
+});
 
-        if (fs.existsSync(filePath)) {
-            res.type('html');
-            res.sendFile(filePath);
-        } else {
-            console.error(`[SEO] HTML file not found: ${filePath}`);
-            // Fall through to SPA fallback by calling next()
-            // But since we're in a router.get, we just 404 here.
-            // The SPA fallback in app.ts will catch unmatched routes.
-            res.status(404).send('Page not found');
-        }
-    });
-}
+router.get('/increase-wpm-from-60-to-100', (_req: Request, res: Response) => {
+    res.sendFile(path.resolve(__dirname, '../seo/increase-wpm-from-60-to-100.html'));
+});
+
+router.get('/typing-speed-vs-accuracy', (_req: Request, res: Response) => {
+    res.sendFile(path.resolve(__dirname, '../seo/typing-speed-vs-accuracy.html'));
+});
+
+router.get('/how-to-improve-typing-accuracy', (_req: Request, res: Response) => {
+    res.sendFile(path.resolve(__dirname, '../seo/how-to-improve-typing-accuracy.html'));
+});
+
+router.get('/what-is-a-good-typing-speed', (_req: Request, res: Response) => {
+    res.sendFile(path.resolve(__dirname, '../seo/what-is-a-good-typing-speed.html'));
+});
 
 export default router;

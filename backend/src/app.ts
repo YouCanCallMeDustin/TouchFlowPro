@@ -94,8 +94,7 @@ app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(requestLogger);
 app.use(wwwRedirect);
 
-// SEO routes (before API and SPA fallback)
-app.use(seoRoutes);
+
 
 // Webhooks before json parsing
 app.use('/api/webhooks', webhooksRoutes);
@@ -133,6 +132,9 @@ app.use('/api/games', gamesRoutes);
 app.use('/api/medical', medicalRoutes);
 app.use('/api/legal', legalRoutes);
 app.use('/api/code', codeRoutes);
+
+// SEO routes (MUST be before static and SPA fallback)
+app.use('/', seoRoutes);
 
 // Static Assets
 const frontendDist = resolveResourcePath('frontend');
