@@ -49,7 +49,9 @@ router.get('/', (_req: Request, res: Response, next) => {
     </section>
             `;
 
-            if (html.includes('</body>')) {
+            if (html.includes('<div id="root"></div>')) {
+                html = html.replace('<div id="root"></div>', `<div id="root">\n${seoSection}\n</div>`);
+            } else if (html.includes('</body>')) {
                 html = html.replace('</body>', `${seoSection}</body>`);
             } else {
                 html += seoSection;
