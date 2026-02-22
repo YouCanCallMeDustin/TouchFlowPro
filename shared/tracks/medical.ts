@@ -1,4 +1,4 @@
-import { Drill } from '../drillLibrary';
+import type { Drill } from '../drillLibrary';
 
 // Auto-generated expanded medical drills
 export const medicalDrillPacks: Record<string, Drill[]> = {
@@ -2689,7 +2689,7 @@ export function getMedicalDrillsBySpecialty(specialty: string): Drill[] {
         'soap': 'soap',
         'discharge': 'discharge'
     };
-    
+
     const mappedKey = keyMap[specialty.toLowerCase()] || specialty.toLowerCase();
     return medicalDrillPacks[mappedKey] || [];
 }

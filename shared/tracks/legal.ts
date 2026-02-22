@@ -1,4 +1,4 @@
-import { Drill } from '../drillLibrary';
+import type { Drill } from '../drillLibrary';
 
 // Auto-generated expanded legal drills
 export const legalDrillPacks: Record<string, Drill[]> = {
@@ -2688,7 +2688,7 @@ export function getLegalDrillsBySpecialty(specialty: string): Drill[] {
         'tax': 'tax',
         'realestate': 'realestate'
     };
-    
+
     const mappedKey = keyMap[specialty.toLowerCase().replace(/\s+/g, '')] || specialty.toLowerCase();
     return legalDrillPacks[mappedKey] || [];
 }

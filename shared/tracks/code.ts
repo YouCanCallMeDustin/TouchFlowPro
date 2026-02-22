@@ -1,4 +1,4 @@
-import { Drill } from '../drillLibrary';
+import type { Drill } from '../drillLibrary';
 
 // Auto-generated expanded code drills
 export const codeDrillPacks: Record<string, Drill[]> = {
@@ -1848,7 +1848,7 @@ export function getCodeDrillsBySpecialty(specialty: string): Drill[] {
         'c++': 'cpp',
         'sql': 'sql'
     };
-    
+
     const mappedKey = keyMap[specialty.toLowerCase().replace(/\s+/g, '')] || specialty.toLowerCase();
     return codeDrillPacks[mappedKey] || [];
 }
