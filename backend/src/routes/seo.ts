@@ -59,6 +59,11 @@ router.get('/', (_req: Request, res: Response, next) => {
                 <p style="color:#94a3b8; font-size:0.95rem; margin-bottom:1rem;">Evaluate your legal data entry speed using real case law, statutory citations, and legal briefs.</p>
                 <a href="https://touchflowpro.com/legal-typing-test" style="color:#6366f1; text-decoration:none; font-weight:600;">Read More &rarr;</a>
             </div>
+            <div style="flex: 1 1 300px; background:#1a2236; padding:1.5rem; border-radius:12px; border:1px solid #1e293b;">
+                <h3 style="color:#818cf8; font-size:1.2rem; margin-top:0; margin-bottom:0.8rem;">Typing Test for Programmers</h3>
+                <p style="color:#94a3b8; font-size:0.95rem; margin-bottom:1rem;">Built specifically for software engineers. Test your speed with code snippets, algorithms, and technical symbols.</p>
+                <a href="https://touchflowpro.com/typing-test-for-programmers" style="color:#6366f1; text-decoration:none; font-weight:600;">Read More &rarr;</a>
+            </div>
         </div>
       </div>
     </section>
@@ -97,6 +102,7 @@ const SEO_PAGES: { slug: string; lastmod: string; priority: string }[] = [
     { slug: 'how-to-type-60-wpm', lastmod: '2026-03-01', priority: '0.8' },
     { slug: 'medical-transcription-typing-test', lastmod: '2026-03-01', priority: '0.8' },
     { slug: 'legal-typing-test', lastmod: '2026-03-01', priority: '0.8' },
+    { slug: 'typing-test-for-programmers', lastmod: '2026-03-01', priority: '0.8' },
 ];
 
 // Resolve the directory containing SEO HTML files.
@@ -181,6 +187,10 @@ router.get('/medical-transcription-typing-test', (_req: Request, res: Response) 
 
 router.get('/legal-typing-test', (_req: Request, res: Response) => {
     res.sendFile(path.resolve(__dirname, '../seo/legal-typing-test.html'));
+});
+
+router.get('/typing-test-for-programmers', (_req: Request, res: Response) => {
+    res.sendFile(path.resolve(__dirname, '../seo/typing-test-for-programmers.html'));
 });
 
 export default router;
