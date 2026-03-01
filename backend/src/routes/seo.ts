@@ -130,6 +130,7 @@ router.get('/sitemap.xml', (_req: Request, res: Response) => {
 
     const staticEntries = [
         { loc: 'https://touchflowpro.com/', lastmod: today, priority: '1.0' },
+        { loc: 'https://touchflowpro.com/free_test', lastmod: today, priority: '0.9' },
     ];
 
     const seoEntries = SEO_PAGES.map((p) => ({
