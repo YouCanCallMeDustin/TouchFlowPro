@@ -61,7 +61,12 @@ export type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'les
 
 function App() {
   const { user, loading, logout } = useAuth()
-  const [stage, setStage] = useState<Stage>('welcome')
+  const [stage, setStage] = useState<Stage>(() => {
+    if (typeof window !== 'undefined' && window.location.pathname === '/free_test') {
+      return 'free_test';
+    }
+    return 'welcome';
+  })
   const [assessmentMetrics, setAssessmentMetrics] = useState<TypingMetrics | null>(null)
   const [userProgress, setUserProgress] = useState<UserProgress | null>(null)
   const [placementResult, setPlacementResult] = useState<PlacementResult | null>(null)
@@ -81,9 +86,14 @@ function App() {
     localStorage.setItem('theme', 'dark');
   }, []);
 
-  // Scroll to top on page change
+  // Scroll to top on page change and update URL for shareability
   useEffect(() => {
     window.scrollTo(0, 0);
+    if (stage === 'free_test') {
+      window.history.replaceState(null, '', '/free_test');
+    } else if (window.location.pathname === '/free_test' && (stage as string) !== 'free_test') {
+      window.history.replaceState(null, '', '/');
+    }
   }, [stage]);
 
   const fetchProgress = useCallback(async (id: string) => {
