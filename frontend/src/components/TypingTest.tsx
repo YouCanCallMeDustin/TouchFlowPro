@@ -82,7 +82,7 @@ const TypingTest: React.FC<Props> = ({
         setLiveWPM(0);
         if (timeLimit) setTimeLeft(timeLimit * 60);
         startTimeRef.current = null;
-        inputRef.current?.focus();
+        inputRef.current?.focus({ preventScroll: true });
     };
 
     useEffect(() => {
@@ -143,7 +143,7 @@ const TypingTest: React.FC<Props> = ({
     }, [userInput, text, metrics, keystrokes, onComplete, isFailed]);
 
     useEffect(() => {
-        inputRef.current?.focus();
+        inputRef.current?.focus({ preventScroll: true });
     }, []);
 
     const { settings } = useSettings();
@@ -157,11 +157,51 @@ const TypingTest: React.FC<Props> = ({
             startTimeRef.current = Date.now();
         }
 
+        if (e.key.length === 1 && (e.ctrlKey || e.metaKey)) {
+            return;
+        }
+
+        if (e.key === 'Backspace' && (e.ctrlKey || e.altKey || e.metaKey)) {
+            e.preventDefault();
+            let deleteCount = 0;
+            // Ctrl/Alt/Meta + Backspace deletes the previous word
+            let i = userInput.length - 1;
+            while (i >= 0 && userInput[i] === ' ') {
+                deleteCount++;
+                i--;
+            }
+            while (i >= 0 && userInput[i] !== ' ') {
+                deleteCount++;
+                i--;
+            }
+            if (deleteCount === 0 && userInput.length > 0) deleteCount = 1;
+
+            if (deleteCount > 0) {
+                const newEvents: KeystrokeEvent[] = Array.from({ length: deleteCount }).map((_, idx) => ({
+                    keyCode: 'Backspace',
+                    key: 'Backspace',
+                    eventType: 'keydown',
+                    timestamp: Date.now() + idx,
+                    expectedKey: 'Backspace'
+                }));
+                const updatedKeystrokes = [...keystrokes, ...newEvents];
+                setKeystrokes(updatedKeystrokes);
+                setUserInput(prev => prev.slice(0, -deleteCount));
+                setMetrics(TypingEngine.calculateMetrics(updatedKeystrokes, text));
+                soundManager.playType();
+            }
+            return;
+        }
+
         if (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Shift') {
-            const isCorrect = e.key === text[userInput.length];
+            let typedKey = e.key;
+            if (typedKey === '“' || typedKey === '”') typedKey = '"';
+            if (typedKey === '‘' || typedKey === '’') typedKey = "'";
+
+            const isCorrect = typedKey === text[userInput.length];
 
 
-            if (suddenDeath && !isCorrect && e.key !== 'Backspace' && e.key !== 'Shift') {
+            if (suddenDeath && !isCorrect && typedKey !== 'Backspace' && typedKey !== 'Shift') {
                 soundManager.playError();
                 setIsFailed(true);
                 onSuddenDeathFailure?.();
@@ -170,8 +210,8 @@ const TypingTest: React.FC<Props> = ({
             }
 
             // Sound Feedback
-            if (e.key !== 'Shift') {
-                if (isCorrect || e.key === 'Backspace') {
+            if (typedKey !== 'Shift') {
+                if (isCorrect || typedKey === 'Backspace') {
                     soundManager.playType();
                 } else {
                     soundManager.playError();
@@ -180,17 +220,17 @@ const TypingTest: React.FC<Props> = ({
 
             const event: KeystrokeEvent = {
                 keyCode: e.code,
-                key: e.key,
+                key: typedKey,
                 eventType: 'keydown',
                 timestamp: Date.now(),
-                expectedKey: e.key === 'Shift' ? 'Shift' : text[userInput.length]
+                expectedKey: typedKey === 'Shift' ? 'Shift' : text[userInput.length]
             };
 
             const updatedKeystrokes = [...keystrokes, event];
             setKeystrokes(updatedKeystrokes);
 
             // Only update typing metrics for character keys and backspace
-            if (e.key !== 'Shift') {
+            if (typedKey !== 'Shift') {
                 const newMetrics = TypingEngine.calculateMetrics(updatedKeystrokes, text);
                 setMetrics(newMetrics);
             }
