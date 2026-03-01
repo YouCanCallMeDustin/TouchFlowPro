@@ -17,7 +17,6 @@ import {
     Settings as SettingsIcon,
     LogOut,
     User as UserIcon,
-    Home,
     Briefcase,
     Stethoscope,
     Scale
@@ -144,19 +143,26 @@ export const Header: React.FC<HeaderProps> = ({
                     {/* DESKTOP ACTIONS (md+) */}
                     <div className="hidden md:flex items-center gap-4 sm:gap-8">
                         {!user ? (
-                            <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-6">
+                                <button
+                                    onClick={() => setStage('free_test')}
+                                    className="hidden md:flex items-center gap-1.5 px-0 text-xs font-black text-text-muted hover:text-white uppercase tracking-widest transition-colors py-2 border-b-2 border-transparent hover:border-white/20"
+                                >
+                                    <Zap size={14} className="text-secondary" />
+                                    Free Test
+                                </button>
                                 <button
                                     onClick={() => setStage('auth_login')}
-                                    className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted hover:text-primary transition-colors whitespace-nowrap"
+                                    className="hidden md:block text-xs font-black text-text-muted hover:text-white uppercase tracking-widest transition-colors px-2 py-2 border-b-2 border-transparent hover:border-white/20"
                                 >
                                     Login
                                 </button>
-                                <button
+                                <Button
                                     onClick={() => setStage('auth_signup')}
-                                    className="px-5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.2em] hover:bg-white/10 transition-all active:scale-95 whitespace-nowrap"
+                                    className="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-primary/20 hover:scale-105 transition-transform"
                                 >
-                                    Sign Up
-                                </button>
+                                    Join Waitlist
+                                </Button>
                             </div>
                         ) : (
                             <>
@@ -287,34 +293,30 @@ export const Header: React.FC<HeaderProps> = ({
 
                             <div className="flex-1 flex flex-col gap-6 overflow-y-auto pb-8">
                                 {!user ? (
-                                    // GUEST MENU
-                                    <div className="flex flex-col gap-4">
+                                    <div className="flex flex-col gap-4 mt-8">
                                         <Button
-                                            onClick={() => { setStage('welcome'); setIsMenuOpen(false); }}
-                                            className="justify-start text-left bg-transparent border-0 hover:bg-white/5 p-4 h-auto"
+                                            onClick={() => { setStage('free_test'); setIsMenuOpen(false); }}
+                                            className="w-full justify-start text-left bg-transparent border border-secondary/20 hover:bg-secondary/10 p-4 h-auto"
                                         >
-                                            <Home className="mr-3" size={18} />
-                                            <span className="font-bold uppercase tracking-wider text-sm">Home</span>
-                                        </Button>
-                                        <Button
-                                            onClick={() => { setStage('pricing'); setIsMenuOpen(false); }}
-                                            className="justify-start text-left bg-transparent border-0 hover:bg-white/5 p-4 h-auto"
-                                        >
-                                            <Zap className="mr-3" size={18} />
-                                            <span className="font-bold uppercase tracking-wider text-sm">Pricing</span>
+                                            <div className="w-8 flex items-center justify-center">
+                                                <Zap className="text-secondary" size={18} />
+                                            </div>
+                                            <span className="font-bold uppercase tracking-wider text-[11px] text-white">Free Test</span>
                                         </Button>
                                         <Button
                                             onClick={() => { setStage('auth_login'); setIsMenuOpen(false); }}
-                                            variant="outline"
-                                            className="w-full justify-center mt-4 border-white/10"
+                                            className="w-full justify-start text-left bg-transparent border border-white/10 hover:bg-white/5 p-4 h-auto"
                                         >
-                                            LOGIN
+                                            <div className="w-8 flex items-center justify-center">
+                                                <UserIcon className="text-text-muted" size={18} />
+                                            </div>
+                                            <span className="font-bold uppercase tracking-wider text-[11px] text-slate-300">Login</span>
                                         </Button>
                                         <Button
                                             onClick={() => { setStage('auth_signup'); setIsMenuOpen(false); }}
-                                            className="w-full justify-center"
+                                            className="w-full p-4 h-auto rounded-xl font-black uppercase tracking-widest text-[11px] shadow-xl shadow-primary/20"
                                         >
-                                            SIGN UP
+                                            Join Waitlist
                                         </Button>
                                     </div>
                                 ) : (

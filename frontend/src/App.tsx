@@ -55,8 +55,9 @@ import { Header } from './components/Header';
 import { MedicalTrack } from './pages/MedicalTrack';
 import { LegalTrack } from './pages/LegalTrack';
 import { CodeTrack } from './pages/CodeTrack';
+import FreeTypingTest from './pages/FreeTypingTest';
 
-export type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension' | 'games' | 'games_accuracy_assassin' | 'games_burner_burst' | 'games_spell_rush' | 'orgs' | 'settings' | 'sample_report' | 'medicalTrack' | 'legalTrack' | 'codingTrack'
+export type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension' | 'games' | 'games_accuracy_assassin' | 'games_burner_burst' | 'games_spell_rush' | 'orgs' | 'settings' | 'sample_report' | 'medicalTrack' | 'legalTrack' | 'codingTrack' | 'free_test'
 
 function App() {
   const { user, loading, logout } = useAuth()
@@ -124,7 +125,10 @@ function App() {
       if (user) {
         fetchProgress(user.id)
       } else {
-        setStage('welcome')
+        // Only override state if we aren't explicitly on a public route
+        if (stage !== 'free_test') {
+          setStage('welcome')
+        }
       }
     }
   }, [user, loading, fetchProgress])
@@ -426,7 +430,14 @@ function App() {
                 <LandingPage
                   onStartAssessment={() => setStage('assessment')}
                   onViewSampleReport={() => setStage('sample_report')}
+                  onStartFreeTest={() => setStage('free_test')}
                 />
+              </PageTransition>
+            )}
+
+            {stage === 'free_test' && (
+              <PageTransition key="free_test">
+                <FreeTypingTest onNavigate={(s) => setStage(s as Stage)} />
               </PageTransition>
             )}
 

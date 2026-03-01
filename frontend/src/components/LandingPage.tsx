@@ -24,6 +24,7 @@ import { FeatureCard } from './Landing/FeatureCard';
 interface LandingPageProps {
     onStartAssessment: () => void;
     onViewSampleReport: () => void;
+    onStartFreeTest: () => void;
 }
 
 const containerVariants: Variants = {
@@ -115,7 +116,7 @@ const AccordionItem: React.FC<{ question: string; answer: string }> = ({ questio
     );
 };
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onViewSampleReport }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onViewSampleReport, onStartFreeTest }) => {
     return (
         <div className="w-full">
             {/* 1) HERO */}
@@ -144,7 +145,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
 
                     <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
                         <Button
-                            onClick={onStartAssessment}
+                            onClick={onStartFreeTest}
                             className="w-full sm:w-auto px-12 py-7 rounded-2xl font-black uppercase tracking-[0.3em] text-[13px] shadow-[0_20px_50px_rgba(var(--primary-rgb),0.3)] group relative overflow-hidden"
                         >
                             Start Free (Takes 60 seconds)
@@ -273,7 +274,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                     </div>
                     <div className="mt-20 text-center">
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                            <Button onClick={onStartAssessment} className="px-12 py-5 rounded-2xl font-black uppercase tracking-[0.3em] text-[11px]">
+                            <Button onClick={onStartFreeTest} className="px-12 py-5 rounded-2xl font-black uppercase tracking-[0.3em] text-[11px]">
                                 Start Free
                             </Button>
                             <button
@@ -463,7 +464,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                     </p>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
                         <Button
-                            onClick={onStartAssessment}
+                            onClick={onStartFreeTest}
                             className="w-full sm:w-auto px-16 py-7 rounded-2xl font-black uppercase tracking-[0.4em] text-[13px] shadow-2xl shadow-primary/30"
                         >
                             Start Free
