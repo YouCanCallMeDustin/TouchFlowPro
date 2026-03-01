@@ -27,12 +27,32 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "TouchFlow Pro",
-    "url": "https://touchflowpro.com",
-    "logo": "https://touchflowpro.com/logo.png",
-    "description": "Professional typing performance training system focused on accuracy, endurance, and measurable improvement.",
-    "sameAs": []
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://touchflowpro.com/#organization",
+        "name": "TouchFlow Pro",
+        "url": "https://touchflowpro.com",
+        "logo": "https://touchflowpro.com/logo.png",
+        "description": "Professional typing performance training system focused on accuracy, endurance, and measurable improvement."
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": "https://touchflowpro.com/#software",
+        "name": "TouchFlow Pro",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "WebBrowser",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "Professional-grade typing performance training for serious typists. Includes keystroke analytics, medical and legal career tracks, and deliberate practice drills.",
+        "creator": {
+          "@id": "https://touchflowpro.com/#organization"
+        }
+      }
+    ]
   }
   </script>
 </head>
