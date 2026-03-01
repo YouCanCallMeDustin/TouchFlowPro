@@ -49,6 +49,11 @@ router.get('/', (_req: Request, res: Response, next) => {
                 <p style="color:#94a3b8; font-size:0.95rem; margin-bottom:1rem;">A complete guide to the fundamentals needed to hit the golden 60 words per minute benchmark.</p>
                 <a href="https://touchflowpro.com/how-to-type-60-wpm" style="color:#6366f1; text-decoration:none; font-weight:600;">Read More &rarr;</a>
             </div>
+            <div style="flex: 1 1 300px; background:#1a2236; padding:1.5rem; border-radius:12px; border:1px solid #1e293b;">
+                <h3 style="color:#818cf8; font-size:1.2rem; margin-top:0; margin-bottom:0.8rem;">Medical Typing Test</h3>
+                <p style="color:#94a3b8; font-size:0.95rem; margin-bottom:1rem;">Evaluate your healthcare typing speed with real-world clinical documentation and pharmacology terminology.</p>
+                <a href="https://touchflowpro.com/medical-transcription-typing-test" style="color:#6366f1; text-decoration:none; font-weight:600;">Read More &rarr;</a>
+            </div>
         </div>
       </div>
     </section>
@@ -85,6 +90,7 @@ const SEO_PAGES: { slug: string; lastmod: string; priority: string }[] = [
     { slug: 'how-to-improve-typing-accuracy', lastmod: '2026-02-21', priority: '0.8' },
     { slug: 'what-is-a-good-typing-speed', lastmod: '2026-02-21', priority: '0.7' },
     { slug: 'how-to-type-60-wpm', lastmod: '2026-03-01', priority: '0.8' },
+    { slug: 'medical-transcription-typing-test', lastmod: '2026-03-01', priority: '0.8' },
 ];
 
 // Resolve the directory containing SEO HTML files.
@@ -161,6 +167,10 @@ router.get('/what-is-a-good-typing-speed', (_req: Request, res: Response) => {
 
 router.get('/how-to-type-60-wpm', (_req: Request, res: Response) => {
     res.sendFile(path.resolve(__dirname, '../seo/how-to-type-60-wpm.html'));
+});
+
+router.get('/medical-transcription-typing-test', (_req: Request, res: Response) => {
+    res.sendFile(path.resolve(__dirname, '../seo/medical-transcription-typing-test.html'));
 });
 
 export default router;
