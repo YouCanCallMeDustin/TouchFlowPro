@@ -121,10 +121,18 @@ function App() {
   // Sync stage from Back/Forward navigation
   useEffect(() => {
     const matchedStage = ROUTE_STAGES[location.pathname];
-    if (matchedStage && matchedStage !== stage) {
-      setStage(matchedStage);
+    if (matchedStage) {
+      setStage(prevStage => {
+        // If we're at 'dashboard', and the URL is '/', that means we intentionally
+        // sent them to the dashboard while keeping the clean root URL.
+        if (prevStage === 'dashboard' && location.pathname === '/') return prevStage;
+
+        // Also don't revert to mapped route if they purposely opened an unmapped sub-app view
+        // like auth_login (because they clicked a button) unless they are really hitting back
+        return prevStage !== matchedStage ? matchedStage : prevStage;
+      });
     }
-  }, [location.pathname, stage]);
+  }, [location.pathname]);
 
   const fetchProgress = useCallback(async (id: string) => {
     setIsFetchingProgress(true)
@@ -155,6 +163,7 @@ function App() {
       }
     } catch (error) {
       console.error('Failed to fetch progress:', error)
+      setStage('welcome')
     } finally {
       setIsFetchingProgress(false)
     }
@@ -163,6 +172,8 @@ function App() {
   useEffect(() => {
     if (!loading) {
       if (user) {
+        // If they are on a mapped route like '/' (welcome), but they are logged in,
+        // fetchProgress will bump them to 'dashboard'.
         fetchProgress(user.id)
       } else {
         // Only override state if we aren't explicitly on a public route

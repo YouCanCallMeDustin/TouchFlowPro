@@ -168,7 +168,7 @@ export const Header: React.FC<HeaderProps> = ({
                                     onClick={() => setStage('auth_signup')}
                                     className="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-primary/20 hover:scale-105 transition-transform"
                                 >
-                                    Join Waitlist
+                                    Register
                                 </Button>
                             </div>
                         ) : (
@@ -324,7 +324,7 @@ export const Header: React.FC<HeaderProps> = ({
                                             onClick={() => { setStage('auth_signup'); setIsMenuOpen(false); }}
                                             className="w-full p-4 h-auto rounded-xl font-black uppercase tracking-widest text-[11px] shadow-xl shadow-primary/20"
                                         >
-                                            Join Waitlist
+                                            Register
                                         </Button>
                                     </div>
                                 ) : (
