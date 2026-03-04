@@ -4,7 +4,6 @@ import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import {
-    Zap,
     ArrowRight,
     Activity,
     Brain,
@@ -134,8 +133,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                     className="max-w-4xl w-full text-center relative z-10"
                 >
                     <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8 backdrop-blur-sm">
-                        <Zap size={14} className="text-primary fill-primary" />
-                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">System Overload Detected: Speed vs Accuracy</span>
+                        <Activity size={14} className="text-primary" />
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">Precision Typing For Professionals</span>
                     </motion.div>
 
                     <motion.h1 variants={itemVariants} className="text-5xl md:text-[5.5rem] font-black mb-6 leading-[0.9] tracking-tighter uppercase italic text-text-main">

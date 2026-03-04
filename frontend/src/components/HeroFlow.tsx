@@ -14,7 +14,7 @@ const KEYWORDS = [
 
 const MarqueeRow: React.FC<{ words: string[], direction?: 'left' | 'right', speed?: number }> = ({ words, direction = 'left', speed = 20 }) => {
     return (
-        <div className="flex overflow-hidden select-none gap-8 py-4 opacity-5">
+        <div className="flex overflow-hidden select-none gap-8 py-4 opacity-[0.02]">
             <motion.div
                 initial={{ x: direction === 'left' ? 0 : "-50%" }}
                 animate={{ x: direction === 'left' ? "-50%" : 0 }}
