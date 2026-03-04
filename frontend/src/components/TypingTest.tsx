@@ -3,13 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { TypingEngine } from '@shared/typingEngine';
 import type { KeystrokeEvent, TypingMetrics, LiveMetrics } from '@shared/types';
 import { DictationUI } from './DictationMode';
-import { VirtualKeyboard } from './VirtualKeyboard';
 import { soundManager } from '../utils/soundManager';
 import { useSettings } from '../context/SettingsContext';
 
 interface Props {
     text: string;
-    onComplete?: (metrics: TypingMetrics, keystrokes: KeystrokeEvent[]) => void;
+    onComplete?: (metrics: TypingMetrics, keystrokes: KeystrokeEvent[], finalInput?: string) => void;
     suddenDeath?: boolean;
     onSuddenDeathFailure?: () => void;
     dictationMode?: boolean;
@@ -94,9 +93,9 @@ const TypingTest: React.FC<Props> = ({
     // Force finish handler
     useEffect(() => {
         if (props.forceFinish && isStarted && !isFailed) {
-            onComplete?.(metrics, keystrokes);
+            onComplete?.(metrics, keystrokes, userInput);
         }
-    }, [props.forceFinish, isStarted, isFailed, metrics, keystrokes, onComplete]);
+    }, [props.forceFinish, isStarted, isFailed, metrics, keystrokes, userInput, onComplete]);
 
     useEffect(() => {
         if (isStarted && startTimeRef.current && !isFailed) {
@@ -113,7 +112,7 @@ const TypingTest: React.FC<Props> = ({
                     if (remaining <= 0) {
                         // Time's up!
                         clearInterval(interval);
-                        onComplete?.(metrics, keystrokes);
+                        onComplete?.(metrics, keystrokes, userInput);
                     }
                 }
 
@@ -138,7 +137,7 @@ const TypingTest: React.FC<Props> = ({
 
     useEffect(() => {
         if (userInput.length === text.length && text.length > 0 && !isFailed) {
-            onComplete?.(metrics, keystrokes);
+            onComplete?.(metrics, keystrokes, userInput);
         }
     }, [userInput, text, metrics, keystrokes, onComplete, isFailed]);
 
@@ -211,7 +210,7 @@ const TypingTest: React.FC<Props> = ({
 
             // Sound Feedback
             if (typedKey !== 'Shift') {
-                if (isCorrect || typedKey === 'Backspace') {
+                if (dictationMode || isCorrect || typedKey === 'Backspace') {
                     soundManager.playType();
                 } else {
                     soundManager.playError();
@@ -447,27 +446,14 @@ const TypingTest: React.FC<Props> = ({
                             ${isStarted ? 'bg-primary/5 border-primary/30 shadow-inner' : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-white/10'}
                         `}>
                             <span className={`text-[10px] font-black uppercase tracking-[0.2em] ${isStarted ? 'text-primary' : 'text-text-muted opacity-50 animate-pulse'}`}>
-                                {isStarted ? 'Sequence in Progress...' : 'Press any key to begin session'}
+                                {isStarted ? 'Sequence in Progress...' : (dictationMode ? 'Press CTRL + ENTER to play audio or type to begin' : 'Click here and begin typing')}
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Virtual Keyboard Bridge */}
-            {showVirtualKeyboard && (
-                <motion.div
-                    initial={settings?.reduceMotion ? false : { opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    className="card p-4 bg-slate-900/[0.02] dark:bg-white/[0.02]"
-                >
-                    <VirtualKeyboard
-                        nextKey={text[userInput.length]}
-                        showFingerGuide={true}
-                        compact={true}
-                    />
-                </motion.div>
-            )}
+
 
             {!isStarted && !isFailed && (
                 <div className="flex justify-center gap-8">

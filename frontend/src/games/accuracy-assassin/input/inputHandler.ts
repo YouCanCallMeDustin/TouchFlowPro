@@ -90,7 +90,10 @@ export function attachInputHandler(opts: InputHandlerOptions): () => void {
             // Only process printable single characters
             if (e.key.length === 1) {
                 e.preventDefault();
-                engine.handleChar(e.key);
+                let typedKey = e.key;
+                if (typedKey === '“' || typedKey === '”') typedKey = '"';
+                if (typedKey === '‘' || typedKey === '’') typedKey = "'";
+                engine.handleChar(typedKey);
             }
         }
     };

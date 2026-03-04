@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ShieldAlert, Activity, ArrowRight, Play, BookOpen, Clock, Target, Layers } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { getMedicalDrillsBySpecialty } from '@shared/tracks/medical';
 import { useAuth } from '../context/AuthContext';
@@ -76,6 +77,10 @@ export const MedicalTrack: React.FC<MedicalTrackProps> = ({ setStage, setLaunchP
 
     return (
         <div className="max-w-6xl mx-auto px-4 py-8">
+            <Helmet>
+                <title>Medical Typing Practice & Terminology Drills - TouchFlow Pro</title>
+                <meta name="description" content="Master specialized healthcare terminology and clinical documentation with our Medical Typing Practice engine. Improve speed and accuracy on SOAP notes and medical syntax." />
+            </Helmet>
             <div className="flex items-center justify-between mb-8">
                 <div>
                     <h1 className="text-3xl font-black uppercase text-text-main flex items-center gap-3">

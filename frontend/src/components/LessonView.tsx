@@ -10,11 +10,11 @@ import {
     AlertOctagon
 } from 'lucide-react';
 import TypingTest from './TypingTest';
-import VisualKeyboard from './VisualKeyboard';
 import type { Lesson } from '@shared/curriculum';
 import type { TypingMetrics, KeystrokeEvent } from '@shared/types';
 import AchievementCelebration from './AchievementCelebration';
 import { apiFetch } from '../utils/api';
+import { computeDiff } from '@shared/diff';
 import { Card } from './ui/Card';
 import { Button } from './ui/Button';
 import { useLaunchStore } from '../state/launchStore';
@@ -39,6 +39,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
     const [practiceText, setPracticeText] = useState<string>(lesson.content);
     const [adaptiveText, setAdaptiveText] = useState<string>('');
     const [keystrokes, setKeystrokes] = useState<KeystrokeEvent[]>([]);
+    const [finalUserInput, setFinalUserInput] = useState<string>('');
     const [warmupStepIndex, setWarmupStepIndex] = useState(0);
     const [showWarmupStepInsight, setShowWarmupStepInsight] = useState(false);
     const [warmupStepMetrics, setWarmupStepMetrics] = useState<TypingMetrics | null>(null);
@@ -123,11 +124,25 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
         }
     };
 
-    const handlePracticeComplete = async (metrics: TypingMetrics, ks: KeystrokeEvent[]) => {
-        const didPass = metrics.accuracy >= lesson.masteryThreshold;
+    const handlePracticeComplete = async (metrics: TypingMetrics, ks: KeystrokeEvent[], finalInput?: string) => {
+        // RE-CALCULATE ACCURACY based on LCS for the final report to prevent "index-shifted" fails
+        if (finalInput) {
+            const diff = computeDiff(practiceText, finalInput);
+            const correctChars = diff.filter(d => d.type === 'correct').length;
+            const totalExpected = practiceText.length;
+            // More forgiving accuracy for the results page
+            const alignedAccuracy = Math.round((correctChars / totalExpected) * 1000) / 10;
+            metrics.accuracy = alignedAccuracy;
+            // Also adjust WPM if it was severely penalized
+            if (metrics.netWPM < metrics.grossWPM * 0.2) {
+                metrics.netWPM = Math.round(((correctChars / 5) / (metrics.durationMs / 60000)) * 10) / 10;
+            }
+        }
+
         setTestMetrics(metrics);
         setKeystrokes(ks);
-        setPassed(didPass);
+        setFinalUserInput(finalInput || '');
+        setPassed(metrics.accuracy >= lesson.masteryThreshold);
         setIsAdaptiveResult(false);
         setMode('results');
 
@@ -145,12 +160,23 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
         }
     };
 
-    const handleTestComplete = (metrics: TypingMetrics, ks: KeystrokeEvent[]) => {
-        // ... (Logic same as before, see original file, will paste implementation)
-        const didPass = metrics.accuracy >= lesson.masteryThreshold;
+    const handleTestComplete = (metrics: TypingMetrics, ks: KeystrokeEvent[], finalInput?: string) => {
+        // RE-CALCULATE ACCURACY based on LCS
+        if (finalInput) {
+            const diff = computeDiff(lesson.content, finalInput);
+            const correctChars = diff.filter(d => d.type === 'correct').length;
+            const totalExpected = lesson.content.length;
+            const alignedAccuracy = Math.round((correctChars / totalExpected) * 1000) / 10;
+            metrics.accuracy = alignedAccuracy;
+            if (metrics.netWPM < metrics.grossWPM * 0.2) {
+                metrics.netWPM = Math.round(((correctChars / 5) / (metrics.durationMs / 60000)) * 10) / 10;
+            }
+        }
+
         setTestMetrics(metrics);
         setKeystrokes(ks);
-        setPassed(didPass);
+        setFinalUserInput(finalInput || '');
+        setPassed(metrics.accuracy >= lesson.masteryThreshold);
         setIsAdaptiveResult(false);
 
         if (metrics.errorMap && Object.keys(metrics.errorMap).length > 0) {
@@ -313,13 +339,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                                 "{lesson.theory || "Focus on maintaining even pressure and a steady rhythm. Precision in your finger placement now builds the foundation for elite speeds later."}"
                             </p>
                         </div>
-                        <div className="text-left">
-                            <div className="flex items-center gap-2 mb-2">
-                                <Settings size={12} className="text-primary opacity-40" />
-                                <h4 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em]">Primary Focus Array</h4>
-                            </div>
-                            <VisualKeyboard highlightKeys={lesson.focusKeys} />
-                        </div>
+
                     </div>
                     <div className="flex justify-center">
                         <Button
@@ -354,12 +374,8 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                                 text={currentWarmup.text}
                                 onComplete={handleWarmupComplete}
                                 showLiveMetrics={enhancedModeEnabled}
-                                showVirtualKeyboard={enhancedModeEnabled}
+                                showVirtualKeyboard={false}
                             />
-                            <div className="mt-6">
-                                <div className="text-[9px] font-black text-text-muted uppercase tracking-[0.3em] mb-4 text-center opacity-40">Focus Key Map</div>
-                                <VisualKeyboard highlightKeys={lesson.focusKeys} />
-                            </div>
                         </>
                     ) : (
                         <div className="card border border-slate-200/60 dark:border-white/5 text-center animate-in zoom-in-95 duration-500 relative overflow-hidden p-8">
@@ -428,7 +444,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                         suddenDeath={suddenDeathEnabled}
                         dictationMode={dictationEnabled}
                         showLiveMetrics={enhancedModeEnabled}
-                        showVirtualKeyboard={enhancedModeEnabled}
+                        showVirtualKeyboard={false}
                         // If using plan timer, we DISABLE internal timer of TypingTest (pass undefined)
                         timeLimit={isPlanLauncher ? undefined : timeLimit}
                         forceFinish={forceFinishTest}
@@ -446,7 +462,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                         onComplete={handleTestComplete}
                         dictationMode={dictationEnabled}
                         showLiveMetrics={enhancedModeEnabled}
-                        showVirtualKeyboard={enhancedModeEnabled}
+                        showVirtualKeyboard={false}
                         mode={lesson.category === 'Code' || lesson.category === 'Programming' ? 'code' : undefined}
                         drillId={lesson.id}
                     />
@@ -476,7 +492,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                     )}
 
                     {/* Stats Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6 px-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 px-2 mb-8">
                         <div className="bg-slate-500/5 dark:bg-white/5 border border-slate-200/50 dark:border-white/5 p-3 rounded-[1rem]">
                             <div className="text-[9px] font-black text-text-muted uppercase tracking-[0.3em] mb-2 opacity-40">Net Speed</div>
                             <div className="text-2xl sm:text-3xl font-black text-text-main mb-1 tracking-tighter">{testMetrics.netWPM}</div>
@@ -490,6 +506,50 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                             <div className="text-2xl sm:text-3xl font-black text-text-main mb-1 tracking-tighter">{testMetrics.totalMistakes}</div>
                         </div>
                     </div>
+
+                    {/* Detailed Transcript Comparison */}
+                    {finalUserInput && (
+                        <div className="bg-slate-900/50 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 p-6 rounded-3xl mb-10 text-left relative overflow-hidden shadow-inner max-w-4xl mx-auto">
+                            <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-4 opacity-50 flex items-center gap-2">
+                                <AlertOctagon size={12} className="text-accent" /> Transcript Breakdown
+                            </h3>
+                            <div className="text-base sm:text-lg font-mono leading-relaxed whitespace-pre-wrap break-words opacity-90 overflow-y-auto max-h-[400px] scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent pr-4">
+                                {(() => {
+                                    const diff = computeDiff(practiceText, finalUserInput);
+                                    return diff.map((bit, index) => {
+                                        if (bit.type === 'correct') {
+                                            return <span key={index} className="text-text-main">{bit.char}</span>;
+                                        }
+                                        if (bit.type === 'missing') {
+                                            const display = bit.char === ' ' ? '␣' : bit.char;
+                                            return (
+                                                <span key={index} className="relative inline-block mx-0.5 group">
+                                                    <span className="text-rose-500/40 border-b border-rose-500/30 font-black">{display}</span>
+                                                    <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block bg-slate-900 text-white text-[10px] font-black rounded px-2 py-1 z-50 whitespace-nowrap">
+                                                        Missing Character
+                                                    </span>
+                                                </span>
+                                            );
+                                        }
+                                        if (bit.type === 'extra' || bit.type === 'incorrect') {
+                                            const display = bit.char === ' ' ? '␣' : bit.char;
+                                            return (
+                                                <span key={index} className="relative inline-block mx-0.5 group">
+                                                    <span className="bg-rose-500/20 text-rose-500 font-black rounded px-0.5 border-b-2 border-rose-500/50">
+                                                        {display}
+                                                    </span>
+                                                    <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block bg-slate-900 text-white text-[10px] font-black rounded px-2 py-1 z-50 whitespace-nowrap">
+                                                        {bit.type === 'extra' ? 'Extra character' : `Expected: ${bit.expected === ' ' ? 'Space' : bit.expected}`}
+                                                    </span>
+                                                </span>
+                                            );
+                                        }
+                                        return null;
+                                    });
+                                })()}
+                            </div>
+                        </div>
+                    )}
 
                     <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-3xl mx-auto">
                         <Button onClick={handleFinish} className="px-6 py-6 rounded-xl font-black text-[10px] uppercase tracking-[0.3em] shadow-lg shadow-primary/40 hover:scale-105 active:scale-95 transition-all flex-1">

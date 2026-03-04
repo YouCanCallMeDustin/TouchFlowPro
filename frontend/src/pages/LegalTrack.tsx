@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ShieldAlert, Activity, Play, BookOpen, Clock, Target, Layers } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { getLegalDrillsBySpecialty } from '@shared/tracks/legal';
 import { useAuth } from '../context/AuthContext';
@@ -76,6 +77,10 @@ export const LegalTrack: React.FC<LegalTrackProps> = ({ setStage, setLaunchParam
 
     return (
         <div className="max-w-6xl mx-auto px-4 py-8">
+            <Helmet>
+                <title>Legal Typing Practice & Terminology Drills - TouchFlow Pro</title>
+                <meta name="description" content="Master specialized legal terminology and documentation. Practice typing speed and accuracy for corporate law, contracts, litigation, and real estate documents." />
+            </Helmet>
             <div className="flex items-center justify-between mb-8">
                 <div>
                     <h1 className="text-3xl font-black uppercase text-text-main flex items-center gap-3">

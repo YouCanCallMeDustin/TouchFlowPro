@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Menu,
@@ -131,12 +132,18 @@ export const Header: React.FC<HeaderProps> = ({
 
                     {/* LOGO AREA */}
                     <div className="flex items-center gap-8">
-                        <img
-                            src={`${import.meta.env.BASE_URL}logo.png`}
-                            alt="TouchFlow Pro"
-                            className="h-10 w-auto cursor-pointer active:scale-95 transition-all hover:brightness-110"
-                            onClick={() => user ? setStage('dashboard') : setStage('welcome')}
-                        />
+                        <Link to="/" onClick={(e) => {
+                            if (user) {
+                                e.preventDefault();
+                                setStage('dashboard');
+                            }
+                        }}>
+                            <img
+                                src={`${import.meta.env.BASE_URL}logo.png`}
+                                alt="TouchFlow Pro"
+                                className="h-10 w-auto cursor-pointer active:scale-95 transition-all hover:brightness-110"
+                            />
+                        </Link>
                         <div className="h-6 w-px bg-slate-200 dark:bg-white/10 hidden sm:block" />
                     </div>
 
@@ -144,13 +151,13 @@ export const Header: React.FC<HeaderProps> = ({
                     <div className="hidden md:flex items-center gap-4 sm:gap-8">
                         {!user ? (
                             <div className="flex items-center gap-6">
-                                <button
-                                    onClick={() => setStage('free_test')}
+                                <Link
+                                    to="/free-typing-test"
                                     className="hidden md:flex items-center gap-1.5 px-0 text-xs font-black text-text-muted hover:text-white uppercase tracking-widest transition-colors py-2 border-b-2 border-transparent hover:border-white/20"
                                 >
                                     <Zap size={14} className="text-secondary" />
                                     Free Test
-                                </button>
+                                </Link>
                                 <button
                                     onClick={() => setStage('auth_login')}
                                     className="hidden md:block text-xs font-black text-text-muted hover:text-white uppercase tracking-widest transition-colors px-2 py-2 border-b-2 border-transparent hover:border-white/20"
@@ -294,15 +301,16 @@ export const Header: React.FC<HeaderProps> = ({
                             <div className="flex-1 flex flex-col gap-6 overflow-y-auto pb-8">
                                 {!user ? (
                                     <div className="flex flex-col gap-4 mt-8">
-                                        <Button
-                                            onClick={() => { setStage('free_test'); setIsMenuOpen(false); }}
-                                            className="w-full justify-start text-left bg-transparent border border-secondary/20 hover:bg-secondary/10 p-4 h-auto"
+                                        <Link
+                                            to="/free-typing-test"
+                                            onClick={() => setIsMenuOpen(false)}
+                                            className="w-full flex justify-start items-center text-left bg-transparent border border-secondary/20 hover:bg-secondary/10 p-4 h-auto rounded-[var(--radius)]"
                                         >
                                             <div className="w-8 flex items-center justify-center">
                                                 <Zap className="text-secondary" size={18} />
                                             </div>
                                             <span className="font-bold uppercase tracking-wider text-[11px] text-white">Free Test</span>
-                                        </Button>
+                                        </Link>
                                         <Button
                                             onClick={() => { setStage('auth_login'); setIsMenuOpen(false); }}
                                             className="w-full justify-start text-left bg-transparent border border-white/10 hover:bg-white/5 p-4 h-auto"

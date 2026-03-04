@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+# Disallow internal authenticated routes from being indexed (if any get linked somehow)
+Disallow: /dashboard
+Disallow: /analytics
+Disallow: /profile
+
+Sitemap: https://touchflowpro.com/sitemap.xml

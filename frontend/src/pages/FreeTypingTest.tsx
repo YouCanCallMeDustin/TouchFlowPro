@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import TypingTest from '../components/TypingTest';
 import { PlacementEngine } from '@shared/placement';
 import type { TypingMetrics, KeystrokeEvent } from '@shared/types';
@@ -35,6 +36,10 @@ export const FreeTypingTest: React.FC<FreeTypingTestProps> = ({ onNavigate }) =>
 
     return (
         <div className="min-h-screen py-12 px-4 flex flex-col items-center">
+            <Helmet>
+                <title>Free Online Typing Speed Test - TouchFlow Pro</title>
+                <meta name="description" content="Test your typing speed and accuracy for free with our 1-Minute Speed Test. Determine your baseline WPM and find your performance tier." />
+            </Helmet>
 
             {!result ? (
                 <div className="w-full max-w-4xl mx-auto">

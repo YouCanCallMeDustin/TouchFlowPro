@@ -31,10 +31,15 @@ const Game: React.FC = () => {
             } else if (e.key === ' ') {
                 e.preventDefault(); // prevent scroll
                 state.shuffleGrid();
-            } else if (e.key.length === 1 && /^[a-zA-Z]$/.test(e.key)) {
+            } else if (e.key.length === 1 && /^[a-zA-Z"']$/.test(e.key) || e.key === '“' || e.key === '”' || e.key === '‘' || e.key === '’') {
                 // If CTRL/ALT/META is pressed, ignore?
                 if (e.ctrlKey || e.altKey || e.metaKey) return;
-                state.handleKeyboardInput(e.key);
+
+                let typedKey = e.key;
+                if (typedKey === '“' || typedKey === '”') typedKey = '"';
+                if (typedKey === '‘' || typedKey === '’') typedKey = "'";
+
+                state.handleKeyboardInput(typedKey);
             }
         };
 

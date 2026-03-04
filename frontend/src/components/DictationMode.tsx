@@ -46,6 +46,7 @@ interface DictationUIProps {
 
 export const DictationUI: React.FC<DictationUIProps> = ({ text, isStarted, userInput, onSpeedChange, currentSpeed, drillId }) => {
     const [showPeek, setShowPeek] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(false);
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     // Initialize audio
@@ -62,15 +63,60 @@ export const DictationUI: React.FC<DictationUIProps> = ({ text, isStarted, userI
         };
     }, [drillId]);
 
-    // Handle play/pause based on isStarted
+    // Sync with isStarted
     useEffect(() => {
-        if (isStarted && audioRef.current) {
-            audioRef.current.play().catch(e => console.error("Audio play failed", e));
-        } else if (!isStarted && audioRef.current) {
-            audioRef.current.pause();
-            audioRef.current.currentTime = 0;
+        if (isStarted) {
+            setIsPlaying(true);
+        } else {
+            setIsPlaying(false);
+            if (audioRef.current) {
+                audioRef.current.currentTime = 0;
+            }
         }
     }, [isStarted]);
+
+    // Handle play/pause based on isPlaying
+    useEffect(() => {
+        if (isPlaying && audioRef.current) {
+            audioRef.current.play().catch(e => console.error("Audio play failed", e));
+        } else if (!isPlaying && audioRef.current) {
+            audioRef.current.pause();
+        }
+    }, [isPlaying]);
+
+    // Handle keyboard shortcut (Ctrl + Enter, Ctrl + Left, Ctrl + Up, Ctrl + Down)
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.ctrlKey || e.metaKey) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    setIsPlaying(prev => !prev);
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    if (audioRef.current) {
+                        audioRef.current.currentTime = 0;
+                        setIsPlaying(true);
+                    }
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    const speeds = [0.5, 0.75, 1, 1.25];
+                    const currentIndex = speeds.indexOf(currentSpeed);
+                    if (currentIndex < speeds.length - 1) {
+                        onSpeedChange(speeds[currentIndex + 1]);
+                    }
+                } else if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    const speeds = [0.5, 0.75, 1, 1.25];
+                    const currentIndex = speeds.indexOf(currentSpeed);
+                    if (currentIndex > 0) {
+                        onSpeedChange(speeds[currentIndex - 1]);
+                    }
+                }
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [currentSpeed, onSpeedChange]);
 
     // Handle speed changes
     useEffect(() => {
@@ -112,7 +158,7 @@ export const DictationUI: React.FC<DictationUIProps> = ({ text, isStarted, userI
             {/* Ghost Text Area */}
             <div className="relative mb-8 overflow-hidden rounded-[2rem] bg-slate-900 shadow-2xl border-4 border-slate-800 p-10 min-h-[200px] flex items-center justify-center">
                 {/* Visual Audio Waves (Animated) */}
-                {isStarted && !showPeek && (
+                {isPlaying && !showPeek && (
                     <div className="absolute inset-x-0 bottom-0 h-32 flex items-end justify-center gap-1.5 pb-10 opacity-30 pointer-events-none">
                         {[...Array(20)].map((_, i) => (
                             <div
@@ -128,21 +174,29 @@ export const DictationUI: React.FC<DictationUIProps> = ({ text, isStarted, userI
                     </div>
                 )}
 
-                <div className="relative z-10 text-center">
+                <div className="relative z-10 w-full flex flex-col items-center">
                     {showPeek ? (
-                        <p className="text-2xl font-mono text-white leading-relaxed max-w-2xl animate-in fade-in duration-200">
+                        <p className="text-2xl font-mono text-white leading-relaxed max-w-2xl animate-in fade-in duration-200 text-center">
                             {text}
                         </p>
+                    ) : userInput.length > 0 ? (
+                        <div className="w-full text-left">
+                            <p className="text-xl font-mono text-slate-300 leading-relaxed whitespace-pre-wrap break-words">
+                                {userInput}<span className="inline-block w-2 h-6 bg-primary-blue animate-pulse align-middle ml-1"></span>
+                            </p>
+                        </div>
                     ) : (
-                        <div className="space-y-4">
+                        <div className="space-y-4 text-center">
                             <div className={`text-6xl mb-4 transition-transform duration-500 ${isStarted ? 'scale-110' : 'scale-100'}`}>
                                 {isStarted ? '🎙️' : '🎧'}
                             </div>
                             <h4 className="text-white font-black text-2xl tracking-tighter uppercase italic">
-                                {isStarted ? 'Transcribing Live Audio...' : 'Audio Ready to Play'}
+                                {isPlaying ? 'Playing Live Audio...' : 'Audio Ready to Play'}
                             </h4>
-                            <p className="text-slate-400 text-sm font-bold uppercase tracking-[0.2em]">
-                                {isStarted ? 'Listen closely and capture the sequence' : 'Start typing to begin dictation'}
+                            <p className="text-slate-400 text-sm font-bold uppercase tracking-[0.2em] leading-relaxed">
+                                {isStarted ? 'Listen closely and capture the sequence' : 'Press CTRL + ENTER to play audio'}
+                                <br />
+                                <span className="text-[10px] text-slate-500 mt-2 block">CTRL+LEFT to restart • CTRL+↑/↓ to scale speed</span>
                             </p>
                         </div>
                     )}

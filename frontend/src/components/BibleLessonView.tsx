@@ -58,17 +58,53 @@ const BibleLessonView: React.FC<BibleLessonViewProps> = ({ verses, onComplete, o
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (mode === 'complete') return;
 
-        if (!isStarted) {
+        if (!isStarted && e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
             setIsStarted(true);
         }
 
+        if (e.key.length === 1 && (e.ctrlKey || e.metaKey)) {
+            return;
+        }
+
+        if (e.key === 'Backspace' && (e.ctrlKey || e.altKey || e.metaKey)) {
+            e.preventDefault();
+            let deleteCount = 0;
+            let i = userInput.length - 1;
+            while (i >= 0 && userInput[i] === ' ') {
+                deleteCount++;
+                i--;
+            }
+            while (i >= 0 && userInput[i] !== ' ') {
+                deleteCount++;
+                i--;
+            }
+            if (deleteCount === 0 && userInput.length > 0) deleteCount = 1;
+
+            if (deleteCount > 0) {
+                const newEvents: KeystrokeEvent[] = Array.from({ length: deleteCount }).map((_, idx) => ({
+                    keyCode: 'Backspace',
+                    key: 'Backspace',
+                    eventType: 'keydown',
+                    timestamp: Date.now() + idx,
+                    expectedKey: 'Backspace'
+                }));
+                setKeystrokes(prev => [...prev, ...newEvents]);
+                setUserInput(prev => prev.slice(0, -deleteCount));
+            }
+            return;
+        }
+
         if (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Shift') {
+            let typedKey = e.key;
+            if (typedKey === '“' || typedKey === '”') typedKey = '"';
+            if (typedKey === '‘' || typedKey === '’') typedKey = "'";
+
             const event: KeystrokeEvent = {
                 keyCode: e.code,
-                key: e.key,
+                key: typedKey,
                 eventType: 'keydown',
                 timestamp: Date.now(),
-                expectedKey: e.key === 'Shift' ? 'Shift' : currentVerse.text[userInput.length]
+                expectedKey: typedKey === 'Shift' ? 'Shift' : currentVerse.text[userInput.length]
             };
 
             setKeystrokes(prev => [...prev, event]);

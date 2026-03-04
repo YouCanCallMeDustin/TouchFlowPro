@@ -1,0 +1,1409 @@
+DICTATION SCRIPTS & NAMING CONVENTION
+======================================
+
+INSTRUCTIONS:
+1. Record the content for each drill.
+2. Save the file as an MP3.
+3. RENAME the file to the 'Required Filename' listed below.
+4. Place the MP3s in: frontend/public/audio/drills/
+
+Title: Emergency Mastery 1
+Required Filename: med_em_1.mp3
+Text to Record:
+"Chief complaint of palpitations starting 1 week ago. Pain is radiating to the back. wheezing bilaterally. Labs pending. Start IV antibiotics and fluids."
+--------------------------------------
+Title: Emergency Mastery 2
+Required Filename: med_em_2.mp3
+Text to Record:
+"Patient brought in by EMS for left-sided weakness. History of type 2 diabetes. EKG shows ST elevation in inferior leads. Consult cardiology. Discharged to SNF."
+--------------------------------------
+Title: Emergency Mastery 3
+Required Filename: med_em_3.mp3
+Text to Record:
+"Patient brought in by EMS for persistent vomiting. History of coronary artery disease. EKG shows atrial fibrillation with RVR. Start IV antibiotics and fluids. Discharged to SNF."
+--------------------------------------
+Title: Emergency Mastery 4
+Required Filename: med_em_4.mp3
+Text to Record:
+"Patient brought in by EMS for sudden onset headache. History of chronic kidney disease. EKG shows LBBB. Admit to medicine. Admitted to ICU."
+--------------------------------------
+Title: Emergency Mastery 5
+Required Filename: med_em_5.mp3
+Text to Record:
+"Trauma activation for blunt head trauma. Primary survey intact. neurologically intact. Imaging shows {imaging}. Schedule outpatient follow-up."
+--------------------------------------
+Title: Emergency Mastery 6
+Required Filename: med_em_6.mp3
+Text to Record:
+"Trauma activation for pedestrian struck. Primary survey intact. neurologically intact. Imaging shows {imaging}. Discharge with strict return precautions."
+--------------------------------------
+Title: Emergency Mastery 7
+Required Filename: med_em_7.mp3
+Text to Record:
+"Patient presents to the ED with palpitations. Vitals are within normal limits. Exam reveals murmur heard at right sternal border. Prepare for OR. Transferred to tertiary center."
+--------------------------------------
+Title: Emergency Mastery 8
+Required Filename: med_em_8.mp3
+Text to Record:
+"Trauma activation for blunt head trauma. Primary survey intact. no focal deficits. Imaging shows {imaging}. Admit to medicine."
+--------------------------------------
+Title: Emergency Mastery 9
+Required Filename: med_em_9.mp3
+Text to Record:
+"Trauma activation for penetrating injury. Primary survey intact. neurologically intact. Imaging shows {imaging}. Increase furosemide dose."
+--------------------------------------
+Title: Emergency Mastery 10
+Required Filename: med_em_10.mp3
+Text to Record:
+"Patient brought in by EMS for right lower quadrant pain. History of chronic kidney disease. EKG shows ST elevation in inferior leads. Schedule outpatient follow-up. Discharged home."
+--------------------------------------
+Title: Emergency Mastery 11
+Required Filename: med_em_11.mp3
+Text to Record:
+"Chief complaint of palpitations starting 3 days ago. Pain is radiating to the back. murmur heard at right sternal border. Labs pending. Schedule outpatient follow-up."
+--------------------------------------
+Title: Emergency Mastery 12
+Required Filename: med_em_12.mp3
+Text to Record:
+"Patient presents to the ED with palpitations. Vitals are tachycardic and hypotensive. Exam reveals wheezing bilaterally. Start IV antibiotics and fluids. Discharged home."
+--------------------------------------
+Title: Emergency Mastery 13
+Required Filename: med_em_13.mp3
+Text to Record:
+"Trauma activation for pedestrian struck. Primary survey intact. neurologically intact. Imaging shows {imaging}. Prepare for OR."
+--------------------------------------
+Title: Emergency Mastery 14
+Required Filename: med_em_14.mp3
+Text to Record:
+"Patient presents to the ED with sudden onset headache. Vitals are within normal limits. Exam reveals wheezing bilaterally. Consult cardiology. Admitted to floor."
+--------------------------------------
+Title: Emergency Mastery 15
+Required Filename: med_em_15.mp3
+Text to Record:
+"Trauma activation for motor vehicle collision. Primary survey intact. no focal deficits. Imaging shows {imaging}. Start IV antibiotics and fluids."
+--------------------------------------
+Title: Emergency Mastery 16
+Required Filename: med_em_16.mp3
+Text to Record:
+"Patient presents to the ED with left-sided weakness. Vitals are hypertensive at 180/100. Exam reveals wheezing bilaterally. Continue current management. Admitted to floor."
+--------------------------------------
+Title: Emergency Mastery 17
+Required Filename: med_em_17.mp3
+Text to Record:
+"Patient presents to the ED with right lower quadrant pain. Vitals are hypertensive at 180/100. Exam reveals murmur heard at right sternal border. Schedule outpatient follow-up. Admitted to ICU."
+--------------------------------------
+Title: Emergency Mastery 18
+Required Filename: med_em_18.mp3
+Text to Record:
+"Patient presents to the ED with severe shortness of breath. Vitals are hypoxic on room air. Exam reveals wheezing bilaterally. Discharge with strict return precautions. Admitted to floor."
+--------------------------------------
+Title: Emergency Mastery 19
+Required Filename: med_em_19.mp3
+Text to Record:
+"Patient presents to the ED with persistent vomiting. Vitals are hypoxic on room air. Exam reveals diffuse tenderness to palpation. Discharge with strict return precautions. Transferred to tertiary center."
+--------------------------------------
+Title: Emergency Mastery 20
+Required Filename: med_em_20.mp3
+Text to Record:
+"Patient brought in by EMS for severe shortness of breath. History of coronary artery disease. EKG shows T wave inversions. Start IV antibiotics and fluids. Discharged home."
+--------------------------------------
+Title: Radiology Mastery 1
+Required Filename: med_rad_1.mp3
+Text to Record:
+"Comparison made to prior study from 1 year ago. No acute intracranial hemorrhage. The liver is well-groomed but anxious. Impression: Findings consistent with pneumonia."
+--------------------------------------
+Title: Radiology Mastery 2
+Required Filename: med_rad_2.mp3
+Text to Record:
+"Comparison made to prior study from last week. Mild degenerative changes. The gallbladder is fidgety. Impression: Cholelithiasis without cholecystitis."
+--------------------------------------
+Title: Radiology Mastery 3
+Required Filename: med_rad_3.mp3
+Text to Record:
+"Comparison made to prior study from last week. Unremarkable study. The lungs is well-groomed but anxious. Impression: Cholelithiasis without cholecystitis."
+--------------------------------------
+Title: Radiology Mastery 4
+Required Filename: med_rad_4.mp3
+Text to Record:
+"Renal Ultrasound performed without contrast. The liver appears fidgety. No evidence of {pathology}. Impression: Cholelithiasis without cholecystitis."
+--------------------------------------
+Title: Radiology Mastery 5
+Required Filename: med_rad_5.mp3
+Text to Record:
+"Comparison made to prior study from last week. Unremarkable study. The liver is well-groomed but anxious. Impression: Cholelithiasis without cholecystitis."
+--------------------------------------
+Title: Radiology Mastery 6
+Required Filename: med_rad_6.mp3
+Text to Record:
+"CT Abdomen/Pelvis performed without contrast. The heart size appears fidgety. No evidence of {pathology}. Impression: Cholelithiasis without cholecystitis."
+--------------------------------------
+Title: Radiology Mastery 7
+Required Filename: med_rad_7.mp3
+Text to Record:
+"Comparison made to prior study from 1 year ago. No acute intracranial hemorrhage. The liver is well-groomed but anxious. Impression: Normal study."
+--------------------------------------
+Title: Radiology Mastery 8
+Required Filename: med_rad_8.mp3
+Text to Record:
+"Exam: CT Head without contrast. Indication: stroke symptoms. Findings: Unremarkable study. Impression: Normal study."
+--------------------------------------
+Title: Radiology Mastery 9
+Required Filename: med_rad_9.mp3
+Text to Record:
+"Exam: CT Head without contrast. Indication: trauma. Findings: Unremarkable study. Impression: Findings consistent with pneumonia."
+--------------------------------------
+Title: Radiology Mastery 10
+Required Filename: med_rad_10.mp3
+Text to Record:
+"Comparison made to prior study from 1 year ago. Mild degenerative changes. The kidneys is fidgety. Impression: Cholelithiasis without cholecystitis."
+--------------------------------------
+Title: Radiology Mastery 11
+Required Filename: med_rad_11.mp3
+Text to Record:
+"MRI Brain performed without contrast. The liver appears calm and cooperative. No evidence of {pathology}. Impression: Normal study."
+--------------------------------------
+Title: Radiology Mastery 12
+Required Filename: med_rad_12.mp3
+Text to Record:
+"CT Head without contrast performed without contrast. The lungs appears well-groomed but anxious. No evidence of {pathology}. Impression: Cholelithiasis without cholecystitis."
+--------------------------------------
+Title: Radiology Mastery 13
+Required Filename: med_rad_13.mp3
+Text to Record:
+"MRI Brain performed without contrast. The kidneys appears fidgety. No evidence of {pathology}. Impression: Normal study."
+--------------------------------------
+Title: Radiology Mastery 14
+Required Filename: med_rad_14.mp3
+Text to Record:
+"Exam: Renal Ultrasound. Indication: stroke symptoms. Findings: Gallstones present without wall thickening. Impression: Cholelithiasis without cholecystitis."
+--------------------------------------
+Title: Radiology Mastery 15
+Required Filename: med_rad_15.mp3
+Text to Record:
+"Comparison made to prior study from 2 years ago. Unremarkable study. The lungs is fidgety. Impression: No acute pathology."
+--------------------------------------
+Title: Radiology Mastery 16
+Required Filename: med_rad_16.mp3
+Text to Record:
+"Exam: MRI Brain. Indication: rule out appendicitis. Findings: Unremarkable study. Impression: Normal study."
+--------------------------------------
+Title: Radiology Mastery 17
+Required Filename: med_rad_17.mp3
+Text to Record:
+"Exam: CT Head without contrast. Indication: trauma. Findings: Patchy bibasilar opacities. Impression: Findings consistent with pneumonia."
+--------------------------------------
+Title: Radiology Mastery 18
+Required Filename: med_rad_18.mp3
+Text to Record:
+"Exam: MRI Brain. Indication: chronic cough. Findings: Mild degenerative changes. Impression: Cholelithiasis without cholecystitis."
+--------------------------------------
+Title: Radiology Mastery 19
+Required Filename: med_rad_19.mp3
+Text to Record:
+"CT Head without contrast performed without contrast. The gallbladder appears fidgety. No evidence of {pathology}. Impression: Normal study."
+--------------------------------------
+Title: Radiology Mastery 20
+Required Filename: med_rad_20.mp3
+Text to Record:
+"Exam: Chest X-Ray PA/Lateral. Indication: chronic cough. Findings: Unremarkable study. Impression: No acute pathology."
+--------------------------------------
+Title: Cardiology Mastery 1
+Required Filename: med_cardio_1.mp3
+Text to Record:
+"Consult for rule out appendicitis. Patient has history of asthma. Mild LVH. Recommendation: Start IV antibiotics and fluids."
+--------------------------------------
+Title: Cardiology Mastery 2
+Required Filename: med_cardio_2.mp3
+Text to Record:
+"Consult for trauma. Patient has history of chronic kidney disease. No regional wall motion abnormalities. Recommendation: Increase furosemide dose."
+--------------------------------------
+Title: Cardiology Mastery 3
+Required Filename: med_cardio_3.mp3
+Text to Record:
+"Patient seen for follow-up of heart failure exacerbation. Reports persistent vomiting. EKG demonstrates ST elevation in inferior leads. Admit to medicine. Transferred to tertiary center."
+--------------------------------------
+Title: Cardiology Mastery 4
+Required Filename: med_cardio_4.mp3
+Text to Record:
+"Echocardiogram reveals No regional wall motion abnormalities. Ejection fraction is 40-45%. Severe mitral valve prolapse. Discharge with strict return precautions."
+--------------------------------------
+Title: Cardiology Mastery 5
+Required Filename: med_cardio_5.mp3
+Text to Record:
+"Echocardiogram reveals Mild LVH. Ejection fraction is 30-35%. Trace tricuspid regurgitation. Admit to medicine."
+--------------------------------------
+Title: Cardiology Mastery 6
+Required Filename: med_cardio_6.mp3
+Text to Record:
+"Echocardiogram reveals No regional wall motion abnormalities. Ejection fraction is 20-25%. No aortic stenosis. Start IV antibiotics and fluids."
+--------------------------------------
+Title: Cardiology Mastery 7
+Required Filename: med_cardio_7.mp3
+Text to Record:
+"Consult for trauma. Patient has history of coronary artery disease. Grade 1 diastolic dysfunction. Recommendation: Discharge with strict return precautions."
+--------------------------------------
+Title: Cardiology Mastery 8
+Required Filename: med_cardio_8.mp3
+Text to Record:
+"Patient seen for follow-up of major depressive disorder. Reports sudden onset headache. EKG demonstrates ST elevation in inferior leads. Start IV antibiotics and fluids. Discharged home."
+--------------------------------------
+Title: Cardiology Mastery 9
+Required Filename: med_cardio_9.mp3
+Text to Record:
+"Echocardiogram reveals No regional wall motion abnormalities. Ejection fraction is 55-60%. Severe mitral valve prolapse. Admit to medicine."
+--------------------------------------
+Title: Cardiology Mastery 10
+Required Filename: med_cardio_10.mp3
+Text to Record:
+"Echocardiogram reveals Dilated left atrium. Ejection fraction is 20-25%. Mild mitral regurgitation. Prepare for OR."
+--------------------------------------
+Title: Cardiology Mastery 11
+Required Filename: med_cardio_11.mp3
+Text to Record:
+"Echocardiogram reveals Mild LVH. Ejection fraction is 55-60%. Trace tricuspid regurgitation. Continue current management."
+--------------------------------------
+Title: Cardiology Mastery 12
+Required Filename: med_cardio_12.mp3
+Text to Record:
+"Consult for hematuria. Patient has history of hypertension. Mild LVH. Recommendation: Admit to medicine."
+--------------------------------------
+Title: Cardiology Mastery 13
+Required Filename: med_cardio_13.mp3
+Text to Record:
+"Patient seen for follow-up of sepsis. Reports syncope. EKG demonstrates LBBB. Prepare for OR. Discharged to SNF."
+--------------------------------------
+Title: Cardiology Mastery 14
+Required Filename: med_cardio_14.mp3
+Text to Record:
+"Echocardiogram reveals Grade 1 diastolic dysfunction. Ejection fraction is 20-25%. Trace tricuspid regurgitation. Discharge with strict return precautions."
+--------------------------------------
+Title: Cardiology Mastery 15
+Required Filename: med_cardio_15.mp3
+Text to Record:
+"Consult for hematuria. Patient has history of hypertension. Grade 1 diastolic dysfunction. Recommendation: Prepare for OR."
+--------------------------------------
+Title: Cardiology Mastery 16
+Required Filename: med_cardio_16.mp3
+Text to Record:
+"Consult for abdominal pain. Patient has history of chronic kidney disease. Mild LVH. Recommendation: Consult cardiology."
+--------------------------------------
+Title: Cardiology Mastery 17
+Required Filename: med_cardio_17.mp3
+Text to Record:
+"Patient seen for follow-up of community acquired pneumonia. Reports persistent vomiting. EKG demonstrates atrial fibrillation with RVR. Schedule outpatient follow-up. Transferred to tertiary center."
+--------------------------------------
+Title: Cardiology Mastery 18
+Required Filename: med_cardio_18.mp3
+Text to Record:
+"Patient seen for follow-up of DKA. Reports right lower quadrant pain. EKG demonstrates T wave inversions. Consult cardiology. Discharged to SNF."
+--------------------------------------
+Title: Cardiology Mastery 19
+Required Filename: med_cardio_19.mp3
+Text to Record:
+"Echocardiogram reveals Mild LVH. Ejection fraction is 55-60%. Trace tricuspid regurgitation. Start IV antibiotics and fluids."
+--------------------------------------
+Title: Cardiology Mastery 20
+Required Filename: med_cardio_20.mp3
+Text to Record:
+"Patient seen for follow-up of sepsis. Reports persistent vomiting. EKG demonstrates LBBB. Consult cardiology. Admitted to floor."
+--------------------------------------
+Title: Surgery Mastery 1
+Required Filename: med_surg_1.mp3
+Text to Record:
+"Preoperative diagnosis: acute appendicitis. Postoperative diagnosis: Same. Procedure: Incision and drainage. Findings: purulent fluid in the RLQ. Admit to medicine."
+--------------------------------------
+Title: Surgery Mastery 2
+Required Filename: med_surg_2.mp3
+Text to Record:
+"Preoperative diagnosis: community acquired pneumonia. Postoperative diagnosis: Same. Procedure: Laparoscopic appendectomy. Findings: inflamed appendix. Prepare for OR."
+--------------------------------------
+Title: Surgery Mastery 3
+Required Filename: med_surg_3.mp3
+Text to Record:
+"The patient was prepped and draped. Midline incision was made. The appendix was bluntly dissected and removed was performed. Skin closed with staples. Discharged to SNF."
+--------------------------------------
+Title: Surgery Mastery 4
+Required Filename: med_surg_4.mp3
+Text to Record:
+"Operative report. Incision and drainage performed under spinal anesthesia. purulent fluid in the RLQ. No complications. Start IV antibiotics and fluids."
+--------------------------------------
+Title: Surgery Mastery 5
+Required Filename: med_surg_5.mp3
+Text to Record:
+"The patient was prepped and draped. McBurney's incision was made. The gallbladder was freed from the liver bed was performed. Wound left open to heal by secondary intention. Discharged home."
+--------------------------------------
+Title: Surgery Mastery 6
+Required Filename: med_surg_6.mp3
+Text to Record:
+"Operative report. Cholecystectomy performed under MAC. gallbladder with stones. No complications. Start IV antibiotics and fluids."
+--------------------------------------
+Title: Surgery Mastery 7
+Required Filename: med_surg_7.mp3
+Text to Record:
+"Preoperative diagnosis: major depressive disorder. Postoperative diagnosis: Same. Procedure: Exploratory laparotomy. Findings: purulent fluid in the RLQ. Prepare for OR."
+--------------------------------------
+Title: Surgery Mastery 8
+Required Filename: med_surg_8.mp3
+Text to Record:
+"Preoperative diagnosis: community acquired pneumonia. Postoperative diagnosis: Same. Procedure: Exploratory laparotomy. Findings: normal appearing bowel. Increase furosemide dose."
+--------------------------------------
+Title: Surgery Mastery 9
+Required Filename: med_surg_9.mp3
+Text to Record:
+"Preoperative diagnosis: community acquired pneumonia. Postoperative diagnosis: Same. Procedure: Laparoscopic appendectomy. Findings: purulent fluid in the RLQ. Admit to medicine."
+--------------------------------------
+Title: Surgery Mastery 10
+Required Filename: med_surg_10.mp3
+Text to Record:
+"The patient was prepped and draped. Right subcostal incision was made. The appendix was bluntly dissected and removed was performed. Wound left open to heal by secondary intention. Admitted to ICU."
+--------------------------------------
+Title: Surgery Mastery 11
+Required Filename: med_surg_11.mp3
+Text to Record:
+"Preoperative diagnosis: generalized anxiety disorder. Postoperative diagnosis: Same. Procedure: Cholecystectomy. Findings: purulent fluid in the RLQ. Increase furosemide dose."
+--------------------------------------
+Title: Surgery Mastery 12
+Required Filename: med_surg_12.mp3
+Text to Record:
+"Preoperative diagnosis: major depressive disorder. Postoperative diagnosis: Same. Procedure: Laparoscopic appendectomy. Findings: purulent fluid in the RLQ. Start IV antibiotics and fluids."
+--------------------------------------
+Title: Surgery Mastery 13
+Required Filename: med_surg_13.mp3
+Text to Record:
+"Operative report. Exploratory laparotomy performed under general endotracheal anesthesia. gallbladder with stones. No complications. Schedule outpatient follow-up."
+--------------------------------------
+Title: Surgery Mastery 14
+Required Filename: med_surg_14.mp3
+Text to Record:
+"Preoperative diagnosis: heart failure exacerbation. Postoperative diagnosis: Same. Procedure: CABG. Findings: purulent fluid in the RLQ. Increase furosemide dose."
+--------------------------------------
+Title: Surgery Mastery 15
+Required Filename: med_surg_15.mp3
+Text to Record:
+"Preoperative diagnosis: DKA. Postoperative diagnosis: Same. Procedure: Incision and drainage. Findings: inflamed appendix. Schedule outpatient follow-up."
+--------------------------------------
+Title: Surgery Mastery 16
+Required Filename: med_surg_16.mp3
+Text to Record:
+"Preoperative diagnosis: major depressive disorder. Postoperative diagnosis: Same. Procedure: Cholecystectomy. Findings: inflamed appendix. Start IV antibiotics and fluids."
+--------------------------------------
+Title: Surgery Mastery 17
+Required Filename: med_surg_17.mp3
+Text to Record:
+"Preoperative diagnosis: community acquired pneumonia. Postoperative diagnosis: Same. Procedure: Exploratory laparotomy. Findings: inflamed appendix. Continue current management."
+--------------------------------------
+Title: Surgery Mastery 18
+Required Filename: med_surg_18.mp3
+Text to Record:
+"The patient was prepped and draped. McBurney's incision was made. The gallbladder was freed from the liver bed was performed. Skin closed with staples. Admitted to ICU."
+--------------------------------------
+Title: Surgery Mastery 19
+Required Filename: med_surg_19.mp3
+Text to Record:
+"Preoperative diagnosis: sepsis. Postoperative diagnosis: Same. Procedure: Incision and drainage. Findings: purulent fluid in the RLQ. Consult cardiology."
+--------------------------------------
+Title: Surgery Mastery 20
+Required Filename: med_surg_20.mp3
+Text to Record:
+"Operative report. Incision and drainage performed under MAC. inflamed appendix. No complications. Schedule outpatient follow-up."
+--------------------------------------
+Title: Psychiatry Mastery 1
+Required Filename: med_psych_1.mp3
+Text to Record:
+"Follow-up for DKA. Reports syncope. Sleep is adequate. Appetite is fair. Consult cardiology."
+--------------------------------------
+Title: Psychiatry Mastery 2
+Required Filename: med_psych_2.mp3
+Text to Record:
+"Mental status exam: Patient is fidgety. Mood is euthymic, affect is constricted. Thought process tangential. Denies SI/HI. Discharge with strict return precautions."
+--------------------------------------
+Title: Psychiatry Mastery 3
+Required Filename: med_psych_3.mp3
+Text to Record:
+"Follow-up for generalized anxiety disorder. Reports syncope. Sleep is adequate. Appetite is increased. Discharge with strict return precautions."
+--------------------------------------
+Title: Psychiatry Mastery 4
+Required Filename: med_psych_4.mp3
+Text to Record:
+"Mental status exam: Patient is fidgety. Mood is depressed, affect is labile. Thought process circumstantial. Denies SI/HI. Schedule outpatient follow-up."
+--------------------------------------
+Title: Psychiatry Mastery 5
+Required Filename: med_psych_5.mp3
+Text to Record:
+"Mental status exam: Patient is fidgety. Mood is irritable, affect is labile. Thought process circumstantial. Denies SI/HI. Schedule outpatient follow-up."
+--------------------------------------
+Title: Psychiatry Mastery 6
+Required Filename: med_psych_6.mp3
+Text to Record:
+"Mental status exam: Patient is disheveled. Mood is euthymic, affect is labile. Thought process flight of ideas. Denies SI/HI. Discharge with strict return precautions."
+--------------------------------------
+Title: Psychiatry Mastery 7
+Required Filename: med_psych_7.mp3
+Text to Record:
+"Mental status exam: Patient is well-groomed but anxious. Mood is irritable, affect is congruent. Thought process linear and goal-directed. Denies SI/HI. Discharge with strict return precautions."
+--------------------------------------
+Title: Psychiatry Mastery 8
+Required Filename: med_psych_8.mp3
+Text to Record:
+"Follow-up for community acquired pneumonia. Reports abdominal pain. Sleep is poor. Appetite is decreased. Increase furosemide dose."
+--------------------------------------
+Title: Psychiatry Mastery 9
+Required Filename: med_psych_9.mp3
+Text to Record:
+"Follow-up for generalized anxiety disorder. Reports severe shortness of breath. Sleep is poor. Appetite is good. Prepare for OR."
+--------------------------------------
+Title: Psychiatry Mastery 10
+Required Filename: med_psych_10.mp3
+Text to Record:
+"Mental status exam: Patient is well-groomed but anxious. Mood is euthymic, affect is flat. Thought process flight of ideas. Denies SI/HI. Increase furosemide dose."
+--------------------------------------
+Title: Psychiatry Mastery 11
+Required Filename: med_psych_11.mp3
+Text to Record:
+"Follow-up for DKA. Reports sudden onset headache. Sleep is adequate. Appetite is good. Schedule outpatient follow-up."
+--------------------------------------
+Title: Psychiatry Mastery 12
+Required Filename: med_psych_12.mp3
+Text to Record:
+"Mental status exam: Patient is disheveled. Mood is depressed, affect is constricted. Thought process circumstantial. Denies SI/HI. Continue current management."
+--------------------------------------
+Title: Psychiatry Mastery 13
+Required Filename: med_psych_13.mp3
+Text to Record:
+"Follow-up for community acquired pneumonia. Reports syncope. Sleep is interrupted. Appetite is good. Schedule outpatient follow-up."
+--------------------------------------
+Title: Psychiatry Mastery 14
+Required Filename: med_psych_14.mp3
+Text to Record:
+"Mental status exam: Patient is calm and cooperative. Mood is euthymic, affect is constricted. Thought process circumstantial. Denies SI/HI. Prepare for OR."
+--------------------------------------
+Title: Psychiatry Mastery 15
+Required Filename: med_psych_15.mp3
+Text to Record:
+"Follow-up for community acquired pneumonia. Reports severe shortness of breath. Sleep is poor. Appetite is increased. Start IV antibiotics and fluids."
+--------------------------------------
+Title: Psychiatry Mastery 16
+Required Filename: med_psych_16.mp3
+Text to Record:
+"Follow-up for DKA. Reports abdominal pain. Sleep is improved. Appetite is fair. Increase furosemide dose."
+--------------------------------------
+Title: Psychiatry Mastery 17
+Required Filename: med_psych_17.mp3
+Text to Record:
+"Follow-up for sepsis. Reports severe shortness of breath. Sleep is adequate. Appetite is good. Admit to medicine."
+--------------------------------------
+Title: Psychiatry Mastery 18
+Required Filename: med_psych_18.mp3
+Text to Record:
+"Mental status exam: Patient is fidgety. Mood is anxious, affect is labile. Thought process circumstantial. Denies SI/HI. Increase furosemide dose."
+--------------------------------------
+Title: Psychiatry Mastery 19
+Required Filename: med_psych_19.mp3
+Text to Record:
+"Mental status exam: Patient is fidgety. Mood is irritable, affect is congruent. Thought process linear and goal-directed. Denies SI/HI. Prepare for OR."
+--------------------------------------
+Title: Psychiatry Mastery 20
+Required Filename: med_psych_20.mp3
+Text to Record:
+"Mental status exam: Patient is well-groomed but anxious. Mood is euthymic, affect is constricted. Thought process tangential. Denies SI/HI. Continue current management."
+--------------------------------------
+Title: Internal Medicine Mastery 1
+Required Filename: med_soap_1.mp3
+Text to Record:
+"S: sudden onset headache. O: Vitals hypertensive at 180/100. Exam: wheezing bilaterally. A: generalized anxiety disorder. P: Admit to medicine."
+--------------------------------------
+Title: Internal Medicine Mastery 2
+Required Filename: med_soap_2.mp3
+Text to Record:
+"S: syncope. O: Vitals febrile to 102F. Exam: neurologically intact. A: major depressive disorder. P: Discharge with strict return precautions."
+--------------------------------------
+Title: Internal Medicine Mastery 3
+Required Filename: med_soap_3.mp3
+Text to Record:
+"S: sudden onset headache. O: Vitals tachycardic and hypotensive. Exam: neurologically intact. A: major depressive disorder. P: Consult cardiology."
+--------------------------------------
+Title: Internal Medicine Mastery 4
+Required Filename: med_soap_4.mp3
+Text to Record:
+"S: palpitations. O: Vitals hypoxic on room air. Exam: clear to auscultation. A: heart failure exacerbation. P: Prepare for OR."
+--------------------------------------
+Title: Internal Medicine Mastery 5
+Required Filename: med_soap_5.mp3
+Text to Record:
+"S: Patient follows up for heart failure exacerbation. O: guarding and rebound tenderness. A: heart failure exacerbation, worsening. P: Schedule outpatient follow-up."
+--------------------------------------
+Title: Internal Medicine Mastery 6
+Required Filename: med_soap_6.mp3
+Text to Record:
+"S: Patient follows up for sepsis. O: diffuse tenderness to palpation. A: generalized anxiety disorder, improving. P: Continue current management."
+--------------------------------------
+Title: Internal Medicine Mastery 7
+Required Filename: med_soap_7.mp3
+Text to Record:
+"S: severe shortness of breath. O: Vitals stable. Exam: clear to auscultation. A: sepsis. P: Start IV antibiotics and fluids."
+--------------------------------------
+Title: Internal Medicine Mastery 8
+Required Filename: med_soap_8.mp3
+Text to Record:
+"S: Patient follows up for acute appendicitis. O: guarding and rebound tenderness. A: DKA, stable. P: Admit to medicine."
+--------------------------------------
+Title: Internal Medicine Mastery 9
+Required Filename: med_soap_9.mp3
+Text to Record:
+"S: Patient follows up for DKA. O: no focal deficits. A: heart failure exacerbation, stable. P: Prepare for OR."
+--------------------------------------
+Title: Internal Medicine Mastery 10
+Required Filename: med_soap_10.mp3
+Text to Record:
+"S: palpitations. O: Vitals tachycardic and hypotensive. Exam: wheezing bilaterally. A: sepsis. P: Discharge with strict return precautions."
+--------------------------------------
+Title: Internal Medicine Mastery 11
+Required Filename: med_soap_11.mp3
+Text to Record:
+"S: Patient follows up for sepsis. O: neurologically intact. A: heart failure exacerbation, worsening. P: Prepare for OR."
+--------------------------------------
+Title: Internal Medicine Mastery 12
+Required Filename: med_soap_12.mp3
+Text to Record:
+"S: persistent vomiting. O: Vitals tachycardic and hypotensive. Exam: neurologically intact. A: generalized anxiety disorder. P: Start IV antibiotics and fluids."
+--------------------------------------
+Title: Internal Medicine Mastery 13
+Required Filename: med_soap_13.mp3
+Text to Record:
+"S: Patient follows up for sepsis. O: murmur heard at right sternal border. A: DKA, poorly controlled. P: Admit to medicine."
+--------------------------------------
+Title: Internal Medicine Mastery 14
+Required Filename: med_soap_14.mp3
+Text to Record:
+"S: sudden onset headache. O: Vitals tachycardic and hypotensive. Exam: murmur heard at right sternal border. A: heart failure exacerbation. P: Increase furosemide dose."
+--------------------------------------
+Title: Internal Medicine Mastery 15
+Required Filename: med_soap_15.mp3
+Text to Record:
+"S: persistent vomiting. O: Vitals within normal limits. Exam: wheezing bilaterally. A: community acquired pneumonia. P: Prepare for OR."
+--------------------------------------
+Title: Internal Medicine Mastery 16
+Required Filename: med_soap_16.mp3
+Text to Record:
+"S: Patient follows up for generalized anxiety disorder. O: no focal deficits. A: heart failure exacerbation, poorly controlled. P: Admit to medicine."
+--------------------------------------
+Title: Internal Medicine Mastery 17
+Required Filename: med_soap_17.mp3
+Text to Record:
+"S: Patient follows up for acute appendicitis. O: clear to auscultation. A: sepsis, worsening. P: Admit to medicine."
+--------------------------------------
+Title: Internal Medicine Mastery 18
+Required Filename: med_soap_18.mp3
+Text to Record:
+"S: Patient follows up for generalized anxiety disorder. O: guarding and rebound tenderness. A: generalized anxiety disorder, poorly controlled. P: Prepare for OR."
+--------------------------------------
+Title: Internal Medicine Mastery 19
+Required Filename: med_soap_19.mp3
+Text to Record:
+"S: right lower quadrant pain. O: Vitals hypertensive at 180/100. Exam: neurologically intact. A: DKA. P: Consult cardiology."
+--------------------------------------
+Title: Internal Medicine Mastery 20
+Required Filename: med_soap_20.mp3
+Text to Record:
+"S: Patient follows up for generalized anxiety disorder. O: clear to auscultation. A: acute appendicitis, improving. P: Admit to medicine."
+--------------------------------------
+Title: Hospitalist Mastery 1
+Required Filename: med_dc_1.mp3
+Text to Record:
+"Admitted for acute appendicitis. Treated with lisinopril and amlodipine. Course was uncomplicated. Discharged to Admitted to floor on maintenance inhalers."
+--------------------------------------
+Title: Hospitalist Mastery 2
+Required Filename: med_dc_2.mp3
+Text to Record:
+"Admitted for DKA. Treated with lisinopril and amlodipine. Course was prolonged but stable. Discharged to Discharged home on oral antibiotics."
+--------------------------------------
+Title: Hospitalist Mastery 3
+Required Filename: med_dc_3.mp3
+Text to Record:
+"Hospital course: Patient admitted with abdominal pain, found to have generalized anxiety disorder. IV fluids and insulin initiated. Condition improved. Discharge instructions: Consult cardiology."
+--------------------------------------
+Title: Hospitalist Mastery 4
+Required Filename: med_dc_4.mp3
+Text to Record:
+"Admitted for sepsis. Treated with IV fluids and insulin. Course was prolonged but stable. Discharged to Transferred to tertiary center on new SSI regimen."
+--------------------------------------
+Title: Hospitalist Mastery 5
+Required Filename: med_dc_5.mp3
+Text to Record:
+"Hospital course: Patient admitted with dizziness, found to have sepsis. albuterol returning initiated. Condition improved. Discharge instructions: Schedule outpatient follow-up."
+--------------------------------------
+Title: Hospitalist Mastery 6
+Required Filename: med_dc_6.mp3
+Text to Record:
+"Admitted for acute appendicitis. Treated with IV Rocephin. Course was uncomplicated. Discharged to Discharged home on new SSI regimen."
+--------------------------------------
+Title: Hospitalist Mastery 7
+Required Filename: med_dc_7.mp3
+Text to Record:
+"Admitted for acute appendicitis. Treated with IV Rocephin. Course was complicated by transient AKI. Discharged to Transferred to tertiary center on new SSI regimen."
+--------------------------------------
+Title: Hospitalist Mastery 8
+Required Filename: med_dc_8.mp3
+Text to Record:
+"Hospital course: Patient admitted with persistent vomiting, found to have heart failure exacerbation. lisinopril and amlodipine initiated. Condition improved. Discharge instructions: Admit to medicine."
+--------------------------------------
+Title: Hospitalist Mastery 9
+Required Filename: med_dc_9.mp3
+Text to Record:
+"Hospital course: Patient admitted with left-sided weakness, found to have DKA. IV Rocephin initiated. Condition improved. Discharge instructions: Discharge with strict return precautions."
+--------------------------------------
+Title: Hospitalist Mastery 10
+Required Filename: med_dc_10.mp3
+Text to Record:
+"Admitted for DKA. Treated with albuterol returning. Course was prolonged but stable. Discharged to Discharged home on oral antibiotics."
+--------------------------------------
+Title: Hospitalist Mastery 11
+Required Filename: med_dc_11.mp3
+Text to Record:
+"Admitted for major depressive disorder. Treated with albuterol returning. Course was prolonged but stable. Discharged to Discharged to SNF on maintenance inhalers."
+--------------------------------------
+Title: Hospitalist Mastery 12
+Required Filename: med_dc_12.mp3
+Text to Record:
+"Hospital course: Patient admitted with abdominal pain, found to have DKA. lisinopril and amlodipine initiated. Condition improved. Discharge instructions: Admit to medicine."
+--------------------------------------
+Title: Hospitalist Mastery 13
+Required Filename: med_dc_13.mp3
+Text to Record:
+"Hospital course: Patient admitted with acute chest pain, found to have major depressive disorder. IV Rocephin initiated. Condition improved. Discharge instructions: Start IV antibiotics and fluids."
+--------------------------------------
+Title: Hospitalist Mastery 14
+Required Filename: med_dc_14.mp3
+Text to Record:
+"Admitted for DKA. Treated with albuterol returning. Course was prolonged but stable. Discharged to Discharged to SNF on oral antibiotics."
+--------------------------------------
+Title: Hospitalist Mastery 15
+Required Filename: med_dc_15.mp3
+Text to Record:
+"Admitted for generalized anxiety disorder. Treated with albuterol returning. Course was uncomplicated. Discharged to Admitted to floor on maintenance inhalers."
+--------------------------------------
+Title: Hospitalist Mastery 16
+Required Filename: med_dc_16.mp3
+Text to Record:
+"Admitted for major depressive disorder. Treated with IV Rocephin. Course was complicated by transient AKI. Discharged to Admitted to floor on oral antibiotics."
+--------------------------------------
+Title: Hospitalist Mastery 17
+Required Filename: med_dc_17.mp3
+Text to Record:
+"Hospital course: Patient admitted with acute chest pain, found to have heart failure exacerbation. albuterol returning initiated. Condition improved. Discharge instructions: Start IV antibiotics and fluids."
+--------------------------------------
+Title: Hospitalist Mastery 18
+Required Filename: med_dc_18.mp3
+Text to Record:
+"Admitted for heart failure exacerbation. Treated with lisinopril and amlodipine. Course was prolonged but stable. Discharged to Transferred to tertiary center on new SSI regimen."
+--------------------------------------
+Title: Hospitalist Mastery 19
+Required Filename: med_dc_19.mp3
+Text to Record:
+"Admitted for heart failure exacerbation. Treated with IV Rocephin. Course was complicated by transient AKI. Discharged to Discharged home on new SSI regimen."
+--------------------------------------
+Title: Hospitalist Mastery 20
+Required Filename: med_dc_20.mp3
+Text to Record:
+"Admitted for generalized anxiety disorder. Treated with albuterol returning. Course was prolonged but stable. Discharged to Admitted to floor on maintenance inhalers."
+--------------------------------------
+Title: Corporate Mastery 1
+Required Filename: legal_corp_1.mp3
+Text to Record:
+"Section 12.3: Confidentiality. The Receiving Party shall not disclose any Confidential Information, including but not limited to source code, to any third party without prior written consent."
+--------------------------------------
+Title: Corporate Mastery 2
+Required Filename: legal_corp_2.mp3
+Text to Record:
+"Pursuant to the terms and conditions set forth herein, Tech Solutions LLC agrees to indemnify and hold harmless Innovate LLC from any and all claims arising out of the breach of this Agreement."
+--------------------------------------
+Title: Corporate Mastery 3
+Required Filename: legal_corp_3.mp3
+Text to Record:
+"This Agreement shall be governed by and construed in accordance with the laws of the State of Delaware, without giving effect to any choice or conflict of law provision."
+--------------------------------------
+Title: Corporate Mastery 4
+Required Filename: legal_corp_4.mp3
+Text to Record:
+"Section 1.1: Confidentiality. The Receiving Party shall not disclose any Confidential Information, including but not limited to proprietary algorithms, to any third party without prior written consent."
+--------------------------------------
+Title: Corporate Mastery 5
+Required Filename: legal_corp_5.mp3
+Text to Record:
+"Pursuant to the terms and conditions set forth herein, Acme Corp agrees to indemnify and hold harmless Innovate LLC from any and all claims arising out of the breach of this Agreement."
+--------------------------------------
+Title: Corporate Mastery 6
+Required Filename: legal_corp_6.mp3
+Text to Record:
+"Pursuant to the terms and conditions set forth herein, John Doe agrees to indemnify and hold harmless Beta Inc from any and all claims arising out of the breach of this Agreement."
+--------------------------------------
+Title: Corporate Mastery 7
+Required Filename: legal_corp_7.mp3
+Text to Record:
+"This Agreement shall be governed by and construed in accordance with the laws of the State of Delaware, without giving effect to any choice or conflict of law provision."
+--------------------------------------
+Title: Corporate Mastery 8
+Required Filename: legal_corp_8.mp3
+Text to Record:
+"This Agreement shall be governed by and construed in accordance with the laws of the State of Delaware, without giving effect to any choice or conflict of law provision."
+--------------------------------------
+Title: Corporate Mastery 9
+Required Filename: legal_corp_9.mp3
+Text to Record:
+"Pursuant to the terms and conditions set forth herein, The Assignor agrees to indemnify and hold harmless The Grantee from any and all claims arising out of the breach of this Agreement."
+--------------------------------------
+Title: Corporate Mastery 10
+Required Filename: legal_corp_10.mp3
+Text to Record:
+"Pursuant to the terms and conditions set forth herein, Global Industries agrees to indemnify and hold harmless The Grantee from any and all claims arising out of the breach of this Agreement."
+--------------------------------------
+Title: Corporate Mastery 11
+Required Filename: legal_corp_11.mp3
+Text to Record:
+"Pursuant to the terms and conditions set forth herein, John Doe agrees to indemnify and hold harmless Delta Corp from any and all claims arising out of the breach of this Agreement."
+--------------------------------------
+Title: Corporate Mastery 12
+Required Filename: legal_corp_12.mp3
+Text to Record:
+"Section 501(c)(3): Confidentiality. The Receiving Party shall not disclose any Confidential Information, including but not limited to trade secrets, to any third party without prior written consent."
+--------------------------------------
+Title: Corporate Mastery 13
+Required Filename: legal_corp_13.mp3
+Text to Record:
+"Pursuant to the terms and conditions set forth herein, Acme Corp agrees to indemnify and hold harmless Beta Inc from any and all claims arising out of the breach of this Agreement."
+--------------------------------------
+Title: Corporate Mastery 14
+Required Filename: legal_corp_14.mp3
+Text to Record:
+"Pursuant to the terms and conditions set forth herein, The Assignor agrees to indemnify and hold harmless Richard Roe from any and all claims arising out of the breach of this Agreement."
+--------------------------------------
+Title: Corporate Mastery 15
+Required Filename: legal_corp_15.mp3
+Text to Record:
+"This Agreement shall be governed by and construed in accordance with the laws of the State of Delaware, without giving effect to any choice or conflict of law provision."
+--------------------------------------
+Title: Corporate Mastery 16
+Required Filename: legal_corp_16.mp3
+Text to Record:
+"Pursuant to the terms and conditions set forth herein, The Assignor agrees to indemnify and hold harmless Innovate LLC from any and all claims arising out of the breach of this Agreement."
+--------------------------------------
+Title: Corporate Mastery 17
+Required Filename: legal_corp_17.mp3
+Text to Record:
+"This Agreement shall be governed by and construed in accordance with the laws of the State of Delaware, without giving effect to any choice or conflict of law provision."
+--------------------------------------
+Title: Corporate Mastery 18
+Required Filename: legal_corp_18.mp3
+Text to Record:
+"This Agreement shall be governed by and construed in accordance with the laws of the State of Delaware, without giving effect to any choice or conflict of law provision."
+--------------------------------------
+Title: Corporate Mastery 19
+Required Filename: legal_corp_19.mp3
+Text to Record:
+"Section 1.1: Confidentiality. The Receiving Party shall not disclose any Confidential Information, including but not limited to source code, to any third party without prior written consent."
+--------------------------------------
+Title: Corporate Mastery 20
+Required Filename: legal_corp_20.mp3
+Text to Record:
+"Section 4.2: Confidentiality. The Receiving Party shall not disclose any Confidential Information, including but not limited to trade secrets, to any third party without prior written consent."
+--------------------------------------
+Title: Criminal Mastery 1
+Required Filename: legal_crim_1.mp3
+Text to Record:
+"The defendant enters a plea of not guilty to the charge of embezzlement. Bail is set at $2,500, and the preliminary hearing is scheduled for the effective date."
+--------------------------------------
+Title: Criminal Mastery 2
+Required Filename: legal_crim_2.mp3
+Text to Record:
+"In the matter of People v. Johnson, the defendant is charged with insider trading. The prosecution must prove beyond a reasonable doubt all elements of the offense."
+--------------------------------------
+Title: Criminal Mastery 3
+Required Filename: legal_crim_3.mp3
+Text to Record:
+"Counsel for the defense objects on the grounds of relevance. The court sustains the objection and strikes the witness's testimony regarding the recovered documents."
+--------------------------------------
+Title: Criminal Mastery 4
+Required Filename: legal_crim_4.mp3
+Text to Record:
+"In the matter of People v. Johnson, the defendant is charged with embezzlement. The prosecution must prove beyond a reasonable doubt all elements of the offense."
+--------------------------------------
+Title: Criminal Mastery 5
+Required Filename: legal_crim_5.mp3
+Text to Record:
+"Counsel for the defense objects on the grounds of relevance. The court sustains the objection and strikes the witness's testimony regarding the recovered documents."
+--------------------------------------
+Title: Criminal Mastery 6
+Required Filename: legal_crim_6.mp3
+Text to Record:
+"Counsel for the defense objects on the grounds of relevance. The court sustains the objection and strikes the witness's testimony regarding the alleged meeting."
+--------------------------------------
+Title: Criminal Mastery 7
+Required Filename: legal_crim_7.mp3
+Text to Record:
+"Counsel for the defense objects on the grounds of lack of foundation. The court sustains the objection and strikes the witness's testimony regarding the financial transaction."
+--------------------------------------
+Title: Criminal Mastery 8
+Required Filename: legal_crim_8.mp3
+Text to Record:
+"Counsel for the defense objects on the grounds of lack of foundation. The court sustains the objection and strikes the witness's testimony regarding the financial transaction."
+--------------------------------------
+Title: Criminal Mastery 9
+Required Filename: legal_crim_9.mp3
+Text to Record:
+"Counsel for the defense objects on the grounds of leading the witness. The court sustains the objection and strikes the witness's testimony regarding the timeline of events."
+--------------------------------------
+Title: Criminal Mastery 10
+Required Filename: legal_crim_10.mp3
+Text to Record:
+"Counsel for the defense objects on the grounds of leading the witness. The court sustains the objection and strikes the witness's testimony regarding the alleged meeting."
+--------------------------------------
+Title: Criminal Mastery 11
+Required Filename: legal_crim_11.mp3
+Text to Record:
+"The defendant enters a plea of not guilty to the charge of insider trading. Bail is set at $100,000, and the preliminary hearing is scheduled for December 31, 2023."
+--------------------------------------
+Title: Criminal Mastery 12
+Required Filename: legal_crim_12.mp3
+Text to Record:
+"Counsel for the defense objects on the grounds of relevance. The court sustains the objection and strikes the witness's testimony regarding the alleged meeting."
+--------------------------------------
+Title: Criminal Mastery 13
+Required Filename: legal_crim_13.mp3
+Text to Record:
+"In the matter of United States v. Doe, the defendant is charged with wire fraud. The prosecution must prove beyond a reasonable doubt all elements of the offense."
+--------------------------------------
+Title: Criminal Mastery 14
+Required Filename: legal_crim_14.mp3
+Text to Record:
+"The defendant enters a plea of not guilty to the charge of grand larceny. Bail is set at $1,000,000, and the preliminary hearing is scheduled for January 15, 2024."
+--------------------------------------
+Title: Criminal Mastery 15
+Required Filename: legal_crim_15.mp3
+Text to Record:
+"Counsel for the defense objects on the grounds of hearsay. The court sustains the objection and strikes the witness's testimony regarding the financial transaction."
+--------------------------------------
+Title: Criminal Mastery 16
+Required Filename: legal_crim_16.mp3
+Text to Record:
+"The defendant enters a plea of not guilty to the charge of perjury. Bail is set at $100,000, and the preliminary hearing is scheduled for October 31st."
+--------------------------------------
+Title: Criminal Mastery 17
+Required Filename: legal_crim_17.mp3
+Text to Record:
+"Counsel for the defense objects on the grounds of leading the witness. The court sustains the objection and strikes the witness's testimony regarding the recovered documents."
+--------------------------------------
+Title: Criminal Mastery 18
+Required Filename: legal_crim_18.mp3
+Text to Record:
+"In the matter of United States v. Doe, the defendant is charged with insider trading. The prosecution must prove beyond a reasonable doubt all elements of the offense."
+--------------------------------------
+Title: Criminal Mastery 19
+Required Filename: legal_crim_19.mp3
+Text to Record:
+"Counsel for the defense objects on the grounds of relevance. The court sustains the objection and strikes the witness's testimony regarding the alleged meeting."
+--------------------------------------
+Title: Criminal Mastery 20
+Required Filename: legal_crim_20.mp3
+Text to Record:
+"Counsel for the defense objects on the grounds of relevance. The court sustains the objection and strikes the witness's testimony regarding the timeline of events."
+--------------------------------------
+Title: Contracts Mastery 1
+Required Filename: legal_contract_1.mp3
+Text to Record:
+"This Non-Disclosure Agreement (the "Agreement") is entered into on January 15, 2024 by and between John Doe ("Disclosing Party") and Delta Corp ("Receiving Party")."
+--------------------------------------
+Title: Contracts Mastery 2
+Required Filename: legal_contract_2.mp3
+Text to Record:
+"In the event of a material breach by either party, the non-breaching party may terminate this Agreement upon 15 days written notice, provided the breach remains uncured."
+--------------------------------------
+Title: Contracts Mastery 3
+Required Filename: legal_contract_3.mp3
+Text to Record:
+"The parties hereto constitute independent contractors, and nothing contained in this Agreement shall be construed to create a partnership, joint venture, or agency relationship."
+--------------------------------------
+Title: Contracts Mastery 4
+Required Filename: legal_contract_4.mp3
+Text to Record:
+"This Non-Disclosure Agreement (the "Agreement") is entered into on the effective date by and between The Grantor ("Disclosing Party") and The Grantee ("Receiving Party")."
+--------------------------------------
+Title: Contracts Mastery 5
+Required Filename: legal_contract_5.mp3
+Text to Record:
+"This Non-Disclosure Agreement (the "Agreement") is entered into on October 31st by and between Acme Corp ("Disclosing Party") and The Grantee ("Receiving Party")."
+--------------------------------------
+Title: Contracts Mastery 6
+Required Filename: legal_contract_6.mp3
+Text to Record:
+"This Non-Disclosure Agreement (the "Agreement") is entered into on October 31st by and between John Doe ("Disclosing Party") and Richard Roe ("Receiving Party")."
+--------------------------------------
+Title: Contracts Mastery 7
+Required Filename: legal_contract_7.mp3
+Text to Record:
+"The parties hereto constitute independent contractors, and nothing contained in this Agreement shall be construed to create a partnership, joint venture, or agency relationship."
+--------------------------------------
+Title: Contracts Mastery 8
+Required Filename: legal_contract_8.mp3
+Text to Record:
+"In the event of a material breach by either party, the non-breaching party may terminate this Agreement upon 60 days written notice, provided the breach remains uncured."
+--------------------------------------
+Title: Contracts Mastery 9
+Required Filename: legal_contract_9.mp3
+Text to Record:
+"In the event of a material breach by either party, the non-breaching party may terminate this Agreement upon 60 days written notice, provided the breach remains uncured."
+--------------------------------------
+Title: Contracts Mastery 10
+Required Filename: legal_contract_10.mp3
+Text to Record:
+"In the event of a material breach by either party, the non-breaching party may terminate this Agreement upon 30 days written notice, provided the breach remains uncured."
+--------------------------------------
+Title: Contracts Mastery 11
+Required Filename: legal_contract_11.mp3
+Text to Record:
+"This Non-Disclosure Agreement (the "Agreement") is entered into on the effective date by and between The Plaintiff ("Disclosing Party") and Mary Major ("Receiving Party")."
+--------------------------------------
+Title: Contracts Mastery 12
+Required Filename: legal_contract_12.mp3
+Text to Record:
+"In the event of a material breach by either party, the non-breaching party may terminate this Agreement upon 60 days written notice, provided the breach remains uncured."
+--------------------------------------
+Title: Contracts Mastery 13
+Required Filename: legal_contract_13.mp3
+Text to Record:
+"In the event of a material breach by either party, the non-breaching party may terminate this Agreement upon 30 days written notice, provided the breach remains uncured."
+--------------------------------------
+Title: Contracts Mastery 14
+Required Filename: legal_contract_14.mp3
+Text to Record:
+"In the event of a material breach by either party, the non-breaching party may terminate this Agreement upon 30 days written notice, provided the breach remains uncured."
+--------------------------------------
+Title: Contracts Mastery 15
+Required Filename: legal_contract_15.mp3
+Text to Record:
+"In the event of a material breach by either party, the non-breaching party may terminate this Agreement upon 15 days written notice, provided the breach remains uncured."
+--------------------------------------
+Title: Contracts Mastery 16
+Required Filename: legal_contract_16.mp3
+Text to Record:
+"This Non-Disclosure Agreement (the "Agreement") is entered into on the effective date by and between The Assignor ("Disclosing Party") and The Defendant ("Receiving Party")."
+--------------------------------------
+Title: Contracts Mastery 17
+Required Filename: legal_contract_17.mp3
+Text to Record:
+"This Non-Disclosure Agreement (the "Agreement") is entered into on March 1st by and between Jane Smith ("Disclosing Party") and The Grantee ("Receiving Party")."
+--------------------------------------
+Title: Contracts Mastery 18
+Required Filename: legal_contract_18.mp3
+Text to Record:
+"This Non-Disclosure Agreement (the "Agreement") is entered into on March 1st by and between Tech Solutions LLC ("Disclosing Party") and Mary Major ("Receiving Party")."
+--------------------------------------
+Title: Contracts Mastery 19
+Required Filename: legal_contract_19.mp3
+Text to Record:
+"This Non-Disclosure Agreement (the "Agreement") is entered into on December 31, 2023 by and between The Grantor ("Disclosing Party") and The Grantee ("Receiving Party")."
+--------------------------------------
+Title: Contracts Mastery 20
+Required Filename: legal_contract_20.mp3
+Text to Record:
+"This Non-Disclosure Agreement (the "Agreement") is entered into on January 15, 2024 by and between Tech Solutions LLC ("Disclosing Party") and Delta Corp ("Receiving Party")."
+--------------------------------------
+Title: Intellectual Property Mastery 1
+Required Filename: legal_ip_1.mp3
+Text to Record:
+"The trademark 'NovaLumina' is actively used in commerce in connection with the sale of consumer electronics. The respondent's use of a confusingly similar mark constitutes trademark infringement."
+--------------------------------------
+Title: Intellectual Property Mastery 2
+Required Filename: legal_ip_2.mp3
+Text to Record:
+"The Assignor hereby irrevocably assigns, transfers, and conveys to the Assignee all right, title, and interest in and to the Intellectual Property, including U.S. Patent No. 10,123,456."
+--------------------------------------
+Title: Intellectual Property Mastery 3
+Required Filename: legal_ip_3.mp3
+Text to Record:
+"The trademark 'OmniSphere' is actively used in commerce in connection with the sale of apparel. The respondent's use of a confusingly similar mark constitutes trademark infringement."
+--------------------------------------
+Title: Intellectual Property Mastery 4
+Required Filename: legal_ip_4.mp3
+Text to Record:
+"The trademark 'AeroDash' is actively used in commerce in connection with the sale of software services. The respondent's use of a confusingly similar mark constitutes trademark infringement."
+--------------------------------------
+Title: Intellectual Property Mastery 5
+Required Filename: legal_ip_5.mp3
+Text to Record:
+"Copyright infringement is alleged regarding the unauthorized reproduction and distribution of the plaintiff's original literary work, titled 'The Silent Horizon'."
+--------------------------------------
+Title: Intellectual Property Mastery 6
+Required Filename: legal_ip_6.mp3
+Text to Record:
+"Copyright infringement is alleged regarding the unauthorized reproduction and distribution of the plaintiff's original literary work, titled 'Advanced Algorithms'."
+--------------------------------------
+Title: Intellectual Property Mastery 7
+Required Filename: legal_ip_7.mp3
+Text to Record:
+"Copyright infringement is alleged regarding the unauthorized reproduction and distribution of the plaintiff's original literary work, titled 'The Silent Horizon'."
+--------------------------------------
+Title: Intellectual Property Mastery 8
+Required Filename: legal_ip_8.mp3
+Text to Record:
+"The Assignor hereby irrevocably assigns, transfers, and conveys to the Assignee all right, title, and interest in and to the Intellectual Property, including U.S. Patent No. 9,876,543."
+--------------------------------------
+Title: Intellectual Property Mastery 9
+Required Filename: legal_ip_9.mp3
+Text to Record:
+"The Assignor hereby irrevocably assigns, transfers, and conveys to the Assignee all right, title, and interest in and to the Intellectual Property, including U.S. Patent No. 10,123,456."
+--------------------------------------
+Title: Intellectual Property Mastery 10
+Required Filename: legal_ip_10.mp3
+Text to Record:
+"The trademark 'OmniSphere' is actively used in commerce in connection with the sale of apparel. The respondent's use of a confusingly similar mark constitutes trademark infringement."
+--------------------------------------
+Title: Intellectual Property Mastery 11
+Required Filename: legal_ip_11.mp3
+Text to Record:
+"Copyright infringement is alleged regarding the unauthorized reproduction and distribution of the plaintiff's original literary work, titled 'Corporate Dynamics'."
+--------------------------------------
+Title: Intellectual Property Mastery 12
+Required Filename: legal_ip_12.mp3
+Text to Record:
+"Copyright infringement is alleged regarding the unauthorized reproduction and distribution of the plaintiff's original literary work, titled 'Advanced Algorithms'."
+--------------------------------------
+Title: Intellectual Property Mastery 13
+Required Filename: legal_ip_13.mp3
+Text to Record:
+"The trademark 'QuantumSync' is actively used in commerce in connection with the sale of apparel. The respondent's use of a confusingly similar mark constitutes trademark infringement."
+--------------------------------------
+Title: Intellectual Property Mastery 14
+Required Filename: legal_ip_14.mp3
+Text to Record:
+"The trademark 'NovaLumina' is actively used in commerce in connection with the sale of apparel. The respondent's use of a confusingly similar mark constitutes trademark infringement."
+--------------------------------------
+Title: Intellectual Property Mastery 15
+Required Filename: legal_ip_15.mp3
+Text to Record:
+"The Assignor hereby irrevocably assigns, transfers, and conveys to the Assignee all right, title, and interest in and to the Intellectual Property, including U.S. Patent No. 10,123,456."
+--------------------------------------
+Title: Intellectual Property Mastery 16
+Required Filename: legal_ip_16.mp3
+Text to Record:
+"The trademark 'NovaLumina' is actively used in commerce in connection with the sale of software services. The respondent's use of a confusingly similar mark constitutes trademark infringement."
+--------------------------------------
+Title: Intellectual Property Mastery 17
+Required Filename: legal_ip_17.mp3
+Text to Record:
+"Copyright infringement is alleged regarding the unauthorized reproduction and distribution of the plaintiff's original literary work, titled 'Echoes of Eternity'."
+--------------------------------------
+Title: Intellectual Property Mastery 18
+Required Filename: legal_ip_18.mp3
+Text to Record:
+"Copyright infringement is alleged regarding the unauthorized reproduction and distribution of the plaintiff's original literary work, titled 'Advanced Algorithms'."
+--------------------------------------
+Title: Intellectual Property Mastery 19
+Required Filename: legal_ip_19.mp3
+Text to Record:
+"The Assignor hereby irrevocably assigns, transfers, and conveys to the Assignee all right, title, and interest in and to the Intellectual Property, including U.S. Patent No. 9,876,543."
+--------------------------------------
+Title: Intellectual Property Mastery 20
+Required Filename: legal_ip_20.mp3
+Text to Record:
+"Copyright infringement is alleged regarding the unauthorized reproduction and distribution of the plaintiff's original literary work, titled 'Advanced Algorithms'."
+--------------------------------------
+Title: Litigation Mastery 1
+Required Filename: legal_lit_1.mp3
+Text to Record:
+"Plaintiff respectfully requests that the Court deny Defendant's Motion to Dismiss, as the Complaint pleads sufficient factual matter to state a claim to relief that is plausible on its face."
+--------------------------------------
+Title: Litigation Mastery 2
+Required Filename: legal_lit_2.mp3
+Text to Record:
+"The parties stipulate to the admissibility of the documents Bates stamped PLTF_100 to PLTF_200 for trial purposes."
+--------------------------------------
+Title: Litigation Mastery 3
+Required Filename: legal_lit_3.mp3
+Text to Record:
+"During the deposition, the deponent testified that they had no prior knowledge of the data breach. This contradicts Exhibit D entered into evidence."
+--------------------------------------
+Title: Litigation Mastery 4
+Required Filename: legal_lit_4.mp3
+Text to Record:
+"The parties stipulate to the admissibility of the documents Bates stamped PLTF_100 to PLTF_200 for trial purposes."
+--------------------------------------
+Title: Litigation Mastery 5
+Required Filename: legal_lit_5.mp3
+Text to Record:
+"Plaintiff respectfully requests that the Court deny Defendant's Motion to Dismiss, as the Complaint pleads sufficient factual matter to state a claim to relief that is plausible on its face."
+--------------------------------------
+Title: Litigation Mastery 6
+Required Filename: legal_lit_6.mp3
+Text to Record:
+"The parties stipulate to the admissibility of the documents Bates stamped DEF_00001 to DEF_00500 for trial purposes."
+--------------------------------------
+Title: Litigation Mastery 7
+Required Filename: legal_lit_7.mp3
+Text to Record:
+"Plaintiff respectfully requests that the Court deny Defendant's Motion to Dismiss, as the Complaint pleads sufficient factual matter to state a claim to relief that is plausible on its face."
+--------------------------------------
+Title: Litigation Mastery 8
+Required Filename: legal_lit_8.mp3
+Text to Record:
+"During the deposition, the deponent testified that they had no prior knowledge of the board meeting. This contradicts Exhibit A entered into evidence."
+--------------------------------------
+Title: Litigation Mastery 9
+Required Filename: legal_lit_9.mp3
+Text to Record:
+"Plaintiff respectfully requests that the Court deny Defendant's Motion to Dismiss, as the Complaint pleads sufficient factual matter to state a claim to relief that is plausible on its face."
+--------------------------------------
+Title: Litigation Mastery 10
+Required Filename: legal_lit_10.mp3
+Text to Record:
+"The parties stipulate to the admissibility of the documents Bates stamped PROD_001001 to PROD_001050 for trial purposes."
+--------------------------------------
+Title: Litigation Mastery 11
+Required Filename: legal_lit_11.mp3
+Text to Record:
+"During the deposition, the deponent testified that they had no prior knowledge of the data breach. This contradicts Exhibit B entered into evidence."
+--------------------------------------
+Title: Litigation Mastery 12
+Required Filename: legal_lit_12.mp3
+Text to Record:
+"The parties stipulate to the admissibility of the documents Bates stamped PLTF_100 to PLTF_200 for trial purposes."
+--------------------------------------
+Title: Litigation Mastery 13
+Required Filename: legal_lit_13.mp3
+Text to Record:
+"Plaintiff respectfully requests that the Court deny Defendant's Motion to Dismiss, as the Complaint pleads sufficient factual matter to state a claim to relief that is plausible on its face."
+--------------------------------------
+Title: Litigation Mastery 14
+Required Filename: legal_lit_14.mp3
+Text to Record:
+"Plaintiff respectfully requests that the Court deny Defendant's Motion to Dismiss, as the Complaint pleads sufficient factual matter to state a claim to relief that is plausible on its face."
+--------------------------------------
+Title: Litigation Mastery 15
+Required Filename: legal_lit_15.mp3
+Text to Record:
+"During the deposition, the deponent testified that they had no prior knowledge of the contract signing. This contradicts Exhibit A entered into evidence."
+--------------------------------------
+Title: Litigation Mastery 16
+Required Filename: legal_lit_16.mp3
+Text to Record:
+"During the deposition, the deponent testified that they had no prior knowledge of the data breach. This contradicts Exhibit E entered into evidence."
+--------------------------------------
+Title: Litigation Mastery 17
+Required Filename: legal_lit_17.mp3
+Text to Record:
+"During the deposition, the deponent testified that they had no prior knowledge of the data breach. This contradicts Exhibit A entered into evidence."
+--------------------------------------
+Title: Litigation Mastery 18
+Required Filename: legal_lit_18.mp3
+Text to Record:
+"Plaintiff respectfully requests that the Court deny Defendant's Motion to Dismiss, as the Complaint pleads sufficient factual matter to state a claim to relief that is plausible on its face."
+--------------------------------------
+Title: Litigation Mastery 19
+Required Filename: legal_lit_19.mp3
+Text to Record:
+"The parties stipulate to the admissibility of the documents Bates stamped DEF_00001 to DEF_00500 for trial purposes."
+--------------------------------------
+Title: Litigation Mastery 20
+Required Filename: legal_lit_20.mp3
+Text to Record:
+"During the deposition, the deponent testified that they had no prior knowledge of the merger negotiations. This contradicts Exhibit D entered into evidence."
+--------------------------------------
+Title: Tax Mastery 1
+Required Filename: legal_tax_1.mp3
+Text to Record:
+"The taxpayer claims a deduction for ordinary and necessary business expenses incurred during the taxable year, pursuant to 26 U.S.C. § 162."
+--------------------------------------
+Title: Tax Mastery 2
+Required Filename: legal_tax_2.mp3
+Text to Record:
+"The taxpayer claims a deduction for ordinary and necessary business expenses incurred during the taxable year, pursuant to 26 U.S.C. § 162."
+--------------------------------------
+Title: Tax Mastery 3
+Required Filename: legal_tax_3.mp3
+Text to Record:
+"The IRS issued a Notice of Deficiency assessing an underpayment of income tax in the amount of $5,000,000 for the tax year ending January 15, 2024."
+--------------------------------------
+Title: Tax Mastery 4
+Required Filename: legal_tax_4.mp3
+Text to Record:
+"The taxpayer claims a deduction for ordinary and necessary business expenses incurred during the taxable year, pursuant to 26 U.S.C. § 162."
+--------------------------------------
+Title: Tax Mastery 5
+Required Filename: legal_tax_5.mp3
+Text to Record:
+"The IRS issued a Notice of Deficiency assessing an underpayment of income tax in the amount of $100,000 for the tax year ending January 15, 2024."
+--------------------------------------
+Title: Tax Mastery 6
+Required Filename: legal_tax_6.mp3
+Text to Record:
+"Under Section 12.3 of the Internal Revenue Code, the transaction qualifies as a tax-free reorganization."
+--------------------------------------
+Title: Tax Mastery 7
+Required Filename: legal_tax_7.mp3
+Text to Record:
+"Under Section 4.2 of the Internal Revenue Code, the transaction qualifies as a tax-free reorganization."
+--------------------------------------
+Title: Tax Mastery 8
+Required Filename: legal_tax_8.mp3
+Text to Record:
+"The taxpayer claims a deduction for ordinary and necessary business expenses incurred during the taxable year, pursuant to 26 U.S.C. § 162."
+--------------------------------------
+Title: Tax Mastery 9
+Required Filename: legal_tax_9.mp3
+Text to Record:
+"The taxpayer claims a deduction for ordinary and necessary business expenses incurred during the taxable year, pursuant to 26 U.S.C. § 162."
+--------------------------------------
+Title: Tax Mastery 10
+Required Filename: legal_tax_10.mp3
+Text to Record:
+"The IRS issued a Notice of Deficiency assessing an underpayment of income tax in the amount of $5,000,000 for the tax year ending March 1st."
+--------------------------------------
+Title: Tax Mastery 11
+Required Filename: legal_tax_11.mp3
+Text to Record:
+"The taxpayer claims a deduction for ordinary and necessary business expenses incurred during the taxable year, pursuant to 26 U.S.C. § 162."
+--------------------------------------
+Title: Tax Mastery 12
+Required Filename: legal_tax_12.mp3
+Text to Record:
+"Under Section 501(c)(3) of the Internal Revenue Code, the transaction qualifies as a tax-free reorganization."
+--------------------------------------
+Title: Tax Mastery 13
+Required Filename: legal_tax_13.mp3
+Text to Record:
+"Under Section 1.1 of the Internal Revenue Code, the transaction qualifies as a tax-free reorganization."
+--------------------------------------
+Title: Tax Mastery 14
+Required Filename: legal_tax_14.mp3
+Text to Record:
+"Under Section 12.3 of the Internal Revenue Code, the transaction qualifies as a tax-free reorganization."
+--------------------------------------
+Title: Tax Mastery 15
+Required Filename: legal_tax_15.mp3
+Text to Record:
+"Under Section 501(c)(3) of the Internal Revenue Code, the transaction qualifies as a tax-free reorganization."
+--------------------------------------
+Title: Tax Mastery 16
+Required Filename: legal_tax_16.mp3
+Text to Record:
+"Under Section 8.5 of the Internal Revenue Code, the transaction qualifies as a tax-free reorganization."
+--------------------------------------
+Title: Tax Mastery 17
+Required Filename: legal_tax_17.mp3
+Text to Record:
+"The IRS issued a Notice of Deficiency assessing an underpayment of income tax in the amount of $2,500 for the tax year ending December 31, 2023."
+--------------------------------------
+Title: Tax Mastery 18
+Required Filename: legal_tax_18.mp3
+Text to Record:
+"The taxpayer claims a deduction for ordinary and necessary business expenses incurred during the taxable year, pursuant to 26 U.S.C. § 162."
+--------------------------------------
+Title: Tax Mastery 19
+Required Filename: legal_tax_19.mp3
+Text to Record:
+"The taxpayer claims a deduction for ordinary and necessary business expenses incurred during the taxable year, pursuant to 26 U.S.C. § 162."
+--------------------------------------
+Title: Tax Mastery 20
+Required Filename: legal_tax_20.mp3
+Text to Record:
+"The IRS issued a Notice of Deficiency assessing an underpayment of income tax in the amount of $100,000 for the tax year ending December 31, 2023."
+--------------------------------------
+Title: Real Estate Mastery 1
+Required Filename: legal_re_1.mp3
+Text to Record:
+"The Grantor conveys and warrants to the Grantee, their heirs and assigns forever, the real estate described as Lot 42 in the Whispering Pines Subdivision, subject to all easements and restrictions of record."
+--------------------------------------
+Title: Real Estate Mastery 2
+Required Filename: legal_re_2.mp3
+Text to Record:
+"The Grantor conveys and warrants to the Grantee, their heirs and assigns forever, the real estate described as Parcel #12345-6789 in the County Assessor's Office, subject to all easements and restrictions of record."
+--------------------------------------
+Title: Real Estate Mastery 3
+Required Filename: legal_re_3.mp3
+Text to Record:
+"The title search revealed an encumbrance on the property in the form of a mechanic's lien filed by The Assignor on January 15, 2024."
+--------------------------------------
+Title: Real Estate Mastery 4
+Required Filename: legal_re_4.mp3
+Text to Record:
+"This Commercial Lease Agreement commences on March 1st and expires on March 1st. Tenant shall pay base rent in the amount of $2,500 per month."
+--------------------------------------
+Title: Real Estate Mastery 5
+Required Filename: legal_re_5.mp3
+Text to Record:
+"The title search revealed an encumbrance on the property in the form of a mechanic's lien filed by The Plaintiff on January 15, 2024."
+--------------------------------------
+Title: Real Estate Mastery 6
+Required Filename: legal_re_6.mp3
+Text to Record:
+"This Commercial Lease Agreement commences on March 1st and expires on January 15, 2024. Tenant shall pay base rent in the amount of $1,000,000 per month."
+--------------------------------------
+Title: Real Estate Mastery 7
+Required Filename: legal_re_7.mp3
+Text to Record:
+"The Grantor conveys and warrants to the Grantee, their heirs and assigns forever, the real estate described as Parcel #12345-6789 in the County Assessor's Office, subject to all easements and restrictions of record."
+--------------------------------------
+Title: Real Estate Mastery 8
+Required Filename: legal_re_8.mp3
+Text to Record:
+"This Commercial Lease Agreement commences on the effective date and expires on January 15, 2024. Tenant shall pay base rent in the amount of $5,000,000 per month."
+--------------------------------------
+Title: Real Estate Mastery 9
+Required Filename: legal_re_9.mp3
+Text to Record:
+"The Grantor conveys and warrants to the Grantee, their heirs and assigns forever, the real estate described as Parcel #12345-6789 in the County Assessor's Office, subject to all easements and restrictions of record."
+--------------------------------------
+Title: Real Estate Mastery 10
+Required Filename: legal_re_10.mp3
+Text to Record:
+"This Commercial Lease Agreement commences on October 31st and expires on the effective date. Tenant shall pay base rent in the amount of $100,000 per month."
+--------------------------------------
+Title: Real Estate Mastery 11
+Required Filename: legal_re_11.mp3
+Text to Record:
+"This Commercial Lease Agreement commences on October 31st and expires on March 1st. Tenant shall pay base rent in the amount of $100,000 per month."
+--------------------------------------
+Title: Real Estate Mastery 12
+Required Filename: legal_re_12.mp3
+Text to Record:
+"The title search revealed an encumbrance on the property in the form of a mechanic's lien filed by The Grantor on the effective date."
+--------------------------------------
+Title: Real Estate Mastery 13
+Required Filename: legal_re_13.mp3
+Text to Record:
+"The Grantor conveys and warrants to the Grantee, their heirs and assigns forever, the real estate described as the premises located at 123 Main Street, subject to all easements and restrictions of record."
+--------------------------------------
+Title: Real Estate Mastery 14
+Required Filename: legal_re_14.mp3
+Text to Record:
+"The title search revealed an encumbrance on the property in the form of a mechanic's lien filed by John Doe on the effective date."
+--------------------------------------
+Title: Real Estate Mastery 15
+Required Filename: legal_re_15.mp3
+Text to Record:
+"The Grantor conveys and warrants to the Grantee, their heirs and assigns forever, the real estate described as Lot 42 in the Whispering Pines Subdivision, subject to all easements and restrictions of record."
+--------------------------------------
+Title: Real Estate Mastery 16
+Required Filename: legal_re_16.mp3
+Text to Record:
+"The title search revealed an encumbrance on the property in the form of a mechanic's lien filed by Tech Solutions LLC on December 31, 2023."
+--------------------------------------
+Title: Real Estate Mastery 17
+Required Filename: legal_re_17.mp3
+Text to Record:
+"The title search revealed an encumbrance on the property in the form of a mechanic's lien filed by The Assignor on October 31st."
+--------------------------------------
+Title: Real Estate Mastery 18
+Required Filename: legal_re_18.mp3
+Text to Record:
+"The Grantor conveys and warrants to the Grantee, their heirs and assigns forever, the real estate described as the premises located at 123 Main Street, subject to all easements and restrictions of record."
+--------------------------------------
+Title: Real Estate Mastery 19
+Required Filename: legal_re_19.mp3
+Text to Record:
+"This Commercial Lease Agreement commences on March 1st and expires on October 31st. Tenant shall pay base rent in the amount of $100,000 per month."
+--------------------------------------
+Title: Real Estate Mastery 20
+Required Filename: legal_re_20.mp3
+Text to Record:
+"The title search revealed an encumbrance on the property in the form of a mechanic's lien filed by The Assignor on October 31st."
+--------------------------------------

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ShieldAlert, Activity, Play, BookOpen, Clock, Target, Layers } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { getCodeDrillsBySpecialty } from '@shared/tracks/code';
 import { useAuth } from '../context/AuthContext';
@@ -76,6 +77,10 @@ export const CodeTrack: React.FC<CodeTrackProps> = ({ setStage, setLaunchParams 
 
     return (
         <div className="max-w-6xl mx-auto px-4 py-8">
+            <Helmet>
+                <title>Coding Typing Practice & Syntax Drills - TouchFlow Pro</title>
+                <meta name="description" content="Master programming syntax and code patterns. Improve your coding velocity by practicing your typing speed on TypeScript, Python, React, Rust, and more." />
+            </Helmet>
             <div className="flex items-center justify-between mb-8">
                 <div>
                     <h1 className="text-3xl font-black uppercase text-text-main flex items-center gap-3">

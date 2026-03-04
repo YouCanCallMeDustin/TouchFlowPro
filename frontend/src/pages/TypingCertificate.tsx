@@ -205,7 +205,7 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (isFailed || phase !== 'testing') return
 
-        if (!isStarted && e.key.length === 1) {
+        if (!isStarted && e.key.length === 1 && !e.ctrlKey && !e.metaKey) {
             setIsStarted(true)
             startTimeRef.current = Date.now()
             const timer = setInterval(() => {
@@ -221,20 +221,62 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
             timerRef.current = timer
         }
 
+        if (e.key.length === 1 && (e.ctrlKey || e.metaKey)) {
+            return;
+        }
+
+        if (e.key === 'Backspace' && (e.ctrlKey || e.altKey || e.metaKey)) {
+            e.preventDefault();
+            let deleteCount = 0;
+            const currentInput = userInputRef.current;
+            const currentText = testTextRef.current;
+            let i = currentInput.length - 1;
+            while (i >= 0 && currentInput[i] === ' ') {
+                deleteCount++;
+                i--;
+            }
+            while (i >= 0 && currentInput[i] !== ' ') {
+                deleteCount++;
+                i--;
+            }
+            if (deleteCount === 0 && currentInput.length > 0) deleteCount = 1;
+
+            if (deleteCount > 0) {
+                const newEvents: KeystrokeEvent[] = Array.from({ length: deleteCount }).map((_, idx) => ({
+                    keyCode: 'Backspace',
+                    key: 'Backspace',
+                    eventType: 'keydown',
+                    timestamp: Date.now() + idx,
+                    expectedKey: 'Backspace'
+                }));
+                const updated = [...keystrokesRef.current, ...newEvents];
+                keystrokesRef.current = updated;
+                const nextVal = currentInput.slice(0, currentInput.length - deleteCount);
+                userInputRef.current = nextVal;
+                setUserInput(nextVal);
+                setMetrics(TypingEngine.calculateMetrics(updated, currentText));
+            }
+            return;
+        }
+
         if (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Shift') {
+            let typedKey = e.key;
+            if (typedKey === '“' || typedKey === '”') typedKey = '"';
+            if (typedKey === '‘' || typedKey === '’') typedKey = "'";
+
             const currentInput = userInputRef.current
             const currentText = testTextRef.current
             const event: KeystrokeEvent = {
                 keyCode: e.code,
-                key: e.key,
+                key: typedKey,
                 eventType: 'keydown',
                 timestamp: Date.now(),
-                expectedKey: e.key === 'Shift' ? 'Shift' : currentText[currentInput.length]
+                expectedKey: typedKey === 'Shift' ? 'Shift' : currentText[currentInput.length]
             }
             const updated = [...keystrokesRef.current, event]
             keystrokesRef.current = updated
 
-            if (e.key !== 'Shift') {
+            if (typedKey !== 'Shift') {
                 const newMetrics = TypingEngine.calculateMetrics(updated, currentText)
                 setMetrics(newMetrics)
             }

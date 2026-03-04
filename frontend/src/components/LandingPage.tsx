@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import {
@@ -24,7 +26,6 @@ import { FeatureCard } from './Landing/FeatureCard';
 interface LandingPageProps {
     onStartAssessment: () => void;
     onViewSampleReport: () => void;
-    onStartFreeTest: () => void;
 }
 
 const containerVariants: Variants = {
@@ -116,9 +117,13 @@ const AccordionItem: React.FC<{ question: string; answer: string }> = ({ questio
     );
 };
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onViewSampleReport, onStartFreeTest }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onViewSampleReport }) => {
     return (
         <div className="w-full">
+            <Helmet>
+                <title>TouchFlow Pro — Professional Typing Performance Trainer</title>
+                <meta name="description" content="Professional-grade typing performance training for serious typists. Keystroke analytics, deliberate practice drills, and structured training plans to measurably increase your speed and accuracy." />
+            </Helmet>
             {/* 1) HERO */}
             <section className="relative min-h-[90vh] w-full flex items-center justify-center overflow-hidden px-4 md:px-0">
                 <HeroFlow />
@@ -144,13 +149,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                     </motion.p>
 
                     <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-                        <Button
-                            onClick={onStartFreeTest}
-                            className="w-full sm:w-auto px-12 py-7 rounded-2xl font-black uppercase tracking-[0.3em] text-[13px] shadow-[0_20px_50px_rgba(var(--primary-rgb),0.3)] group relative overflow-hidden"
+                        <Link
+                            to="/free-typing-test"
+                            className="w-full sm:w-auto px-12 py-7 rounded-2xl font-black uppercase tracking-[0.3em] text-[13px] shadow-[0_20px_50px_rgba(var(--primary-rgb),0.3)] group relative overflow-hidden bg-[var(--primary)] text-white hover:opacity-90 inline-flex items-center justify-center"
                         >
                             Start Free (Takes 60 seconds)
                             <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
-                        </Button>
+                        </Link>
                     </motion.div>
 
                     <motion.p variants={itemVariants} className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted opacity-40 mb-12">
@@ -274,9 +279,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                     </div>
                     <div className="mt-20 text-center">
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                            <Button onClick={onStartFreeTest} className="px-12 py-5 rounded-2xl font-black uppercase tracking-[0.3em] text-[11px]">
+                            <Link
+                                to="/free-typing-test"
+                                className="px-12 py-5 rounded-2xl font-black uppercase tracking-[0.3em] text-[11px] bg-[var(--primary)] text-white hover:opacity-90 inline-flex items-center justify-center shadow-md hover:shadow-lg"
+                            >
                                 Start Free
-                            </Button>
+                            </Link>
                             <button
                                 onClick={onViewSampleReport}
                                 className="text-[11px] font-black uppercase tracking-[0.3em] text-text-muted hover:text-primary transition-colors border-b border-white/10 pb-1"
@@ -463,12 +471,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                         Start free, run your baseline, and get your first training plan in minutes.
                     </p>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                        <Button
-                            onClick={onStartFreeTest}
-                            className="w-full sm:w-auto px-16 py-7 rounded-2xl font-black uppercase tracking-[0.4em] text-[13px] shadow-2xl shadow-primary/30"
+                        <Link
+                            to="/free-typing-test"
+                            className="w-full sm:w-auto px-16 py-7 rounded-2xl font-black uppercase tracking-[0.4em] text-[13px] shadow-2xl shadow-primary/30 bg-[var(--primary)] text-white hover:opacity-90 inline-flex items-center justify-center"
                         >
                             Start Free
-                        </Button>
+                        </Link>
                     </div>
                 </div>
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-[300px] bg-primary/10 blur-[120px] rounded-[100%] pointer-events-none" />

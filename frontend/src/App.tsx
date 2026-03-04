@@ -1,5 +1,7 @@
 import { TypingEngine } from '@shared/typingEngine'
 import { useState, useEffect, useCallback } from 'react'
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { AnimatePresence } from 'framer-motion'
 import { Card } from './components/ui/Card'
 import { Button } from './components/ui/Button'
@@ -56,16 +58,37 @@ import { MedicalTrack } from './pages/MedicalTrack';
 import { LegalTrack } from './pages/LegalTrack';
 import { CodeTrack } from './pages/CodeTrack';
 import FreeTypingTest from './pages/FreeTypingTest';
+import { TypingPlateauArticle } from './pages/articles/TypingPlateauArticle';
+import { TypeFasterArticle } from './pages/articles/TypeFasterArticle';
+import { SixtyToHundredArticle } from './pages/articles/SixtyToHundredArticle';
 
-export type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension' | 'games' | 'games_accuracy_assassin' | 'games_burner_burst' | 'games_spell_rush' | 'orgs' | 'settings' | 'sample_report' | 'medicalTrack' | 'legalTrack' | 'codingTrack' | 'free_test'
+export type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension' | 'games' | 'games_accuracy_assassin' | 'games_burner_burst' | 'games_spell_rush' | 'orgs' | 'settings' | 'sample_report' | 'medicalTrack' | 'legalTrack' | 'codingTrack' | 'free_test' | 'article_plateau' | 'article_faster' | 'article_60_to_100'
+
+const STAGE_ROUTES: Partial<Record<Stage, string>> = {
+  welcome: '/',
+  free_test: '/free-typing-test',
+  medicalTrack: '/medical-typing-practice',
+  legalTrack: '/legal-typing-test',
+  codingTrack: '/code-typing-practice',
+  pricing: '/pricing',
+  terms: '/terms',
+  privacy: '/privacy-policy',
+  article_plateau: '/articles/typing-speed-plateau',
+  article_faster: '/articles/type-faster-accurately',
+  article_60_to_100: '/articles/60-wpm-to-100-wpm',
+};
+
+const ROUTE_STAGES: Record<string, Stage> = Object.fromEntries(
+  Object.entries(STAGE_ROUTES).map(([stage, path]) => [path, stage as Stage])
+);
 
 function App() {
   const { user, loading, logout } = useAuth()
+  const location = useLocation()
+  const navigate = useNavigate()
+
   const [stage, setStage] = useState<Stage>(() => {
-    if (typeof window !== 'undefined' && window.location.pathname === '/free_test') {
-      return 'free_test';
-    }
-    return 'welcome';
+    return ROUTE_STAGES[location.pathname] || 'welcome';
   })
   const [assessmentMetrics, setAssessmentMetrics] = useState<TypingMetrics | null>(null)
   const [userProgress, setUserProgress] = useState<UserProgress | null>(null)
@@ -86,15 +109,22 @@ function App() {
     localStorage.setItem('theme', 'dark');
   }, []);
 
-  // Scroll to top on page change and update URL for shareability
+  // Sync URL from stage changes
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (stage === 'free_test') {
-      window.history.replaceState(null, '', '/free_test');
-    } else if (window.location.pathname === '/free_test' && (stage as string) !== 'free_test') {
-      window.history.replaceState(null, '', '/');
+    const targetPath = STAGE_ROUTES[stage];
+    if (targetPath && targetPath !== location.pathname) {
+      navigate(targetPath, { replace: true });
     }
-  }, [stage]);
+  }, [stage, navigate, location.pathname]);
+
+  // Sync stage from Back/Forward navigation
+  useEffect(() => {
+    const matchedStage = ROUTE_STAGES[location.pathname];
+    if (matchedStage && matchedStage !== stage) {
+      setStage(matchedStage);
+    }
+  }, [location.pathname, stage]);
 
   const fetchProgress = useCallback(async (id: string) => {
     setIsFetchingProgress(true)
@@ -136,7 +166,7 @@ function App() {
         fetchProgress(user.id)
       } else {
         // Only override state if we aren't explicitly on a public route
-        if (stage !== 'free_test') {
+        if (!ROUTE_STAGES[location.pathname] || location.pathname === '/') {
           setStage('welcome')
         }
       }
@@ -400,6 +430,9 @@ function App() {
 
   return (
     <ErrorBoundary>
+      <Helmet>
+        <link rel="canonical" href={`https://touchflowpro.com${location.pathname === '/' ? '' : location.pathname}`} />
+      </Helmet>
       <div className="min-h-screen bg-bg-main selection:bg-primary/20 relative">
         <Header
           user={user}
@@ -440,7 +473,6 @@ function App() {
                 <LandingPage
                   onStartAssessment={() => setStage('assessment')}
                   onViewSampleReport={() => setStage('sample_report')}
-                  onStartFreeTest={() => setStage('free_test')}
                 />
               </PageTransition>
             )}
@@ -752,6 +784,24 @@ function App() {
                 </div>
               </PageTransition>
             )}
+
+            {stage === 'article_plateau' && (
+              <PageTransition key="article_plateau">
+                <TypingPlateauArticle onNavigate={(s: string) => setStage(s as Stage)} />
+              </PageTransition>
+            )}
+
+            {stage === 'article_faster' && (
+              <PageTransition key="article_faster">
+                <TypeFasterArticle onNavigate={(s: string) => setStage(s as Stage)} />
+              </PageTransition>
+            )}
+
+            {stage === 'article_60_to_100' && (
+              <PageTransition key="article_60_to_100">
+                <SixtyToHundredArticle onNavigate={(s: string) => setStage(s as Stage)} />
+              </PageTransition>
+            )}
           </AnimatePresence>
         </main>
 
@@ -763,25 +813,49 @@ function App() {
           newLevel={showAchievement?.level}
         />
 
-        <footer className="border-t border-white/5 mt-12 py-6 px-4">
-          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+        <footer className="border-t border-white/5 mt-12 py-12 px-4 bg-bg-main relative z-50">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div className="col-span-1 md:col-span-2">
+              <h3 className="text-xl font-black text-white uppercase tracking-tighter italic mb-4">
+                TouchFlow <span className="text-primary">Pro</span>
+              </h3>
+              <p className="text-sm text-text-muted opacity-80 max-w-sm mb-6">
+                Professional-grade typing performance training. Measure your baseline, discover your bottlenecks, and drill your weaknesses with adaptive telemetry.
+              </p>
+            </div>
+
+            <div>
+              <h4 className="text-xs font-black text-white uppercase tracking-widest mb-4">Performance Guides</h4>
+              <ul className="flex flex-col gap-3">
+                <li>
+                  <Link to="/articles/typing-speed-plateau" className="text-xs text-text-muted hover:text-primary transition-colors font-medium">Overcoming the Speed Plateau</Link>
+                </li>
+                <li>
+                  <Link to="/articles/type-faster-accurately" className="text-xs text-text-muted hover:text-primary transition-colors font-medium">Accuracy vs. Velocity</Link>
+                </li>
+                <li>
+                  <Link to="/articles/60-wpm-to-100-wpm" className="text-xs text-text-muted hover:text-primary transition-colors font-medium">60 WPM to 100 WPM</Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-xs font-black text-white uppercase tracking-widest mb-4">Legal</h4>
+              <ul className="flex flex-col gap-3">
+                <li>
+                  <Link to="/terms" className="text-xs text-text-muted hover:text-white transition-colors font-medium">Terms of Service</Link>
+                </li>
+                <li>
+                  <Link to="/privacy-policy" className="text-xs text-text-muted hover:text-white transition-colors font-medium">Privacy Policy</Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="max-w-7xl mx-auto pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3">
             <span className="text-[10px] text-text-muted font-medium">
               © {new Date().getFullYear()} TouchFlow Pro. All rights reserved.
             </span>
-            <div className="flex items-center gap-6">
-              <button
-                onClick={() => setStage('terms')}
-                className="text-[10px] text-text-muted hover:text-primary transition-colors font-medium uppercase tracking-[0.15em]"
-              >
-                Terms of Service
-              </button>
-              <button
-                onClick={() => setStage('privacy')}
-                className="text-[10px] text-text-muted hover:text-primary transition-colors font-medium uppercase tracking-[0.15em]"
-              >
-                Privacy Policy
-              </button>
-            </div>
           </div>
         </footer>
 
