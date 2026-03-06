@@ -112,47 +112,7 @@ const SEO_PAGES: { slug: string; lastmod: string; priority: string }[] = [
 // In dev (ts-node):  __dirname = backend/src/routes  → ../seo
 // In prod (compiled): __dirname = dist/backend/src/routes → ../seo
 
-// ---------------------------------------------------------------------------
-// robots.txt
-// ---------------------------------------------------------------------------
-router.get('/robots.txt', (_req: Request, res: Response) => {
-    res.type('text/plain');
-    res.send(
-        `User-agent: *\nAllow: /\n\nSitemap: https://touchflowpro.com/sitemap.xml\n`
-    );
-});
 
-// ---------------------------------------------------------------------------
-// sitemap.xml
-// ---------------------------------------------------------------------------
-router.get('/sitemap.xml', (_req: Request, res: Response) => {
-    const today = new Date().toISOString().split('T')[0];
-
-    const staticEntries = [
-        { loc: 'https://touchflowpro.com/', lastmod: today, priority: '1.0' },
-        { loc: 'https://touchflowpro.com/free_test', lastmod: today, priority: '0.9' },
-    ];
-
-    const seoEntries = SEO_PAGES.map((p) => ({
-        loc: `https://touchflowpro.com/${p.slug}`,
-        lastmod: p.lastmod,
-        priority: p.priority,
-    }));
-
-    const entries = [...staticEntries, ...seoEntries];
-
-    const urls = entries
-        .map(
-            (e) =>
-                `  <url>\n    <loc>${e.loc}</loc>\n    <lastmod>${e.lastmod}</lastmod>\n    <priority>${e.priority}</priority>\n  </url>`
-        )
-        .join('\n');
-
-    const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
-
-    res.type('application/xml');
-    res.send(xml);
-});
 
 // ---------------------------------------------------------------------------
 // SEO page routes
