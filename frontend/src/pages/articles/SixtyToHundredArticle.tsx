@@ -14,8 +14,34 @@ export const SixtyToHundredArticle: React.FC<ArticleProps> = () => {
     return (
         <div className="min-h-screen py-12 px-4 flex flex-col items-center">
             <Helmet>
-                <title>How to go from 60 WPM to 100 WPM — TouchFlow Pro</title>
-                <meta name="description" content="A structural guide on taking your typing speed from an average 60 WPM to an elite 100 WPM using advanced techniques, n-gram training, and proper ergonomics." />
+                <title>60 WPM to 100 WPM: Professional Typing Speed Benchmarks & Guide</title>
+                <meta name="description" content="A structural guide on taking your typing speed from an average 60 WPM to an elite 100 WPM. Includes professional benchmarks and motor learning strategies." />
+                
+                {/* Structured Data */}
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "FAQPage",
+                        "mainEntity": [
+                            {
+                                "@type": "Question",
+                                "name": "What is a good typing speed?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "A good typing speed for most professional roles is 60-80 WPM. However, for elite technical or administrative roles, 90-100+ WPM is considered the gold standard for peak productivity."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "Is 60 WPM fast?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Yes, 60 WPM is above average and sufficient for most office work. The average typist scores around 40 WPM. Moving beyond 60 WPM requires shifting from letter-by-letter processing to word-level 'bursting'."
+                                }
+                            }
+                        ]
+                    })}
+                </script>
             </Helmet>
 
             <motion.article
@@ -50,6 +76,30 @@ export const SixtyToHundredArticle: React.FC<ArticleProps> = () => {
                         <p className="text-sm opacity-80 mb-0">
                             A 60 WPM typist reads a word, spells it out in their head, and presses the keys in sequence. A 100 WPM typist reads the next three words, recognizes the physical shape of those words on the keyboard, and their fingers execute the macro-commands simultaneously.
                         </p>
+                    </div>
+
+                    <h2 className="text-2xl font-black text-white mt-12 mb-4 uppercase tracking-tight">Professional Typing Speed Benchmarks</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-8 not-prose">
+                        <div className="p-4 bg-white/5 border border-white/10 rounded-xl">
+                            <span className="text-[10px] font-black text-text-muted uppercase tracking-widest">40 WPM</span>
+                            <h4 className="text-lg font-bold text-white mb-1">Global Average</h4>
+                            <p className="text-xs opacity-60">Sufficient for casual writing and email messaging.</p>
+                        </div>
+                        <div className="p-4 bg-white/5 border border-white/10 rounded-xl border-emerald-500/30">
+                            <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">60 WPM</span>
+                            <h4 className="text-lg font-bold text-white mb-1">Professional Standard</h4>
+                            <p className="text-xs opacity-60">The benchmark for office productivity and data entry.</p>
+                        </div>
+                        <div className="p-4 bg-white/5 border border-white/10 rounded-xl">
+                            <span className="text-[10px] font-black text-text-muted uppercase tracking-widest">80 WPM</span>
+                            <h4 className="text-lg font-bold text-white mb-1">High Performance</h4>
+                            <p className="text-xs opacity-60">Required for transcription, legal, and medical coding.</p>
+                        </div>
+                        <div className="p-4 bg-primary/10 border border-primary/30 rounded-xl">
+                            <span className="text-[10px] font-black text-primary uppercase tracking-widest">100+ WPM</span>
+                            <h4 className="text-lg font-bold text-white mb-1">Elite Professional</h4>
+                            <p className="text-xs opacity-80">Typing at the speed of thought. Zero cognitive drag.</p>
+                        </div>
                     </div>
 
                     <h2 className="text-2xl font-black text-white mt-12 mb-4 uppercase tracking-tight">Step 1: Shift to Word-Level Processing</h2>
