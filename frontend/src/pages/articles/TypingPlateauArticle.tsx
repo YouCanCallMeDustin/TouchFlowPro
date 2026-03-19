@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Card } from '../../components/ui/Card';
 import { ArrowRight, BarChart3, Brain, Activity } from 'lucide-react';
 import { AggregateRating } from '../../components/articles/AggregateRating';
-import type { Stage } from '../../App';
+import type { Stage } from '../../types/stages';
 
 interface ArticleProps {
     onNavigate: (stage: Stage) => void;
@@ -145,6 +145,9 @@ export const TypingPlateauArticle: React.FC<ArticleProps> = () => {
                         </li>
                         <li>
                             <strong className="text-white">Variable Speed Training:</strong> Forcing yourself to type 10% faster than your baseline (sacrificing accuracy temporarily) forces your nervous system to adapt to higher cadences. Alternatively, typing with 100% strict accuracy at a slower pace rewires bad muscle memory.
+                        </li>
+                        <li>
+                            <strong className="text-white">Escaping Stagnation:</strong> Developing <strong>motivation</strong> is key when <strong>overcoming stagnation</strong>. Most typists quit when they don't see immediate results. Using analytics to see your "micro-wins" (like reducing a specific bigram hesitation) is the only way to stay engaged during the plateau.
                         </li>
                         <li>
                             <strong className="text-white">Fatigue and Focus:</strong> Motor learning requires intense focus. Training past the point of mental fatigue actually solidifies bad habits. 15 minutes of highly focused, analytic practice is vastly superior to an hour of mindless typing.

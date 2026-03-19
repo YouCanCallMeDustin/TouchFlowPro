@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Card } from '../../components/ui/Card';
 import { Target, ArrowRight } from 'lucide-react';
 import { AggregateRating } from '../../components/articles/AggregateRating';
-import type { Stage } from '../../App';
+import type { Stage } from '../../types/stages';
 
 interface ArticleProps {
     onNavigate: (stage: Stage) => void;
@@ -89,10 +89,10 @@ export const SixtyToHundredArticle: React.FC<ArticleProps> = () => {
                 {/* Content Body */}
                 <div className="prose prose-invert prose-lg max-w-none mb-16 space-y-8 text-text-muted leading-relaxed">
                     <p className="text-xl text-text-main font-medium">
-                        60 Words Per Minute (WPM) is the professional standard. It is fast enough to do most office jobs without typing becoming a strictly limiting factor. However, 100 WPM represents a completely different paradigm. At 100 WPM, the keyboard effectively disappears. You type at the speed of thought.
+                        60 <strong>words</strong> per minute (WPM) is the professional standard. It is <strong>fast</strong> enough to do most office jobs without typing becoming a strictly limiting factor. However, 100 WPM represents a completely different paradigm. At 100 WPM, the keyboard effectively disappears. You type at the speed of thought.
                     </p>
                     <p>
-                        Getting from 60 to 100 WPM requires fundamentally changing <em>how</em> you interact with the keyboard. The techniques that got you to 60 WPM will not get you to 100 WPM.
+                        Knowing <strong>how</strong> to <strong>get</strong> from 60 to 100 WPM requires fundamentally changing the mechanics of your hand movements. The techniques that got you to 60 WPM will not be enough to reach the elite tier.
                     </p>
 
                     <div className="my-12 p-8 bg-white/5 border-l-4 border-emerald-500 rounded-r-2xl">

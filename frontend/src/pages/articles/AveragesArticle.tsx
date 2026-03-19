@@ -6,7 +6,7 @@ import { Card } from '../../components/ui/Card';
 import { BarChart3, ArrowRight } from 'lucide-react';
 import { TypingSpeedTable } from '../../components/articles/TypingSpeedTable';
 import { AggregateRating } from '../../components/articles/AggregateRating';
-import type { Stage } from '../../App';
+import type { Stage } from '../../types/stages';
 
 interface ArticleProps {
     onNavigate: (stage: Stage) => void;

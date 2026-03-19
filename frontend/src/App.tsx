@@ -1,4 +1,5 @@
 import { TypingEngine } from '@shared/typingEngine'
+import type { Stage } from './types/stages';
 import { useState, useEffect, useCallback } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -63,12 +64,14 @@ import { TypeFasterArticle } from './pages/articles/TypeFasterArticle';
 import { SixtyToHundredArticle } from './pages/articles/SixtyToHundredArticle';
 import { AveragesArticle } from './pages/articles/AveragesArticle';
 import { UltimateGuideArticle } from './pages/articles/UltimateGuideArticle';
+import { HowToTypeFasterArticle } from './pages/articles/HowToTypeFasterArticle';
+import { TouchTypingGuideArticle } from './pages/articles/TouchTypingGuideArticle';
+import { TypingPracticeArticle } from './pages/articles/TypingPracticeArticle';
+import { TypingSpeedTestArticle } from './pages/articles/TypingSpeedTestArticle';
+import { ImproveTypingSpeedArticle } from './pages/articles/ImproveTypingSpeedArticle';
+import { TypingAccuracyArticle } from './pages/articles/TypingAccuracyArticle';
+import { FastestTypingTechniquesArticle } from './pages/articles/FastestTypingTechniquesArticle';
 
-export type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension' | 'games' | 'games_accuracy_assassin' | 'games_burner_burst' | 'games_spell_rush' | 'orgs' | 'settings' | 'sample_report' | 'medicalTrack' | 'legalTrack' | 'codingTrack' | 'free_test'  | 'article_plateau'
-  | 'article_type_faster'
-  | 'article_60_to_100'
-  | 'article_averages'
-  | 'article_ultimate_guide';
 
 const STAGE_ROUTES: Partial<Record<Stage, string>> = {
   welcome: '/',
@@ -84,6 +87,13 @@ const STAGE_ROUTES: Partial<Record<Stage, string>> = {
   article_60_to_100: '/articles/60-wpm-to-100-wpm',
   'article_averages': '/articles/typing-speed-averages',
   'article_ultimate_guide': '/articles/ultimate-guide-to-typing-speed',
+  'article_how_to_type_faster': '/articles/how-to-type-faster',
+  'article_touch_typing_guide': '/articles/touch-typing-guide',
+  'article_typing_practice': '/articles/typing-practice',
+  'article_typing_test': '/articles/typing-speed-test',
+  'article_improve_typing_speed': '/articles/improve-typing-speed',
+  'article_typing_accuracy': '/articles/typing-accuracy',
+  'article_fastest_techniques': '/articles/fastest-typing-techniques',
   auth_login: '/login',
   auth_signup: '/signup',
   assessment: '/assessment',
@@ -831,8 +841,43 @@ function App() {
               </PageTransition>
             )}
             {stage === 'article_ultimate_guide' && (
-              <PageTransition key="article_ultimate_guide">
-                <UltimateGuideArticle onNavigate={(s: string) => setStage(s as Stage)} />
+              <PageTransition key="ultimate-guide">
+                <UltimateGuideArticle onNavigate={setStage} />
+              </PageTransition>
+            )}
+            {stage === 'article_how_to_type_faster' && (
+              <PageTransition key="how-to-type-faster">
+                <HowToTypeFasterArticle onNavigate={setStage} />
+              </PageTransition>
+            )}
+            {stage === 'article_touch_typing_guide' && (
+              <PageTransition key="touch-typing-guide">
+                <TouchTypingGuideArticle onNavigate={setStage} />
+              </PageTransition>
+            )}
+            {stage === 'article_typing_practice' && (
+              <PageTransition key="typing-practice">
+                <TypingPracticeArticle onNavigate={setStage} />
+              </PageTransition>
+            )}
+            {stage === 'article_typing_test' && (
+              <PageTransition key="typing-test">
+                <TypingSpeedTestArticle onNavigate={setStage} />
+              </PageTransition>
+            )}
+            {stage === 'article_improve_typing_speed' && (
+              <PageTransition key="improve-typing-speed">
+                <ImproveTypingSpeedArticle onNavigate={setStage} />
+              </PageTransition>
+            )}
+            {stage === 'article_typing_accuracy' && (
+              <PageTransition key="typing-accuracy">
+                <TypingAccuracyArticle onNavigate={setStage} />
+              </PageTransition>
+            )}
+            {stage === 'article_fastest_techniques' && (
+              <PageTransition key="fastest-techniques">
+                <FastestTypingTechniquesArticle onNavigate={setStage} />
               </PageTransition>
             )}
           </AnimatePresence>

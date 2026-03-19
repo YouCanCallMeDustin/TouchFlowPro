@@ -3,10 +3,10 @@ import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Card } from '../../components/ui/Card';
-import { BookOpen, Target, Zap, Activity, ArrowRight, BarChart3 } from 'lucide-react';
+import { BookOpen, Target, Zap, Activity, BarChart3 } from 'lucide-react';
 import { TypingSpeedTable } from '../../components/articles/TypingSpeedTable';
 import { AggregateRating } from '../../components/articles/AggregateRating';
-import type { Stage } from '../../App';
+import type { Stage } from '../../types/stages';
 
 interface ArticleProps {
     onNavigate: (stage: Stage) => void;
@@ -112,18 +112,36 @@ export const UltimateGuideArticle: React.FC<ArticleProps> = () => {
 
                     <section className="bg-white/5 border border-white/10 rounded-3xl p-10 mt-16">
                         <h2 className="text-2xl font-black text-white mb-8 uppercase tracking-tighter italic">Related Research & deepdives</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <Link to="/articles/typing-speed-plateau" className="flex flex-col p-6 bg-bg-main border border-white/5 rounded-2xl hover:border-primary/20 transition-all group">
-                                <h4 className="text-sm font-black uppercase tracking-tight italic mb-2 group-hover:text-primary transition-colors">Overcoming Plateaus</h4>
-                                <p className="text-xs opacity-60 mb-4">Deep dive into the science of speed stagnation.</p>
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-primary inline-flex items-center gap-2">Read More <ArrowRight size={12} /></span>
-                            </Link>
-                            <Link to="/articles/type-faster-accurately" className="flex flex-col p-6 bg-bg-main border border-white/5 rounded-2xl hover:border-primary/20 transition-all group">
-                                <h4 className="text-sm font-black uppercase tracking-tight italic mb-2 group-hover:text-primary transition-colors">Speed & Accuracy</h4>
-                                <p className="text-xs opacity-60 mb-4">How to balance velocity with error suppression.</p>
-                                <span className="text-[10px] font-bold uppercase tracking-widest text-primary inline-flex items-center gap-2">Read More <ArrowRight size={12} /></span>
-                            </Link>
-                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+                        <Link to="/articles/how-to-type-faster" className="p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors group">
+                            <h4 className="text-white font-bold mb-1">How to Type Faster</h4>
+                            <p className="text-xs opacity-60">10 pro tips to increase your WPM immediately.</p>
+                        </Link>
+                        <Link to="/articles/touch-typing-guide" className="p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors group">
+                            <h4 className="text-white font-bold mb-1">Touch Typing Guide</h4>
+                            <p className="text-xs opacity-60">Learn the art of typing without looking.</p>
+                        </Link>
+                        <Link to="/articles/typing-practice" className="p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors group">
+                            <h4 className="text-white font-bold mb-1">Typing Practice</h4>
+                            <p className="text-xs opacity-60">Structured exercises and drills for mastery.</p>
+                        </Link>
+                        <Link to="/articles/typing-speed-test" className="p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors group">
+                            <h4 className="text-white font-bold mb-1">Typing Speed Test</h4>
+                            <p className="text-xs opacity-60">Official WPM and accuracy evaluation.</p>
+                        </Link>
+                        <Link to="/articles/improve-typing-speed" className="p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors group">
+                            <h4 className="text-white font-bold mb-1">Improve Typing Speed</h4>
+                            <p className="text-xs opacity-60">Proven methods to increase your pace.</p>
+                        </Link>
+                        <Link to="/articles/typing-accuracy" className="p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors group">
+                            <h4 className="text-white font-bold mb-1">Typing Accuracy</h4>
+                            <p className="text-xs opacity-60">Eliminate mistakes and master precision.</p>
+                        </Link>
+                        <Link to="/articles/fastest-typing-techniques" className="p-4 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-colors group col-span-full">
+                            <h4 className="text-white font-bold mb-1">Fastest Typing Techniques</h4>
+                            <p className="text-xs opacity-60">Pro hacks and methods for elite 150+ WPM velocity.</p>
+                        </Link>
+                    </div>
                     </section>
                 </div>
 

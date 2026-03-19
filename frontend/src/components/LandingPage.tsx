@@ -501,6 +501,29 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                             </Link>
                         </Card>
                     </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-8 pb-16">
+                        <Card className="p-6 border-white/5 bg-white/[0.02] flex flex-col group hover:border-primary/20 transition-all">
+                            <h4 className="text-sm font-black uppercase tracking-tight italic mb-2 group-hover:text-primary transition-colors">How to Type Faster</h4>
+                            <p className="text-[10px] text-text-muted mb-4">10 pro tips to increase speed.</p>
+                            <Link to="/articles/how-to-type-faster" className="text-[9px] font-black uppercase tracking-widest text-primary mt-auto flex items-center gap-1">Read <ArrowRight size={10} /></Link>
+                        </Card>
+                        <Card className="p-6 border-white/5 bg-white/[0.02] flex flex-col group hover:border-primary/20 transition-all">
+                            <h4 className="text-sm font-black uppercase tracking-tight italic mb-2 group-hover:text-primary transition-colors">Touch Typing Guide</h4>
+                            <p className="text-[10px] text-text-muted mb-4">Learn to type without looking.</p>
+                            <Link to="/articles/touch-typing-guide" className="text-[9px] font-black uppercase tracking-widest text-primary mt-auto flex items-center gap-1">Read <ArrowRight size={10} /></Link>
+                        </Card>
+                        <Card className="p-6 border-white/5 bg-white/[0.02] flex flex-col group hover:border-primary/20 transition-all">
+                            <h4 className="text-sm font-black uppercase tracking-tight italic mb-2 group-hover:text-primary transition-colors">Typing Test</h4>
+                            <p className="text-[10px] text-text-muted mb-4">Official WPM evaluation.</p>
+                            <Link to="/articles/typing-speed-test" className="text-[9px] font-black uppercase tracking-widest text-primary mt-auto flex items-center gap-1">Read <ArrowRight size={10} /></Link>
+                        </Card>
+                        <Card className="p-6 border-white/5 bg-white/[0.02] flex flex-col group hover:border-primary/20 transition-all">
+                            <h4 className="text-sm font-black uppercase tracking-tight italic mb-2 group-hover:text-primary transition-colors">Speed Accuracy</h4>
+                            <p className="text-[10px] text-text-muted mb-4">Master precision.</p>
+                            <Link to="/articles/typing-accuracy" className="text-[9px] font-black uppercase tracking-widest text-primary mt-auto flex items-center gap-1">Read <ArrowRight size={10} /></Link>
+                        </Card>
+                    </div>
                 </div>
             </section>
 

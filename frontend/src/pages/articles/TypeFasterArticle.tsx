@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Card } from '../../components/ui/Card';
 import { ArrowRight, Zap, Target, ShieldCheck } from 'lucide-react';
 import { AggregateRating } from '../../components/articles/AggregateRating';
-import type { Stage } from '../../App';
+import type { Stage } from '../../types/stages';
 
 interface ArticleProps {
     onNavigate: (stage: Stage) => void;
@@ -132,7 +132,7 @@ export const TypeFasterArticle: React.FC<ArticleProps> = () => {
 
                     <h2 className="text-2xl font-black text-white mt-12 mb-4 uppercase tracking-tight">How to Train Properly</h2>
                     <p>
-                        Mindless practice reinforces bad habits. You need a system that tracks your specific errors and forces you to practice them slowly. Set a session goal: "Today, I will focus entirely on achieving 98%+ accuracy, regardless of my WPM." Once you achieve that consistency, you can start pushing the speed boundary.
+                        Mindless practice reinforces bad habits. If you want to <strong>improve typing speed and accuracy</strong>, you need a system that tracks your specific errors and forces you to practice them slowly. Set a session goal: "Today, I will focus entirely on achieving 98%+ accuracy, regardless of my WPM." Once you <strong>increase</strong> your <strong>speed</strong>, the <strong>accuracy</strong> will become second nature through rhythmic repetition.
                     </p>
                 </div>
 
