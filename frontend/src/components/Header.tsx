@@ -27,7 +27,7 @@ import { Button } from './ui/Button';
 import { Dropdown } from './ui/Dropdown';
 
 // Types (Mirrors App.tsx)
-import type { Stage } from '../App';
+import type { Stage } from '../types/stages';
 import type { UserProgress, Lesson } from '@shared/curriculum';
 
 interface HeaderProps {
