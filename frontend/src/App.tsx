@@ -62,8 +62,13 @@ import { TypingPlateauArticle } from './pages/articles/TypingPlateauArticle';
 import { TypeFasterArticle } from './pages/articles/TypeFasterArticle';
 import { SixtyToHundredArticle } from './pages/articles/SixtyToHundredArticle';
 import { AveragesArticle } from './pages/articles/AveragesArticle';
+import { UltimateGuideArticle } from './pages/articles/UltimateGuideArticle';
 
-export type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension' | 'games' | 'games_accuracy_assassin' | 'games_burner_burst' | 'games_spell_rush' | 'orgs' | 'settings' | 'sample_report' | 'medicalTrack' | 'legalTrack' | 'codingTrack' | 'free_test' | 'article_plateau' | 'article_faster' | 'article_60_to_100' | 'article_averages'
+export type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension' | 'games' | 'games_accuracy_assassin' | 'games_burner_burst' | 'games_spell_rush' | 'orgs' | 'settings' | 'sample_report' | 'medicalTrack' | 'legalTrack' | 'codingTrack' | 'free_test'  | 'article_plateau'
+  | 'article_type_faster'
+  | 'article_60_to_100'
+  | 'article_averages'
+  | 'article_ultimate_guide';
 
 const STAGE_ROUTES: Partial<Record<Stage, string>> = {
   welcome: '/',
@@ -75,9 +80,10 @@ const STAGE_ROUTES: Partial<Record<Stage, string>> = {
   terms: '/terms',
   privacy: '/privacy-policy',
   article_plateau: '/articles/typing-speed-plateau',
-  article_faster: '/articles/type-faster-accurately',
+  article_type_faster: '/articles/type-faster-accurately',
   article_60_to_100: '/articles/60-wpm-to-100-wpm',
-  article_averages: '/articles/typing-speed-averages',
+  'article_averages': '/articles/typing-speed-averages',
+  'article_ultimate_guide': '/articles/ultimate-guide-to-typing-speed',
   auth_login: '/login',
   auth_signup: '/signup',
   assessment: '/assessment',
@@ -808,8 +814,8 @@ function App() {
               </PageTransition>
             )}
 
-            {stage === 'article_faster' && (
-              <PageTransition key="article_faster">
+            {stage === 'article_type_faster' && (
+              <PageTransition key="article_type_faster">
                 <TypeFasterArticle onNavigate={(s: string) => setStage(s as Stage)} />
               </PageTransition>
             )}
@@ -822,6 +828,11 @@ function App() {
             {stage === 'article_averages' && (
               <PageTransition key="article_averages">
                 <AveragesArticle onNavigate={(s: string) => setStage(s as Stage)} />
+              </PageTransition>
+            )}
+            {stage === 'article_ultimate_guide' && (
+              <PageTransition key="article_ultimate_guide">
+                <UltimateGuideArticle onNavigate={(s: string) => setStage(s as Stage)} />
               </PageTransition>
             )}
           </AnimatePresence>
@@ -860,6 +871,9 @@ function App() {
                 </li>
                 <li>
                   <Link to="/articles/typing-speed-averages" className="text-xs text-text-muted hover:text-primary transition-colors font-medium">Average Typing Speeds</Link>
+                </li>
+                <li>
+                  <Link to="/articles/ultimate-guide-to-typing-speed" className="text-xs text-text-muted hover:text-primary transition-colors font-medium">Ultimate Guide (100+ WPM)</Link>
                 </li>
               </ul>
             </div>

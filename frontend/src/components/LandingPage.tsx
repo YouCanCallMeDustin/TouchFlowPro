@@ -138,9 +138,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                     </motion.div>
 
                     <motion.h1 variants={itemVariants} className="text-5xl md:text-[5.5rem] font-black mb-6 leading-[0.9] tracking-tighter uppercase italic text-text-main">
-                        Type Faster. <br />
-                        Stay Accurate. <br />
-                        <span className="text-primary">Build Endurance.</span>
+                        Learn Touch Typing. <br />
+                        Increase Typing <span className="text-primary italic">Speed (WPM).</span>
                     </motion.h1>
 
                     <motion.p variants={itemVariants} className="text-text-muted text-base md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed font-bold">
@@ -478,17 +477,17 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                                 Explore the 'OK Plateau' in motor learning and the research-backed methods to break through speed stagnation.
                             </p>
                             <Link to="/articles/typing-speed-plateau" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary group-hover:gap-4 transition-all">
-                                Read Research <ArrowRight size={14} />
+                                Typing Speed Training <ArrowRight size={14} />
                             </Link>
                         </Card>
-                        <Card className="p-8 border-white/5 bg-white/[0.02] flex flex-col group hover:border-primary/20 transition-all opacity-50 grayscale hover:opacity-100 hover:grayscale-0">
+                        <Card className="p-8 border-white/5 bg-white/[0.02] flex flex-col group hover:border-primary/20 transition-all">
                             <Activity size={24} className="text-primary mb-6" />
                             <h3 className="text-xl font-black uppercase tracking-tight italic mb-4 leading-tight">Typing Faster & Accurately</h3>
                             <p className="text-sm text-text-muted font-medium leading-relaxed mb-8 flex-1">
                                 A clinical approach to balancing keystroke velocity with error suppression in high-pressure environments.
                             </p>
                             <Link to="/articles/type-faster-accurately" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary group-hover:gap-4 transition-all">
-                                Read Article <ArrowRight size={14} />
+                                Learn Touch Typing <ArrowRight size={14} />
                             </Link>
                         </Card>
                         <Card className="p-8 border-white/5 bg-white/[0.02] flex flex-col group hover:border-primary/20 transition-all opacity-50 grayscale hover:opacity-100 hover:grayscale-0">

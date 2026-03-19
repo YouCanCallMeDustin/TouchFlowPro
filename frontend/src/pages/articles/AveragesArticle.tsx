@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Card } from '../../components/ui/Card';
-import { BarChart3 } from 'lucide-react';
+import { BarChart3, ArrowRight } from 'lucide-react';
 import { TypingSpeedTable } from '../../components/articles/TypingSpeedTable';
 import { AggregateRating } from '../../components/articles/AggregateRating';
 import type { Stage } from '../../App';
@@ -185,6 +185,14 @@ export const AveragesArticle: React.FC<ArticleProps> = () => {
                         <BarChart3 size={16} className="ml-2 group-hover:scale-110 transition-transform" />
                     </Link>
                 </Card>
+
+                <section className="bg-primary/5 border border-primary/10 rounded-3xl p-10 mt-16 mb-8 text-center">
+                    <h4 className="text-xl font-black text-white uppercase italic tracking-tighter mb-4">Want the complete system?</h4>
+                    <p className="text-sm opacity-60 mb-6">Read our high-authority pillar resource for the full roadmap to elite speeds.</p>
+                    <Link to="/articles/ultimate-guide-to-typing-speed" className="text-primary font-black uppercase tracking-[0.2em] text-[10px] inline-flex items-center gap-2 hover:gap-4 transition-all">
+                        Ultimate Guide to 100+ WPM <ArrowRight size={14} />
+                    </Link>
+                </section>
 
                 <AggregateRating rating={4.7} count={42} />
             </motion.article>

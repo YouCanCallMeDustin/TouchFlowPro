@@ -42,8 +42,13 @@
   </url>
   <url>
     <loc>https://touchflowpro.com/articles/typing-speed-averages</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <lastmod>2026-03-19</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://touchflowpro.com/articles/ultimate-guide-to-typing-speed</loc>
+    <lastmod>2026-03-19</lastmod>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://touchflowpro.com/pricing</loc>
