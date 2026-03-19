@@ -203,19 +203,57 @@ router.post('/create-portal-session', authenticateToken, async (req: any, res) =
         console.log(`[API /subscriptions/create-portal-session POST] Authenticated user: ${userId}`);
         if (!userId) return res.status(401).json({ error: 'Unauthorized' });
 
-        const user = await prisma.user.findUnique({ where: { id: userId } });
-        if (!user || !user.stripeCustomerId) {
-            return res.status(404).json({ error: 'No subscription found' });
+        const user = await prisma.user.findUnique({ 
+            where: { id: userId },
+            include: {
+                orgMemberships: {
+                    where: { role: 'ADMIN' },
+                    include: { org: true }
+                }
+            }
+        });
+
+        if (!user) return res.status(404).json({ error: 'User not found' });
+
+        let customerId = user.stripeCustomerId;
+
+        // Fallback to Org Customer ID if user is an ADMIN of a subscribed org
+        if (!customerId && user.orgMemberships.length > 0) {
+            // Find the first org with a customer ID
+            const orgWithStripe = user.orgMemberships.find(m => m.org.stripeCustomerId);
+            if (orgWithStripe) {
+                customerId = orgWithStripe.org.stripeCustomerId;
+                console.log(`[Portal] Falling back to Organization Customer ID: ${customerId} for Org: ${orgWithStripe.orgId}`);
+            }
         }
 
+        if (!customerId) {
+            console.error(`[Portal] No Stripe Customer ID found for user ${userId} or their administrated organizations.`);
+            return res.status(404).json({ 
+                error: 'No subscription found. If you just subscribed, please try again in a few seconds or use "Sync Status".' 
+            });
+        }
+
+        // Use request origin if available, fallback to FRONTEND_URL
+        const returnUrl = (req.headers.origin || FRONTEND_URL) + '/settings';
+        console.log(`[Portal] Creating portal session for customer: ${customerId}, return_url: ${returnUrl}`);
+
         const session = await stripe.billingPortal.sessions.create({
-            customer: user.stripeCustomerId,
-            return_url: `${FRONTEND_URL}/settings`,
+            customer: customerId,
+            return_url: returnUrl,
         });
 
         res.json({ url: session.url });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Error creating portal session:', error);
+        
+        // Handle specific Stripe errors (e.g. invalid customer ID)
+        if (error.type === 'StripeInvalidRequestError' && error.message.includes('No such customer')) {
+            return res.status(400).json({ 
+                error: 'The associated Stripe customer record could not be found. Please use "Sync Status" to repair your account link.' 
+            });
+        }
+
         res.status(500).json({ error: 'Failed to create portal session' });
     }
 });

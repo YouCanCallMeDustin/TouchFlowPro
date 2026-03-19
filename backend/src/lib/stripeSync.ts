@@ -180,8 +180,18 @@ export async function syncUserWithStripe(userId: string, email: string) {
         const finalStatus = await getEffectiveSubscriptionStatus(userId);
         return { status: finalStatus, updated: false };
 
-    } catch (error) {
+    } catch (error: any) {
         console.error('[StripeSync] Critical error during synchronization:', error);
+        
+        // If Stripe says customer doesn't exist, clear it locally so next attempt re-discovers
+        if (error.type === 'StripeInvalidRequestError' && error.message.includes('No such customer')) {
+             console.log(`[StripeSync] Stripe reports customer does not exist. Clearing local ID for ${userId} to trigger re-discovery.`);
+             await prisma.user.update({
+                 where: { id: userId },
+                 data: { stripeCustomerId: null }
+             });
+        }
+        
         return null;
     }
 }

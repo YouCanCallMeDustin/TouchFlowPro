@@ -61,8 +61,9 @@ import FreeTypingTest from './pages/FreeTypingTest';
 import { TypingPlateauArticle } from './pages/articles/TypingPlateauArticle';
 import { TypeFasterArticle } from './pages/articles/TypeFasterArticle';
 import { SixtyToHundredArticle } from './pages/articles/SixtyToHundredArticle';
+import { AveragesArticle } from './pages/articles/AveragesArticle';
 
-export type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension' | 'games' | 'games_accuracy_assassin' | 'games_burner_burst' | 'games_spell_rush' | 'orgs' | 'settings' | 'sample_report' | 'medicalTrack' | 'legalTrack' | 'codingTrack' | 'free_test' | 'article_plateau' | 'article_faster' | 'article_60_to_100'
+export type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension' | 'games' | 'games_accuracy_assassin' | 'games_burner_burst' | 'games_spell_rush' | 'orgs' | 'settings' | 'sample_report' | 'medicalTrack' | 'legalTrack' | 'codingTrack' | 'free_test' | 'article_plateau' | 'article_faster' | 'article_60_to_100' | 'article_averages'
 
 const STAGE_ROUTES: Partial<Record<Stage, string>> = {
   welcome: '/',
@@ -76,6 +77,11 @@ const STAGE_ROUTES: Partial<Record<Stage, string>> = {
   article_plateau: '/articles/typing-speed-plateau',
   article_faster: '/articles/type-faster-accurately',
   article_60_to_100: '/articles/60-wpm-to-100-wpm',
+  article_averages: '/articles/typing-speed-averages',
+  auth_login: '/login',
+  auth_signup: '/signup',
+  assessment: '/assessment',
+  sample_report: '/sample-report',
 };
 
 const ROUTE_STAGES: Record<string, Stage> = Object.fromEntries(
@@ -813,6 +819,11 @@ function App() {
                 <SixtyToHundredArticle onNavigate={(s: string) => setStage(s as Stage)} />
               </PageTransition>
             )}
+            {stage === 'article_averages' && (
+              <PageTransition key="article_averages">
+                <AveragesArticle onNavigate={(s: string) => setStage(s as Stage)} />
+              </PageTransition>
+            )}
           </AnimatePresence>
         </main>
 
@@ -846,6 +857,9 @@ function App() {
                 </li>
                 <li>
                   <Link to="/articles/60-wpm-to-100-wpm" className="text-xs text-text-muted hover:text-primary transition-colors font-medium">60 WPM to 100 WPM</Link>
+                </li>
+                <li>
+                  <Link to="/articles/typing-speed-averages" className="text-xs text-text-muted hover:text-primary transition-colors font-medium">Average Typing Speeds</Link>
                 </li>
               </ul>
             </div>

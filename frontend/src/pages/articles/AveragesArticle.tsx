@@ -1,0 +1,193 @@
+import React from 'react';
+import { Helmet } from 'react-helmet-async';
+import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { Card } from '../../components/ui/Card';
+import { BarChart3 } from 'lucide-react';
+import { TypingSpeedTable } from '../../components/articles/TypingSpeedTable';
+import { AggregateRating } from '../../components/articles/AggregateRating';
+import type { Stage } from '../../App';
+
+interface ArticleProps {
+    onNavigate: (stage: Stage) => void;
+}
+
+export const AveragesArticle: React.FC<ArticleProps> = () => {
+    return (
+        <div className="min-h-screen py-12 px-4 flex flex-col items-center">
+            <Helmet>
+                <title>Average Typing Speed: Benchmarks by Age, Profession & Skill Level</title>
+                <meta name="description" content="What is a good typing speed? Explore average WPM statistics across different age groups, professions, and certification standards. See how you compare." />
+                <meta property="og:title" content="Typing Speed Averages: How Do You Compare?" />
+                <meta property="og:description" content="What is a good typing speed? Explore average WPM statistics across different age groups, professions, and certification standards." />
+                <meta property="og:type" content="article" />
+                <meta property="og:url" content="https://touchflowpro.com/articles/typing-speed-averages" />
+                <meta property="og:image" content="https://touchflowpro.com/assets/og-averages.png" />
+                <meta name="twitter:card" content="summary_large_image" />
+                
+                {/* Structured Data */}
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "BlogPosting",
+                        "headline": "Average Typing Speed: Complete Benchmarks",
+                        "description": "A comprehensive guide to typing speed averages, covering demographics and professional standards.",
+                        "author": {
+                            "@type": "Organization",
+                            "name": "TouchFlow Pro"
+                        },
+                        "isAccessibleForFree": "True",
+                        "aggregateRating": {
+                            "@type": "AggregateRating",
+                            "ratingValue": "4.7",
+                            "reviewCount": "42"
+                        },
+                        "mainEntityOfPage": {
+                            "@type": "WebPage",
+                            "@id": "https://touchflowpro.com/articles/typing-speed-averages"
+                        }
+                    })}
+                </script>
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "FAQPage",
+                        "mainEntity": [
+                            {
+                                "@type": "Question",
+                                "name": "What is the average typing speed?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "The average typing speed is approximately 40 words per minute (WPM). Professional typists usually average between 60 and 80 WPM."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "Is 40 WPM fast?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "40 WPM is considered average. It is sufficient for casual use but most professional office roles prefer 50-60 WPM for optimal productivity."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "How fast should a programmer type?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "While coding involves more thinking than typing, a speed of 50-60 WPM is recommended to ensure that the typing process doesn't interrupt the cognitive flow of problem-solving."
+                                }
+                            }
+                        ]
+                    })}
+                </script>
+            </Helmet>
+
+            <motion.article
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="w-full max-w-4xl mx-auto"
+            >
+                {/* Header */}
+                <div className="text-center mb-16">
+                    <div className="inline-block px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 mb-6">
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500">Statistical Analysis</span>
+                    </div>
+                    <h1 className="text-4xl md:text-6xl font-black text-text-main mb-6 uppercase tracking-tighter italic leading-[0.9]">
+                        How Fast is <span className="text-blue-500 border-b-4 border-blue-500/30 pb-1">Average?</span>
+                    </h1>
+                    <p className="text-text-muted text-lg max-w-2xl mx-auto font-bold uppercase tracking-wider opacity-60">
+                        A breakdown of typing speed benchmarks across the globe.
+                    </p>
+                </div>
+
+                {/* Content Body */}
+                <div className="prose prose-invert prose-lg max-w-none mb-16 space-y-8 text-text-muted leading-relaxed">
+                    <p className="text-xl text-text-main font-medium">
+                        The average typing speed for most people is roughly <strong>40 words per minute (WPM)</strong>. For professional typists, the average jumps significantly to 65-75 WPM. But "average" depends heavily on context—your age, your job, and the type of keyboard you use all play a role.
+                    </p>
+
+                    <h2 className="text-2xl font-black text-white mt-12 mb-4 uppercase tracking-tight">Global Typing Averages</h2>
+                    <TypingSpeedTable />
+                    
+                    <p className="mt-8">
+                        As shown in the table above, typing speed is a multi-tiered skill. Most casual users peak at the "Average" level, while technical professions require "Professional" or "High Performance" speeds to maintain workplace efficiency.
+                    </p>
+
+                    <h2 className="text-2xl font-black text-white mt-12 mb-4 uppercase tracking-tight">Typing Speed by Age</h2>
+                    <p>
+                        Surprisingly, younger generations aren't always the fastest. While they are faster on mobile devices, traditional touch-typing speed peaks in the early 20s.
+                    </p>
+                    <div className="bg-white/5 rounded-2xl p-8 my-8 border border-white/10">
+                        <ul className="space-y-4">
+                            <li className="flex justify-between items-center border-b border-white/5 pb-2">
+                                <span className="font-bold">Under 18</span>
+                                <span className="text-blue-500 font-black">37 WPM</span>
+                            </li>
+                            <li className="flex justify-between items-center border-b border-white/5 pb-2">
+                                <span className="font-bold">18 - 24</span>
+                                <span className="text-blue-500 font-black">44 WPM</span>
+                            </li>
+                            <li className="flex justify-between items-center border-b border-white/5 pb-2">
+                                <span className="font-bold">25 - 45</span>
+                                <span className="text-blue-500 font-black">42 WPM</span>
+                            </li>
+                            <li className="flex justify-between items-center">
+                                <span className="font-bold">45+</span>
+                                <span className="text-blue-400 font-black">36 WPM</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <h2 className="text-2xl font-black text-white mt-12 mb-4 uppercase tracking-tight">Professional Standards</h2>
+                    <p>
+                        Certain professions require much higher than "average" typing skills. If you are pursuing a career in these fields, 40 WPM will not be enough.
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-8 not-prose">
+                        <div className="p-4 bg-white/5 border border-white/10 rounded-xl">
+                            <h4 className="text-white font-bold mb-1">Data Entry</h4>
+                            <p className="text-blue-500 font-black mb-2">60+ WPM</p>
+                            <p className="text-xs opacity-60">Standard entry-level requirement for high-volume data processing.</p>
+                        </div>
+                        <div className="p-4 bg-white/5 border border-white/10 rounded-xl">
+                            <h4 className="text-white font-bold mb-1">Legal/Medical Transcription</h4>
+                            <p className="text-blue-500 font-black mb-2">75+ WPM</p>
+                            <p className="text-xs opacity-60">Requires high accuracy and familiarity with specialized vocabulary.</p>
+                        </div>
+                        <div className="p-4 bg-white/5 border border-white/10 rounded-xl">
+                            <h4 className="text-white font-bold mb-1">Programmers</h4>
+                            <p className="text-blue-500 font-black mb-2">50 - 90 WPM</p>
+                            <p className="text-xs opacity-60">Variation is high, but faster typing reduces cognitive load during coding.</p>
+                        </div>
+                        <div className="p-4 bg-white/5 border border-white/10 rounded-xl">
+                            <h4 className="text-white font-bold mb-1">Court Reporters</h4>
+                            <p className="text-blue-500 font-black mb-2">225+ WPM</p>
+                            <p className="text-xs opacity-60">(Requires specialized steno machines, not QWERTY keyboards).</p>
+                        </div>
+                    </div>
+
+                    <h2 className="text-2xl font-black text-white mt-12 mb-4 uppercase tracking-tight">What counts as "Good"?</h2>
+                    <p>
+                        "Good" is relative. At <strong>60 WPM</strong>, you are faster than 80% of the population. At <strong>80 WPM</strong>, you are in the top 5% of all typists. If you can reach <strong>100 WPM</strong>, you are in the elite 1%—typing at the speed of thought.
+                    </p>
+                </div>
+
+                {/* Call To Action */}
+                <Card className="p-10 border-blue-500/20 bg-gradient-to-br from-blue-500/10 to-transparent text-center">
+                    <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter mb-4">How do you compare?</h3>
+                    <p className="text-text-muted mb-8 max-w-xl mx-auto">
+                        Don't guess your speed. Get a professional-grade telemetry report. We'll show you exactly how your speed, accuracy, and rhythmic stability compare to global averages.
+                    </p>
+                    <Link
+                        to="/free-typing-test"
+                        className="inline-flex items-center justify-center px-10 py-5 rounded-2xl font-black uppercase tracking-[0.3em] text-[12px] bg-blue-600 text-white hover:opacity-90 shadow-2xl shadow-blue-500/30 group"
+                    >
+                        Check my WPM Score
+                        <BarChart3 size={16} className="ml-2 group-hover:scale-110 transition-transform" />
+                    </Link>
+                </Card>
+
+                <AggregateRating rating={4.7} count={42} />
+            </motion.article>
+        </div>
+    );
+};
