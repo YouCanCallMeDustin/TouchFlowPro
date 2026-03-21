@@ -268,6 +268,15 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
         }
     }, [mode, passed, testMetrics]);
 
+    const [dictationModeEnabled, setDictationModeEnabled] = useState(false);
+
+    // Auto-enable dictation mode recommendation for medical/legal
+    useEffect(() => {
+        if (lesson.category === 'Medical' || lesson.category === 'Legal') {
+            setDictationModeEnabled(true);
+        }
+    }, [lesson.category]);
+
     return (
         <div className="max-w-5xl mx-auto w-full relative">
 
@@ -427,6 +436,24 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                                     <button onClick={() => setSuddenDeathEnabled(true)} className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${suddenDeathEnabled ? 'bg-rose-500 text-white shadow-xl shadow-rose-500/20' : 'text-text-muted hover:text-text-main'}`}>Fatal Grip</button>
                                     <button onClick={() => setSuddenDeathEnabled(false)} className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${!suddenDeathEnabled ? 'bg-primary text-white shadow-xl shadow-primary/20' : 'text-text-muted hover:text-text-main'}`}>Soft Sync</button>
                                 </div>
+
+                                {/* Dictation Mode Toggle */}
+                                {(lesson.category === 'Medical' || lesson.category === 'Legal' || lesson.category === 'Specialty Practice') && (
+                                    <div className="flex items-center bg-white/5 p-0.5 rounded-xl border border-white/10 hidden lg:flex">
+                                        <button
+                                            onClick={() => setDictationModeEnabled(false)}
+                                            className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${!dictationModeEnabled ? 'bg-[#3b82f6] text-white shadow-xl shadow-[#3b82f6]/20' : 'text-text-muted hover:text-text-main'}`}
+                                        >
+                                            Standard
+                                        </button>
+                                        <button
+                                            onClick={() => setDictationModeEnabled(true)}
+                                            className={`px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${dictationModeEnabled ? 'bg-[#3b82f6] text-white shadow-xl shadow-[#3b82f6]/20' : 'text-text-muted hover:text-text-main'}`}
+                                        >
+                                            Dictation
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                         <button onClick={() => { if (isPlanLauncher) { clearPendingLaunch(); onCancel(); } else { setMode('intro'); } }} className="text-[10px] font-black uppercase tracking-widest bg-slate-500/5 dark:bg-white/5 px-6 py-3 rounded-xl hover:bg-slate-500/10 dark:hover:bg-white/10 transition-all border border-slate-200/50 dark:border-white/10 text-text-muted hover:text-text-main relative z-10">
@@ -439,6 +466,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
                         suddenDeath={suddenDeathEnabled}
                         showLiveMetrics={enhancedModeEnabled}
                         showVirtualKeyboard={false}
+                        dictationMode={dictationModeEnabled}
                         // If using plan timer, we DISABLE internal timer of TypingTest (pass undefined)
                         timeLimit={isPlanLauncher ? undefined : timeLimit}
                         forceFinish={forceFinishTest}

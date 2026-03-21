@@ -136,7 +136,7 @@ export const DictationUI: React.FC<DictationUIProps> = ({ text, isStarted, userI
                             <button
                                 key={s}
                                 onClick={() => onSpeedChange(s)}
-                                className={`px-3 py-1 rounded-md text-[10px] font-black transition-all ${currentSpeed === s ? 'bg-primary-blue text-white shadow-md' : 'text-slate-400 hover:bg-slate-50'}`}
+                                className={`px-3 py-1 rounded-md text-[10px] font-black transition-all ${currentSpeed === s ? 'bg-primary text-white shadow-md' : 'text-slate-400 hover:bg-slate-50'}`}
                             >
                                 {s}x
                             </button>
@@ -144,15 +144,24 @@ export const DictationUI: React.FC<DictationUIProps> = ({ text, isStarted, userI
                     </div>
                 </div>
 
-                <button
-                    onMouseDown={() => setShowPeek(true)}
-                    onMouseUp={() => setShowPeek(false)}
-                    onMouseLeave={() => setShowPeek(false)}
-                    className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-primary-blue hover:border-primary-blue transition-all shadow-sm active:scale-95 select-none"
-                    title="Hold to peek at text"
-                >
-                    <span>👁️</span> Hold to Peek
-                </button>
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => setIsPlaying(prev => !prev)}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95 ${isPlaying ? 'bg-rose-500/10 text-rose-500 border border-rose-500/20' : 'bg-primary/10 text-primary border border-primary/20'}`}
+                    >
+                        {isPlaying ? '⏸️ Pause' : '▶️ Play'}
+                    </button>
+
+                    <button
+                        onMouseDown={() => setShowPeek(true)}
+                        onMouseUp={() => setShowPeek(false)}
+                        onMouseLeave={() => setShowPeek(false)}
+                        className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-primary hover:border-primary transition-all shadow-sm active:scale-95 select-none"
+                        title="Hold to peek at text"
+                    >
+                        <span>👁️</span> Hold to Peek
+                    </button>
+                </div>
             </div>
 
             {/* Ghost Text Area */}
@@ -163,7 +172,7 @@ export const DictationUI: React.FC<DictationUIProps> = ({ text, isStarted, userI
                         {[...Array(20)].map((_, i) => (
                             <div
                                 key={i}
-                                className="w-1 bg-primary-blue rounded-full animate-audio-bar"
+                                className="w-1 bg-primary rounded-full animate-audio-bar"
                                 style={{
                                     height: `${20 + Math.random() * 60}%`,
                                     animationDelay: `${i * 0.1}s`,
@@ -182,7 +191,7 @@ export const DictationUI: React.FC<DictationUIProps> = ({ text, isStarted, userI
                     ) : userInput.length > 0 ? (
                         <div className="w-full text-left">
                             <p className="text-xl font-mono text-slate-300 leading-relaxed whitespace-pre-wrap break-words">
-                                {userInput}<span className="inline-block w-2 h-6 bg-primary-blue animate-pulse align-middle ml-1"></span>
+                                {userInput}<span className="inline-block w-2 h-6 bg-primary animate-pulse align-middle ml-1"></span>
                             </p>
                         </div>
                     ) : (
@@ -205,7 +214,7 @@ export const DictationUI: React.FC<DictationUIProps> = ({ text, isStarted, userI
                 {/* Progress Ring Background */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] border-[20px] border-white/5 rounded-full pointer-events-none"></div>
                 <div
-                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] border-[20px] border-primary-blue/20 rounded-full pointer-events-none border-t-primary-blue transition-all duration-300"
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] border-[20px] border-primary/20 rounded-full pointer-events-none border-t-primary transition-all duration-300"
                     style={{ transform: `translate(-50%, -50%) rotate(${(userInput.length / text.length) * 360}deg)` }}
                 ></div>
             </div>
