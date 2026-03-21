@@ -17,7 +17,6 @@ import Signup from './components/Auth/Signup'
 import AnalyticsDashboard from './pages/AnalyticsDashboard'
 import SessionHistory from './pages/SessionHistory'
 import { AchievementsPanel } from './pages/AchievementsPanel'
-import CustomDrillBuilder from './pages/CustomDrillBuilder'
 import GoalsDashboard from './pages/GoalsDashboard'
 import Dashboard from './pages/Dashboard'
 import DrillSelectionPage from './pages/DrillSelectionPage'
@@ -426,28 +425,6 @@ function App() {
     }
   }
 
-  const [currentLessonDuration, setCurrentLessonDuration] = useState<number | undefined>(undefined)
-
-  const handleStartCustomSession = (content: string, title: string, duration?: number) => {
-    const customLesson: Lesson = {
-      id: `custom-${Date.now()}`,
-      title: title,
-      content: content,
-      category: 'Adaptive Practice',
-      difficulty: 'Professional',
-      order: 999,
-      xpReward: 15,
-      learningObjectives: ['Personalized Practice'],
-      lessonNumber: 0,
-      prerequisites: [],
-      masteryThreshold: 0,
-      description: 'Custom generated practice session'
-    }
-    setCurrentLesson(customLesson)
-    setCurrentLessonDuration(duration)
-    setCurrentLessonCompleted(false)
-    setStage('lesson')
-  }
 
   if (loading || isFetchingProgress) {
     return (
@@ -495,7 +472,6 @@ function App() {
                 <Dashboard
                   userId={user.id}
                   onNavigate={(s) => setStage(s as any)}
-                  onStartCustomSession={handleStartCustomSession}
                   userEmail={user.email}
                   userName={userProgress?.name || (user as any).user_metadata?.full_name}
                 />
@@ -615,7 +591,6 @@ function App() {
                   onComplete={handleLessonComplete}
                   onCancel={() => setStage('curriculum')}
                   initialDrillText={initialDrillText}
-                  timeLimit={currentLessonDuration}
                 />
               </PageTransition>
             )}
@@ -640,11 +615,6 @@ function App() {
               </PageTransition>
             )}
 
-            {stage === 'custom_drills' && user && (
-              <PageTransition key="custom_drills">
-                <CustomDrillBuilder userId={user.id} />
-              </PageTransition>
-            )}
 
             {stage === 'goals' && user && (
               <PageTransition key="goals">

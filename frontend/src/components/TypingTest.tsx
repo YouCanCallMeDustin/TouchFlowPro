@@ -379,7 +379,8 @@ const TypingTest: React.FC<Props> = ({
 
             <div
                 ref={containerRef}
-                className={`relative card p-6 transition-all duration-500 overflow-hidden ${accuracyGlow} ${settings?.fontScale === 'LG' ? 'p-10' : ''}`}
+                onClick={() => inputRef.current?.focus()}
+                className={`relative card cursor-text p-6 transition-all duration-500 overflow-hidden ${accuracyGlow} ${settings?.fontScale === 'LG' ? 'p-10' : ''}`}
             >
                 {/* Sudden Death Effects */}
                 <AnimatePresence>

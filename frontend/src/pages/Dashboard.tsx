@@ -21,7 +21,7 @@ import {
     Activity,
     ArrowUpRight,
     Award,
-    Edit3,
+    Trophy,
     CheckCircle,
     ChevronRight
 } from 'lucide-react';
@@ -43,7 +43,6 @@ interface DashboardProps {
     onNavigate: (stage: string) => void;
     userEmail?: string;
     userName?: string | null;
-    onStartCustomSession?: (content: string, title: string, duration?: number) => void;
 }
 
 interface TodayStats {
@@ -720,7 +719,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
                                     { id: 'practice', label: 'Practice', icon: Target },
                                     { id: 'bible_practice', label: 'History', icon: History },
                                     { id: 'analytics', label: 'Stats', icon: TrendingUp },
-                                    { id: 'custom_drills', label: 'Custom Drills', icon: Edit3 }
+                                    { id: 'leaderboard', label: 'Ranks', icon: Trophy }
                                 ].map((item) => (
                                     <button
                                         key={item.id}
