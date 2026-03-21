@@ -110,6 +110,7 @@ function App() {
   const navigate = useNavigate()
 
   const [stage, setStage] = useState<Stage>(() => {
+    if (location.pathname === '/articles/good-typing-speed') return 'article_averages';
     return ROUTE_STAGES[location.pathname] || 'welcome';
   })
   const [assessmentMetrics, setAssessmentMetrics] = useState<TypingMetrics | null>(null)
