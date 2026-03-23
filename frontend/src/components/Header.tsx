@@ -20,7 +20,8 @@ import {
     User as UserIcon,
     Briefcase,
     Stethoscope,
-    Scale
+    Scale,
+    Clock
 } from 'lucide-react';
 import { Breadcrumbs } from './Breadcrumbs';
 import { Button } from './ui/Button';
@@ -78,6 +79,7 @@ export const Header: React.FC<HeaderProps> = ({
             items: [
                 { id: 'curriculum', label: 'Learn', icon: BookOpen },
                 { id: 'practice', label: 'Practice', icon: Zap },
+                { id: 'practice_tests', label: 'Practice Tests', icon: Clock },
                 { id: 'games', label: 'Games', icon: Gamepad2 },
                 { id: 'code_practice', label: 'Code', icon: Compass },
                 { id: 'certificate', label: 'Certify', icon: Shield },

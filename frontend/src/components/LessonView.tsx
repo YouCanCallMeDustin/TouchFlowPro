@@ -362,7 +362,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
             )}
 
             {mode === 'warmup' && (
-                <div className="space-y-4 animate-in fade-in slide-in-from-bottom-6 duration-700">
+                <div className="space-y-2 animate-in fade-in slide-in-from-bottom-6 duration-700">
                     {/* ... (Warmup content same as original) ... */}
                     <div className="bg-slate-500/5 dark:bg-white/5 border border-slate-200/50 dark:border-white/5 text-text-main px-4 py-2 rounded-[1rem] shadow-lg flex items-center justify-between border-t border-slate-200/20 dark:border-white/10 relative overflow-hidden">
                         <div className="flex items-center gap-3 relative z-10">
@@ -416,7 +416,7 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
             )}
 
             {mode === 'practice' && (
-                <div className="space-y-4 animate-in fade-in slide-in-from-bottom-6 duration-700">
+                <div className="space-y-2 animate-in fade-in slide-in-from-bottom-6 duration-700">
                     <div className="bg-slate-500/5 dark:bg-white/5 border border-slate-200/50 dark:border-white/5 text-text-main px-4 py-2 rounded-[1rem] shadow-lg flex items-center justify-between border-t border-slate-200/20 dark:border-white/10 relative overflow-hidden">
                         <div className="flex items-center gap-6 relative z-10">
                             <div className="flex items-center gap-3">

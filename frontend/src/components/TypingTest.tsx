@@ -145,6 +145,21 @@ const TypingTest: React.FC<Props> = ({
         inputRef.current?.focus({ preventScroll: true });
     }, []);
 
+    useEffect(() => {
+        const activeChar = document.getElementById('typing-active-char');
+        const container = document.getElementById('typing-text-container');
+        
+        if (activeChar && container) {
+            const containerRect = container.getBoundingClientRect();
+            const charRect = activeChar.getBoundingClientRect();
+            
+            // If the character is close to the bottom or top of the visible container area, scroll it to the center
+            if (charRect.bottom > containerRect.bottom - 40 || charRect.top < containerRect.top + 40) {
+                activeChar.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+    }, [userInput]);
+
     const { settings } = useSettings();
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -260,6 +275,7 @@ const TypingTest: React.FC<Props> = ({
             return (
                 <motion.span
                     key={index}
+                    id={isCurrent ? 'typing-active-char' : undefined}
                     initial={false}
                     animate={{
                         color: isError ? 'var(--accent)' : isCorrect ? 'var(--primary)' : 'var(--text-muted)',
@@ -323,9 +339,9 @@ const TypingTest: React.FC<Props> = ({
     };
 
     return (
-        <div className="w-full max-w-5xl mx-auto space-y-8">
+        <div className="w-full max-w-5xl mx-auto space-y-4">
             {/* Header Metrics */}
-            <div className={`grid grid-cols-1 md:grid-cols-4 gap-4 ${settings?.reduceMotion ? '' : 'animate-in fade-in slide-in-from-bottom-4 duration-500'}`}>
+            <div className={`grid grid-cols-1 md:grid-cols-4 gap-2 ${settings?.reduceMotion ? '' : 'animate-in fade-in slide-in-from-bottom-4 duration-500'}`}>
                 {[
                     { label: 'Velocity', value: liveWPM, unit: 'WPM', color: 'text-primary' },
                     { label: 'Precision', value: metrics.accuracy, unit: '%', color: 'text-secondary' },
@@ -380,7 +396,7 @@ const TypingTest: React.FC<Props> = ({
             <div
                 ref={containerRef}
                 onClick={() => inputRef.current?.focus()}
-                className={`relative card cursor-text p-6 transition-all duration-500 overflow-hidden ${accuracyGlow} ${settings?.fontScale === 'LG' ? 'p-10' : ''}`}
+                className={`relative card cursor-text p-4 transition-all duration-500 overflow-hidden ${accuracyGlow} ${settings?.fontScale === 'LG' ? 'p-8' : ''}`}
             >
                 {/* Sudden Death Effects */}
                 <AnimatePresence>
@@ -413,7 +429,7 @@ const TypingTest: React.FC<Props> = ({
                     />
                 </div>
 
-                <div className="relative z-10 space-y-8">
+                <div className="relative z-10 space-y-4">
                     {dictationMode ? (
                         <DictationUI
                             text={text}
@@ -424,7 +440,7 @@ const TypingTest: React.FC<Props> = ({
                             drillId={drillId}
                         />
                     ) : (
-                        <div className={`min-h-[100px] leading-relaxed select-none ${mode === 'code' ? 'whitespace-pre-wrap break-all font-mono text-left' : 'flex flex-wrap gap-x-0.5 gap-y-4 justify-center'}`}>
+                        <div id="typing-text-container" className={`h-[160px] overflow-y-auto scrollbar-none leading-relaxed select-none ${mode === 'code' ? 'whitespace-pre-wrap break-all font-mono text-left' : 'flex flex-wrap content-start gap-x-0.5 gap-y-2 justify-center'}`}>
                             {renderText()}
                         </div>
                     )}

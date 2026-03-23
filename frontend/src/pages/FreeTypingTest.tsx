@@ -35,7 +35,7 @@ export const FreeTypingTest: React.FC<FreeTypingTestProps> = ({ onNavigate }) =>
     };
 
     return (
-        <div className="min-h-screen py-12 px-4 flex flex-col items-center">
+        <div className="w-full px-4 flex flex-col items-center">
             <Helmet>
                 <title>Free Online Typing Speed Test - TouchFlow Pro</title>
                 <meta name="description" content="Test your typing speed and accuracy for free with our 1-Minute Speed Test. Determine your baseline WPM and find your performance tier." />
@@ -46,7 +46,7 @@ export const FreeTypingTest: React.FC<FreeTypingTestProps> = ({ onNavigate }) =>
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-center mb-12"
+                        className="text-center mb-6"
                     >
                         <div className="inline-block px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6">
                             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">Free Assessment</span>
@@ -59,7 +59,7 @@ export const FreeTypingTest: React.FC<FreeTypingTestProps> = ({ onNavigate }) =>
                         </p>
                     </motion.div>
 
-                    <Card className="p-8 bg-white/5 backdrop-blur-xl border-white/10 shadow-2xl relative overflow-hidden">
+                    <Card className="p-4 bg-white/5 backdrop-blur-xl border-white/10 shadow-2xl relative overflow-hidden">
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-secondary to-primary animate-pulse opacity-50" />
 
                         <TypingTest

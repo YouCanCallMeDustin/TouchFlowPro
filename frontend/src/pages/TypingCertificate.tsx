@@ -626,8 +626,8 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
         const currentAccuracy = metrics?.accuracy || 100
 
         return (
-            <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
-                <div className="flex items-center justify-between mb-6">
+            <div className="w-full max-w-5xl mx-auto px-4 sm:px-6">
+                <div className="flex items-center justify-between px-2">
                     <button onClick={resetToSelection} className="flex items-center gap-2 text-text-muted hover:text-primary transition-colors">
                         <RotateCcw size={14} />
                         <span className="text-[10px] font-black uppercase tracking-[0.2em]">Abort Test</span>
@@ -657,7 +657,7 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
                     </div>
                 </div>
 
-                <div className="card p-8 sm:p-12 overflow-hidden mb-6 min-h-[400px] flex flex-col relative">
+                <div className="card p-6 sm:p-8 overflow-hidden mb-6 h-[260px] flex flex-col relative">
                     {/* Progress Line */}
                     <div className="absolute top-0 left-0 w-full h-1 bg-white/5">
                         <motion.div

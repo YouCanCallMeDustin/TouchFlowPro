@@ -6,7 +6,6 @@ import { Helmet } from 'react-helmet-async';
 import { AnimatePresence } from 'framer-motion'
 import { Card } from './components/ui/Card'
 import { Button } from './components/ui/Button'
-import './App.css'
 import './games/accuracy-assassin/ui/accuracy-assassin.css'
 
 import PageTransition from './components/PageTransition'
@@ -28,6 +27,7 @@ import CodePractice from './pages/CodePractice'
 import PricingPage from './pages/PricingPage'
 import TermsOfService from './pages/TermsOfService'
 import PrivacyPolicy from './pages/PrivacyPolicy'
+import PracticeTests from './pages/PracticeTests';
 import TypingCertificate from './pages/TypingCertificate'
 import Extension from './pages/Extension'
 import { GamesLanding } from './pages/GamesLanding'
@@ -426,6 +426,23 @@ function App() {
   }
 
 
+  const isTypingMode = ['lesson', 'practice_tests', 'certificate', 'free_test', 'assessment'].includes(stage) || stage.startsWith('games_');
+
+  useEffect(() => {
+    if (isTypingMode) {
+      window.scrollTo(0, 0);
+      document.body.style.overflow = 'hidden';
+      document.body.style.height = '100vh';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.height = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.height = '';
+    }
+  }, [isTypingMode]);
+
   if (loading || isFetchingProgress) {
     return (
       <div className="min-h-screen bg-bg-main flex items-center justify-center">
@@ -444,7 +461,7 @@ function App() {
       <Helmet>
         <link rel="canonical" href={`https://touchflowpro.com${location.pathname === '/' ? '' : location.pathname}`} />
       </Helmet>
-      <div className="min-h-screen bg-bg-main selection:bg-primary/20 relative">
+      <div className={`min-h-screen bg-bg-main selection:bg-primary/20 relative ${isTypingMode ? 'h-screen overflow-hidden flex flex-col' : ''}`}>
         <Header
           user={user}
           userProgress={userProgress}
@@ -454,7 +471,7 @@ function App() {
           currentLesson={currentLesson}
         />
 
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 py-20 flex justify-center w-full overflow-hidden">
+        <main className={`relative z-10 ${isTypingMode ? 'flex-1 flex flex-col items-center pt-2 overflow-y-auto scrollbar-none' : 'pt-24 pb-12 px-4'}`}>
           <AnimatePresence mode="wait">
             {stage === 'auth_login' && (
               <PageTransition key="auth_login">
@@ -641,6 +658,12 @@ function App() {
             {stage === 'practice' && user && (
               <PageTransition key="practice">
                 <Practice userId={user.id} onSessionComplete={handleSessionComplete} />
+              </PageTransition>
+            )}
+
+            {stage === 'practice_tests' && user && (
+              <PageTransition key="practice_tests">
+                <PracticeTests userId={user.id} onNavigate={setStage} />
               </PageTransition>
             )}
 
@@ -862,57 +885,59 @@ function App() {
           newLevel={showAchievement?.level}
         />
 
-        <footer className="border-t border-white/5 mt-12 py-12 px-4 bg-bg-main relative z-50">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div className="col-span-1 md:col-span-2">
-              <h3 className="text-xl font-black text-white uppercase tracking-tighter italic mb-4">
-                TouchFlow <span className="text-primary">Pro</span>
-              </h3>
-              <p className="text-sm text-text-muted opacity-80 max-w-sm mb-6">
-                Professional-grade typing performance training. Measure your baseline, discover your bottlenecks, and drill your weaknesses with adaptive telemetry.
-              </p>
+        {!isTypingMode && (
+          <footer className="border-t border-white/5 mt-12 py-12 px-4 bg-bg-main relative z-50">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+              <div className="col-span-1 md:col-span-2">
+                <h3 className="text-xl font-black text-white uppercase tracking-tighter italic mb-4">
+                  TouchFlow <span className="text-primary">Pro</span>
+                </h3>
+                <p className="text-sm text-text-muted opacity-80 max-w-sm mb-6">
+                  Professional-grade typing performance training. Measure your baseline, discover your bottlenecks, and drill your weaknesses with adaptive telemetry.
+                </p>
+              </div>
+
+              <div>
+                <h4 className="text-xs font-black text-white uppercase tracking-widest mb-4">Performance Guides</h4>
+                <ul className="flex flex-col gap-3">
+                  <li>
+                    <Link to="/articles/typing-speed-plateau" className="text-xs text-text-muted hover:text-primary transition-colors font-medium">Overcoming the Speed Plateau</Link>
+                  </li>
+                  <li>
+                    <Link to="/articles/type-faster-accurately" className="text-xs text-text-muted hover:text-primary transition-colors font-medium">Accuracy vs. Velocity</Link>
+                  </li>
+                  <li>
+                    <Link to="/articles/60-wpm-to-100-wpm" className="text-xs text-text-muted hover:text-primary transition-colors font-medium">60 WPM to 100 WPM</Link>
+                  </li>
+                  <li>
+                    <Link to="/articles/typing-speed-averages" className="text-xs text-text-muted hover:text-primary transition-colors font-medium">Average Typing Speeds</Link>
+                  </li>
+                  <li>
+                    <Link to="/articles/ultimate-guide-to-typing-speed" className="text-xs text-text-muted hover:text-primary transition-colors font-medium">Ultimate Guide (100+ WPM)</Link>
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="text-xs font-black text-white uppercase tracking-widest mb-4">Legal</h4>
+                <ul className="flex flex-col gap-3">
+                  <li>
+                    <Link to="/terms" className="text-xs text-text-muted hover:text-white transition-colors font-medium">Terms of Service</Link>
+                  </li>
+                  <li>
+                    <Link to="/privacy-policy" className="text-xs text-text-muted hover:text-white transition-colors font-medium">Privacy Policy</Link>
+                  </li>
+                </ul>
+              </div>
             </div>
 
-            <div>
-              <h4 className="text-xs font-black text-white uppercase tracking-widest mb-4">Performance Guides</h4>
-              <ul className="flex flex-col gap-3">
-                <li>
-                  <Link to="/articles/typing-speed-plateau" className="text-xs text-text-muted hover:text-primary transition-colors font-medium">Overcoming the Speed Plateau</Link>
-                </li>
-                <li>
-                  <Link to="/articles/type-faster-accurately" className="text-xs text-text-muted hover:text-primary transition-colors font-medium">Accuracy vs. Velocity</Link>
-                </li>
-                <li>
-                  <Link to="/articles/60-wpm-to-100-wpm" className="text-xs text-text-muted hover:text-primary transition-colors font-medium">60 WPM to 100 WPM</Link>
-                </li>
-                <li>
-                  <Link to="/articles/typing-speed-averages" className="text-xs text-text-muted hover:text-primary transition-colors font-medium">Average Typing Speeds</Link>
-                </li>
-                <li>
-                  <Link to="/articles/ultimate-guide-to-typing-speed" className="text-xs text-text-muted hover:text-primary transition-colors font-medium">Ultimate Guide (100+ WPM)</Link>
-                </li>
-              </ul>
+            <div className="max-w-7xl mx-auto pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <span className="text-[10px] text-text-muted font-medium">
+                © {new Date().getFullYear()} TouchFlow Pro. All rights reserved.
+              </span>
             </div>
-
-            <div>
-              <h4 className="text-xs font-black text-white uppercase tracking-widest mb-4">Legal</h4>
-              <ul className="flex flex-col gap-3">
-                <li>
-                  <Link to="/terms" className="text-xs text-text-muted hover:text-white transition-colors font-medium">Terms of Service</Link>
-                </li>
-                <li>
-                  <Link to="/privacy-policy" className="text-xs text-text-muted hover:text-white transition-colors font-medium">Privacy Policy</Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="max-w-7xl mx-auto pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3">
-            <span className="text-[10px] text-text-muted font-medium">
-              © {new Date().getFullYear()} TouchFlow Pro. All rights reserved.
-            </span>
-          </div>
-        </footer>
+          </footer>
+        )}
 
         <style>{`
             @keyframes shine {
