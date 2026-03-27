@@ -21,7 +21,9 @@ import {
     Briefcase,
     Stethoscope,
     Scale,
-    Clock
+    Clock,
+    Activity,
+    TrendingUp
 } from 'lucide-react';
 import { Breadcrumbs } from './Breadcrumbs';
 import { Button } from './ui/Button';
@@ -111,6 +113,19 @@ export const Header: React.FC<HeaderProps> = ({
                 { id: 'analytics', label: 'Stats', icon: BarChart3 },
                 { id: 'achievements', label: 'Awards', icon: Award },
                 { id: 'leaderboard', label: 'Ranks', icon: Trophy },
+            ]
+        },
+        {
+            type: 'dropdown',
+            id: 'resources_dropdown',
+            label: 'Resources',
+            icon: BookOpen,
+            items: [
+                { id: 'article_ultimate_guide', label: 'Ultimate Guide', icon: Zap },
+                { id: 'article_averages', label: 'WPM Benchmarks', icon: BarChart3 },
+                { id: 'article_how_to_type_faster', label: 'How to Type Faster', icon: Zap },
+                { id: 'article_plateau', label: 'Speed Plateaus', icon: Activity },
+                { id: 'article_60_to_100', label: '60 to 100 WPM', icon: TrendingUp },
             ]
         },
         {

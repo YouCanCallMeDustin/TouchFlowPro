@@ -899,23 +899,22 @@ function App() {
 
               <div>
                 <h4 className="text-xs font-black text-white uppercase tracking-widest mb-4">Performance Guides</h4>
-                <ul className="flex flex-col gap-3">
-                  <li>
-                    <Link to="/articles/typing-speed-plateau" className="text-xs text-text-muted hover:text-primary transition-colors font-medium">Overcoming the Speed Plateau</Link>
-                  </li>
-                  <li>
-                    <Link to="/articles/type-faster-accurately" className="text-xs text-text-muted hover:text-primary transition-colors font-medium">Accuracy vs. Velocity</Link>
-                  </li>
-                  <li>
-                    <Link to="/articles/60-wpm-to-100-wpm" className="text-xs text-text-muted hover:text-primary transition-colors font-medium">60 WPM to 100 WPM</Link>
-                  </li>
-                  <li>
-                    <Link to="/articles/typing-speed-averages" className="text-xs text-text-muted hover:text-primary transition-colors font-medium">Average Typing Speeds</Link>
-                  </li>
-                  <li>
-                    <Link to="/articles/ultimate-guide-to-typing-speed" className="text-xs text-text-muted hover:text-primary transition-colors font-medium">Ultimate Guide (100+ WPM)</Link>
-                  </li>
-                </ul>
+                <div className="grid grid-cols-2 gap-x-8">
+                  <ul className="flex flex-col gap-3">
+                    <li><Link to="/articles/typing-speed-averages" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Average Speeds</Link></li>
+                    <li><Link to="/articles/ultimate-guide-to-typing-speed" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Ultimate Guide</Link></li>
+                    <li><Link to="/articles/how-to-type-faster" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">How to Type Faster</Link></li>
+                    <li><Link to="/articles/typing-speed-plateau" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Overcoming Plateaus</Link></li>
+                    <li><Link to="/articles/60-wpm-to-100-wpm" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">60 to 100 WPM</Link></li>
+                  </ul>
+                  <ul className="flex flex-col gap-3">
+                    <li><Link to="/articles/type-faster-accurately" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Accuracy Guide</Link></li>
+                    <li><Link to="/articles/touch-typing-guide" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Touch Typing</Link></li>
+                    <li><Link to="/articles/typing-speed-test" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Speed Evaluation</Link></li>
+                    <li><Link to="/articles/fastest-typing-techniques" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Elite Techniques</Link></li>
+                    <li><Link to="/articles/typing-practice" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Practice Drills</Link></li>
+                  </ul>
+                </div>
               </div>
 
               <div>
