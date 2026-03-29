@@ -169,10 +169,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                         <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">Precision Typing For Professionals</span>
                     </motion.div>
 
-                    <motion.h1 variants={itemVariants} className="text-5xl md:text-[5.5rem] font-black mb-6 leading-[0.9] tracking-tighter uppercase italic text-text-main">
+                    <h1 className="text-5xl md:text-[5.5rem] font-black mb-6 leading-[0.9] tracking-tighter uppercase italic text-text-main animate-in fade-in slide-in-from-bottom-4 duration-500 fill-mode-both">
                         Learn Touch Typing. <br />
                         Increase Typing <span className="text-primary italic">Speed (WPM).</span>
-                    </motion.h1>
+                    </h1>
 
                     <motion.p variants={itemVariants} className="text-text-muted text-base md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed font-bold">
                         TouchFlow Pro is the typing improvement platform for working professionals. Train with spaced repetition, fatigue detection, and performance analytics—so your speed climbs without your accuracy collapsing.

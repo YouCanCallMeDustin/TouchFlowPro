@@ -451,7 +451,17 @@ function App() {
     }
   }, [isTypingMode]);
 
-  if (loading || isFetchingProgress) {
+  // Determine if the current stage is a public-facing page
+  const isPublicStage = [
+    'welcome', 'free_test', 'medicalTrack', 'legalTrack', 'codingTrack', 
+    'pricing', 'terms', 'privacy', 'about', 'contact', 'faq', 'articles_index',
+    'auth_login', 'auth_signup', 'assessment'
+  ].includes(stage) || String(stage).startsWith('article_');
+
+  // Only block the entire rendering pipeline if we are trying to access a PROTECTED route
+  // while the Supabase session is still resolving. This eliminates the massive 2.0s LCP penalty
+  // applied to the homepage for anonymous mobile traffic.
+  if ((loading || isFetchingProgress) && !isPublicStage) {
     return (
       <div className="min-h-screen bg-bg-main flex items-center justify-center">
         <div className="text-center">
