@@ -16,52 +16,68 @@ export const UltimateGuideArticle: React.FC<ArticleProps> = () => {
     return (
         <div className="min-h-screen py-12 px-4 flex flex-col items-center">
             <Helmet>
-                <title>How to Reach 100+ WPM: The Ultimate Typing Speed Guide (2026)</title>
-                <meta name="description" content="Master touch typing with our elite 100 WPM roadmap. Learn the science of motor learning, rhythmic stability, and ergonomic optimization for 2026." />
-                
+                <title>Ultimate Guide to Typing Speed: 100+ WPM Mastery | TouchFlowPro</title>
+                <meta name="description" content="Master touch typing with our elite 100 WPM roadmap. Learn the science of motor learning, rhythmic stability, and ergonomic optimization for speed." />
+                <link rel="canonical" href="https://touchflowpro.com/articles/ultimate-guide-to-typing-speed" />
+                <meta property="og:title" content="Ultimate Guide to Typing Speed: 100+ WPM Mastery | TouchFlowPro" />
+                <meta property="og:description" content="Master touch typing with our elite 100 WPM roadmap. Learn the science of motor learning, rhythmic stability, and ergonomic optimization for speed." />
+                <meta property="og:type" content="article" />
+                <meta property="og:url" content="https://touchflowpro.com/articles/ultimate-guide-to-typing-speed" />
+                <meta property="og:image" content="https://touchflowpro.com/assets/og-ultimate-guide.png" />
+                <meta property="og:site_name" content="TouchFlowPro" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Ultimate Guide to Typing Speed: 100+ WPM Mastery | TouchFlowPro" />
+                <meta name="twitter:description" content="Master touch typing with our elite 100 WPM roadmap. Learn the science of motor learning, rhythmic stability, and ergonomic optimization for speed." />
                 {/* Structured Data */}
+            
                 <script type="application/ld+json">
                     {JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@graph": [
-                            {
-                                "@type": "BreadcrumbList",
-                                "itemListElement": [
-                                    {
-                                        "@type": "ListItem",
-                                        "position": 1,
-                                        "name": "Home",
-                                        "item": "https://touchflowpro.com"
-                                    },
-                                    {
-                                        "@type": "ListItem",
-                                        "position": 2,
-                                        "name": "Articles",
-                                        "item": "https://touchflowpro.com/articles/ultimate-guide-to-typing-speed"
-                                    },
-                                    {
-                                        "@type": "ListItem",
-                                        "position": 3,
-                                        "name": "Ultimate Typing Guide"
-                                    }
-                                ]
-                            },
-                            {
-                                "@type": "Article",
-                                "headline": "The Ultimate Guide to Typing Speed: 100+ WPM Roadmap",
-                                "description": "A complete step-by-step system to reaching 100+ WPM through deliberate practice and motor learning science.",
-                                "author": {
-                                    "@type": "Organization",
-                                    "name": "TouchFlow Pro"
-                                },
-                                "isAccessibleForFree": "True",
-                                "aggregateRating": {
-                                    "@type": "AggregateRating",
-                                    "ratingValue": "4.9",
-                                    "reviewCount": "248"
-                                }
-                            }
-                        ]
+                              "@context": "https://schema.org",
+                              "@type": "Article",
+                              "headline": "Ultimate Guide to Typing Speed: 100+ WPM Mastery",
+                              "description": "Master touch typing with our elite 100 WPM roadmap. Learn the science of motor learning, rhythmic stability, and ergonomic optimization for speed.",
+                              "image": "https://touchflowpro.com/assets/og-ultimate-guide.png",
+                              "author": {
+                                        "@type": "Organization",
+                                        "name": "TouchFlow Pro",
+                                        "url": "https://touchflowpro.com"
+                              },
+                              "publisher": {
+                                        "@type": "Organization",
+                                        "name": "TouchFlow Pro",
+                                        "logo": {
+                                                  "@type": "ImageObject",
+                                                  "url": "https://touchflowpro.com/logo.png"
+                                        }
+                              },
+                              "datePublished": "2024-01-01T08:00:00+08:00",
+                              "dateModified": "2026-03-29T00:54:45.398Z"
+                    })}
+                </script>
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                              "@context": "https://schema.org",
+                              "@type": "BreadcrumbList",
+                              "itemListElement": [
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 1,
+                                                  "name": "Home",
+                                                  "item": "https://touchflowpro.com"
+                                        },
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 2,
+                                                  "name": "Articles",
+                                                  "item": "https://touchflowpro.com/articles"
+                                        },
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 3,
+                                                  "name": "Ultimate Guide to Typing Speed: 100+ WPM Mastery",
+                                                  "item": "https://touchflowpro.com/articles/ultimate-guide-to-typing-speed"
+                                        }
+                              ]
                     })}
                 </script>
             </Helmet>

@@ -15,29 +15,67 @@ export const TypeFasterArticle: React.FC<ArticleProps> = () => {
     return (
         <div className="min-h-screen py-12 px-4 flex flex-col items-center">
             <Helmet>
-                <title>How to Type Faster: 7 Scientific Strategies for Speed & Accuracy</title>
-                <meta name="description" content="Discover the mechanics of typing faster without sacrificing precision. Learn about N-grams, rhythmic stability, and motor learning science to boost your WPM." />
-                
+                <title>Type Faster & Accurately: Scientific WPM Strategies | TouchFlowPro</title>
+                <meta name="description" content="Discover the mechanics of typing faster without sacrificing precision. Learn about N-grams, rhythmic stability, and motor learning science to boost WPM." />
+                <link rel="canonical" href="https://touchflowpro.com/articles/type-faster-accurately" />
+                <meta property="og:title" content="Type Faster & Accurately: Scientific WPM Strategies | TouchFlowPro" />
+                <meta property="og:description" content="Discover the mechanics of typing faster without sacrificing precision. Learn about N-grams, rhythmic stability, and motor learning science to boost WPM." />
                 <meta property="og:type" content="article" />
                 <meta property="og:url" content="https://touchflowpro.com/articles/type-faster-accurately" />
                 <meta property="og:image" content="https://touchflowpro.com/assets/og-faster.png" />
+                <meta property="og:site_name" content="TouchFlowPro" />
                 <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Type Faster & Accurately: Scientific WPM Strategies | TouchFlowPro" />
+                <meta name="twitter:description" content="Discover the mechanics of typing faster without sacrificing precision. Learn about N-grams, rhythmic stability, and motor learning science to boost WPM." />
+            
                 <script type="application/ld+json">
                     {JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "BlogPosting",
-                        "headline": "How to Type Faster and More Accurately",
-                        "description": "Scientific strategies for increasing typing speed through accuracy-first doctrines and motor learning optimization.",
-                        "author": {
-                            "@type": "Organization",
-                            "name": "TouchFlow Pro"
-                        },
-                        "isAccessibleForFree": "True",
-                        "aggregateRating": {
-                            "@type": "AggregateRating",
-                            "ratingValue": "4.8",
-                            "reviewCount": "89"
-                        }
+                              "@context": "https://schema.org",
+                              "@type": "Article",
+                              "headline": "Type Faster & Accurately: Scientific WPM Strategies",
+                              "description": "Discover the mechanics of typing faster without sacrificing precision. Learn about N-grams, rhythmic stability, and motor learning science to boost WPM.",
+                              "image": "https://touchflowpro.com/assets/og-faster.png",
+                              "author": {
+                                        "@type": "Organization",
+                                        "name": "TouchFlow Pro",
+                                        "url": "https://touchflowpro.com"
+                              },
+                              "publisher": {
+                                        "@type": "Organization",
+                                        "name": "TouchFlow Pro",
+                                        "logo": {
+                                                  "@type": "ImageObject",
+                                                  "url": "https://touchflowpro.com/logo.png"
+                                        }
+                              },
+                              "datePublished": "2024-01-01T08:00:00+08:00",
+                              "dateModified": "2026-03-29T00:54:45.378Z"
+                    })}
+                </script>
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                              "@context": "https://schema.org",
+                              "@type": "BreadcrumbList",
+                              "itemListElement": [
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 1,
+                                                  "name": "Home",
+                                                  "item": "https://touchflowpro.com"
+                                        },
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 2,
+                                                  "name": "Articles",
+                                                  "item": "https://touchflowpro.com/articles"
+                                        },
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 3,
+                                                  "name": "Type Faster & Accurately: Scientific WPM Strategies",
+                                                  "item": "https://touchflowpro.com/articles/type-faster-accurately"
+                                        }
+                              ]
                     })}
                 </script>
                 <script type="application/ld+json">

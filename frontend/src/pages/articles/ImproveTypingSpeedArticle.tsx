@@ -15,21 +15,67 @@ export const ImproveTypingSpeedArticle: React.FC<ArticleProps> = () => {
     return (
         <div className="min-h-screen py-12 px-4 flex flex-col items-center">
             <Helmet>
-                <title>How to Improve Typing Speed: Expert Tips to Increase WPM & Accuracy</title>
-                <meta name="description" content="Learn exactly how to improve typing speed with our expert-led guide. Follow these top tips to increase your WPM and overall efficiency safely." />
+                <title>How to Improve Typing Speed: Deliberate Practice Drills & Techniques | TouchFlowPro</title>
+                <meta name="description" content="Learn proven deliberate practice techniques to increase your typing speed. Science-backed drills, muscle memory strategies, and structured exercises for measurable WPM gains." />
+                <link rel="canonical" href="https://touchflowpro.com/articles/improve-typing-speed" />
+                <meta property="og:title" content="How to Improve Typing Speed: Deliberate Practice Drills & Techniques | TouchFlowPro" />
+                <meta property="og:description" content="Learn proven deliberate practice techniques to increase your typing speed. Science-backed drills, muscle memory strategies, and structured exercises for measurable WPM gains." />
+                <meta property="og:type" content="article" />
+                <meta property="og:url" content="https://touchflowpro.com/articles/improve-typing-speed" />
+                <meta property="og:image" content="https://touchflowpro.com/assets/og-improve.png" />
+                <meta property="og:site_name" content="TouchFlowPro" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="How to Improve Typing Speed: Deliberate Practice Drills & Techniques | TouchFlowPro" />
+                <meta name="twitter:description" content="Learn proven deliberate practice techniques to increase your typing speed. Science-backed drills, muscle memory strategies, and structured exercises for measurable WPM gains." />
+            
                 <script type="application/ld+json">
                     {JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "BlogPosting",
-                        "headline": "How to Improve Typing Speed: Expert Tips to Increase WPM",
-                        "description": "Learn exactly how to improve typing speed with these expert-vetted tips to increase your performance.",
-                        "author": { "@type": "Organization", "name": "TouchFlow Pro" },
-                        "isAccessibleForFree": "True",
-                        "aggregateRating": {
-                            "@type": "AggregateRating",
-                            "ratingValue": "4.9",
-                            "reviewCount": "127"
-                        }
+                              "@context": "https://schema.org",
+                              "@type": "Article",
+                              "headline": "How to Improve Typing Speed: Deliberate Practice Drills & Techniques",
+                              "description": "Learn proven deliberate practice techniques to increase your typing speed. Science-backed drills, muscle memory strategies, and structured exercises for measurable WPM gains.",
+                              "image": "https://touchflowpro.com/assets/og-improve.png",
+                              "author": {
+                                        "@type": "Organization",
+                                        "name": "TouchFlow Pro",
+                                        "url": "https://touchflowpro.com"
+                              },
+                              "publisher": {
+                                        "@type": "Organization",
+                                        "name": "TouchFlow Pro",
+                                        "logo": {
+                                                  "@type": "ImageObject",
+                                                  "url": "https://touchflowpro.com/logo.png"
+                                        }
+                              },
+                              "datePublished": "2024-01-01T08:00:00+08:00",
+                              "dateModified": "2026-03-29T00:54:45.364Z"
+                    })}
+                </script>
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                              "@context": "https://schema.org",
+                              "@type": "BreadcrumbList",
+                              "itemListElement": [
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 1,
+                                                  "name": "Home",
+                                                  "item": "https://touchflowpro.com"
+                                        },
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 2,
+                                                  "name": "Articles",
+                                                  "item": "https://touchflowpro.com/articles"
+                                        },
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 3,
+                                                  "name": "How to Improve Typing Speed: Deliberate Practice Drills & Techniques",
+                                                  "item": "https://touchflowpro.com/articles/improve-typing-speed"
+                                        }
+                              ]
                     })}
                 </script>
             </Helmet>

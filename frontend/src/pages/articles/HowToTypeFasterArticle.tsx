@@ -15,21 +15,67 @@ export const HowToTypeFasterArticle: React.FC<ArticleProps> = () => {
     return (
         <div className="min-h-screen py-12 px-4 flex flex-col items-center">
             <Helmet>
-                <title>How to Type Faster: 10 Pro Tips to Increase Your WPM</title>
-                <meta name="description" content="Want to know how to type faster? Learn the elite tips professionals use to increase their typing speed and efficiency." />
+                <title>How to Type Faster: 10 Pro Keyboard Tips | TouchFlowPro</title>
+                <meta name="description" content="Looking to type faster? Transition from hunt-and-peck to elite touch typing with our 10 professional tips to increase your words per minute today." />
+                <link rel="canonical" href="https://touchflowpro.com/articles/how-to-type-faster" />
+                <meta property="og:title" content="How to Type Faster: 10 Pro Keyboard Tips | TouchFlowPro" />
+                <meta property="og:description" content="Looking to type faster? Transition from hunt-and-peck to elite touch typing with our 10 professional tips to increase your words per minute today." />
+                <meta property="og:type" content="article" />
+                <meta property="og:url" content="https://touchflowpro.com/articles/how-to-type-faster" />
+                <meta property="og:image" content="https://touchflowpro.com/assets/og-type-faster-tips.png" />
+                <meta property="og:site_name" content="TouchFlowPro" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="How to Type Faster: 10 Pro Keyboard Tips | TouchFlowPro" />
+                <meta name="twitter:description" content="Looking to type faster? Transition from hunt-and-peck to elite touch typing with our 10 professional tips to increase your words per minute today." />
+            
                 <script type="application/ld+json">
                     {JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "BlogPosting",
-                        "headline": "How to Type Faster: Tips & Tricks",
-                        "description": "Learn exactly how to type faster with these 10 practical tips to increase your words per minute.",
-                        "author": { "@type": "Organization", "name": "TouchFlow Pro" },
-                        "isAccessibleForFree": "True",
-                        "aggregateRating": {
-                            "@type": "AggregateRating",
-                            "ratingValue": "4.9",
-                            "reviewCount": "156"
-                        }
+                              "@context": "https://schema.org",
+                              "@type": "Article",
+                              "headline": "How to Type Faster: 10 Pro Keyboard Tips",
+                              "description": "Looking to type faster? Transition from hunt-and-peck to elite touch typing with our 10 professional tips to increase your words per minute today.",
+                              "image": "https://touchflowpro.com/assets/og-type-faster-tips.png",
+                              "author": {
+                                        "@type": "Organization",
+                                        "name": "TouchFlow Pro",
+                                        "url": "https://touchflowpro.com"
+                              },
+                              "publisher": {
+                                        "@type": "Organization",
+                                        "name": "TouchFlow Pro",
+                                        "logo": {
+                                                  "@type": "ImageObject",
+                                                  "url": "https://touchflowpro.com/logo.png"
+                                        }
+                              },
+                              "datePublished": "2024-01-01T08:00:00+08:00",
+                              "dateModified": "2026-03-29T00:54:45.363Z"
+                    })}
+                </script>
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                              "@context": "https://schema.org",
+                              "@type": "BreadcrumbList",
+                              "itemListElement": [
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 1,
+                                                  "name": "Home",
+                                                  "item": "https://touchflowpro.com"
+                                        },
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 2,
+                                                  "name": "Articles",
+                                                  "item": "https://touchflowpro.com/articles"
+                                        },
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 3,
+                                                  "name": "How to Type Faster: 10 Pro Keyboard Tips",
+                                                  "item": "https://touchflowpro.com/articles/how-to-type-faster"
+                                        }
+                              ]
                     })}
                 </script>
             </Helmet>

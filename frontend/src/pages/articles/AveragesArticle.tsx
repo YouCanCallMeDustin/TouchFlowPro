@@ -17,16 +17,70 @@ export const AveragesArticle: React.FC<ArticleProps> = () => {
     return (
         <div className="min-h-screen py-12 px-4 flex flex-col items-center">
             <Helmet>
-                <title>Average Typing Speed: 2026 Benchmarks (How Do You Compare?)</title>
-                <meta name="description" content="Is your WPM above average? Discover the 2026 typing speed benchmarks by age, profession, and skill level. Plus, elite strategies to reach 100+ WPM." />
-                <meta property="og:title" content="Average Typing Speed: 2026 Benchmarks & Professional Standards" />
-                <meta property="og:description" content="See how your WPM compares to the world. A complete breakdown of average typing speeds for 2026." />
+                <title>What Is a Good Typing Speed? Average WPM by Profession & Skill Level | TouchFlowPro</title>
+                <meta name="description" content="Discover what counts as a good typing speed for your profession. Average WPM benchmarks for writers, programmers, data entry, legal, and medical transcription roles." />
+                <link rel="canonical" href="https://touchflowpro.com/articles/typing-speed-averages" />
+                <meta property="og:title" content="What Is a Good Typing Speed? Average WPM by Profession & Skill Level | TouchFlowPro" />
+                <meta property="og:description" content="Discover what counts as a good typing speed for your profession. Average WPM benchmarks for writers, programmers, data entry, legal, and medical transcription roles." />
                 <meta property="og:type" content="article" />
                 <meta property="og:url" content="https://touchflowpro.com/articles/typing-speed-averages" />
                 <meta property="og:image" content="https://touchflowpro.com/assets/og-averages.png" />
+                <meta property="og:site_name" content="TouchFlowPro" />
                 <meta name="twitter:card" content="summary_large_image" />
-                
+                <meta name="twitter:title" content="What Is a Good Typing Speed? Average WPM by Profession & Skill Level | TouchFlowPro" />
+                <meta name="twitter:description" content="Discover what counts as a good typing speed for your profession. Average WPM benchmarks for writers, programmers, data entry, legal, and medical transcription roles." />
                 {/* Structured Data */}
+            
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                              "@context": "https://schema.org",
+                              "@type": "Article",
+                              "headline": "What Is a Good Typing Speed? Average WPM by Profession & Skill Level",
+                              "description": "Discover what counts as a good typing speed for your profession. Average WPM benchmarks for writers, programmers, data entry, legal, and medical transcription roles.",
+                              "image": "https://touchflowpro.com/assets/og-averages.png",
+                              "author": {
+                                        "@type": "Organization",
+                                        "name": "TouchFlow Pro",
+                                        "url": "https://touchflowpro.com"
+                              },
+                              "publisher": {
+                                        "@type": "Organization",
+                                        "name": "TouchFlow Pro",
+                                        "logo": {
+                                                  "@type": "ImageObject",
+                                                  "url": "https://touchflowpro.com/logo.png"
+                                        }
+                              },
+                              "datePublished": "2024-01-01T08:00:00+08:00",
+                              "dateModified": "2026-03-29T00:54:45.352Z"
+                    })}
+                </script>
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                              "@context": "https://schema.org",
+                              "@type": "BreadcrumbList",
+                              "itemListElement": [
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 1,
+                                                  "name": "Home",
+                                                  "item": "https://touchflowpro.com"
+                                        },
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 2,
+                                                  "name": "Articles",
+                                                  "item": "https://touchflowpro.com/articles"
+                                        },
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 3,
+                                                  "name": "What Is a Good Typing Speed? Average WPM by Profession & Skill Level",
+                                                  "item": "https://touchflowpro.com/articles/typing-speed-averages"
+                                        }
+                              ]
+                    })}
+                </script>
                 <script type="application/ld+json">
                     {JSON.stringify({
                         "@context": "https://schema.org",

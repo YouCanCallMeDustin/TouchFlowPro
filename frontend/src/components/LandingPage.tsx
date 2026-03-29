@@ -120,8 +120,40 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
     return (
         <div className="w-full">
             <Helmet>
-                <title>TouchFlow Pro — Professional Typing Performance Trainer</title>
-                <meta name="description" content="Professional-grade typing performance training for serious typists. Keystroke analytics, deliberate practice drills, and structured training plans to measurably increase your speed and accuracy." />
+                <title>TouchFlowPro — Advanced Typing Speed & Accuracy Trainer | Break Your Plateau</title>
+                <meta name="description" content="Professional-grade typing performance training for serious typists. Keystroke analytics, deliberate practice drills, and structured plans to push past your WPM plateau. Start training now." />
+                <link rel="canonical" href="https://touchflowpro.com/" />
+                <meta property="og:title" content="TouchFlowPro — Advanced Typing Speed & Accuracy Trainer | Break Your Plateau" />
+                <meta property="og:description" content="Professional-grade typing performance training for serious typists. Keystroke analytics, deliberate practice drills, and structured plans to push past your WPM plateau. Start training now." />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content="https://touchflowpro.com/" />
+                <meta property="og:image" content="https://touchflowpro.com/og-image.png" />
+                <meta property="og:site_name" content="TouchFlowPro" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="TouchFlowPro — Advanced Typing Speed & Accuracy Trainer | Break Your Plateau" />
+                <meta name="twitter:description" content="Professional-grade typing performance training for serious typists. Keystroke analytics, deliberate practice drills, and structured plans to push past your WPM plateau. Start training now." />
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "Organization",
+                        "name": "TouchFlow Pro",
+                        "url": "https://touchflowpro.com",
+                        "logo": "https://touchflowpro.com/logo.png",
+                        "description": "Professional-grade typing performance training for serious typists.",
+                        "sameAs": [
+                            "https://twitter.com/touchflowpro",
+                            "https://www.linkedin.com/company/touchflowpro/"
+                        ]
+                    })}
+                </script>
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "WebSite",
+                        "name": "TouchFlow Pro",
+                        "url": "https://touchflowpro.com"
+                    })}
+                </script>
             </Helmet>
             {/* 1) HERO */}
             <section className="relative min-h-[90vh] w-full flex items-center justify-center overflow-hidden px-4 md:px-0">

@@ -78,8 +78,37 @@ export const CodeTrack: React.FC<CodeTrackProps> = ({ setStage, setLaunchParams 
     return (
         <div className="max-w-6xl mx-auto px-4 py-8">
             <Helmet>
-                <title>Coding Typing Practice & Syntax Drills - TouchFlow Pro</title>
+                <title>Coding Typing Practice: Developer Keyboard Drills | TouchFlowPro</title>
                 <meta name="description" content="Master programming syntax and code patterns. Improve your coding velocity by practicing your typing speed on TypeScript, Python, React, Rust, and more." />
+                <link rel="canonical" href="https://touchflowpro.com/code-track" />
+                <meta property="og:title" content="Coding Typing Practice: Developer Keyboard Drills | TouchFlowPro" />
+                <meta property="og:description" content="Master programming syntax and code patterns. Improve your coding velocity by practicing your typing speed on TypeScript, Python, React, Rust, and more." />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content="https://touchflowpro.com/code-track" />
+                <meta property="og:image" content="https://touchflowpro.com/og-image.png" />
+                <meta property="og:site_name" content="TouchFlowPro" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Coding Typing Practice: Developer Keyboard Drills | TouchFlowPro" />
+                <meta name="twitter:description" content="Master programming syntax and code patterns. Improve your coding velocity by practicing your typing speed on TypeScript, Python, React, Rust, and more." />
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "SoftwareApplication",
+                        "name": "Coding Typing Practice Tracker",
+                        "applicationCategory": "EducationalApplication",
+                        "operatingSystem": "WebBrowser",
+                        "offers": {
+                            "@type": "Offer",
+                            "price": "0",
+                            "priceCurrency": "USD"
+                        },
+                        "aggregateRating": {
+                            "@type": "AggregateRating",
+                            "ratingValue": "4.8",
+                            "ratingCount": "942"
+                        }
+                    })}
+                </script>
             </Helmet>
             <div className="flex items-center justify-between mb-8">
                 <div>

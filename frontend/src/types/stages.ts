@@ -1,4 +1,5 @@
 export type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'lesson' | 'levelup' | 'auth_login' | 'auth_signup' | 'dashboard' | 'analytics' | 'history' | 'achievements' | 'custom_drills' | 'goals' | 'profile' | 'practice' | 'practice_tests' | 'bible_practice' | 'enhanced_practice' | 'leaderboard' | 'pricing' | 'code_practice' | 'drill_selection' | 'terms' | 'privacy' | 'certificate' | 'extension' | 'games' | 'games_accuracy_assassin' | 'games_burner_burst' | 'games_spell_rush' | 'orgs' | 'settings' | 'sample_report' | 'medicalTrack' | 'legalTrack' | 'codingTrack' | 'free_test'  | 'article_plateau'
+  | 'about' | 'contact' | 'faq' | 'articles_index'
   | 'article_type_faster'
   | 'article_60_to_100'
   | 'article_averages'

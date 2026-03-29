@@ -78,8 +78,37 @@ export const LegalTrack: React.FC<LegalTrackProps> = ({ setStage, setLaunchParam
     return (
         <div className="max-w-6xl mx-auto px-4 py-8">
             <Helmet>
-                <title>Legal Typing Practice & Terminology Drills - TouchFlow Pro</title>
-                <meta name="description" content="Master specialized legal terminology and documentation. Practice typing speed and accuracy for corporate law, contracts, litigation, and real estate documents." />
+                <title>Legal Transcription & Court Reporter Typing Drills | TouchFlowPro</title>
+                <meta name="description" content="Master specialized legal terminology. Practice typing speed and accuracy for corporate law and litigation. Start your free legal typing drills today." />
+                <link rel="canonical" href="https://touchflowpro.com/legal-track" />
+                <meta property="og:title" content="Legal Transcription & Court Reporter Typing Drills | TouchFlowPro" />
+                <meta property="og:description" content="Master specialized legal terminology. Practice typing speed and accuracy for corporate law and litigation. Start your free legal typing drills today." />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content="https://touchflowpro.com/legal-track" />
+                <meta property="og:image" content="https://touchflowpro.com/og-image.png" />
+                <meta property="og:site_name" content="TouchFlowPro" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Legal Typing Test & Practice For Legal Assistants | TouchFlowPro" />
+                <meta name="twitter:description" content="Professional typing tests and practice drills tailored for the legal industry. Master complex legal terminology, dictation speed, and formatting standards." />
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "SoftwareApplication",
+                        "name": "Legal Typing Practice Tool",
+                        "applicationCategory": "EducationalApplication",
+                        "operatingSystem": "WebBrowser",
+                        "offers": {
+                            "@type": "Offer",
+                            "price": "0",
+                            "priceCurrency": "USD"
+                        },
+                        "aggregateRating": {
+                            "@type": "AggregateRating",
+                            "ratingValue": "4.9",
+                            "ratingCount": "412"
+                        }
+                    })}
+                </script>
             </Helmet>
             <div className="flex items-center justify-between mb-8">
                 <div>

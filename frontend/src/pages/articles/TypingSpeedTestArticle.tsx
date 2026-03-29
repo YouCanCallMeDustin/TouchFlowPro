@@ -15,21 +15,67 @@ export const TypingSpeedTestArticle: React.FC<ArticleProps> = () => {
     return (
         <div className="min-h-screen py-12 px-4 flex flex-col items-center">
             <Helmet>
-                <title>Typing Speed Test: Measure Your WPM and Accuracy</title>
+                <title>Free Online Typing Speed Test: Check Your WPM | TouchFlowPro</title>
                 <meta name="description" content="Take a professional typing speed test. Gain deep insights into your WPM, accuracy, and keystroke metrics with our advanced analytics engine." />
+                <link rel="canonical" href="https://touchflowpro.com/articles/typing-speed-test" />
+                <meta property="og:title" content="Free Online Typing Speed Test: Check Your WPM | TouchFlowPro" />
+                <meta property="og:description" content="Take a professional typing speed test. Gain deep insights into your WPM, accuracy, and keystroke metrics with our advanced analytics engine." />
+                <meta property="og:type" content="article" />
+                <meta property="og:url" content="https://touchflowpro.com/articles/typing-speed-test" />
+                <meta property="og:image" content="https://touchflowpro.com/assets/og-speed-test.png" />
+                <meta property="og:site_name" content="TouchFlowPro" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Free Online Typing Speed Test: Check Your WPM | TouchFlowPro" />
+                <meta name="twitter:description" content="Take a professional typing speed test. Gain deep insights into your WPM, accuracy, and keystroke metrics with our advanced analytics engine." />
+            
                 <script type="application/ld+json">
                     {JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "BlogPosting",
-                        "headline": "Professional Typing Speed Test",
-                        "description": "Measure your WPM with our advanced analytics-driven typing speed test.",
-                        "author": { "@type": "Organization", "name": "TouchFlow Pro" },
-                        "isAccessibleForFree": "True",
-                        "aggregateRating": {
-                            "@type": "AggregateRating",
-                            "ratingValue": "4.7",
-                            "reviewCount": "342"
-                        }
+                              "@context": "https://schema.org",
+                              "@type": "Article",
+                              "headline": "Free Online Typing Speed Test: Check Your WPM",
+                              "description": "Take a professional typing speed test. Gain deep insights into your WPM, accuracy, and keystroke metrics with our advanced analytics engine.",
+                              "image": "https://touchflowpro.com/assets/og-speed-test.png",
+                              "author": {
+                                        "@type": "Organization",
+                                        "name": "TouchFlow Pro",
+                                        "url": "https://touchflowpro.com"
+                              },
+                              "publisher": {
+                                        "@type": "Organization",
+                                        "name": "TouchFlow Pro",
+                                        "logo": {
+                                                  "@type": "ImageObject",
+                                                  "url": "https://touchflowpro.com/logo.png"
+                                        }
+                              },
+                              "datePublished": "2024-01-01T08:00:00+08:00",
+                              "dateModified": "2026-03-29T00:54:45.394Z"
+                    })}
+                </script>
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                              "@context": "https://schema.org",
+                              "@type": "BreadcrumbList",
+                              "itemListElement": [
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 1,
+                                                  "name": "Home",
+                                                  "item": "https://touchflowpro.com"
+                                        },
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 2,
+                                                  "name": "Articles",
+                                                  "item": "https://touchflowpro.com/articles"
+                                        },
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 3,
+                                                  "name": "Free Online Typing Speed Test: Check Your WPM",
+                                                  "item": "https://touchflowpro.com/articles/typing-speed-test"
+                                        }
+                              ]
                     })}
                 </script>
             </Helmet>

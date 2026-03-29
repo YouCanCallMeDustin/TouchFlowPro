@@ -1,5 +1,7 @@
 import { ArrowLeft } from 'lucide-react'
 
+import { Helmet } from 'react-helmet-async'
+
 interface PrivacyPolicyProps {
     onBack: () => void
 }
@@ -7,6 +9,11 @@ interface PrivacyPolicyProps {
 export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
     return (
         <div className="max-w-3xl mx-auto w-full">
+            <Helmet>
+                <title>Privacy Policy | TouchFlow Pro</title>
+                <meta name="description" content="Read the TouchFlow Pro privacy policy. Learn how we collect, store, and protect your typing metrics and account data." />
+                <link rel="canonical" href="https://touchflowpro.com/privacy-policy" />
+            </Helmet>
             <button
                 onClick={onBack}
                 className="flex items-center gap-2 text-text-muted hover:text-primary transition-colors mb-8 group"

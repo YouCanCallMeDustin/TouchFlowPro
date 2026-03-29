@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Helmet } from 'react-helmet-async'
 import { TypingEngine } from '@shared/typingEngine'
 import type { KeystrokeEvent, TypingMetrics } from '@shared/types'
 import { Award, Clock, Target, Zap, Download, RotateCcw, ChevronRight, Shield } from 'lucide-react'
@@ -520,6 +521,20 @@ const TypingCertificate: React.FC<TypingCertificateProps> = ({ userId: _userId, 
     if (phase === 'select') {
         return (
             <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+                <Helmet>
+                    <title>Official Typing Certificate: Verify Your WPM | TouchFlowPro</title>
+                    <meta name="description" content="Take an official typing test and receive a verifiable certificate of your WPM and accuracy to prove your professional typing proficiency." />
+                    <link rel="canonical" href="https://touchflowpro.com/certificate" />
+                    <meta property="og:title" content="Official Typing Certificate: Verify Your WPM | TouchFlowPro" />
+                    <meta property="og:description" content="Take an official typing test and receive a verifiable certificate of your WPM and accuracy to prove your professional typing proficiency." />
+                    <meta property="og:type" content="website" />
+                    <meta property="og:url" content="https://touchflowpro.com/certificate" />
+                    <meta property="og:image" content="https://touchflowpro.com/og-image.png" />
+                    <meta property="og:site_name" content="TouchFlowPro" />
+                    <meta name="twitter:card" content="summary_large_image" />
+                    <meta name="twitter:title" content="Official Typing Certificate: Verify Your WPM | TouchFlowPro" />
+                    <meta name="twitter:description" content="Take an official typing test and receive a verifiable certificate of your WPM and accuracy to prove your professional typing proficiency." />
+                </Helmet>
                 <div className="relative overflow-hidden card group min-h-[220px] flex items-center p-8 sm:p-12 mb-12 border border-slate-700/50">
                     <div className="relative z-10 w-full md:w-2/3">
                         <div className="flex items-center gap-3 mb-6">

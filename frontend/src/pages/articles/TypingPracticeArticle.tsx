@@ -15,21 +15,67 @@ export const TypingPracticeArticle: React.FC<ArticleProps> = () => {
     return (
         <div className="min-h-screen py-12 px-4 flex flex-col items-center">
             <Helmet>
-                <title>Typing Practice: Daily Exercises and Drills for Mastery</title>
-                <meta name="description" content="Improve your speed with our structured typing practice lessons. Discover advanced exercises and drills designed for professional typists." />
+                <title>Typing Practice Drills: Improve Speed & Accuracy | TouchFlowPro</title>
+                <meta name="description" content="Improve your typing speed with structured daily practice lessons. Discover advanced exercises designed for professional typists. Start practicing today." />
+                <link rel="canonical" href="https://touchflowpro.com/articles/typing-practice" />
+                <meta property="og:title" content="Typing Practice Drills: Improve Speed & Accuracy | TouchFlowPro" />
+                <meta property="og:description" content="Improve your typing speed with structured daily practice lessons. Discover advanced exercises designed for professional typists. Start practicing today." />
+                <meta property="og:type" content="article" />
+                <meta property="og:url" content="https://touchflowpro.com/articles/typing-practice" />
+                <meta property="og:image" content="https://touchflowpro.com/assets/og-practice.png" />
+                <meta property="og:site_name" content="TouchFlowPro" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Typing Practice Drills: Improve Speed & Accuracy | TouchFlowPro" />
+                <meta name="twitter:description" content="Improve your typing speed with structured daily practice lessons. Discover advanced exercises designed for professional typists. Start practicing today." />
+            
                 <script type="application/ld+json">
                     {JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "BlogPosting",
-                        "headline": "Professional Typing Practice",
-                        "description": "Daily typing practice exercises and drills to build muscle memory.",
-                        "author": { "@type": "Organization", "name": "TouchFlow Pro" },
-                        "isAccessibleForFree": "True",
-                        "aggregateRating": {
-                            "@type": "AggregateRating",
-                            "ratingValue": "4.8",
-                            "reviewCount": "184"
-                        }
+                              "@context": "https://schema.org",
+                              "@type": "Article",
+                              "headline": "Typing Practice Drills: Improve Speed & Accuracy",
+                              "description": "Improve your typing speed with structured daily practice lessons. Discover advanced exercises designed for professional typists. Start practicing today.",
+                              "image": "https://touchflowpro.com/assets/og-practice.png",
+                              "author": {
+                                        "@type": "Organization",
+                                        "name": "TouchFlow Pro",
+                                        "url": "https://touchflowpro.com"
+                              },
+                              "publisher": {
+                                        "@type": "Organization",
+                                        "name": "TouchFlow Pro",
+                                        "logo": {
+                                                  "@type": "ImageObject",
+                                                  "url": "https://touchflowpro.com/logo.png"
+                                        }
+                              },
+                              "datePublished": "2024-01-01T08:00:00+08:00",
+                              "dateModified": "2026-03-29T00:54:45.393Z"
+                    })}
+                </script>
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                              "@context": "https://schema.org",
+                              "@type": "BreadcrumbList",
+                              "itemListElement": [
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 1,
+                                                  "name": "Home",
+                                                  "item": "https://touchflowpro.com"
+                                        },
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 2,
+                                                  "name": "Articles",
+                                                  "item": "https://touchflowpro.com/articles"
+                                        },
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 3,
+                                                  "name": "Typing Practice Drills: Improve Speed & Accuracy",
+                                                  "item": "https://touchflowpro.com/articles/typing-practice"
+                                        }
+                              ]
                     })}
                 </script>
             </Helmet>

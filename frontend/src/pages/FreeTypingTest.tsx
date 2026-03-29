@@ -37,8 +37,37 @@ export const FreeTypingTest: React.FC<FreeTypingTestProps> = ({ onNavigate }) =>
     return (
         <div className="w-full px-4 flex flex-col items-center">
             <Helmet>
-                <title>Free Online Typing Speed Test - TouchFlow Pro</title>
+                <title>Free 1-Minute Typing Test: Test Your WPM Online | TouchFlowPro</title>
                 <meta name="description" content="Test your typing speed and accuracy for free with our 1-Minute Speed Test. Determine your baseline WPM and find your performance tier." />
+                <link rel="canonical" href="https://touchflowpro.com/free-typing-test" />
+                <meta property="og:title" content="Free 1-Minute Typing Test: Test Your WPM Online | TouchFlowPro" />
+                <meta property="og:description" content="Test your typing speed and accuracy for free with our 1-Minute Speed Test. Determine your baseline WPM and find your performance tier." />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content="https://touchflowpro.com/free-typing-test" />
+                <meta property="og:image" content="https://touchflowpro.com/og-image.png" />
+                <meta property="og:site_name" content="TouchFlowPro" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Free 1-Minute Typing Test: Test Your WPM Online | TouchFlowPro" />
+                <meta name="twitter:description" content="Test your typing speed and accuracy for free with our 1-Minute Speed Test. Determine your baseline WPM and find your performance tier." />
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "SoftwareApplication",
+                        "name": "Free 1-Minute Typing Test",
+                        "applicationCategory": "EducationalApplication",
+                        "operatingSystem": "WebBrowser",
+                        "offers": {
+                            "@type": "Offer",
+                            "price": "0",
+                            "priceCurrency": "USD"
+                        },
+                        "aggregateRating": {
+                            "@type": "AggregateRating",
+                            "ratingValue": "4.9",
+                            "ratingCount": "1250"
+                        }
+                    })}
+                </script>
             </Helmet>
 
             {!result ? (

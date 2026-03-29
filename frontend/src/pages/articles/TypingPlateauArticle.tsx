@@ -15,46 +15,68 @@ export const TypingPlateauArticle: React.FC<ArticleProps> = () => {
     return (
         <div className="min-h-screen py-12 px-4 flex flex-col items-center">
             <Helmet>
-                <title>Stuck at 60 WPM? Overcoming Typing Plateaus with Motor Learning Science</title>
-                <meta name="description" content="Stuck at 60 or 80 WPM? Learn the science behind typing speed plateaus, how to bypass the 'OK Plateau', and research-backed methods to reach 100+ WPM." />
-                
-                {/* Open Graph / Social */}
-                <meta property="og:title" content="How to Break Through Your Typing Speed Plateau" />
-                <meta property="og:description" content="Why does typing speed flatline? Explore the 'OK Plateau' in motor learning and the exact drills needed to bypass it." />
+                <title>How to Break Your Typing Speed Plateau | TouchFlowPro</title>
+                <meta name="description" content="Stuck at 60 or 80 WPM? Learn the science behind typing speed plateaus and research-backed methods to bypass the 'OK Plateau' to hit 100+ WPM." />
+                <link rel="canonical" href="https://touchflowpro.com/articles/typing-speed-plateau" />
+                <meta property="og:title" content="How to Break Your Typing Speed Plateau | TouchFlowPro" />
+                <meta property="og:description" content="Stuck at 60 or 80 WPM? Learn the science behind typing speed plateaus and research-backed methods to bypass the 'OK Plateau' to hit 100+ WPM." />
                 <meta property="og:type" content="article" />
                 <meta property="og:url" content="https://touchflowpro.com/articles/typing-speed-plateau" />
                 <meta property="og:image" content="https://touchflowpro.com/assets/og-plateau.png" />
+                <meta property="og:site_name" content="TouchFlowPro" />
                 <meta name="twitter:card" content="summary_large_image" />
-                
+                <meta name="twitter:title" content="How to Break Your Typing Speed Plateau | TouchFlowPro" />
+                <meta name="twitter:description" content="Stuck at 60 or 80 WPM? Learn the science behind typing speed plateaus and research-backed methods to bypass the 'OK Plateau' to hit 100+ WPM." />
                 {/* Structured Data: Article & FAQ */}
+            
                 <script type="application/ld+json">
                     {JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "BlogPosting",
-                        "headline": "Overcoming the Typing Speed Plateau",
-                        "description": "Learn the science behind typing speed plateaus and how deliberate practice helps typists break through the 'OK Plateau'.",
-                        "author": {
-                            "@type": "Organization",
-                            "name": "TouchFlow Pro"
-                        },
-                        "publisher": {
-                            "@type": "Organization",
-                            "name": "TouchFlow Pro",
-                            "logo": {
-                                "@type": "ImageObject",
-                                "url": "https://touchflowpro.com/logo.png"
-                            }
-                        },
-                        "isAccessibleForFree": "True",
-                        "aggregateRating": {
-                            "@type": "AggregateRating",
-                            "ratingValue": "4.9",
-                            "reviewCount": "124"
-                        },
-                        "mainEntityOfPage": {
-                            "@type": "WebPage",
-                            "@id": "https://touchflowpro.com/articles/typing-speed-plateau"
-                        }
+                              "@context": "https://schema.org",
+                              "@type": "Article",
+                              "headline": "How to Break Your Typing Speed Plateau",
+                              "description": "Stuck at 60 or 80 WPM? Learn the science behind typing speed plateaus and research-backed methods to bypass the 'OK Plateau' to hit 100+ WPM.",
+                              "image": "https://touchflowpro.com/assets/og-plateau.png",
+                              "author": {
+                                        "@type": "Organization",
+                                        "name": "TouchFlow Pro",
+                                        "url": "https://touchflowpro.com"
+                              },
+                              "publisher": {
+                                        "@type": "Organization",
+                                        "name": "TouchFlow Pro",
+                                        "logo": {
+                                                  "@type": "ImageObject",
+                                                  "url": "https://touchflowpro.com/logo.png"
+                                        }
+                              },
+                              "datePublished": "2024-01-01T08:00:00+08:00",
+                              "dateModified": "2026-03-29T00:54:45.386Z"
+                    })}
+                </script>
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                              "@context": "https://schema.org",
+                              "@type": "BreadcrumbList",
+                              "itemListElement": [
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 1,
+                                                  "name": "Home",
+                                                  "item": "https://touchflowpro.com"
+                                        },
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 2,
+                                                  "name": "Articles",
+                                                  "item": "https://touchflowpro.com/articles"
+                                        },
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 3,
+                                                  "name": "How to Break Your Typing Speed Plateau",
+                                                  "item": "https://touchflowpro.com/articles/typing-speed-plateau"
+                                        }
+                              ]
                     })}
                 </script>
                 <script type="application/ld+json">

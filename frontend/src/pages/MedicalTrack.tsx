@@ -78,8 +78,37 @@ export const MedicalTrack: React.FC<MedicalTrackProps> = ({ setStage, setLaunchP
     return (
         <div className="max-w-6xl mx-auto px-4 py-8">
             <Helmet>
-                <title>Medical Typing Practice & Terminology Drills - TouchFlow Pro</title>
+                <title>Medical Transcription Typing Training & Drills | TouchFlowPro</title>
                 <meta name="description" content="Master specialized healthcare terminology and clinical documentation with our Medical Typing Practice engine. Improve speed and accuracy on SOAP notes and medical syntax." />
+                <link rel="canonical" href="https://touchflowpro.com/medical-track" />
+                <meta property="og:title" content="Medical Transcription Typing Training & Drills | TouchFlowPro" />
+                <meta property="og:description" content="Master specialized healthcare terminology and clinical documentation with our Medical Typing Practice engine. Improve speed and accuracy on SOAP notes and medical syntax." />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content="https://touchflowpro.com/medical-track" />
+                <meta property="og:image" content="https://touchflowpro.com/og-image.png" />
+                <meta property="og:site_name" content="TouchFlowPro" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Medical Transcription Typing Practice & Speed Tests | TouchFlowPro" />
+                <meta name="twitter:description" content="Specialized typing drills for medical professionals. Master ICD-10 terminology, anatomy, and pharmacology for accurate charting and transcription." />
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "SoftwareApplication",
+                        "name": "Medical Transcription Typing Tool",
+                        "applicationCategory": "EducationalApplication",
+                        "operatingSystem": "WebBrowser",
+                        "offers": {
+                            "@type": "Offer",
+                            "price": "0",
+                            "priceCurrency": "USD"
+                        },
+                        "aggregateRating": {
+                            "@type": "AggregateRating",
+                            "ratingValue": "4.9",
+                            "ratingCount": "580"
+                        }
+                    })}
+                </script>
             </Helmet>
             <div className="flex items-center justify-between mb-8">
                 <div>

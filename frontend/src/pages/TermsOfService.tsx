@@ -1,5 +1,7 @@
 import { ArrowLeft } from 'lucide-react'
 
+import { Helmet } from 'react-helmet-async'
+
 interface TermsOfServiceProps {
     onBack: () => void
 }
@@ -7,6 +9,11 @@ interface TermsOfServiceProps {
 export default function TermsOfService({ onBack }: TermsOfServiceProps) {
     return (
         <div className="max-w-3xl mx-auto w-full">
+            <Helmet>
+                <title>Terms of Service | TouchFlow Pro</title>
+                <meta name="description" content="View the TouchFlow Pro terms of service. Understand the rules and guidelines governing our typing practice platform." />
+                <link rel="canonical" href="https://touchflowpro.com/terms" />
+            </Helmet>
             <button
                 onClick={onBack}
                 className="flex items-center gap-2 text-text-muted hover:text-primary transition-colors mb-8 group"

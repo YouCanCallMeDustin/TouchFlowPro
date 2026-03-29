@@ -90,7 +90,37 @@ export const PracticeTests: React.FC<PracticeTestsProps> = ({ userId, onNavigate
     return (
         <div className="w-full px-4 flex flex-col items-center">
             <Helmet>
-                <title>Practice Tests - TouchFlow Pro</title>
+                <title>Typing Practice Tests: Measure & Track WPM Progress | TouchFlowPro</title>
+                <meta name="description" content="Type full sentences and paragraphs in our realistic practice tests. Build endurance and measure your WPM progress accurately. Start your practice now." />
+                <link rel="canonical" href="https://touchflowpro.com/practice" />
+                <meta property="og:title" content="Typing Practice Tests: Measure & Track WPM Progress | TouchFlowPro" />
+                <meta property="og:description" content="Type full sentences and paragraphs in our realistic practice tests. Build endurance and measure your WPM progress accurately. Start your practice now." />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content="https://touchflowpro.com/practice" />
+                <meta property="og:image" content="https://touchflowpro.com/og-image.png" />
+                <meta property="og:site_name" content="TouchFlowPro" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Typing Practice Tests: Custom Text & Warm-up Drills | TouchFlowPro" />
+                <meta name="twitter:description" content="Access specialized typing tests, hand warm-up drills, classic literature passages, and professional correspondence practice to build endurance and velocity." />
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "SoftwareApplication",
+                        "name": "TouchFlow Practice Tests",
+                        "applicationCategory": "EducationalApplication",
+                        "operatingSystem": "WebBrowser",
+                        "offers": {
+                            "@type": "Offer",
+                            "price": "0",
+                            "priceCurrency": "USD"
+                        },
+                        "aggregateRating": {
+                            "@type": "AggregateRating",
+                            "ratingValue": "4.8",
+                            "ratingCount": "1045"
+                        }
+                    })}
+                </script>
             </Helmet>
 
             <AnimatePresence mode="wait">

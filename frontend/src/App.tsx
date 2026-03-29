@@ -58,6 +58,10 @@ import { MedicalTrack } from './pages/MedicalTrack';
 import { LegalTrack } from './pages/LegalTrack';
 import { CodeTrack } from './pages/CodeTrack';
 import FreeTypingTest from './pages/FreeTypingTest';
+import AboutPage from './pages/AboutPage';
+import ContactPage from './pages/ContactPage';
+import FaqPage from './pages/FaqPage';
+import ArticlesIndexPage from './pages/ArticlesIndexPage';
 import { TypingPlateauArticle } from './pages/articles/TypingPlateauArticle';
 import { TypeFasterArticle } from './pages/articles/TypeFasterArticle';
 import { SixtyToHundredArticle } from './pages/articles/SixtyToHundredArticle';
@@ -81,6 +85,10 @@ const STAGE_ROUTES: Partial<Record<Stage, string>> = {
   pricing: '/pricing',
   terms: '/terms',
   privacy: '/privacy-policy',
+  about: '/about',
+  contact: '/contact',
+  faq: '/faq',
+  articles_index: '/articles',
   article_plateau: '/articles/typing-speed-plateau',
   article_type_faster: '/articles/type-faster-accurately',
   article_60_to_100: '/articles/60-wpm-to-100-wpm',
@@ -719,6 +727,30 @@ function App() {
               </PageTransition>
             )}
 
+            {stage === 'about' && (
+              <PageTransition key="about">
+                <AboutPage onBack={() => setStage(user ? 'dashboard' : 'welcome')} />
+              </PageTransition>
+            )}
+
+            {stage === 'contact' && (
+              <PageTransition key="contact">
+                <ContactPage onBack={() => setStage(user ? 'dashboard' : 'welcome')} />
+              </PageTransition>
+            )}
+
+            {stage === 'faq' && (
+              <PageTransition key="faq">
+                <FaqPage onBack={() => setStage(user ? 'dashboard' : 'welcome')} />
+              </PageTransition>
+            )}
+
+            {stage === 'articles_index' && (
+              <PageTransition key="articles_index">
+                <ArticlesIndexPage onBack={() => setStage(user ? 'dashboard' : 'welcome')} />
+              </PageTransition>
+            )}
+
             {stage === 'orgs' && user && (
               <PageTransition key="orgs">
                 <Orgs
@@ -887,7 +919,7 @@ function App() {
 
         {!isTypingMode && (
           <footer className="border-t border-white/5 mt-12 py-12 px-4 bg-bg-main relative z-50">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-8 mb-8">
               <div className="col-span-1 md:col-span-2">
                 <h3 className="text-xl font-black text-white uppercase tracking-tighter italic mb-4">
                   TouchFlow <span className="text-primary">Pro</span>
@@ -918,13 +950,24 @@ function App() {
               </div>
 
               <div>
+                <h4 className="text-xs font-black text-white uppercase tracking-widest mb-4">Company</h4>
+                <ul className="flex flex-col gap-3">
+                  <li><Link to="/about" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">About Us</Link></li>
+                  <li><Link to="/articles" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Resource Library</Link></li>
+                  <li><Link to="/contact" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Contact</Link></li>
+                  <li><Link to="/faq" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">FAQ</Link></li>
+                  <li><Link to="/free-typing-test" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Free Typing Test</Link></li>
+                </ul>
+              </div>
+
+              <div>
                 <h4 className="text-xs font-black text-white uppercase tracking-widest mb-4">Legal</h4>
                 <ul className="flex flex-col gap-3">
                   <li>
-                    <Link to="/terms" className="text-xs text-text-muted hover:text-white transition-colors font-medium">Terms of Service</Link>
+                    <Link to="/terms" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Terms of Service</Link>
                   </li>
                   <li>
-                    <Link to="/privacy-policy" className="text-xs text-text-muted hover:text-white transition-colors font-medium">Privacy Policy</Link>
+                    <Link to="/privacy-policy" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Privacy Policy</Link>
                   </li>
                 </ul>
               </div>

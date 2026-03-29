@@ -15,21 +15,67 @@ export const TypingAccuracyArticle: React.FC<ArticleProps> = () => {
     return (
         <div className="min-h-screen py-12 px-4 flex flex-col items-center">
             <Helmet>
-                <title>Typing Accuracy Guide: How to Reduce Mistakes and Improve Precision</title>
-                <meta name="description" content="Stop making mistakes when you type. Learn how to improve typing accuracy with our precision-focused exercises and ergonomic tips." />
+                <title>Typing Accuracy Training: Reduce Errors & Typos | TouchFlowPro</title>
+                <meta name="description" content="Stop making mistakes when you type. Learn how to improve typing accuracy with our precision-focused exercises and ergonomic tips for professional typists." />
+                <link rel="canonical" href="https://touchflowpro.com/articles/typing-accuracy" />
+                <meta property="og:title" content="Typing Accuracy Training: Reduce Errors & Typos | TouchFlowPro" />
+                <meta property="og:description" content="Stop making mistakes when you type. Learn how to improve typing accuracy with our precision-focused exercises and ergonomic tips for professional typists." />
+                <meta property="og:type" content="article" />
+                <meta property="og:url" content="https://touchflowpro.com/articles/typing-accuracy" />
+                <meta property="og:image" content="https://touchflowpro.com/assets/og-accuracy.png" />
+                <meta property="og:site_name" content="TouchFlowPro" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Typing Accuracy Training: Reduce Errors & Typos | TouchFlowPro" />
+                <meta name="twitter:description" content="Stop making mistakes when you type. Learn how to improve typing accuracy with our precision-focused exercises and ergonomic tips for professional typists." />
+            
                 <script type="application/ld+json">
                     {JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "BlogPosting",
-                        "headline": "Mastering Typing Accuracy",
-                        "description": "A guide on how to improve typing accuracy and eliminate common mistakes.",
-                        "author": { "@type": "Organization", "name": "TouchFlow Pro" },
-                        "isAccessibleForFree": "True",
-                        "aggregateRating": {
-                            "@type": "AggregateRating",
-                            "ratingValue": "4.8",
-                            "reviewCount": "165"
-                        }
+                              "@context": "https://schema.org",
+                              "@type": "Article",
+                              "headline": "Typing Accuracy Training: Reduce Errors & Typos",
+                              "description": "Stop making mistakes when you type. Learn how to improve typing accuracy with our precision-focused exercises and ergonomic tips for professional typists.",
+                              "image": "https://touchflowpro.com/assets/og-accuracy.png",
+                              "author": {
+                                        "@type": "Organization",
+                                        "name": "TouchFlow Pro",
+                                        "url": "https://touchflowpro.com"
+                              },
+                              "publisher": {
+                                        "@type": "Organization",
+                                        "name": "TouchFlow Pro",
+                                        "logo": {
+                                                  "@type": "ImageObject",
+                                                  "url": "https://touchflowpro.com/logo.png"
+                                        }
+                              },
+                              "datePublished": "2024-01-01T08:00:00+08:00",
+                              "dateModified": "2026-03-29T00:54:45.382Z"
+                    })}
+                </script>
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                              "@context": "https://schema.org",
+                              "@type": "BreadcrumbList",
+                              "itemListElement": [
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 1,
+                                                  "name": "Home",
+                                                  "item": "https://touchflowpro.com"
+                                        },
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 2,
+                                                  "name": "Articles",
+                                                  "item": "https://touchflowpro.com/articles"
+                                        },
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 3,
+                                                  "name": "Typing Accuracy Training: Reduce Errors & Typos",
+                                                  "item": "https://touchflowpro.com/articles/typing-accuracy"
+                                        }
+                              ]
                     })}
                 </script>
             </Helmet>

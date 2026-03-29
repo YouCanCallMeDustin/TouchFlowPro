@@ -15,31 +15,68 @@ export const SixtyToHundredArticle: React.FC<ArticleProps> = () => {
     return (
         <div className="min-h-screen py-12 px-4 flex flex-col items-center">
             <Helmet>
-                <title>Is 60 WPM Good? 60 to 100 WPM Typing Speed Guide</title>
-                <meta name="description" content="Is 60 WPM a good typing speed? Learn how it compares to the global average and get the exact roadmap to reach an elite 100 WPM pace." />
-                <meta property="og:description" content="Is 60 WPM a good typing speed? Learn how it compares to the global average and get the exact roadmap to reach an elite 100 WPM pace." />
+                <title>How to Go from 60 WPM to 100 WPM — A Structured Training Plan | TouchFlowPro</title>
+                <meta name="description" content="Break through your typing speed plateau with a structured 60 to 100 WPM progression plan. Targeted drills, bigram training, and performance benchmarks for serious typists." />
+                <link rel="canonical" href="https://touchflowpro.com/articles/60-wpm-to-100-wpm" />
+                <meta property="og:title" content="How to Go from 60 WPM to 100 WPM — A Structured Training Plan | TouchFlowPro" />
+                <meta property="og:description" content="Break through your typing speed plateau with a structured 60 to 100 WPM progression plan. Targeted drills, bigram training, and performance benchmarks for serious typists." />
                 <meta property="og:type" content="article" />
                 <meta property="og:url" content="https://touchflowpro.com/articles/60-wpm-to-100-wpm" />
                 <meta property="og:image" content="https://touchflowpro.com/assets/og-60-to-100.png" />
+                <meta property="og:site_name" content="TouchFlowPro" />
                 <meta name="twitter:card" content="summary_large_image" />
-                
+                <meta name="twitter:title" content="How to Go from 60 WPM to 100 WPM — A Structured Training Plan | TouchFlowPro" />
+                <meta name="twitter:description" content="Break through your typing speed plateau with a structured 60 to 100 WPM progression plan. Targeted drills, bigram training, and performance benchmarks for serious typists." />
                 {/* Structured Data */}
+            
                 <script type="application/ld+json">
                     {JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "BlogPosting",
-                        "headline": "Crossing the Chasm: 60 to 100 WPM",
-                        "description": "A structural guide on taking your typing speed from an average 60 WPM to an elite 100 WPM.",
-                        "author": {
-                            "@type": "Organization",
-                            "name": "TouchFlow Pro"
-                        },
-                        "isAccessibleForFree": "True",
-                        "aggregateRating": {
-                            "@type": "AggregateRating",
-                            "ratingValue": "5.0",
-                            "reviewCount": "56"
-                        }
+                              "@context": "https://schema.org",
+                              "@type": "Article",
+                              "headline": "How to Go from 60 WPM to 100 WPM — A Structured Training Plan",
+                              "description": "Break through your typing speed plateau with a structured 60 to 100 WPM progression plan. Targeted drills, bigram training, and performance benchmarks for serious typists.",
+                              "image": "https://touchflowpro.com/assets/og-60-to-100.png",
+                              "author": {
+                                        "@type": "Organization",
+                                        "name": "TouchFlow Pro",
+                                        "url": "https://touchflowpro.com"
+                              },
+                              "publisher": {
+                                        "@type": "Organization",
+                                        "name": "TouchFlow Pro",
+                                        "logo": {
+                                                  "@type": "ImageObject",
+                                                  "url": "https://touchflowpro.com/logo.png"
+                                        }
+                              },
+                              "datePublished": "2024-01-01T08:00:00+08:00",
+                              "dateModified": "2026-03-29T00:54:45.367Z"
+                    })}
+                </script>
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                              "@context": "https://schema.org",
+                              "@type": "BreadcrumbList",
+                              "itemListElement": [
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 1,
+                                                  "name": "Home",
+                                                  "item": "https://touchflowpro.com"
+                                        },
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 2,
+                                                  "name": "Articles",
+                                                  "item": "https://touchflowpro.com/articles"
+                                        },
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 3,
+                                                  "name": "How to Go from 60 WPM to 100 WPM — A Structured Training Plan",
+                                                  "item": "https://touchflowpro.com/articles/60-wpm-to-100-wpm"
+                                        }
+                              ]
                     })}
                 </script>
                 <script type="application/ld+json">

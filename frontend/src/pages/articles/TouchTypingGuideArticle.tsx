@@ -15,21 +15,67 @@ export const TouchTypingGuideArticle: React.FC<ArticleProps> = () => {
     return (
         <div className="min-h-screen py-12 px-4 flex flex-col items-center">
             <Helmet>
-                <title>Touch Typing Guide: Learn How to Type Without Looking</title>
-                <meta name="description" content="Our comprehensive touch typing guide will help you learn to type faster and more accurately without ever looking at your keyboard." />
+                <title>Touch Typing Guide: Learn to Type Without Looking | TouchFlowPro</title>
+                <meta name="description" content="Master keyboard efficiency with our comprehensive touch typing guide. Learn proper finger placement and motor skills to type faster without looking down." />
+                <link rel="canonical" href="https://touchflowpro.com/articles/touch-typing-guide" />
+                <meta property="og:title" content="Touch Typing Guide: Learn to Type Without Looking | TouchFlowPro" />
+                <meta property="og:description" content="Master keyboard efficiency with our comprehensive touch typing guide. Learn proper finger placement and motor skills to type faster without looking down." />
+                <meta property="og:type" content="article" />
+                <meta property="og:url" content="https://touchflowpro.com/articles/touch-typing-guide" />
+                <meta property="og:image" content="https://touchflowpro.com/assets/og-touch-typing.png" />
+                <meta property="og:site_name" content="TouchFlowPro" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Touch Typing Guide: Learn to Type Without Looking | TouchFlowPro" />
+                <meta name="twitter:description" content="Master keyboard efficiency with our comprehensive touch typing guide. Learn proper finger placement and motor skills to type faster without looking down." />
+            
                 <script type="application/ld+json">
                     {JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "BlogPosting",
-                        "headline": "The Ultimate Touch Typing Guide",
-                        "description": "Learn touch typing with our step-by-step guide to keyboard mastery.",
-                        "author": { "@type": "Organization", "name": "TouchFlow Pro" },
-                        "isAccessibleForFree": "True",
-                        "aggregateRating": {
-                            "@type": "AggregateRating",
-                            "ratingValue": "5.0",
-                            "reviewCount": "212"
-                        }
+                              "@context": "https://schema.org",
+                              "@type": "Article",
+                              "headline": "Touch Typing Guide: Learn to Type Without Looking",
+                              "description": "Master keyboard efficiency with our comprehensive touch typing guide. Learn proper finger placement and motor skills to type faster without looking down.",
+                              "image": "https://touchflowpro.com/assets/og-touch-typing.png",
+                              "author": {
+                                        "@type": "Organization",
+                                        "name": "TouchFlow Pro",
+                                        "url": "https://touchflowpro.com"
+                              },
+                              "publisher": {
+                                        "@type": "Organization",
+                                        "name": "TouchFlow Pro",
+                                        "logo": {
+                                                  "@type": "ImageObject",
+                                                  "url": "https://touchflowpro.com/logo.png"
+                                        }
+                              },
+                              "datePublished": "2024-01-01T08:00:00+08:00",
+                              "dateModified": "2026-03-29T00:54:45.374Z"
+                    })}
+                </script>
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                              "@context": "https://schema.org",
+                              "@type": "BreadcrumbList",
+                              "itemListElement": [
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 1,
+                                                  "name": "Home",
+                                                  "item": "https://touchflowpro.com"
+                                        },
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 2,
+                                                  "name": "Articles",
+                                                  "item": "https://touchflowpro.com/articles"
+                                        },
+                                        {
+                                                  "@type": "ListItem",
+                                                  "position": 3,
+                                                  "name": "Touch Typing Guide: Learn to Type Without Looking",
+                                                  "item": "https://touchflowpro.com/articles/touch-typing-guide"
+                                        }
+                              ]
                     })}
                 </script>
             </Helmet>

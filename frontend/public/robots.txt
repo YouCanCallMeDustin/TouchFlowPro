@@ -1,8 +1,42 @@
 User-agent: *
+
+# Allow all public-facing pages
 Allow: /
-# Disallow internal authenticated routes from being indexed (if any get linked somehow)
+Allow: /free-typing-test
+Allow: /medical-typing-practice
+Allow: /legal-typing-test
+Allow: /code-typing-practice
+Allow: /about
+Allow: /articles
+Allow: /contact
+Allow: /faq
+Allow: /pricing
+Allow: /terms
+Allow: /privacy-policy
+Allow: /articles/
+
+# Block authenticated app routes — these require login and should not be indexed
 Disallow: /dashboard
-Disallow: /analytics
 Disallow: /profile
+Disallow: /assessment
+Disallow: /curriculum
+Disallow: /lesson
+Disallow: /practice
+Disallow: /practice-tests
+Disallow: /analytics
+Disallow: /history
+Disallow: /achievements
+Disallow: /goals
+Disallow: /leaderboard
+Disallow: /code-practice
+Disallow: /bible-practice
+Disallow: /certificate
+Disallow: /orgs
+Disallow: /settings
+Disallow: /games
+Disallow: /extension
+Disallow: /login
+Disallow: /signup
+Disallow: /sample-report
 
 Sitemap: https://touchflowpro.com/sitemap.xml
