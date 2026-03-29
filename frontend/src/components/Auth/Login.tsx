@@ -51,6 +51,8 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup }) => {
                         <img
                             src={`${import.meta.env.BASE_URL}logo.png`}
                             alt="TouchFlow Pro"
+                            width="200"
+                            height="96"
                             className="h-24 w-auto relative z-10 brightness-110 drop-shadow-2xl"
                         />
                     </div>

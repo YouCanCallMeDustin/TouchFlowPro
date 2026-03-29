@@ -158,6 +158,8 @@ export const Header: React.FC<HeaderProps> = ({
                             <img
                                 src={`${import.meta.env.BASE_URL}logo.png`}
                                 alt="TouchFlow Pro"
+                                width="200"
+                                height="40"
                                 className="h-10 w-auto cursor-pointer active:scale-95 transition-all hover:brightness-110"
                             />
                         </Link>
