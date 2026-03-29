@@ -21,6 +21,47 @@ interface Props {
     drillId?: string;
 }
 
+const Char = React.memo(({ char, status, reduceMotion, fontSizeClass }: { char: string, status: 'untyped' | 'correct' | 'error' | 'current', reduceMotion: boolean, fontSizeClass: string }) => {
+    const isCurrent = status === 'current';
+    const isError = status === 'error';
+    const isCorrect = status === 'correct';
+    const isTyped = status === 'correct' || status === 'error';
+
+    return (
+        <motion.span
+            id={isCurrent ? 'typing-active-char' : undefined}
+            initial={false}
+            animate={{
+                color: isError ? 'var(--accent)' : isCorrect ? 'var(--primary)' : 'var(--text-muted)',
+                opacity: isTyped ? 1 : 0.4,
+                scale: isCurrent && !reduceMotion ? 1.1 : 1,
+            }}
+            transition={reduceMotion ? { duration: 0 } : undefined}
+            className={`inline-block font-mono ${fontSizeClass} transition-all relative ${isCurrent ? 'font-black' : 'font-medium'}`}
+        >
+            {isError && char === ' ' ? (
+                <span className="relative inline-block w-[0.6em] text-center">
+                    <span className="opacity-0"> </span>
+                    <span className="absolute inset-0 flex items-center justify-center text-[0.8em] font-black leading-none">
+                        ␣
+                    </span>
+                </span>
+            ) : char === ' ' ? (
+                '\u00A0'
+            ) : (
+                char
+            )}
+            {isCurrent && (
+                <motion.div
+                    layoutId="cursor"
+                    className="absolute -bottom-1 left-0 w-full h-1 bg-primary rounded-full"
+                    transition={reduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 500, damping: 30 }}
+                />
+            )}
+        </motion.span>
+    );    
+});
+
 const TypingTest: React.FC<Props> = ({
     text,
     onComplete,
@@ -266,50 +307,24 @@ const TypingTest: React.FC<Props> = ({
             settings?.fontScale === 'LG' ? 'text-3xl sm:text-4xl leading-relaxed' :
                 'text-xl sm:text-2xl';
 
-        const renderChar = (char: string, index: number) => {
-            const isTyped = index < userInput.length;
-            const isCurrent = index === userInput.length;
-            const isCorrect = isTyped && userInput[index] === char;
-            const isError = isTyped && !isCorrect;
-
-            return (
-                <motion.span
-                    key={index}
-                    id={isCurrent ? 'typing-active-char' : undefined}
-                    initial={false}
-                    animate={{
-                        color: isError ? 'var(--accent)' : isCorrect ? 'var(--primary)' : 'var(--text-muted)',
-                        opacity: isTyped ? 1 : 0.4,
-                        scale: isCurrent && !settings?.reduceMotion ? 1.1 : 1,
-                    }}
-                    transition={settings?.reduceMotion ? { duration: 0 } : undefined}
-                    className={`inline-block font-mono ${fontSizeClass} transition-all relative ${isCurrent ? 'font-black' : 'font-medium'}`}
-                >
-                    {isError && char === ' ' ? (
-                        <span className="relative inline-block w-[0.6em] text-center">
-                            <span className="opacity-0"> </span>
-                            <span className="absolute inset-0 flex items-center justify-center text-[0.8em] font-black leading-none">
-                                ␣
-                            </span>
-                        </span>
-                    ) : char === ' ' ? (
-                        '\u00A0'
-                    ) : (
-                        char
-                    )}
-                    {isCurrent && (
-                        <motion.div
-                            layoutId="cursor"
-                            className="absolute -bottom-1 left-0 w-full h-1 bg-primary rounded-full"
-                            transition={settings?.reduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 500, damping: 30 }}
-                        />
-                    )}
-                </motion.span>
-            );
+        const getStatus = (index: number, char: string): 'untyped' | 'correct' | 'error' | 'current' => {
+            if (index === userInput.length) return 'current';
+            if (index < userInput.length) {
+                return userInput[index] === char ? 'correct' : 'error';
+            }
+            return 'untyped';
         };
 
         if (mode === 'code') {
-            return text.split('').map((char, index) => renderChar(char, index));
+            return text.split('').map((char, index) => (
+                <Char 
+                    key={index} 
+                    char={char} 
+                    status={getStatus(index, char)} 
+                    reduceMotion={!!settings?.reduceMotion} 
+                    fontSizeClass={fontSizeClass} 
+                />
+            ));
         }
 
         const words = text.split(' ');
@@ -323,7 +338,15 @@ const TypingTest: React.FC<Props> = ({
                 <span key={wIdx} className="inline-flex whitespace-nowrap gap-x-0.5">
                     {wordChars.split('').map((char) => {
                         const index = charIndex++;
-                        return renderChar(char, index);
+                        return (
+                            <Char 
+                                key={index} 
+                                char={char} 
+                                status={getStatus(index, char)} 
+                                reduceMotion={!!settings?.reduceMotion} 
+                                fontSizeClass={fontSizeClass} 
+                            />
+                        );
                     })}
                 </span>
             );
