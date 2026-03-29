@@ -28,6 +28,24 @@ class ErrorBoundary extends Component<Props, State> {
 
     componentDidCatch(error: Error, errorInfo: ErrorInfo) {
         console.error('ErrorBoundary caught an error:', error, errorInfo);
+
+        // Check for chunk load error (usually happens when a new version is deployed and old chunks are gone)
+        const isChunkError = error.message && (
+            error.message.includes('Failed to fetch dynamically imported module') ||
+            error.message.includes('ChunkLoadError') ||
+            error.message.includes('failed to fetch dynamically imported module')
+        );
+
+        if (isChunkError) {
+            // Check if we already tried reloading in this session to prevent infinite reload loops
+            const hasReloaded = sessionStorage.getItem('tfp_chunk_error_reload');
+            if (!hasReloaded) {
+                sessionStorage.setItem('tfp_chunk_error_reload', 'true');
+                console.warn('Chunk load error detected. Attempting automatic reload to fetch latest version...');
+                window.location.reload();
+                return;
+            }
+        }
     }
 
     render() {

@@ -135,18 +135,32 @@ function App() {
     // Force permanent dark mode (nighttime mode)
     document.documentElement.classList.add('dark');
     localStorage.setItem('theme', 'dark');
+
+    // Clear chunk load error retry flag on successful load
+    sessionStorage.removeItem('tfp_chunk_error_reload');
   }, []);
 
   // Sync URL from stage changes
   useEffect(() => {
-    window.scrollTo(0, 0);
     const targetPath = STAGE_ROUTES[stage];
-    // We check against window.location.pathname to prevent race conditions when
-    // React Suspense defers a render cycle while chunk loading
-    if (targetPath && targetPath !== window.location.pathname && targetPath !== location.pathname) {
-      navigate(targetPath, { replace: true });
+    // If we're at 'dashboard', and the URL is '/', that means we intentionally
+    // sent them to the dashboard while keeping the clean root URL.
+    if (stage === 'dashboard' && location.pathname === '/') return;
+
+    // Only force-sync the URL if it doesn't already map to a valid stage 
+    // AND it's different from our target. This prevents the "tug-of-war" 
+    // where clicking a Footer Link changes the URL, but the App reverts it 
+    // because the 'stage' hasn't updated yet.
+    if (targetPath && targetPath !== location.pathname) {
+      // If the current actual URL already maps to a known stage, we trust that 
+      // the URL-to-Stage effect will handle the update.
+      const matchedStageForUrl = ROUTE_STAGES[location.pathname];
+      if (!matchedStageForUrl || matchedStageForUrl === stage) {
+         window.scrollTo(0, 0);
+         navigate(targetPath, { replace: true });
+      }
     }
-  }, [stage, navigate]); 
+  }, [stage, navigate, location.pathname]); 
 
   // Sync stage from Back/Forward navigation
   useEffect(() => {
