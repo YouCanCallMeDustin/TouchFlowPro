@@ -1,79 +1,77 @@
 import { TypingEngine } from '@shared/typingEngine'
 import type { Stage } from './types/stages';
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, lazy, Suspense } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { AnimatePresence } from 'framer-motion'
 import { Card } from './components/ui/Card'
 import { Button } from './components/ui/Button'
-import './games/accuracy-assassin/ui/accuracy-assassin.css'
 
 import PageTransition from './components/PageTransition'
-import { Curriculum } from './components/Curriculum'
-import LessonView from './components/LessonView'
-import Login from './components/Auth/Login'
-import Signup from './components/Auth/Signup'
-import AnalyticsDashboard from './pages/AnalyticsDashboard'
-import SessionHistory from './pages/SessionHistory'
-import { AchievementsPanel } from './pages/AchievementsPanel'
-import GoalsDashboard from './pages/GoalsDashboard'
-import Dashboard from './pages/Dashboard'
-import DrillSelectionPage from './pages/DrillSelectionPage'
-import Profile from './pages/Profile'
-import Practice from './pages/Practice'
-import BiblePractice from './pages/BiblePractice'
-import Leaderboard from './pages/Leaderboard'
-import CodePractice from './pages/CodePractice'
-import PricingPage from './pages/PricingPage'
-import TermsOfService from './pages/TermsOfService'
-import PrivacyPolicy from './pages/PrivacyPolicy'
-import PracticeTests from './pages/PracticeTests';
-import TypingCertificate from './pages/TypingCertificate'
-import Extension from './pages/Extension'
-import { GamesLanding } from './pages/GamesLanding'
-import { AccuracyAssassinPage } from './games/accuracy-assassin/ui/AccuracyAssassinPage'
-import { BurnerBurstPage } from './games/type-to-orbit/ui/TypeToOrbitPage'
-import SpellRushGame from './games/spell-rush/Game'
 import AchievementModal from './components/AchievementModal'
 import ErrorBoundary from './components/ErrorBoundary'
 import { LandingPage } from './components/LandingPage'
-import { SkillAssessment } from './components/SkillAssessment'
+import Login from './components/Auth/Login'
+import Signup from './components/Auth/Signup'
+import { Header } from './components/Header';
 import { useAuth } from './context/AuthContext'
+import { useSettings } from './context/SettingsContext'
+import { useLaunchStore } from './state/launchStore'
+import { apiFetch } from './utils/api';
 import type { TypingMetrics, KeystrokeEvent } from '@shared/types'
 import { drillLibrary } from '@shared/drillLibrary'
 import type { UserProgress, Lesson } from '@shared/curriculum'
 import type { DifficultyLevel, PlacementResult } from '@shared/placement'
-import Orgs from './pages/Orgs'
-import Settings from './pages/Settings'
-import { useSettings } from './context/SettingsContext'
-import { useLaunchStore } from './state/launchStore'
 
-
-import { apiFetch } from './utils/api';
-
-import SampleReport from './pages/SampleReport'
-
-import { Header } from './components/Header';
-import { MedicalTrack } from './pages/MedicalTrack';
-import { LegalTrack } from './pages/LegalTrack';
-import { CodeTrack } from './pages/CodeTrack';
-import FreeTypingTest from './pages/FreeTypingTest';
-import AboutPage from './pages/AboutPage';
-import ContactPage from './pages/ContactPage';
-import FaqPage from './pages/FaqPage';
-import ArticlesIndexPage from './pages/ArticlesIndexPage';
-import { TypingPlateauArticle } from './pages/articles/TypingPlateauArticle';
-import { TypeFasterArticle } from './pages/articles/TypeFasterArticle';
-import { SixtyToHundredArticle } from './pages/articles/SixtyToHundredArticle';
-import { AveragesArticle } from './pages/articles/AveragesArticle';
-import { UltimateGuideArticle } from './pages/articles/UltimateGuideArticle';
-import { HowToTypeFasterArticle } from './pages/articles/HowToTypeFasterArticle';
-import { TouchTypingGuideArticle } from './pages/articles/TouchTypingGuideArticle';
-import { TypingPracticeArticle } from './pages/articles/TypingPracticeArticle';
-import { TypingSpeedTestArticle } from './pages/articles/TypingSpeedTestArticle';
-import { ImproveTypingSpeedArticle } from './pages/articles/ImproveTypingSpeedArticle';
-import { TypingAccuracyArticle } from './pages/articles/TypingAccuracyArticle';
-import { FastestTypingTechniquesArticle } from './pages/articles/FastestTypingTechniquesArticle';
+// ── Lazy-loaded pages (split into separate chunks) ──────────────────────────
+const Curriculum            = lazy(() => import('./components/Curriculum').then(m => ({ default: m.Curriculum })))
+const LessonView            = lazy(() => import('./components/LessonView'))
+const SkillAssessment       = lazy(() => import('./components/SkillAssessment').then(m => ({ default: m.SkillAssessment })))
+const Dashboard             = lazy(() => import('./pages/Dashboard'))
+const AnalyticsDashboard    = lazy(() => import('./pages/AnalyticsDashboard'))
+const SessionHistory        = lazy(() => import('./pages/SessionHistory'))
+const AchievementsPanel     = lazy(() => import('./pages/AchievementsPanel').then(m => ({ default: m.AchievementsPanel })))
+const GoalsDashboard        = lazy(() => import('./pages/GoalsDashboard'))
+const DrillSelectionPage    = lazy(() => import('./pages/DrillSelectionPage'))
+const Profile               = lazy(() => import('./pages/Profile'))
+const Practice              = lazy(() => import('./pages/Practice'))
+const BiblePractice         = lazy(() => import('./pages/BiblePractice'))
+const Leaderboard           = lazy(() => import('./pages/Leaderboard'))
+const CodePractice          = lazy(() => import('./pages/CodePractice'))
+const PricingPage           = lazy(() => import('./pages/PricingPage'))
+const TermsOfService        = lazy(() => import('./pages/TermsOfService'))
+const PrivacyPolicy         = lazy(() => import('./pages/PrivacyPolicy'))
+const PracticeTests         = lazy(() => import('./pages/PracticeTests'))
+const TypingCertificate     = lazy(() => import('./pages/TypingCertificate'))
+const Extension             = lazy(() => import('./pages/Extension'))
+const GamesLanding          = lazy(() => import('./pages/GamesLanding').then(m => ({ default: m.GamesLanding })))
+const AccuracyAssassinPage  = lazy(() => import('./games/accuracy-assassin/ui/AccuracyAssassinPage').then(m => ({ default: m.AccuracyAssassinPage })))
+const BurnerBurstPage       = lazy(() => import('./games/type-to-orbit/ui/TypeToOrbitPage').then(m => ({ default: m.BurnerBurstPage })))
+const SpellRushGame         = lazy(() => import('./games/spell-rush/Game'))
+const Orgs                  = lazy(() => import('./pages/Orgs'))
+const Settings              = lazy(() => import('./pages/Settings'))
+const SampleReport          = lazy(() => import('./pages/SampleReport'))
+const MedicalTrack          = lazy(() => import('./pages/MedicalTrack').then(m => ({ default: m.MedicalTrack })))
+const LegalTrack            = lazy(() => import('./pages/LegalTrack').then(m => ({ default: m.LegalTrack })))
+const CodeTrack             = lazy(() => import('./pages/CodeTrack').then(m => ({ default: m.CodeTrack })))
+const FreeTypingTest        = lazy(() => import('./pages/FreeTypingTest'))
+const AboutPage             = lazy(() => import('./pages/AboutPage'))
+const ContactPage           = lazy(() => import('./pages/ContactPage'))
+const FaqPage               = lazy(() => import('./pages/FaqPage'))
+const ArticlesIndexPage     = lazy(() => import('./pages/ArticlesIndexPage'))
+// Articles
+const TypingPlateauArticle        = lazy(() => import('./pages/articles/TypingPlateauArticle').then(m => ({ default: m.TypingPlateauArticle })))
+const TypeFasterArticle           = lazy(() => import('./pages/articles/TypeFasterArticle').then(m => ({ default: m.TypeFasterArticle })))
+const SixtyToHundredArticle       = lazy(() => import('./pages/articles/SixtyToHundredArticle').then(m => ({ default: m.SixtyToHundredArticle })))
+const AveragesArticle             = lazy(() => import('./pages/articles/AveragesArticle').then(m => ({ default: m.AveragesArticle })))
+const UltimateGuideArticle        = lazy(() => import('./pages/articles/UltimateGuideArticle').then(m => ({ default: m.UltimateGuideArticle })))
+const HowToTypeFasterArticle      = lazy(() => import('./pages/articles/HowToTypeFasterArticle').then(m => ({ default: m.HowToTypeFasterArticle })))
+const TouchTypingGuideArticle     = lazy(() => import('./pages/articles/TouchTypingGuideArticle').then(m => ({ default: m.TouchTypingGuideArticle })))
+const TypingPracticeArticle       = lazy(() => import('./pages/articles/TypingPracticeArticle').then(m => ({ default: m.TypingPracticeArticle })))
+const TypingSpeedTestArticle      = lazy(() => import('./pages/articles/TypingSpeedTestArticle').then(m => ({ default: m.TypingSpeedTestArticle })))
+const ImproveTypingSpeedArticle   = lazy(() => import('./pages/articles/ImproveTypingSpeedArticle').then(m => ({ default: m.ImproveTypingSpeedArticle })))
+const TypingAccuracyArticle       = lazy(() => import('./pages/articles/TypingAccuracyArticle').then(m => ({ default: m.TypingAccuracyArticle })))
+const FastestTypingTechniquesArticle = lazy(() => import('./pages/articles/FastestTypingTechniquesArticle').then(m => ({ default: m.FastestTypingTechniquesArticle })))
 
 
 const STAGE_ROUTES: Partial<Record<Stage, string>> = {
@@ -480,6 +478,14 @@ function App() {
         />
 
         <main className={`relative z-10 ${isTypingMode ? 'flex-1 flex flex-col items-center pt-2 overflow-y-auto scrollbar-none' : 'pt-24 pb-12 px-4'}`}>
+          <Suspense fallback={
+            <div className="min-h-[60vh] flex items-center justify-center">
+              <div className="text-center">
+                <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+                <div className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted opacity-40">Loading...</div>
+              </div>
+            </div>
+          }>
           <AnimatePresence mode="wait">
             {stage === 'auth_login' && (
               <PageTransition key="auth_login">
@@ -907,6 +913,7 @@ function App() {
               </PageTransition>
             )}
           </AnimatePresence>
+          </Suspense>
         </main>
 
         <AchievementModal

@@ -19,7 +19,7 @@ export function RaceTrack({ racers, player }: RaceTrackProps) {
         <div className="absolute inset-0 z-0 bg-slate-950 overflow-hidden">
             {/* Layer 3: Deep Space (Slowest) - Fades in */}
             <div
-                className="absolute inset-0 bg-[url('/assets/bg_space.png')] bg-cover bg-center transition-opacity duration-1000"
+                className="absolute inset-0 bg-[url('/assets/bg_space.webp')] bg-cover bg-center transition-opacity duration-1000"
                 style={{
                     transform: `translateY(${progress * 2}px)`,
                     opacity: Math.max(0, (progress - 20) / 40) // Fade in starting at 20%
@@ -46,7 +46,7 @@ export function RaceTrack({ racers, player }: RaceTrackProps) {
 
             {/* Layer 1: Ground/Clouds (Fastest) - Fades out */}
             <div
-                className="absolute inset-x-0 bottom-0 h-[150vh] transition-transform duration-100 ease-linear bg-[url('/assets/bg_launch.png')] bg-cover bg-bottom"
+                className="absolute inset-x-0 bottom-0 h-[150vh] transition-transform duration-100 ease-linear bg-[url('/assets/bg_launch.webp')] bg-cover bg-bottom"
                 style={{
                     transform: `translateY(${progress * 15}px)`,
                     opacity: Math.max(0, 1 - (progress / 40)) // Fade out by 40%

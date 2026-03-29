@@ -11,6 +11,18 @@ export default defineConfig({
       '@shared': path.resolve(__dirname, '../shared'),
     },
   },
+  build: {
+    chunkSizeWarningLimit: 600,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react':  ['react', 'react-dom', 'react-router-dom'],
+          'vendor-motion': ['framer-motion'],
+          'vendor-helmet': ['react-helmet-async'],
+        },
+      },
+    },
+  },
   server: {
     fs: {
       allow: ['..'],
