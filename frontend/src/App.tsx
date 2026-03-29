@@ -141,10 +141,12 @@ function App() {
   useEffect(() => {
     window.scrollTo(0, 0);
     const targetPath = STAGE_ROUTES[stage];
-    if (targetPath && targetPath !== location.pathname) {
+    // We check against window.location.pathname to prevent race conditions when
+    // React Suspense defers a render cycle while chunk loading
+    if (targetPath && targetPath !== window.location.pathname && targetPath !== location.pathname) {
       navigate(targetPath, { replace: true });
     }
-  }, [stage, navigate, location.pathname]);
+  }, [stage, navigate]); 
 
   // Sync stage from Back/Forward navigation
   useEffect(() => {
