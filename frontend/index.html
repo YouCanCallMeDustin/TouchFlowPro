@@ -12,7 +12,11 @@
   <link rel="preconnect" href="https://www.google-analytics.com" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <!-- Async Font Loading to prevent Render Blocking -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800;900&family=JetBrains+Mono:wght@400;700&display=swap">
+  </noscript>
   <!-- Preload the LCP element (logo visible on every page) -->
   <link rel="preload" href="/logo.png" as="image" type="image/png" />
 
@@ -25,6 +29,19 @@
 
     gtag('config', 'G-W242Q5PVFY');
   </script>
+
+  <style>
+    /* Inline CSS for instantaneous First Contentful Paint (FCP) */
+    @keyframes pulse-shell { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+    #root-shell {
+      min-height: 100vh;
+      background-color: oklch(10% 0.02 240);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+  </style>
 
   <script type="application/ld+json">
   {
@@ -60,7 +77,18 @@
 </head>
 
 <body>
-  <div id="root"></div>
+  <div id="root">
+    <div id="root-shell">
+      <div style="text-align: center;">
+        <div style="font-size: 2.25rem; font-weight: 800; animation: pulse-shell 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; color: #fff; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: -0.05em;">
+          TouchFlow Pro
+        </div>
+        <div style="color: rgba(255,255,255,0.4); letter-spacing: 0.4em; text-transform: uppercase; font-size: 10px; font-weight: 900;">
+          Initializing Engine...
+        </div>
+      </div>
+    </div>
+  </div>
   <script type="module" src="/src/main.tsx"></script>
 </body>
 
