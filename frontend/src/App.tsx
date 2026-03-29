@@ -1,6 +1,6 @@
 import { TypingEngine } from '@shared/typingEngine'
 import type { Stage } from './types/stages';
-import { useState, useEffect, useCallback, lazy, Suspense } from 'react'
+import { useState, useEffect, useCallback, lazy, Suspense, useRef } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { AnimatePresence } from 'framer-motion'
@@ -130,6 +130,7 @@ function App() {
   const [showAchievement, setShowAchievement] = useState<{ type?: string, isLevel?: boolean, level?: number } | null>(null)
   const { settings: userSettings } = useSettings()
   const [reportOrgId, setReportOrgId] = useState<string | null>(null);
+  const lastStageRef = useRef<Stage>(stage);
 
   useEffect(() => {
     // Force permanent dark mode (nighttime mode)
@@ -143,21 +144,25 @@ function App() {
   // Sync URL from stage changes
   useEffect(() => {
     const targetPath = STAGE_ROUTES[stage];
+    const isProgrammaticUpdate = lastStageRef.current !== stage;
+    lastStageRef.current = stage;
+
     // If we're at 'dashboard', and the URL is '/', that means we intentionally
     // sent them to the dashboard while keeping the clean root URL.
     if (stage === 'dashboard' && location.pathname === '/') return;
 
-    // Only force-sync the URL if it doesn't already map to a valid stage 
-    // AND it's different from our target. This prevents the "tug-of-war" 
-    // where clicking a Footer Link changes the URL, but the App reverts it 
-    // because the 'stage' hasn't updated yet.
     if (targetPath && targetPath !== location.pathname) {
-      // If the current actual URL already maps to a known stage, we trust that 
-      // the URL-to-Stage effect will handle the update.
+      // If the stage was updated programmatically (e.g. from the Header),
+      // we ALWAYS want to force a navigation to that path.
+      // Otherwise, if the URL changed first (e.g. Footer Link), we check if the URL 
+      // already maps to a valid stage. If it does, we trust the URL-to-Stage 
+      // sync effect to update the stage state.
       const matchedStageForUrl = ROUTE_STAGES[location.pathname];
-      if (!matchedStageForUrl || matchedStageForUrl === stage) {
-         window.scrollTo(0, 0);
-         navigate(targetPath, { replace: true });
+      const isUrlDriveNavigation = matchedStageForUrl && matchedStageForUrl !== stage;
+
+      if (isProgrammaticUpdate || !isUrlDriveNavigation) {
+        window.scrollTo(0, 0);
+        navigate(targetPath, { replace: true });
       }
     }
   }, [stage, navigate, location.pathname]); 
