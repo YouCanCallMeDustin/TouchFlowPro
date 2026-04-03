@@ -117,23 +117,6 @@ export const Header: React.FC<HeaderProps> = ({
         },
         {
             type: 'link',
-            id: 'articles_index',
-            label: 'Library',
-            icon: BookOpen
-        },
-        {
-            type: 'dropdown',
-            id: 'support_dropdown',
-            label: 'Support',
-            icon: Compass,
-            items: [
-                { id: 'faq', label: 'FAQ', icon: HelpCircle },
-                { id: 'about', label: 'About', icon: UserIcon },
-                { id: 'contact', label: 'Contact', icon: Mail },
-            ]
-        },
-        {
-            type: 'link',
             id: 'settings',
             label: 'Settings',
             icon: SettingsIcon
@@ -176,6 +159,24 @@ export const Header: React.FC<HeaderProps> = ({
                             <BookOpen size={14} className={stage === 'articles_index' ? 'text-primary' : 'text-primary/40'} />
                             Library
                         </button>
+
+                        <div className="h-4 w-px bg-white/5 hidden lg:block" />
+
+                        <div className="hidden lg:flex items-center gap-6">
+                            {[
+                                { id: 'faq', label: 'FAQ' },
+                                { id: 'about', label: 'About' },
+                                { id: 'contact', label: 'Contact' }
+                            ].map((item) => (
+                                <button
+                                    key={item.id}
+                                    onClick={() => setStage(item.id as Stage)}
+                                    className={`text-[9px] font-black uppercase tracking-[0.2em] transition-colors ${stage === item.id ? 'text-primary' : 'text-text-muted hover:text-text-main'}`}
+                                >
+                                    {item.label}
+                                </button>
+                            ))}
+                        </div>
                     </div>
 
                     {/* DESKTOP ACTIONS (md+) */}
@@ -351,6 +352,24 @@ export const Header: React.FC<HeaderProps> = ({
                                             </div>
                                             <span className="font-bold uppercase tracking-wider text-[11px] text-slate-300">Library</span>
                                         </button>
+                                        
+                                        <div className="grid grid-cols-3 gap-2">
+                                            {[
+                                                { id: 'faq', label: 'FAQ', icon: HelpCircle },
+                                                { id: 'about', label: 'About', icon: UserIcon },
+                                                { id: 'contact', label: 'Contact', icon: Mail }
+                                            ].map((item) => (
+                                                <button
+                                                    key={item.id}
+                                                    onClick={() => { setStage(item.id as Stage); setIsMenuOpen(false); }}
+                                                    className="flex flex-col items-center justify-center gap-2 bg-white/5 border border-white/10 p-3 rounded-xl hover:bg-white/10"
+                                                >
+                                                    <item.icon size={14} className="text-primary/60" />
+                                                    <span className="text-[8px] font-black uppercase tracking-widest text-text-muted">{item.label}</span>
+                                                </button>
+                                            ))}
+                                        </div>
+
                                         <Button
                                             onClick={() => { setStage('auth_login'); setIsMenuOpen(false); }}
                                             className="w-full justify-start text-left bg-transparent border border-white/10 hover:bg-white/5 p-4 h-auto"
@@ -381,6 +400,33 @@ export const Header: React.FC<HeaderProps> = ({
                                                     <div className="text-xs font-bold text-text-main truncate text-ellipsis">{user.email}</div>
                                                 </div>
                                             </div>
+                                        </div>
+
+                                        <button
+                                            onClick={() => { setStage('articles_index'); setIsMenuOpen(false); }}
+                                            className="w-full flex justify-start items-center text-left bg-white/5 border border-white/10 hover:bg-white/10 p-4 h-auto rounded-xl mb-2"
+                                        >
+                                            <div className="w-8 flex items-center justify-center">
+                                                <BookOpen className="text-primary" size={18} />
+                                            </div>
+                                            <span className="font-bold uppercase tracking-wider text-[11px] text-slate-300">Library</span>
+                                        </button>
+
+                                        <div className="grid grid-cols-3 gap-2 mt-2">
+                                            {[
+                                                { id: 'faq', label: 'FAQ', icon: HelpCircle },
+                                                { id: 'about', label: 'About', icon: UserIcon },
+                                                { id: 'contact', label: 'Contact', icon: Mail }
+                                            ].map((item) => (
+                                                <button
+                                                    key={item.id}
+                                                    onClick={() => { setStage(item.id as Stage); setIsMenuOpen(false); }}
+                                                    className="flex flex-col items-center justify-center gap-2 bg-white/5 border border-white/10 p-3 rounded-xl hover:bg-white/10"
+                                                >
+                                                    <item.icon size={14} className="text-primary/60" />
+                                                    <span className="text-[8px] font-black uppercase tracking-widest text-text-muted">{item.label}</span>
+                                                </button>
+                                            ))}
                                         </div>
 
                                         {/* Main Navigation Links */}
