@@ -10,6 +10,8 @@ import {
     BarChart3,
     Award,
     Trophy,
+    HelpCircle,
+    Mail,
     Compass,
     Shield,
     Code,
@@ -22,8 +24,6 @@ import {
     Stethoscope,
     Scale,
     Clock,
-    Activity,
-    TrendingUp
 } from 'lucide-react';
 import { Breadcrumbs } from './Breadcrumbs';
 import { Button } from './ui/Button';
@@ -116,16 +116,20 @@ export const Header: React.FC<HeaderProps> = ({
             ]
         },
         {
+            type: 'link',
+            id: 'articles_index',
+            label: 'Library',
+            icon: BookOpen
+        },
+        {
             type: 'dropdown',
-            id: 'resources_dropdown',
-            label: 'Resources',
-            icon: BookOpen,
+            id: 'support_dropdown',
+            label: 'Support',
+            icon: Compass,
             items: [
-                { id: 'article_ultimate_guide', label: 'Ultimate Guide', icon: Zap },
-                { id: 'article_averages', label: 'WPM Benchmarks', icon: BarChart3 },
-                { id: 'article_how_to_type_faster', label: 'How to Type Faster', icon: Zap },
-                { id: 'article_plateau', label: 'Speed Plateaus', icon: Activity },
-                { id: 'article_60_to_100', label: '60 to 100 WPM', icon: TrendingUp },
+                { id: 'faq', label: 'FAQ', icon: HelpCircle },
+                { id: 'about', label: 'About', icon: UserIcon },
+                { id: 'contact', label: 'Contact', icon: Mail },
             ]
         },
         {
@@ -164,6 +168,14 @@ export const Header: React.FC<HeaderProps> = ({
                             />
                         </Link>
                         <div className="h-6 w-px bg-slate-200 dark:bg-white/10 hidden sm:block" />
+                        
+                        <button
+                            onClick={() => setStage('articles_index')}
+                            className={`hidden sm:flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:scale-105 active:scale-95 ${stage === 'articles_index' ? 'text-primary' : 'text-text-muted hover:text-text-main'}`}
+                        >
+                            <BookOpen size={14} className={stage === 'articles_index' ? 'text-primary' : 'text-primary/40'} />
+                            Library
+                        </button>
                     </div>
 
                     {/* DESKTOP ACTIONS (md+) */}
@@ -330,6 +342,15 @@ export const Header: React.FC<HeaderProps> = ({
                                             </div>
                                             <span className="font-bold uppercase tracking-wider text-[11px] text-white">Free Test</span>
                                         </Link>
+                                        <button
+                                            onClick={() => { setStage('articles_index'); setIsMenuOpen(false); }}
+                                            className="w-full flex justify-start items-center text-left bg-white/5 border border-white/10 hover:bg-white/10 p-4 h-auto rounded-xl"
+                                        >
+                                            <div className="w-8 flex items-center justify-center">
+                                                <BookOpen className="text-primary" size={18} />
+                                            </div>
+                                            <span className="font-bold uppercase tracking-wider text-[11px] text-slate-300">Library</span>
+                                        </button>
                                         <Button
                                             onClick={() => { setStage('auth_login'); setIsMenuOpen(false); }}
                                             className="w-full justify-start text-left bg-transparent border border-white/10 hover:bg-white/5 p-4 h-auto"

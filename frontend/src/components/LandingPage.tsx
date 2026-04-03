@@ -491,73 +491,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                 </div>
             </section>
 
-            {/* 9.5) PERFORMANCE RESEARCH & ARTICLES (SEO Linking) */}
-            <section className="py-32 px-4 bg-white/[0.02]">
-                <div className="max-w-7xl mx-auto">
-                    <div className="text-center mb-16">
-                        <span className="text-[10px] font-black uppercase tracking-[0.5em] text-primary mb-6 block">Resource Library</span>
-                        <h2 className="text-4xl md:text-5xl font-black text-text-main tracking-tighter uppercase italic leading-[0.9] mb-4">
-                            Performance <span className="text-primary">Research.</span>
-                        </h2>
-                        <p className="text-text-muted text-sm font-bold uppercase tracking-[0.3em] opacity-40">Science-backed insights for serious typists.</p>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <Card className="p-8 border-white/5 bg-white/[0.02] flex flex-col group hover:border-primary/20 transition-all">
-                            <Brain size={24} className="text-primary mb-6" />
-                            <h3 className="text-xl font-black uppercase tracking-tight italic mb-4 leading-tight group-hover:text-primary transition-colors">Overcoming the Plateau</h3>
-                            <p className="text-sm text-text-muted font-medium leading-relaxed mb-8 flex-1">
-                                Explore the 'OK Plateau' in motor learning and the research-backed methods to break through speed stagnation.
-                            </p>
-                            <Link to="/articles/typing-speed-plateau" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary group-hover:gap-4 transition-all">
-                                Typing Speed Training <ArrowRight size={14} />
-                            </Link>
-                        </Card>
-                        <Card className="p-8 border-white/5 bg-white/[0.02] flex flex-col group hover:border-primary/20 transition-all">
-                            <Activity size={24} className="text-primary mb-6" />
-                            <h3 className="text-xl font-black uppercase tracking-tight italic mb-4 leading-tight">Typing Faster & Accurately</h3>
-                            <p className="text-sm text-text-muted font-medium leading-relaxed mb-8 flex-1">
-                                A clinical approach to balancing keystroke velocity with error suppression in high-pressure environments.
-                            </p>
-                            <Link to="/articles/type-faster-accurately" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary group-hover:gap-4 transition-all">
-                                Learn Touch Typing <ArrowRight size={14} />
-                            </Link>
-                        </Card>
-                        <Card className="p-8 border-white/5 bg-white/[0.02] flex flex-col group hover:border-primary/20 transition-all opacity-50 grayscale hover:opacity-100 hover:grayscale-0">
-                            <TrendingUp size={24} className="text-primary mb-6" />
-                            <h3 className="text-xl font-black uppercase tracking-tight italic mb-4 leading-tight">60 WPM to 100 WPM</h3>
-                            <p className="text-sm text-text-muted font-medium leading-relaxed mb-8 flex-1">
-                                The structural shift in neural pathways required to transition from intermediate to professional speed tiers.
-                            </p>
-                            <Link to="/articles/60-wpm-to-100-wpm" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary group-hover:gap-4 transition-all">
-                                Read Guide <ArrowRight size={14} />
-                            </Link>
-                        </Card>
-                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-8 pb-16">
-                        <Card className="p-6 border-white/5 bg-white/[0.02] flex flex-col group hover:border-primary/20 transition-all">
-                            <h4 className="text-sm font-black uppercase tracking-tight italic mb-2 group-hover:text-primary transition-colors">How to Type Faster</h4>
-                            <p className="text-[10px] text-text-muted mb-4">10 pro tips to increase speed.</p>
-                            <Link to="/articles/how-to-type-faster" className="text-[9px] font-black uppercase tracking-widest text-primary mt-auto flex items-center gap-1">Read <ArrowRight size={10} /></Link>
-                        </Card>
-                        <Card className="p-6 border-white/5 bg-white/[0.02] flex flex-col group hover:border-primary/20 transition-all">
-                            <h4 className="text-sm font-black uppercase tracking-tight italic mb-2 group-hover:text-primary transition-colors">Touch Typing Guide</h4>
-                            <p className="text-[10px] text-text-muted mb-4">Learn to type without looking.</p>
-                            <Link to="/articles/touch-typing-guide" className="text-[9px] font-black uppercase tracking-widest text-primary mt-auto flex items-center gap-1">Read <ArrowRight size={10} /></Link>
-                        </Card>
-                        <Card className="p-6 border-white/5 bg-white/[0.02] flex flex-col group hover:border-primary/20 transition-all">
-                            <h4 className="text-sm font-black uppercase tracking-tight italic mb-2 group-hover:text-primary transition-colors">Typing Test</h4>
-                            <p className="text-[10px] text-text-muted mb-4">Official WPM evaluation.</p>
-                            <Link to="/articles/typing-speed-test" className="text-[9px] font-black uppercase tracking-widest text-primary mt-auto flex items-center gap-1">Read <ArrowRight size={10} /></Link>
-                        </Card>
-                        <Card className="p-6 border-white/5 bg-white/[0.02] flex flex-col group hover:border-primary/20 transition-all">
-                            <h4 className="text-sm font-black uppercase tracking-tight italic mb-2 group-hover:text-primary transition-colors">Speed Accuracy</h4>
-                            <p className="text-[10px] text-text-muted mb-4">Master precision.</p>
-                            <Link to="/articles/typing-accuracy" className="text-[9px] font-black uppercase tracking-widest text-primary mt-auto flex items-center gap-1">Read <ArrowRight size={10} /></Link>
-                        </Card>
-                    </div>
-                </div>
-            </section>
 
             {/* 10) FINAL CTA (bottom) */}
             <section className="py-40 px-4 relative overflow-hidden text-center bg-gradient-to-b from-transparent to-primary/5">

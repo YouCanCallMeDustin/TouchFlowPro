@@ -115,8 +115,13 @@ function App() {
   const navigate = useNavigate()
 
   const [stage, setStage] = useState<Stage>(() => {
-    if (location.pathname === '/articles/good-typing-speed') return 'article_averages';
-    return ROUTE_STAGES[location.pathname] || 'welcome';
+    // Normalize path: ignore trailing slash for matching
+    const normalizedPath = location.pathname.length > 1 && location.pathname.endsWith('/')
+      ? location.pathname.slice(0, -1)
+      : location.pathname;
+
+    if (normalizedPath === '/articles/good-typing-speed') return 'article_averages';
+    return ROUTE_STAGES[normalizedPath] || 'welcome';
   })
   const [assessmentMetrics, setAssessmentMetrics] = useState<TypingMetrics | null>(null)
   const [userProgress, setUserProgress] = useState<UserProgress | null>(null)
@@ -169,12 +174,17 @@ function App() {
 
   // Sync stage from Back/Forward navigation
   useEffect(() => {
-    const matchedStage = ROUTE_STAGES[location.pathname];
+    // Normalize path: ignore trailing slash for matching
+    const normalizedPath = location.pathname.length > 1 && location.pathname.endsWith('/')
+      ? location.pathname.slice(0, -1)
+      : location.pathname;
+
+    const matchedStage = ROUTE_STAGES[normalizedPath];
     if (matchedStage) {
       setStage(prevStage => {
         // If we're at 'dashboard', and the URL is '/', that means we intentionally
         // sent them to the dashboard while keeping the clean root URL.
-        if (prevStage === 'dashboard' && location.pathname === '/') return prevStage;
+        if (prevStage === 'dashboard' && normalizedPath === '/') return prevStage;
 
         // Also don't revert to mapped route if they purposely opened an unmapped sub-app view
         // like auth_login (because they clicked a button) unless they are really hitting back
@@ -957,7 +967,7 @@ function App() {
 
         {!isTypingMode && (
           <footer className="border-t border-white/5 mt-12 py-12 px-4 bg-bg-main relative z-50">
-            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-8 mb-8">
+            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
               <div className="col-span-1 md:col-span-2">
                 <h3 className="text-xl font-black text-white uppercase tracking-tighter italic mb-4">
                   TouchFlow <span className="text-primary">Pro</span>
@@ -968,27 +978,7 @@ function App() {
               </div>
 
               <div>
-                <h4 className="text-xs font-black text-white uppercase tracking-widest mb-4">Performance Guides</h4>
-                <div className="grid grid-cols-2 gap-x-8">
-                  <ul className="flex flex-col gap-3">
-                    <li><Link to="/articles/typing-speed-averages" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Average Speeds</Link></li>
-                    <li><Link to="/articles/ultimate-guide-to-typing-speed" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Ultimate Guide</Link></li>
-                    <li><Link to="/articles/how-to-type-faster" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">How to Type Faster</Link></li>
-                    <li><Link to="/articles/typing-speed-plateau" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Overcoming Plateaus</Link></li>
-                    <li><Link to="/articles/60-wpm-to-100-wpm" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">60 to 100 WPM</Link></li>
-                  </ul>
-                  <ul className="flex flex-col gap-3">
-                    <li><Link to="/articles/type-faster-accurately" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Accuracy Guide</Link></li>
-                    <li><Link to="/articles/touch-typing-guide" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Touch Typing</Link></li>
-                    <li><Link to="/articles/typing-speed-test" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Speed Evaluation</Link></li>
-                    <li><Link to="/articles/fastest-typing-techniques" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Elite Techniques</Link></li>
-                    <li><Link to="/articles/typing-practice" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Practice Drills</Link></li>
-                  </ul>
-                </div>
-              </div>
-
-              <div>
-                <h4 className="text-xs font-black text-white uppercase tracking-widest mb-4">Company</h4>
+                <h4 className="text-xs font-black text-white uppercase tracking-widest mb-4">Explore</h4>
                 <ul className="flex flex-col gap-3">
                   <li><Link to="/about" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">About Us</Link></li>
                   <li><Link to="/articles" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Resource Library</Link></li>

@@ -117,41 +117,76 @@ const SEO_PAGES: { slug: string; lastmod: string; priority: string }[] = [
 // ---------------------------------------------------------------------------
 // SEO page routes
 // Each registered slug serves its corresponding HTML file directly.
+// We prefix these with /articles/ to match the frontend router.
 // ---------------------------------------------------------------------------
-router.get('/how-to-type-faster', (_req: Request, res: Response) => {
+
+// Articles Index
+router.get('/articles', (_req: Request, res: Response, next) => {
+    try {
+        const frontendDist = resolveResourcePath('frontend');
+        const indexPath = path.join(frontendDist, 'index.html');
+        if (fs.existsSync(indexPath)) {
+            res.sendFile(indexPath);
+        } else {
+            next();
+        }
+    } catch (e) {
+        next();
+    }
+});
+
+// Individual Articles (Prefixed)
+router.get('/articles/how-to-type-faster', (_req: Request, res: Response) => {
     res.sendFile(path.resolve(__dirname, '../seo/how-to-type-faster.html'));
 });
 
-router.get('/increase-wpm-from-60-to-100', (_req: Request, res: Response) => {
+router.get('/articles/increase-wpm-from-60-to-100', (_req: Request, res: Response) => {
     res.sendFile(path.resolve(__dirname, '../seo/increase-wpm-from-60-to-100.html'));
 });
 
-router.get('/typing-speed-vs-accuracy', (_req: Request, res: Response) => {
+router.get('/articles/typing-speed-vs-accuracy', (_req: Request, res: Response) => {
     res.sendFile(path.resolve(__dirname, '../seo/typing-speed-vs-accuracy.html'));
 });
 
-router.get('/how-to-improve-typing-accuracy', (_req: Request, res: Response) => {
+router.get('/articles/how-to-improve-typing-accuracy', (_req: Request, res: Response) => {
     res.sendFile(path.resolve(__dirname, '../seo/how-to-improve-typing-accuracy.html'));
 });
 
-router.get('/what-is-a-good-typing-speed', (_req: Request, res: Response) => {
+router.get('/articles/typing-speed-averages', (_req: Request, res: Response) => {
     res.sendFile(path.resolve(__dirname, '../seo/what-is-a-good-typing-speed.html'));
 });
 
-router.get('/how-to-type-60-wpm', (_req: Request, res: Response) => {
+router.get('/articles/how-to-type-60-wpm', (_req: Request, res: Response) => {
     res.sendFile(path.resolve(__dirname, '../seo/how-to-type-60-wpm.html'));
 });
 
-router.get('/medical-transcription-typing-test', (_req: Request, res: Response) => {
+router.get('/articles/medical-transcription-typing-test', (_req: Request, res: Response) => {
     res.sendFile(path.resolve(__dirname, '../seo/medical-transcription-typing-test.html'));
 });
 
-router.get('/legal-typing-test', (_req: Request, res: Response) => {
+router.get('/articles/legal-typing-test', (_req: Request, res: Response) => {
     res.sendFile(path.resolve(__dirname, '../seo/legal-typing-test.html'));
 });
 
-router.get('/typing-test-for-programmers', (_req: Request, res: Response) => {
+router.get('/articles/typing-test-for-programmers', (_req: Request, res: Response) => {
     res.sendFile(path.resolve(__dirname, '../seo/typing-test-for-programmers.html'));
+});
+
+// SEO Redirects for old unprefixed paths (maintains SEO juice)
+const REDIRECT_MAP: InstanceType<typeof Map<string, string>> = new Map([
+    ['/how-to-type-faster', '/articles/how-to-type-faster'],
+    ['/increase-wpm-from-60-to-100', '/articles/increase-wpm-from-60-to-100'],
+    ['/typing-speed-vs-accuracy', '/articles/typing-speed-vs-accuracy'],
+    ['/how-to-improve-typing-accuracy', '/articles/how-to-improve-typing-accuracy'],
+    ['/what-is-a-good-typing-speed', '/articles/typing-speed-averages'],
+    ['/how-to-type-60-wpm', '/articles/how-to-type-60-wpm'],
+    ['/medical-transcription-typing-test', '/articles/medical-transcription-typing-test'],
+    ['/legal-typing-test', '/articles/legal-typing-test'],
+    ['/typing-test-for-programmers', '/articles/typing-test-for-programmers'],
+]);
+
+REDIRECT_MAP.forEach((newPath, oldPath) => {
+    router.get(oldPath, (_req, res) => res.redirect(301, newPath));
 });
 
 export default router;
