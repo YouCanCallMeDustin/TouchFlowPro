@@ -7,7 +7,8 @@ import { Request, Response, NextFunction } from 'express';
 export const wwwRedirect = (req: Request, res: Response, next: NextFunction): void => {
     if (
         process.env.NODE_ENV === 'production' &&
-        req.hostname?.startsWith('www.')
+        req.hostname?.startsWith('www.') &&
+        !req.path.startsWith('/.well-known/acme-challenge/')
     ) {
         const nonWwwHost = req.hostname.replace(/^www\./, '');
         const redirectUrl = `https://${nonWwwHost}${req.originalUrl}`;
