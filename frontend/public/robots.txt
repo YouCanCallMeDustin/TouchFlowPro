@@ -39,4 +39,8 @@ Disallow: /login
 Disallow: /signup
 Disallow: /sample-report
 
+# Host
+Host: https://touchflowpro.com
+
+# Sitemap
 Sitemap: https://touchflowpro.com/sitemap.xml

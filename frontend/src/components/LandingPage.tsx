@@ -120,11 +120,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
     return (
         <div className="w-full">
             <Helmet>
-                <title>TouchFlowPro — Advanced Typing Speed & Accuracy Trainer | Break Your Plateau</title>
-                <meta name="description" content="Professional-grade typing performance training for serious typists. Keystroke analytics, deliberate practice drills, and structured plans to push past your WPM plateau. Start training now." />
+                <title>Hit 100+ WPM: The Elite Typing Trainer for Professionals | TouchFlow Pro</title>
+                <meta name="description" content="Master elite typing speed with science-backed drills. Increase your WPM, eliminate fatigue, and benchmark your performance. Built for Engineers, Medical Professionals, and Legal Clerks." />
                 <link rel="canonical" href="https://touchflowpro.com/" />
-                <meta property="og:title" content="TouchFlowPro — Advanced Typing Speed & Accuracy Trainer | Break Your Plateau" />
-                <meta property="og:description" content="Professional-grade typing performance training for serious typists. Keystroke analytics, deliberate practice drills, and structured plans to push past your WPM plateau. Start training now." />
+                <meta property="og:title" content="Hit 100+ WPM: Typing Training for Professionals" />
+                <meta property="og:description" content="Increase your typing speed and accuracy with deliberate practice. Benchmarked for elite careers." />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content="https://touchflowpro.com/" />
                 <meta property="og:image" content="https://touchflowpro.com/og-image.png" />

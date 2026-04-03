@@ -105,6 +105,56 @@ const SEO_PAGES: { slug: string; lastmod: string; priority: string }[] = [
     { slug: 'typing-test-for-programmers', lastmod: '2026-03-01', priority: '0.8' },
 ];
 
+/**
+ * GET /sitemap.xml
+ * Dynamically generates a sitemap based on the SEO pages registry and core site routes.
+ */
+router.get('/sitemap.xml', (_req: Request, res: Response) => {
+    const baseUrl = 'https://touchflowpro.com';
+    const now = new Date().toISOString().split('T')[0];
+
+    // Core static pages
+    const corePages = [
+        { loc: '', priority: '1.0', changefreq: 'daily' },
+        { loc: '/free-typing-test', priority: '0.9', changefreq: 'weekly' },
+        { loc: '/articles', priority: '0.8', changefreq: 'daily' },
+        { loc: '/about', priority: '0.6', changefreq: 'monthly' },
+        { loc: '/faq', priority: '0.6', changefreq: 'monthly' },
+        { loc: '/contact', priority: '0.5', changefreq: 'monthly' },
+        { loc: '/pricing', priority: '0.7', changefreq: 'monthly' },
+    ];
+
+    let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+    xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+
+    // Add core pages
+    corePages.forEach(page => {
+        xml += '  <url>\n';
+        xml += `    <loc>${baseUrl}${page.loc}</loc>\n`;
+        xml += `    <lastmod>${now}</lastmod>\n`;
+        xml += `    <changefreq>${page.changefreq}</changefreq>\n`;
+        xml += `    <priority>${page.priority}</priority>\n`;
+        xml += '  </url>\n';
+    });
+
+    // Add SEO articles
+    SEO_PAGES.forEach(page => {
+        // Special case for 'what-is-a-good-typing-speed' which maps to 'typing-speed-averages'
+        const pathSlug = page.slug === 'what-is-a-good-typing-speed' ? 'typing-speed-averages' : page.slug;
+        xml += '  <url>\n';
+        xml += `    <loc>${baseUrl}/articles/${pathSlug}</loc>\n`;
+        xml += `    <lastmod>${page.lastmod}</lastmod>\n`;
+        xml += `    <changefreq>monthly</changefreq>\n`;
+        xml += `    <priority>${page.priority}</priority>\n`;
+        xml += '  </url>\n';
+    });
+
+    xml += '</urlset>';
+
+    res.header('Content-Type', 'application/xml');
+    res.send(xml);
+});
+
 // Resolve the directory containing SEO HTML files.
 // In dev (ts-node):  __dirname = backend/src/routes  → ../seo
 // In prod (compiled): __dirname = dist/backend/src/routes → ../seo

@@ -96,16 +96,16 @@ export default function ArticlesIndexPage({ onBack }: ArticlesIndexPageProps) {
     return (
         <div className="w-full px-4 flex flex-col items-center py-12">
             <Helmet>
-                <title>Typing Guides & Articles | TouchFlow Pro</title>
-                <meta name="description" content="Explore our library of advanced typing tutorials, scientific strategies, and WPM improvement guides built for professional touch typists." />
+                <title>Typing Performance Library: Professional Training & Research | TouchFlow Pro</title>
+                <meta name="description" content="Explore the definitive library of professional typing guides. Master 100+ WPM, optimize accuracy, and discover the science of keyboard performance for engineers, doctors, and legal pros." />
                 <link rel="canonical" href="https://touchflowpro.com/articles" />
                 <script type="application/ld+json">
                     {JSON.stringify({
                         "@context": "https://schema.org",
                         "@type": "CollectionPage",
-                        "name": "Typing Guides & Articles",
+                        "name": "Typing Performance Library",
                         "url": "https://touchflowpro.com/articles",
-                        "description": "Explore our library of advanced typing tutorials, scientific strategies, and WPM improvement guides built for professional touch typists.",
+                        "description": "Professional training guides and research on typing speed, accuracy, and performance optimization.",
                         "hasPart": articles.map(article => ({
                             "@type": "Article",
                             "headline": article.title,
