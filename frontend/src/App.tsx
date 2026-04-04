@@ -968,23 +968,33 @@ function App() {
         {!isTypingMode && (
           <footer className="border-t border-white/5 mt-12 py-12 px-4 bg-bg-main relative z-50">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-              <div className="col-span-1 md:col-span-2">
+              <div className="col-span-1 md:col-span-1">
                 <h3 className="text-xl font-black text-white uppercase tracking-tighter italic mb-4">
                   TouchFlow <span className="text-primary">Pro</span>
                 </h3>
-                <p className="text-sm text-text-muted opacity-80 max-w-sm mb-6">
-                  Professional-grade typing performance training. Measure your baseline, discover your bottlenecks, and drill your weaknesses with adaptive telemetry.
+                <p className="text-[11px] text-text-muted opacity-80 max-w-sm mb-6 leading-relaxed">
+                  Professional-grade typing performance training. Measure baseline, discover bottlenecks, and drill weaknesses.
                 </p>
               </div>
 
               <div>
                 <h4 className="text-xs font-black text-white uppercase tracking-widest mb-4">Explore</h4>
                 <ul className="flex flex-col gap-3">
-                  <li><Link to="/about" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">About Us</Link></li>
-                  <li><Link to="/articles" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Resource Library</Link></li>
-                  <li><Link to="/contact" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Contact</Link></li>
-                  <li><Link to="/faq" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">FAQ</Link></li>
-                  <li><Link to="/free-typing-test" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Free Typing Test</Link></li>
+                  <li><Link onClick={() => setStage('about')} to="/about" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">About Us</Link></li>
+                  <li><Link onClick={() => setStage('articles_index')} to="/articles" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Resource Library</Link></li>
+                  <li><Link onClick={() => setStage('contact')} to="/contact" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Contact</Link></li>
+                  <li><Link onClick={() => setStage('faq')} to="/faq" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">FAQ</Link></li>
+                  <li><Link onClick={() => setStage('free_test')} to="/free-typing-test" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Free Typing Test</Link></li>
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="text-xs font-black text-white uppercase tracking-widest mb-4">Research</h4>
+                <ul className="flex flex-col gap-3">
+                  <li><Link onClick={() => setStage('article_averages')} to="/articles/typing-speed-averages" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Speed Averages (2026)</Link></li>
+                  <li><Link onClick={() => setStage('article_plateau')} to="/articles/typing-speed-plateau" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Breaking Plateaus</Link></li>
+                  <li><Link onClick={() => setStage('article_improve_typing_speed')} to="/articles/improve-typing-speed" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">7 Elite Speed Drills</Link></li>
+                  <li><Link onClick={() => setStage('article_60_to_100')} to="/articles/60-wpm-to-100-wpm" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">60 to 100 WPM Plan</Link></li>
                 </ul>
               </div>
 
@@ -992,10 +1002,10 @@ function App() {
                 <h4 className="text-xs font-black text-white uppercase tracking-widest mb-4">Legal</h4>
                 <ul className="flex flex-col gap-3">
                   <li>
-                    <Link to="/terms" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Terms of Service</Link>
+                    <Link onClick={() => setStage('terms')} to="/terms" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Terms of Service</Link>
                   </li>
                   <li>
-                    <Link to="/privacy-policy" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Privacy Policy</Link>
+                    <Link onClick={() => setStage('privacy')} to="/privacy-policy" className="text-[10px] text-text-muted hover:text-primary transition-colors font-bold uppercase tracking-wider">Privacy Policy</Link>
                   </li>
                 </ul>
               </div>

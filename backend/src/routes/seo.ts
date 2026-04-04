@@ -15,75 +15,12 @@ router.get('/', (_req: Request, res: Response, next) => {
         const indexPath = path.join(frontendDist, 'index.html');
 
         if (fs.existsSync(indexPath)) {
-            let html = fs.readFileSync(indexPath, 'utf-8');
-
-            // Inject the SEO section before the closing body tag
-            // This ensures it's part of the static HTML response for crawlers
-            const seoSection = `
-    <section id="typing-resources" style="background:#111827; padding:4rem 2rem; border-top:1px solid #1e293b; text-align:center;">
-      <div style="max-width:900px; margin:0 auto;">
-        <h2 style="color:#e2e8f0; font-size:1.8rem; margin-bottom:2rem; font-family:'Segoe UI',system-ui,sans-serif;">Typing Performance Research</h2>
-        <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:2rem; text-align:left;">
-            <div style="flex: 1 1 300px; background:#1a2236; padding:1.5rem; border-radius:12px; border:1px solid #1e293b;">
-                <h3 style="color:#818cf8; font-size:1.2rem; margin-top:0; margin-bottom:0.8rem;">How to Type Faster</h3>
-                <p style="color:#94a3b8; font-size:0.95rem; margin-bottom:1rem;">Master advanced techniques, deliberate practice strategies, and neuromuscular optimization.</p>
-                <a href="https://touchflowpro.com/how-to-type-faster" style="color:#6366f1; text-decoration:none; font-weight:600;">Read More &rarr;</a>
-            </div>
-            <div style="flex: 1 1 300px; background:#1a2236; padding:1.5rem; border-radius:12px; border:1px solid #1e293b;">
-                <h3 style="color:#818cf8; font-size:1.2rem; margin-top:0; margin-bottom:0.8rem;">Increase WPM from 60 to 100</h3>
-                <p style="color:#94a3b8; font-size:0.95rem; margin-bottom:1rem;">A structured 3-phase training system featuring burst conditioning and rhythm acceleration.</p>
-                <a href="https://touchflowpro.com/increase-wpm-from-60-to-100" style="color:#6366f1; text-decoration:none; font-weight:600;">Read More &rarr;</a>
-            </div>
-            <div style="flex: 1 1 300px; background:#1a2236; padding:1.5rem; border-radius:12px; border:1px solid #1e293b;">
-                <h3 style="color:#818cf8; font-size:1.2rem; margin-top:0; margin-bottom:0.8rem;">Typing Speed vs Accuracy</h3>
-                <p style="color:#94a3b8; font-size:0.95rem; margin-bottom:1rem;">Discover why mechanical precision and high accuracy is the foundational driver of elite speed.</p>
-                <a href="https://touchflowpro.com/typing-speed-vs-accuracy" style="color:#6366f1; text-decoration:none; font-weight:600;">Read More &rarr;</a>
-            </div>
-            <div style="flex: 1 1 300px; background:#1a2236; padding:1.5rem; border-radius:12px; border:1px solid #1e293b;">
-                <h3 style="color:#818cf8; font-size:1.2rem; margin-top:0; margin-bottom:0.8rem;">How to Improve Typing Accuracy</h3>
-                <p style="color:#94a3b8; font-size:0.95rem; margin-bottom:1rem;">Learn how to correct errors and optimize your accuracy to stop slowing down your typing speed.</p>
-                <a href="https://touchflowpro.com/how-to-improve-typing-accuracy" style="color:#6366f1; text-decoration:none; font-weight:600;">Read More &rarr;</a>
-            </div>
-            <div style="flex: 1 1 300px; background:#1a2236; padding:1.5rem; border-radius:12px; border:1px solid #1e293b;">
-                <h3 style="color:#818cf8; font-size:1.2rem; margin-top:0; margin-bottom:0.8rem;">How to Type 60 WPM</h3>
-                <p style="color:#94a3b8; font-size:0.95rem; margin-bottom:1rem;">A complete guide to the fundamentals needed to hit the golden 60 words per minute benchmark.</p>
-                <a href="https://touchflowpro.com/how-to-type-60-wpm" style="color:#6366f1; text-decoration:none; font-weight:600;">Read More &rarr;</a>
-            </div>
-            <div style="flex: 1 1 300px; background:#1a2236; padding:1.5rem; border-radius:12px; border:1px solid #1e293b;">
-                <h3 style="color:#818cf8; font-size:1.2rem; margin-top:0; margin-bottom:0.8rem;">Medical Typing Test</h3>
-                <p style="color:#94a3b8; font-size:0.95rem; margin-bottom:1rem;">Evaluate your healthcare typing speed with real-world clinical documentation and pharmacology terminology.</p>
-                <a href="https://touchflowpro.com/medical-transcription-typing-test" style="color:#6366f1; text-decoration:none; font-weight:600;">Read More &rarr;</a>
-            </div>
-            <div style="flex: 1 1 300px; background:#1a2236; padding:1.5rem; border-radius:12px; border:1px solid #1e293b;">
-                <h3 style="color:#818cf8; font-size:1.2rem; margin-top:0; margin-bottom:0.8rem;">Legal Typing Test</h3>
-                <p style="color:#94a3b8; font-size:0.95rem; margin-bottom:1rem;">Evaluate your legal data entry speed using real case law, statutory citations, and legal briefs.</p>
-                <a href="https://touchflowpro.com/legal-typing-test" style="color:#6366f1; text-decoration:none; font-weight:600;">Read More &rarr;</a>
-            </div>
-            <div style="flex: 1 1 300px; background:#1a2236; padding:1.5rem; border-radius:12px; border:1px solid #1e293b;">
-                <h3 style="color:#818cf8; font-size:1.2rem; margin-top:0; margin-bottom:0.8rem;">Typing Test for Programmers</h3>
-                <p style="color:#94a3b8; font-size:0.95rem; margin-bottom:1rem;">Built specifically for software engineers. Test your speed with code snippets, algorithms, and technical symbols.</p>
-                <a href="https://touchflowpro.com/typing-test-for-programmers" style="color:#6366f1; text-decoration:none; font-weight:600;">Read More &rarr;</a>
-            </div>
-        </div>
-      </div>
-    </section>
-            `;
-
-            if (html.includes('<div id="root"></div>')) {
-                html = html.replace('<div id="root"></div>', `<div id="root">\n${seoSection}\n</div>`);
-            } else if (html.includes('</body>')) {
-                html = html.replace('</body>', `${seoSection}</body>`);
-            } else {
-                html += seoSection;
-            }
-
-            res.send(html);
+            res.sendFile(indexPath);
         } else {
-            // If index.html is missing, fall through to next middleware (which might 404 or handle it)
             next();
         }
     } catch (error) {
-        console.error('[SEO] Failed to inject homepage content:', error);
+        console.error('[SEO] Failed to serve homepage:', error);
         next();
     }
 });
@@ -104,7 +41,7 @@ const SEO_PAGES: { slug: string; lastmod: string; priority: string }[] = [
     { slug: 'legal-typing-test', lastmod: '2026-03-01', priority: '0.8' },
     { slug: 'typing-test-for-programmers', lastmod: '2026-03-01', priority: '0.8' },
     { slug: 'typing-speed-plateau', lastmod: '2026-04-03', priority: '0.8' },
-    { slug: 'improve-typing-speed', lastmod: '2026-04-03', priority: '0.8' },
+    { slug: 'improve-typing-speed', lastmod: '2026-04-03', priority: '0.9' },
     { slug: '60-wpm-to-100-wpm', lastmod: '2026-04-03', priority: '0.8' },
 ];
 
