@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Card } from '../../components/ui/Card';
-import { Target, ArrowRight } from 'lucide-react';
+import { ArrowRight, Zap, Target, Rocket, CheckCircle2 } from 'lucide-react';
 import { AggregateRating } from '../../components/articles/AggregateRating';
 import type { Stage } from '../../types/stages';
 
@@ -15,92 +15,41 @@ export const SixtyToHundredArticle: React.FC<ArticleProps> = () => {
     return (
         <div className="min-h-screen py-12 px-4 flex flex-col items-center">
             <Helmet>
-                <title>60 to 100 WPM: The Exact Training Plan [2026]</title>
-                <meta name="description" content="Going from 60 to 100 WPM requires a completely different technique. Here's the exact 3-phase training system used by elite typists. Free plan included." />
+                <title>60 to 100 WPM: The Elite Typing Roadmap</title>
+                <meta name="description" content="A 3-phase technical roadmap to go from 60 WPM to 100+ WPM. Learn the advanced bigram chunking and rhythmic stability techniques used by elite typists." />
                 <link rel="canonical" href="https://touchflowpro.com/articles/60-wpm-to-100-wpm" />
-                <meta property="og:title" content="60 to 100 WPM: The Exact Training Plan [2026]" />
-                <meta property="og:description" content="Going from 60 to 100 WPM requires a completely different technique. Here's the exact 3-phase training system." />
+                <meta property="og:title" content="60 to 100 WPM: The Elite Typing Roadmap" />
+                <meta property="og:description" content="A 3-phase technical roadmap to go from 60 WPM to 100+ WPM. Learn the elite techniques for speed." />
                 <meta property="og:type" content="article" />
                 <meta property="og:url" content="https://touchflowpro.com/articles/60-wpm-to-100-wpm" />
                 <meta property="og:image" content="https://touchflowpro.com/assets/og-60-to-100.png" />
                 <meta property="og:site_name" content="TouchFlowPro" />
                 <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content="60 to 100 WPM: The Exact Training Plan [2026]" />
-                <meta name="twitter:description" content="Going from 60 to 100 WPM requires a completely different technique. Here's the exact 3-phase training system." />
-                {/* Structured Data */}
-            
+                <meta name="twitter:title" content="60 to 100 WPM: The Elite Typing Roadmap" />
+                <meta name="twitter:description" content="A 3-phase technical roadmap to go from 60 WPM to 100+ WPM." />
+
                 <script type="application/ld+json">
                     {JSON.stringify({
-                              "@context": "https://schema.org",
-                              "@type": "Article",
-                              "headline": "How to Go from 60 WPM to 100 WPM — A Structured Training Plan",
-                              "description": "Break through your typing speed plateau with a structured 60 to 100 WPM progression plan. Targeted drills, bigram training, and performance benchmarks for serious typists.",
-                              "image": "https://touchflowpro.com/assets/og-60-to-100.png",
-                              "author": {
-                                        "@type": "Organization",
-                                        "name": "TouchFlow Pro",
-                                        "url": "https://touchflowpro.com"
-                              },
-                              "publisher": {
-                                        "@type": "Organization",
-                                        "name": "TouchFlow Pro",
-                                        "logo": {
-                                                  "@type": "ImageObject",
-                                                  "url": "https://touchflowpro.com/logo.png"
-                                        }
-                              },
-                              "datePublished": "2024-01-01T08:00:00+08:00",
-                              "dateModified": "2026-03-29T00:54:45.367Z"
-                    })}
-                </script>
-                <script type="application/ld+json">
-                    {JSON.stringify({
-                              "@context": "https://schema.org",
-                              "@type": "BreadcrumbList",
-                              "itemListElement": [
-                                        {
-                                                  "@type": "ListItem",
-                                                  "position": 1,
-                                                  "name": "Home",
-                                                  "item": "https://touchflowpro.com"
-                                        },
-                                        {
-                                                  "@type": "ListItem",
-                                                  "position": 2,
-                                                  "name": "Articles",
-                                                  "item": "https://touchflowpro.com/articles"
-                                        },
-                                        {
-                                                  "@type": "ListItem",
-                                                  "position": 3,
-                                                  "name": "How to Go from 60 WPM to 100 WPM — A Structured Training Plan",
-                                                  "item": "https://touchflowpro.com/articles/60-wpm-to-100-wpm"
-                                        }
-                              ]
-                    })}
-                </script>
-                <script type="application/ld+json">
-                    {JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "FAQPage",
-                        "mainEntity": [
-                            {
-                                "@type": "Question",
-                                "name": "What is a good typing speed?",
-                                "acceptedAnswer": {
-                                    "@type": "Answer",
-                                    "text": "A good typing speed for most professional roles is 60-80 WPM. However, for elite technical or administrative roles, 90-100+ WPM is considered the gold standard for peak productivity."
-                                }
-                            },
-                            {
-                                "@type": "Question",
-                                "name": "Is 60 WPM fast?",
-                                "acceptedAnswer": {
-                                    "@type": "Answer",
-                                    "text": "Yes, 60 WPM is above average and sufficient for most office work. The average typist scores around 40 WPM. Moving beyond 60 WPM requires shifting from letter-by-letter processing to word-level 'bursting'."
-                                }
-                            }
-                        ]
+                               "@context": "https://schema.org",
+                               "@type": "Article",
+                               "headline": "60 to 100 WPM: The Elite Typing Roadmap",
+                               "description": "A 3-phase technical roadmap to go from 60 WPM to 100+ WPM.",
+                               "image": "https://touchflowpro.com/assets/og-60-to-100.png",
+                               "author": {
+                                         "@type": "Organization",
+                                         "name": "TouchFlow Pro",
+                                         "url": "https://touchflowpro.com"
+                               },
+                               "publisher": {
+                                         "@type": "Organization",
+                                         "name": "TouchFlow Pro",
+                                         "logo": {
+                                                   "@type": "ImageObject",
+                                                   "url": "https://touchflowpro.com/logo.png"
+                                         }
+                               },
+                               "datePublished": "2024-01-01T08:00:00+08:00",
+                               "dateModified": "2026-04-03T00:00:00.000Z"
                     })}
                 </script>
             </Helmet>
@@ -110,122 +59,140 @@ export const SixtyToHundredArticle: React.FC<ArticleProps> = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="w-full max-w-4xl mx-auto"
             >
-                {/* Header */}
+                {/* Mastering Header */}
                 <div className="text-center mb-16">
-                    <div className="inline-block px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 mb-6">
-                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500">Milestone Guide</span>
-                    </div>
-                    <h1 className="text-4xl md:text-6xl font-black text-text-main mb-6 uppercase tracking-tighter italic leading-[0.9]">
-                        Crossing the Chasm: <br /><span className="text-emerald-500 border-b-4 border-emerald-500/30 pb-1">60 to 100 WPM.</span>
+                    <h1 className="text-4xl md:text-8xl font-black text-text-main mb-6 uppercase tracking-tighter italic leading-[0.85]">
+                        60 To 100 <br/> <span className="text-primary italic">The Roadmap.</span>
                     </h1>
-                    <p className="text-text-muted text-lg max-w-2xl mx-auto font-bold uppercase tracking-wider opacity-60">
-                        The exact methodology required to transform from an average typist to an elite professional.
+                    <p className="text-text-muted text-xl max-w-3xl mx-auto font-bold uppercase tracking-[0.2em] opacity-80 leading-relaxed">
+                        A 3-phase technical transformation from competent to world-class performance.
                     </p>
                 </div>
 
-                {/* Content Body */}
-                <div className="prose prose-invert prose-lg max-w-none mb-16 space-y-8 text-text-muted leading-relaxed">
-                    <p className="text-xl text-text-main font-medium">
-                        60 <strong>words</strong> per minute (WPM) is the professional standard. It is <strong>fast</strong> enough to do most office jobs without typing becoming a strictly limiting factor. However, 100 WPM represents a completely different paradigm. At 100 WPM, the keyboard effectively disappears. You type at the speed of thought.
-                    </p>
-                    <p>
-                        Knowing <strong>how</strong> to <strong>get</strong> from 60 to 100 WPM requires fundamentally changing the mechanics of your hand movements. The techniques that got you to 60 WPM will not be enough to reach the elite tier.
-                    </p>
-
-                    <div className="my-12 p-8 bg-white/5 border-l-4 border-emerald-500 rounded-r-2xl">
-                        <h3 className="text-xl font-black text-white uppercase tracking-tight mb-2">The 60 WPM Typist vs. The 100 WPM Typist</h3>
-                        <p className="text-sm opacity-80 mb-0">
-                            A 60 WPM typist reads a word, spells it out in their head, and presses the keys in sequence. A 100 WPM typist reads the next three words, recognizes the physical shape of those words on the keyboard, and their fingers execute the macro-commands simultaneously.
+                <div className="prose prose-invert prose-lg max-w-none mb-16 space-y-12 text-text-muted leading-relaxed">
+                    <section>
+                        <p className="text-2xl text-text-main font-black leading-tight mb-8">
+                            Reaching <span className="text-primary italic">100 WPM</span> isn't about typing faster; it's about <span className="text-white">thinking in chunks.</span>
                         </p>
+                        <p>
+                            Most typists plateau at 60 WPM because they still process individual characters. Elite typists (100+ WPM) process entire words and common "n-grams" as single motor units. This transition requires a fundamental shift in how your brain interacts with the keyboard.
+                        </p>
+                    </section>
+
+                    {/* The 3-Phase Roadmap */}
+                    <div className="space-y-6 not-prose">
+                        <Card className="p-8 border-white/5 bg-bg-surface/50 relative overflow-hidden group">
+                           <div className="flex gap-6 items-start">
+                               <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
+                                   <Zap className="text-primary" size={24} />
+                               </div>
+                               <div>
+                                   <h3 className="text-xl font-black text-white uppercase italic tracking-tighter mb-2">Phase 1: Rhythmic Stability (60-80 WPM)</h3>
+                                   <p className="text-sm opacity-70 leading-relaxed mb-4">
+                                       Stop rushing. The biggest bottleneck at 60 WPM is "bursting"—typing fast on easy words and pausing on hard ones. True speed comes from a perfectly consistent metronome-like rhythm.
+                                   </p>
+                                   <div className="flex gap-2">
+                                       <span className="text-[10px] font-black uppercase tracking-widest text-primary px-2 py-1 bg-primary/10 rounded">Stability First</span>
+                                       <span className="text-[10px] font-black uppercase tracking-widest text-primary px-2 py-1 bg-primary/10 rounded">Zero Hesitation</span>
+                                   </div>
+                               </div>
+                           </div>
+                        </Card>
+
+                        <Card className="p-8 border-white/5 bg-bg-surface/50 relative overflow-hidden group">
+                           <div className="flex gap-6 items-start">
+                               <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
+                                   <Target className="text-primary" size={24} />
+                               </div>
+                               <div>
+                                   <h3 className="text-xl font-black text-white uppercase italic tracking-tighter mb-2">Phase 2: N-Gram Chunking (80-95 WPM)</h3>
+                                   <p className="text-sm opacity-70 leading-relaxed mb-4">
+                                       At 80 WPM, you must stop typing "T-H-E" and start firing the "THE" motor sequence as a single command. We call this "Chunking." Your brain must treat common bigrams (th, er, on, an) as single physical gestures.
+                                   </p>
+                                   <div className="flex gap-2">
+                                       <span className="text-[10px] font-black uppercase tracking-widest text-primary px-2 py-1 bg-primary/10 rounded">Motor Units</span>
+                                       <span className="text-[10px] font-black uppercase tracking-widest text-primary px-2 py-1 bg-primary/10 rounded">Bigram Focus</span>
+                                   </div>
+                               </div>
+                           </div>
+                        </Card>
+
+                        <Card className="p-8 border-white/5 bg-bg-surface/50 relative overflow-hidden group">
+                           <div className="flex gap-6 items-start">
+                               <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
+                                   <Rocket className="text-primary" size={24} />
+                               </div>
+                               <div>
+                                   <h3 className="text-xl font-black text-white uppercase italic tracking-tighter mb-2">Phase 3: The Flow State (100+ WPM)</h3>
+                                   <p className="text-sm opacity-70 leading-relaxed mb-4">
+                                       Elite performance is about visual lookahead. By the time you type word A, your eyes must already be processing word C. This decouples the visual input from the mechanical output, creating a seamless "Flow State."
+                                   </p>
+                                   <div className="flex gap-2">
+                                       <span className="text-[10px] font-black uppercase tracking-widest text-primary px-2 py-1 bg-primary/10 rounded">Lookahead</span>
+                                       <span className="text-[10px] font-black uppercase tracking-widest text-primary px-2 py-1 bg-primary/10 rounded">Elite Mastery</span>
+                                   </div>
+                               </div>
+                           </div>
+                        </Card>
                     </div>
 
-                    <h2 className="text-2xl font-black text-white mt-12 mb-4 uppercase tracking-tight">Professional Typing Speed Benchmarks</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-8 not-prose">
-                        <div className="p-4 bg-white/5 border border-white/10 rounded-xl">
-                            <span className="text-[10px] font-black text-text-muted uppercase tracking-widest">40 WPM</span>
-                            <h4 className="text-lg font-bold text-white mb-1">Global Average</h4>
-                            <p className="text-xs opacity-60">Sufficient for casual writing and email messaging.</p>
+                    <section className="space-y-6">
+                        <h2 className="text-4xl font-black text-white uppercase tracking-tighter italic">Technical Prerequisites</h2>
+                        <ul className="space-y-4 list-none p-0">
+                            <li className="flex items-center gap-3">
+                                <CheckCircle2 className="text-primary" size={20} />
+                                <span>**Strict Touch Typing**: 100 WPM is impossible with "hybrid" or "hunt and peck" styles.</span>
+                            </li>
+                            <li className="flex items-center gap-3">
+                                <CheckCircle2 className="text-primary" size={20} />
+                                <span>**Mechanical Switches**: Linear or tactile switches provide the millisecond clarity required for high cadences.</span>
+                            </li>
+                            <li className="flex items-center gap-3">
+                                <CheckCircle2 className="text-primary" size={20} />
+                                <span>**Visual Lookahead**: Train your eyes to stay 2-3 words ahead of your hands.</span>
+                            </li>
+                        </ul>
+                    </section>
+
+                    <Card className="p-10 bg-gradient-to-br from-primary/10 to-transparent border-primary/20 text-center">
+                        <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter mb-4">The "Mastery" Checklist</h3>
+                        <p className="text-white/80 font-medium mb-8">
+                            Are you checking all the boxes for elite performance? Most typists miss the "Rhythmic Stability" layer.
+                        </p>
+                        <div className="flex justify-center">
+                           <Link to="/login" className="bg-primary text-white font-black uppercase tracking-widest px-8 py-4 rounded-full hover:scale-105 transition-transform flex items-center gap-3">
+                               Review My Checklist <ArrowRight size={20} />
+                           </Link>
                         </div>
-                        <div className="p-4 bg-white/5 border border-white/10 rounded-xl border-emerald-500/30">
-                            <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">60 WPM</span>
-                            <h4 className="text-lg font-bold text-white mb-1">Professional Standard</h4>
-                            <p className="text-xs opacity-60">The benchmark for office productivity and data entry.</p>
-                        </div>
-                        <div className="p-4 bg-white/5 border border-white/10 rounded-xl">
-                            <span className="text-[10px] font-black text-text-muted uppercase tracking-widest">80 WPM</span>
-                            <h4 className="text-lg font-bold text-white mb-1">High Performance</h4>
-                            <p className="text-xs opacity-60">Required for transcription, legal, and medical coding.</p>
-                        </div>
-                        <div className="p-4 bg-primary/10 border border-primary/30 rounded-xl">
-                            <span className="text-[10px] font-black text-primary uppercase tracking-widest">100+ WPM</span>
-                            <h4 className="text-lg font-bold text-white mb-1">Elite Professional</h4>
-                            <p className="text-xs opacity-80">Typing at the speed of thought. Zero cognitive drag.</p>
-                        </div>
-                    </div>
+                    </Card>
 
-                    <h2 className="text-2xl font-black text-white mt-12 mb-4 uppercase tracking-tight">Is 60 WPM Good?</h2>
-                    <p>
-                        The short answer is <strong>yes</strong>. 60 WPM is significantly higher than the global average of 40 WPM. For most knowledge workers, 60 WPM is the "efficiency threshold." At this speed, you aren't actively hindered by your typing speed in 90% of office tasks.
-                    </p>
-                    <p>
-                        However, if your goal is to be a top-tier developer, legal professional, or medical transcriptionist, 60 WPM is merely the starting line. These roles often require 80-90 WPM to maintain a "flow state" where the computer keeps up with your thoughts.
-                    </p>
-                    <div className="bg-emerald-500/5 border border-emerald-500/20 p-6 rounded-2xl my-8">
-                        <h4 className="text-white font-bold mb-2">Why stop at 60?</h4>
-                        <p className="text-sm mb-0">At 100 WPM, you type 66% faster than at 60 WPM. Over a year, this saves hundreds of hours of raw data entry time. It is the difference between struggling to finish a report and finishing with time to spare.</p>
-                    </div>
-
-                    <h2 className="text-2xl font-black text-white mt-12 mb-4 uppercase tracking-tight">Step 1: Shift to Word-Level Processing</h2>
-                    <p>
-                        To type at 100 WPM, your brain cannot process individual letters. You must train your fingers to recognize common word endings (like <em>-tion</em>, <em>-ing</em>, <em>-ment</em>) as a single, fluid gesture. This is known as "Bursting" or "Chording." In professional practice, you want to drill the top 200 most common English words until they are entirely relegated to muscle memory bursts.
-                    </p>
-
-                    <h2 className="text-2xl font-black text-white mt-12 mb-4 uppercase tracking-tight">Step 2: Learn to Read Ahead (Pipelining)</h2>
-                    <p>
-                        When typing from source material (or formulating thoughts), you should never be looking at the word you are currently typing. Your eyes must be 1 to 2 words ahead of your fingers. This creates a buffer in your short-term memory, allowing your hands to execute continuously without pausing to process the next instruction.
-                    </p>
-                    <p>
-                        If you find yourself pausing between words, it's a symptom that you aren't reading ahead. Practice by forcing your eyes to snap to the next word the moment you begin typing the first letter of the current word.
-                    </p>
-
-                    <h2 className="text-2xl font-black text-white mt-12 mb-4 uppercase tracking-tight">Step 3: Hunt Down Your Micro-Pauses</h2>
-                    <p>
-                        The difference between 80 WPM and 100 WPM is often just the elimination of hesitated keystrokes. You likely have characters that take you 50ms to 100ms longer to press than others—perhaps it's the letter 'P', the 'C', or common punctuation like commas.
-                    </p>
-                    <p>
-                        At speeds pushing 100 WPM, these micro-pauses accumulate, breaking your flow state. You must use analytic software to identify these specific slow-keys and run targeted isolation drills to bring their reaction time down to your baseline average.
-                    </p>
-
-                    <h2 className="text-2xl font-black text-white mt-12 mb-4 uppercase tracking-tight">Step 4: Stop Bottoming Out</h2>
-                    <p>
-                        Most typists press keys all the way down until the switch hits the plastic base (bottoming out). Mechanical keyboards actuate halfway down the press. To type at absolute maximal speeds, you must learn a lighter touch. Developing the sensitivity to brush keys rather than hammer them saves valuable fractions of a second on key return times and significantly reduces finger fatigue.
-                    </p>
+                    <section className="bg-white/5 border border-white/10 rounded-3xl p-8 my-16 text-center">
+                        <h3 className="text-2xl font-black text-white uppercase italic tracking-tighter mb-6">Escape the "Average" Tier</h3>
+                        <p className="text-text-muted mb-8 max-w-xl mx-auto">
+                            The difference between 60 WPM and 100 WPM is exactly **one million keystrokes** of deliberate practice. Our system tracks every single one of them.
+                        </p>
+                        <Link to="/articles/typing-speed-plateau" className="text-primary font-black uppercase tracking-[0.2em] text-[10px] inline-flex items-center gap-2 hover:gap-4 transition-all">
+                            Breaking the OK Plateau <ArrowRight size={14} />
+                        </Link>
+                    </section>
                 </div>
 
-                {/* Call To Action */}
-                <Card className="p-10 border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 to-transparent text-center">
-                    <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter mb-4">Are you ready to break 100 WPM?</h3>
-                    <p className="text-text-muted mb-8 max-w-xl mx-auto">
-                        Standard typing tests won't get you there. TouchFlow Pro is engineered with the exact telemetry systems needed to diagnose your micro-pauses, enforce rhythm, and drill n-grams until you reach elite speeds.
-                    </p>
-                    <Link
-                        to="/free-typing-test"
-                        className="inline-flex items-center justify-center px-10 py-5 rounded-2xl font-black uppercase tracking-[0.3em] text-[12px] bg-emerald-500 text-bg-main hover:opacity-90 shadow-2xl shadow-emerald-500/30 group"
-                    >
-                        Test Your Current Baseline
-                        <Target size={16} className="ml-2 group-hover:scale-110 transition-transform" />
-                    </Link>
-                </Card>
-
-                <section className="bg-primary/5 border border-primary/10 rounded-3xl p-10 mt-16 mb-8 text-center">
-                    <h4 className="text-xl font-black text-white uppercase italic tracking-tighter mb-4">Want the complete system?</h4>
-                    <p className="text-sm opacity-60 mb-6">Read our high-authority pillar resource for the full roadmap to elite speeds.</p>
-                    <Link to="/articles/ultimate-guide-to-typing-speed" className="text-primary font-black uppercase tracking-[0.2em] text-[10px] inline-flex items-center gap-2 hover:gap-4 transition-all">
-                        Ultimate Guide to 100+ WPM <ArrowRight size={14} />
-                    </Link>
+                <div className="mb-16">
+                   <AggregateRating rating={4.8} count={412} />
+                </div>
+                
+                <section className="bg-primary border border-primary/20 rounded-[3rem] p-12 md:p-20 text-center relative overflow-hidden">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.1)_0%,transparent_70%)]" />
+                    <div className="relative z-10">
+                        <h4 className="text-3xl md:text-5xl font-black text-white uppercase italic tracking-tighter mb-6 leading-tight">Join The <br/> Elite 1%.</h4>
+                        <p className="text-white/80 text-lg mb-10 max-w-lg mx-auto font-medium">
+                            Our telemetry-driven roadmap is the only path to guaranteed 100+ WPM professional speeds.
+                        </p>
+                        <Link to="/free-typing-test" className="bg-white text-primary font-black uppercase tracking-widest px-10 py-5 rounded-full hover:scale-105 transition-transform inline-flex items-center gap-3">
+                            Check Your WPM Now <ArrowRight size={20} />
+                        </Link>
+                    </div>
                 </section>
-
-                <AggregateRating rating={5.0} count={56} />
             </motion.article>
         </div>
     );

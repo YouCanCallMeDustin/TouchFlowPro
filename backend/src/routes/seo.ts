@@ -35,14 +35,14 @@ const SEO_PAGES: { slug: string; lastmod: string; priority: string }[] = [
     { slug: 'increase-wpm-from-60-to-100', lastmod: '2026-02-19', priority: '0.8' },
     { slug: 'typing-speed-vs-accuracy', lastmod: '2026-02-19', priority: '0.8' },
     { slug: 'how-to-improve-typing-accuracy', lastmod: '2026-02-21', priority: '0.8' },
-    { slug: 'what-is-a-good-typing-speed', lastmod: '2026-02-21', priority: '0.7' },
+    { slug: 'what-is-a-good-typing-speed', lastmod: '2026-04-03', priority: '0.9' },
     { slug: 'how-to-type-60-wpm', lastmod: '2026-03-01', priority: '0.8' },
     { slug: 'medical-transcription-typing-test', lastmod: '2026-03-01', priority: '0.8' },
     { slug: 'legal-typing-test', lastmod: '2026-03-01', priority: '0.8' },
     { slug: 'typing-test-for-programmers', lastmod: '2026-03-01', priority: '0.8' },
-    { slug: 'typing-speed-plateau', lastmod: '2026-04-03', priority: '0.8' },
+    { slug: 'typing-speed-plateau', lastmod: '2026-04-03', priority: '0.9' },
     { slug: 'improve-typing-speed', lastmod: '2026-04-03', priority: '0.9' },
-    { slug: '60-wpm-to-100-wpm', lastmod: '2026-04-03', priority: '0.8' },
+    { slug: '60-wpm-to-100-wpm', lastmod: '2026-04-03', priority: '0.9' },
 ];
 
 /**
