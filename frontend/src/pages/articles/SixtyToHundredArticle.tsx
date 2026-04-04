@@ -15,18 +15,18 @@ export const SixtyToHundredArticle: React.FC<ArticleProps> = () => {
     return (
         <div className="min-h-screen py-12 px-4 flex flex-col items-center">
             <Helmet>
-                <title>How to Go from 60 WPM to 100 WPM — A Structured Training Plan | TouchFlowPro</title>
-                <meta name="description" content="Break through your typing speed plateau with a structured 60 to 100 WPM progression plan. Targeted drills, bigram training, and performance benchmarks for serious typists." />
+                <title>60 to 100 WPM: The Exact Training Plan [2026]</title>
+                <meta name="description" content="Going from 60 to 100 WPM requires a completely different technique. Here's the exact 3-phase training system used by elite typists. Free plan included." />
                 <link rel="canonical" href="https://touchflowpro.com/articles/60-wpm-to-100-wpm" />
-                <meta property="og:title" content="How to Go from 60 WPM to 100 WPM — A Structured Training Plan | TouchFlowPro" />
-                <meta property="og:description" content="Break through your typing speed plateau with a structured 60 to 100 WPM progression plan. Targeted drills, bigram training, and performance benchmarks for serious typists." />
+                <meta property="og:title" content="60 to 100 WPM: The Exact Training Plan [2026]" />
+                <meta property="og:description" content="Going from 60 to 100 WPM requires a completely different technique. Here's the exact 3-phase training system." />
                 <meta property="og:type" content="article" />
                 <meta property="og:url" content="https://touchflowpro.com/articles/60-wpm-to-100-wpm" />
                 <meta property="og:image" content="https://touchflowpro.com/assets/og-60-to-100.png" />
                 <meta property="og:site_name" content="TouchFlowPro" />
                 <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content="How to Go from 60 WPM to 100 WPM — A Structured Training Plan | TouchFlowPro" />
-                <meta name="twitter:description" content="Break through your typing speed plateau with a structured 60 to 100 WPM progression plan. Targeted drills, bigram training, and performance benchmarks for serious typists." />
+                <meta name="twitter:title" content="60 to 100 WPM: The Exact Training Plan [2026]" />
+                <meta name="twitter:description" content="Going from 60 to 100 WPM requires a completely different technique. Here's the exact 3-phase training system." />
                 {/* Structured Data */}
             
                 <script type="application/ld+json">

@@ -15,18 +15,18 @@ export const ImproveTypingSpeedArticle: React.FC<ArticleProps> = () => {
     return (
         <div className="min-h-screen py-12 px-4 flex flex-col items-center">
             <Helmet>
-                <title>How to Improve Typing Speed: Deliberate Practice Drills & Techniques | TouchFlowPro</title>
-                <meta name="description" content="Learn proven deliberate practice techniques to increase your typing speed. Science-backed drills, muscle memory strategies, and structured exercises for measurable WPM gains." />
+                <title>How to Type Faster: 7 Drills That Actually Work</title>
+                <meta name="description" content="Stop doing random typing tests. These 7 deliberate practice drills are how professional typists actually improve. Start with a free baseline assessment." />
                 <link rel="canonical" href="https://touchflowpro.com/articles/improve-typing-speed" />
-                <meta property="og:title" content="How to Improve Typing Speed: Deliberate Practice Drills & Techniques | TouchFlowPro" />
-                <meta property="og:description" content="Learn proven deliberate practice techniques to increase your typing speed. Science-backed drills, muscle memory strategies, and structured exercises for measurable WPM gains." />
+                <meta property="og:title" content="How to Type Faster: 7 Drills That Actually Work" />
+                <meta property="og:description" content="Stop doing random typing tests. These 7 deliberate practice drills are how professional typists actually improve." />
                 <meta property="og:type" content="article" />
                 <meta property="og:url" content="https://touchflowpro.com/articles/improve-typing-speed" />
                 <meta property="og:image" content="https://touchflowpro.com/assets/og-improve.png" />
                 <meta property="og:site_name" content="TouchFlowPro" />
                 <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content="How to Improve Typing Speed: Deliberate Practice Drills & Techniques | TouchFlowPro" />
-                <meta name="twitter:description" content="Learn proven deliberate practice techniques to increase your typing speed. Science-backed drills, muscle memory strategies, and structured exercises for measurable WPM gains." />
+                <meta name="twitter:title" content="How to Type Faster: 7 Drills That Actually Work" />
+                <meta name="twitter:description" content="Stop doing random typing tests. These 7 deliberate practice drills are how professional typists actually improve." />
             
                 <script type="application/ld+json">
                     {JSON.stringify({

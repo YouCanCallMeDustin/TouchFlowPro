@@ -103,6 +103,9 @@ const SEO_PAGES: { slug: string; lastmod: string; priority: string }[] = [
     { slug: 'medical-transcription-typing-test', lastmod: '2026-03-01', priority: '0.8' },
     { slug: 'legal-typing-test', lastmod: '2026-03-01', priority: '0.8' },
     { slug: 'typing-test-for-programmers', lastmod: '2026-03-01', priority: '0.8' },
+    { slug: 'typing-speed-plateau', lastmod: '2026-04-03', priority: '0.8' },
+    { slug: 'improve-typing-speed', lastmod: '2026-04-03', priority: '0.8' },
+    { slug: '60-wpm-to-100-wpm', lastmod: '2026-04-03', priority: '0.8' },
 ];
 
 /**
@@ -220,6 +223,18 @@ router.get('/articles/legal-typing-test', (_req: Request, res: Response) => {
 
 router.get('/articles/typing-test-for-programmers', (_req: Request, res: Response) => {
     res.sendFile(path.resolve(__dirname, '../seo/typing-test-for-programmers.html'));
+});
+
+router.get('/articles/typing-speed-plateau', (_req: Request, res: Response) => {
+    res.sendFile(path.resolve(__dirname, '../seo/typing-speed-plateau.html'));
+});
+
+router.get('/articles/improve-typing-speed', (_req: Request, res: Response) => {
+    res.sendFile(path.resolve(__dirname, '../seo/improve-typing-speed.html'));
+});
+
+router.get('/articles/60-wpm-to-100-wpm', (_req: Request, res: Response) => {
+    res.sendFile(path.resolve(__dirname, '../seo/60-wpm-to-100-wpm.html'));
 });
 
 // SEO Redirects for old unprefixed paths (maintains SEO juice)
