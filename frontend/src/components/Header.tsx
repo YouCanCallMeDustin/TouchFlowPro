@@ -24,6 +24,8 @@ import {
     Stethoscope,
     Scale,
     Clock,
+    Maximize2,
+    Minimize2,
 } from 'lucide-react';
 import { Breadcrumbs } from './Breadcrumbs';
 import { Button } from './ui/Button';
@@ -56,6 +58,47 @@ export const Header: React.FC<HeaderProps> = ({
     useEffect(() => {
         setIsMenuOpen(false);
     }, [stage]);
+
+    // Smart Header Visibility Logic
+    const [isVisible, setIsVisible] = useState(true);
+    const [lastScrollY, setLastScrollY] = useState(0);
+    const [isFullscreen, setIsFullscreen] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+            
+            // Hide on scroll down (> 50px), show on scroll up
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                setIsVisible(false);
+            } else {
+                setIsVisible(true);
+            }
+            
+            setLastScrollY(currentScrollY);
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [lastScrollY]);
+
+    const toggleFullscreen = () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => {
+                console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+            });
+            setIsFullscreen(true);
+        } else {
+            document.exitFullscreen();
+            setIsFullscreen(false);
+        }
+    };
+
+    useEffect(() => {
+        const handleFsChange = () => setIsFullscreen(!!document.fullscreenElement);
+        document.addEventListener('fullscreenchange', handleFsChange);
+        return () => document.removeEventListener('fullscreenchange', handleFsChange);
+    }, []);
 
     // Close menu on escape key
     useEffect(() => {
@@ -131,7 +174,9 @@ export const Header: React.FC<HeaderProps> = ({
 
     return (
         <>
-            <header className="glass-header rounded-b-[2rem] px-6 sm:px-12 py-2 sticky top-0 z-50">
+            <header 
+                className={`glass-header rounded-b-[2rem] px-6 sm:px-12 py-2 sticky top-0 z-50 transition-transform duration-500 ease-in-out ${isVisible ? 'translate-y-0' : '-translate-y-full shadow-none pointer-events-none'}`}
+            >
                 <div className="max-w-7xl mx-auto flex justify-between items-center gap-4">
 
                     {/* LOGO AREA */}
@@ -229,6 +274,14 @@ export const Header: React.FC<HeaderProps> = ({
                                     className="group relative px-5 py-2.5 rounded-xl bg-red-500/5 border border-red-500/10 transition-all hover:bg-red-500 hover:text-white active:scale-95 whitespace-nowrap"
                                 >
                                     <span className="relative z-10 text-[9px] font-black uppercase tracking-[0.2em]">Logout</span>
+                                </button>
+
+                                <button
+                                    onClick={toggleFullscreen}
+                                    className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-text-muted hover:text-primary transition-all hover:scale-105 active:scale-95"
+                                    title="Toggle Fullscreen"
+                                >
+                                    {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
                                 </button>
                             </>
                         )}
@@ -372,6 +425,13 @@ export const Header: React.FC<HeaderProps> = ({
                                                     <span className="text-[8px] font-black uppercase tracking-widest text-text-muted">{item.label}</span>
                                                 </button>
                                             ))}
+                                            <button
+                                                onClick={toggleFullscreen}
+                                                className="flex flex-col items-center justify-center gap-2 bg-white/5 border border-white/10 p-3 rounded-xl hover:bg-white/10"
+                                            >
+                                                {isFullscreen ? <Minimize2 size={14} className="text-blue-400" /> : <Maximize2 size={14} className="text-primary/60" />}
+                                                <span className="text-[8px] font-black uppercase tracking-widest text-text-muted">Screen</span>
+                                            </button>
                                         </div>
 
                                         <Button
