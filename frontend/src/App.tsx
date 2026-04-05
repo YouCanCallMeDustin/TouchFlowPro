@@ -95,9 +95,10 @@ const ComparisonArticle            = lazy(() => import('./pages/articles/Compari
 const STAGE_ROUTES: Partial<Record<Stage, string>> = {
   welcome: '/',
   free_test: '/free-typing-test',
-  medicalTrack: '/medical-typing-practice',
-  legalTrack: '/legal-typing-test',
-  codingTrack: '/code-typing-practice',
+  medicalTrack: '/medical-track',
+  legalTrack: '/legal-track',
+  codingTrack: '/coding-track',
+  bible_practice: '/bible-practice',
   curriculum: '/curriculum',
   pricing: '/pricing',
   terms: '/terms',
@@ -524,7 +525,7 @@ function App() {
   // Determine if the current stage is a public-facing page
   const isPublicStage = [
     'welcome', 'free_test', 'medicalTrack', 'legalTrack', 'codingTrack', 
-    'pricing', 'terms', 'privacy', 'about', 'contact', 'faq', 'articles_index',
+    'bible_practice', 'pricing', 'terms', 'privacy', 'about', 'contact', 'faq', 'articles_index',
     'auth_login', 'auth_signup', 'assessment'
   ].includes(stage) || String(stage).startsWith('article_');
 
