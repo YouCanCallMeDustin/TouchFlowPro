@@ -17,17 +17,22 @@
 
   <!-- Professional Tracks -->
   <url>
-    <loc>https://touchflowpro.com/medical-typing-practice</loc>
+    <loc>https://touchflowpro.com/medical-track</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://touchflowpro.com/legal-typing-test</loc>
+    <loc>https://touchflowpro.com/legal-track</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://touchflowpro.com/code-typing-practice</loc>
+    <loc>https://touchflowpro.com/coding-track</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://touchflowpro.com/bible-practice</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -58,6 +63,11 @@
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>https://touchflowpro.com/assessment</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
 
   <!-- Legal -->
   <url>
@@ -72,6 +82,11 @@
   </url>
 
   <!-- Articles -->
+  <url>
+    <loc>https://touchflowpro.com/articles/touchflow-vs-monkeytype</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <url>
     <loc>https://touchflowpro.com/articles/typing-speed-averages</loc>
     <changefreq>monthly</changefreq>

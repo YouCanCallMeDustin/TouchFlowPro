@@ -1,24 +1,23 @@
 User-agent: *
 
-# Allow all public-facing pages
+# Allow all public-facing pages and professional tracks
 Allow: /
 Allow: /free-typing-test
-Allow: /medical-typing-practice
-Allow: /legal-typing-test
-Allow: /code-typing-practice
+Allow: /medical-track
+Allow: /legal-track
+Allow: /coding-track
+Allow: /bible-practice
 Allow: /about
 Allow: /articles
 Allow: /contact
 Allow: /faq
 Allow: /pricing
-Allow: /terms
-Allow: /privacy-policy
+Allow: /assessment
 Allow: /articles/
 
 # Block authenticated app routes — these require login and should not be indexed
 Disallow: /dashboard
 Disallow: /profile
-Disallow: /assessment
 Disallow: /curriculum
 Disallow: /lesson
 Disallow: /practice
@@ -29,7 +28,6 @@ Disallow: /achievements
 Disallow: /goals
 Disallow: /leaderboard
 Disallow: /code-practice
-Disallow: /bible-practice
 Disallow: /certificate
 Disallow: /orgs
 Disallow: /settings
