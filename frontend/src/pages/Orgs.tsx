@@ -11,9 +11,10 @@ import {
     Loader2,
     TrendingUp,
     Target,
-    Key,
+    ArrowLeft,
+    LogOut,
     FileText,
-    ArrowLeft
+    X
 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
@@ -21,7 +22,6 @@ import PageTransition from '../components/PageTransition';
 import { apiFetch } from '../utils/api';
 import CreateOrgModal from '../components/CreateOrgModal';
 import InviteMemberModal from '../components/InviteMemberModal';
-import JoinOrgModal from '../components/JoinOrgModal';
 import { StrategicFAQ } from '../components/SEO/StrategicFAQ';
 
 const MotionCard = motion(Card);
@@ -37,11 +37,13 @@ interface Organization {
 }
 
 interface OrgsProps {
+    user: any;
+    userProgress: any;
     onNavigate: (stage: string) => void;
     onViewReport: (orgId: string) => void;
 }
 
-const Orgs: React.FC<OrgsProps> = ({ onNavigate, onViewReport }) => {
+const Orgs: React.FC<OrgsProps> = ({ user, userProgress, onNavigate, onViewReport }) => {
 
     // ... inside return ...
 
@@ -49,12 +51,12 @@ const Orgs: React.FC<OrgsProps> = ({ onNavigate, onViewReport }) => {
     const [loading, setLoading] = useState(true);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
     const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
-    const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
     const [selectedOrgId, setSelectedOrgId] = useState<string | null>(null);
     const [orgDetails, setOrgDetails] = useState<any | null>(null);
     const [orgAnalytics, setOrgAnalytics] = useState<any | null>(null);
     const [detailsLoading, setDetailsLoading] = useState(false);
     const [openMenuMemberId, setOpenMenuMemberId] = useState<string | null>(null);
+    const [pendingInvites, setPendingInvites] = useState<any[]>([]);
 
     useEffect(() => {
         fetchOrgs();
@@ -75,12 +77,14 @@ const Orgs: React.FC<OrgsProps> = ({ onNavigate, onViewReport }) => {
     const fetchDetails = async (id: string) => {
         try {
             setDetailsLoading(true);
-            const [details, analytics] = await Promise.all([
+            const [details, analytics, invites] = await Promise.all([
                 apiFetch(`/api/orgs/${id}`),
-                apiFetch(`/api/orgs/${id}/analytics`)
+                apiFetch(`/api/orgs/${id}/analytics`),
+                apiFetch(`/api/org-invites?orgId=${id}`)
             ]);
             setOrgDetails(details);
             setOrgAnalytics(analytics);
+            setPendingInvites(invites.invites || []);
         } catch (error) {
             console.error('Failed to fetch org details or analytics:', error);
         } finally {
@@ -102,6 +106,36 @@ const Orgs: React.FC<OrgsProps> = ({ onNavigate, onViewReport }) => {
         } catch (error) {
             console.error('Failed to remove member:', error);
             alert('Failed to remove member');
+        }
+    };
+
+    const handleLeaveOrg = async () => {
+        if (!selectedOrgId || !confirm('Are you sure you want to leave this organization?')) return;
+        try {
+            await apiFetch(`/api/orgs/${selectedOrgId}/leave`, { method: 'POST' });
+            fetchOrgs();
+            setSelectedOrgId(null);
+        } catch (error) {
+            console.error('Failed to leave org:', error);
+            alert('Failed to leave organization');
+        }
+    };
+
+    const handleCancelInvite = async (inviteId: string) => {
+        if (!selectedOrgId || !confirm('Are you sure you want to cancel this invitation?')) return;
+        try {
+            await apiFetch(`/api/org-invites/${inviteId}`, { method: 'DELETE' });
+            fetchDetails(selectedOrgId);
+        } catch (error) {
+            console.error('Failed to cancel invite:', error);
+        }
+    };
+
+    const handleCreateClick = () => {
+        if (userProgress?.subscriptionStatus === 'starter') {
+            onNavigate('pricing');
+        } else {
+            setIsCreateModalOpen(true);
         }
     };
 
@@ -159,17 +193,10 @@ const Orgs: React.FC<OrgsProps> = ({ onNavigate, onViewReport }) => {
 
                     <div className="absolute top-1/2 right-12 -translate-y-1/2 hidden lg:flex flex-col gap-3">
                         <Button
-                            onClick={() => setIsCreateModalOpen(true)}
+                            onClick={handleCreateClick}
                             className="w-full px-8 py-4 rounded-2xl uppercase tracking-[0.3em] text-[12px] font-black shadow-2xl shadow-primary/30"
                         >
                             <Plus size={20} className="mr-3" /> Establish New Org
-                        </Button>
-                        <Button
-                            onClick={() => setIsJoinModalOpen(true)}
-                            variant="outline"
-                            className="w-full px-8 py-4 rounded-2xl uppercase tracking-[0.3em] text-[12px] font-black border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/10"
-                        >
-                            <Key size={20} className="mr-3" /> Join Org
                         </Button>
                     </div>
 
@@ -205,18 +232,10 @@ const Orgs: React.FC<OrgsProps> = ({ onNavigate, onViewReport }) => {
                                             <Button
                                                 variant="outline"
                                                 size="sm"
-                                                onClick={() => setIsCreateModalOpen(true)}
+                                                onClick={handleCreateClick}
                                                 className="w-full text-[10px] font-black uppercase tracking-widest"
                                             >
                                                 Initialize First Team
-                                            </Button>
-                                            <Button
-                                                variant="outline"
-                                                size="sm"
-                                                onClick={() => setIsJoinModalOpen(true)}
-                                                className="w-full text-[10px] font-black uppercase tracking-widest border-emerald-500/20 text-emerald-500"
-                                            >
-                                                Join via Token
                                             </Button>
                                         </div>
                                     </MotionCard>
@@ -395,38 +414,86 @@ const Orgs: React.FC<OrgsProps> = ({ onNavigate, onViewReport }) => {
                                                                 </div>
                                                             </td>
                                                             <td className="px-8 py-4 text-right relative">
-                                                                {orgDetails.myRole === 'ADMIN' && (
-                                                                    <div className="relative">
-                                                                        <button
-                                                                            onClick={(e) => {
-                                                                                e.stopPropagation();
-                                                                                setOpenMenuMemberId(openMenuMemberId === member.user.id ? null : member.user.id);
-                                                                            }}
-                                                                            className="p-2 rounded-lg text-text-muted hover:bg-white/5 transition-colors"
-                                                                        >
-                                                                            <Settings size={14} />
-                                                                        </button>
+                                                                <div className="relative">
+                                                                    <button
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            setOpenMenuMemberId(openMenuMemberId === member.user.id ? null : member.user.id);
+                                                                        }}
+                                                                        className="p-2 rounded-lg text-text-muted hover:bg-white/5 transition-colors"
+                                                                    >
+                                                                        <Settings size={14} />
+                                                                    </button>
 
-                                                                        {openMenuMemberId === member.user.id && (
-                                                                            <div className="absolute right-0 top-full mt-2 w-48 bg-bg-card border border-white/10 rounded-xl shadow-xl z-50 overflow-hidden">
-                                                                                <div className="py-1">
+                                                                    {openMenuMemberId === member.user.id && (
+                                                                        <div className="absolute right-0 top-full mt-2 w-48 bg-[#0a0a0a] border border-white/10 rounded-xl shadow-xl z-50 overflow-hidden">
+                                                                            <div className="py-1">
+                                                                                {orgDetails.myRole === 'ADMIN' && member.user.id !== user.id && (
+                                                                                    <>
+                                                                                        <button
+                                                                                            onClick={() => handleChangeRole(member.user.id, member.role === 'ADMIN' ? 'MEMBER' : 'ADMIN')}
+                                                                                            className="w-full text-left px-4 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition-colors flex items-center gap-2"
+                                                                                        >
+                                                                                            <Shield size={12} />
+                                                                                            {member.role === 'ADMIN' ? 'Demote to Member' : 'Promote to Admin'}
+                                                                                        </button>
+                                                                                        <button
+                                                                                            onClick={() => handleRemoveMember(member.user.id)}
+                                                                                            className="w-full text-left px-4 py-3 text-[10px] font-black uppercase tracking-widest text-red-500 hover:bg-red-500/10 transition-colors flex items-center gap-2"
+                                                                                        >
+                                                                                            <Users size={12} /> Remove Member
+                                                                                        </button>
+                                                                                    </>
+                                                                                )}
+                                                                                {member.user.id === user.id && (
                                                                                     <button
-                                                                                        onClick={() => handleChangeRole(member.user.id, member.role === 'ADMIN' ? 'MEMBER' : 'ADMIN')}
-                                                                                        className="w-full text-left px-4 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-white/5 transition-colors flex items-center gap-2"
-                                                                                    >
-                                                                                        <Shield size={12} />
-                                                                                        {member.role === 'ADMIN' ? 'Demote to Member' : 'Promote to Admin'}
-                                                                                    </button>
-                                                                                    <button
-                                                                                        onClick={() => handleRemoveMember(member.user.id)}
+                                                                                        onClick={handleLeaveOrg}
                                                                                         className="w-full text-left px-4 py-3 text-[10px] font-black uppercase tracking-widest text-red-500 hover:bg-red-500/10 transition-colors flex items-center gap-2"
                                                                                     >
-                                                                                        <Users size={12} /> Remove Member
+                                                                                        <LogOut size={12} /> Leave Organization
                                                                                     </button>
-                                                                                </div>
+                                                                                )}
                                                                             </div>
-                                                                        )}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                    {/* Pending Invites */}
+                                                    {pendingInvites.map((invite: any) => (
+                                                        <tr key={invite.id} className="opacity-60 bg-white/[0.01]">
+                                                            <td className="px-8 py-4">
+                                                                <div className="flex items-center gap-4">
+                                                                    <div className="w-10 h-10 rounded-xl bg-slate-500/5 flex items-center justify-center border border-dashed border-white/10">
+                                                                        <Mail size={16} className="text-text-muted/20" />
                                                                     </div>
+                                                                    <div>
+                                                                        <div className="text-sm font-black text-text-muted tracking-tight">Pending Recruitment</div>
+                                                                        <div className="text-[10px] font-bold text-text-muted/60 italic">{invite.email}</div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td className="px-8 py-4">
+                                                                <span className="text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded-lg bg-slate-500/5 text-text-muted/40">
+                                                                    Awaiting Deployment
+                                                                </span>
+                                                            </td>
+                                                            <td className="px-8 py-4">
+                                                                <div className="flex items-center gap-2">
+                                                                    <div className="w-1.5 h-1.5 rounded-full bg-slate-500/30 animate-pulse" />
+                                                                    <span className="text-[10px] font-black uppercase tracking-widest text-text-muted/40 italic">Inactive</span>
+                                                                </div>
+                                                            </td>
+                                                            <td className="px-8 py-4 text-right">
+                                                                {orgDetails.myRole === 'ADMIN' && (
+                                                                    <button
+                                                                        onClick={() => handleCancelInvite(invite.id)}
+                                                                        className="p-2 rounded-lg text-red-500/30 hover:text-red-500 hover:bg-red-500/10 transition-all"
+                                                                        title="Cancel Invite"
+                                                                    >
+                                                                        <X size={14} />
+                                                                    </button>
                                                                 )}
                                                             </td>
                                                         </tr>
@@ -480,14 +547,7 @@ const Orgs: React.FC<OrgsProps> = ({ onNavigate, onViewReport }) => {
                 onClose={() => setIsInviteModalOpen(false)}
                 orgId={selectedOrgId || ''}
                 orgName={orgDetails?.name || ''}
-            />
-            <JoinOrgModal
-                isOpen={isJoinModalOpen}
-                onClose={() => setIsJoinModalOpen(false)}
-                onSuccess={(org) => {
-                    setOrgs(prev => [org, ...prev]);
-                    handleOrgClick(org.id);
-                }}
+                onSuccess={() => fetchDetails(selectedOrgId || '')}
             />
 
             {/* Strategic FAQ for AI Optimization (AIO) */}

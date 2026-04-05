@@ -56,20 +56,7 @@ const PricingPage: React.FC<PricingPageProps> = ({ onNavigate, user }) => {
             return;
         }
 
-        if (plan.type === 'STARTER') {
-            handleSubscribe('STARTER');
-        } else {
-            // Team plans require org selection
-            if (orgs.length === 0) {
-                if (window.confirm("You need a Team Organization to subscribe to this plan. Would you like to create one now?")) {
-                    onNavigate('orgs');
-                }
-            } else if (orgs.length === 1) {
-                setShowOrgSelector({ plan: plan.type });
-            } else {
-                setShowOrgSelector({ plan: plan.type });
-            }
-        }
+        handleSubscribe(plan.type);
     };
 
     const plans = [
@@ -132,10 +119,7 @@ const PricingPage: React.FC<PricingPageProps> = ({ onNavigate, user }) => {
                 "100 Seats Included"
             ],
             missing: [],
-            cta: "Contact Sales", // Logic says "Contact Sales" in screenshot, but user wants to implement payment?
-            // "Can you implement this payment system... make whatever necessary changes"
-            // I'll make it clickable for now given the request, or maybe "Upgrade".
-            // Let's make it clickable "Upgrade to Enterprise"
+            cta: "Go Enterprise", 
             isPopular: false,
             color: "purple"
         }

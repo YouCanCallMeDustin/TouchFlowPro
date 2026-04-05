@@ -940,6 +940,8 @@ function App() {
               <PageTransition key="orgs">
                 {user ? (
                    <Orgs
+                   user={user}
+                   userProgress={userProgress}
                    onNavigate={(s: string) => setStage(s as Stage)}
                    onViewReport={(orgId) => {
                      setReportOrgId(orgId);

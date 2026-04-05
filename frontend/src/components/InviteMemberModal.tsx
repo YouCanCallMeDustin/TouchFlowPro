@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Mail, Send, Loader2, Clipboard, Check } from 'lucide-react';
+import { X, Mail, Send, Loader2, Check } from 'lucide-react';
 import { Button } from './ui/Button';
 import { apiFetch } from '../utils/api';
 
@@ -9,14 +9,14 @@ interface InviteMemberModalProps {
     onClose: () => void;
     orgId: string;
     orgName: string;
+    onSuccess?: () => void;
 }
 
-const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ isOpen, onClose, orgId, orgName }) => {
+const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ isOpen, onClose, orgId, orgName, onSuccess }) => {
     const [email, setEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [inviteToken, setInviteToken] = useState<string | null>(null);
-    const [copied, setCopied] = useState(false);
+    const [success, setSuccess] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -26,7 +26,7 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ isOpen, onClose, 
             setLoading(true);
             setError(null);
 
-            const response = await apiFetch('/api/org-invites', {
+            await apiFetch('/api/org-invites', {
                 method: 'POST',
                 body: JSON.stringify({
                     orgId,
@@ -35,8 +35,9 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ isOpen, onClose, 
                 })
             });
 
-            setInviteToken(response.token);
+            setSuccess(true);
             setEmail('');
+            if (onSuccess) onSuccess();
         } catch (err: any) {
             setError(err.message || 'Failed to send invitation');
         } finally {
@@ -44,15 +45,8 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ isOpen, onClose, 
         }
     };
 
-    const copyToClipboard = () => {
-        if (!inviteToken) return;
-        navigator.clipboard.writeText(inviteToken);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-    };
-
     const handleClose = () => {
-        setInviteToken(null);
+        setSuccess(false);
         setError(null);
         setEmail('');
         onClose();
@@ -93,7 +87,7 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ isOpen, onClose, 
                             </div>
                         </div>
 
-                        {!inviteToken ? (
+                        {!success ? (
                             <form onSubmit={handleSubmit} className="space-y-8">
                                 <div className="space-y-4">
                                     <label className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted ml-1">Candidate Email</label>
@@ -134,34 +128,17 @@ const InviteMemberModal: React.FC<InviteMemberModalProps> = ({ isOpen, onClose, 
                                     <div className="w-12 h-12 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
                                         <Check className="text-emerald-500" size={24} />
                                     </div>
-                                    <h3 className="text-lg font-black text-text-main mb-1">Invitation Prepared</h3>
+                                    <h3 className="text-lg font-black text-text-main mb-1">Invitation Dispatched</h3>
                                     <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest leading-relaxed">
-                                        An invitation has been generated. Provide the token below to the candidate for registration.
+                                        The invitation has been successfully sent. If the user already has an account, they have been added to the fleet. Otherwise, the system is awaiting their registration.
                                     </p>
-                                </div>
-
-                                <div className="space-y-4">
-                                    <label className="text-[10px] font-black uppercase tracking-[0.2em] text-text-muted ml-1">Authorization Token</label>
-                                    <div className="relative">
-                                        <input
-                                            readOnly
-                                            value={inviteToken}
-                                            className="w-full bg-slate-500/5 border border-white/5 rounded-2xl px-6 py-4 text-text-main font-mono text-sm focus:outline-none"
-                                        />
-                                        <button
-                                            onClick={copyToClipboard}
-                                            className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
-                                        >
-                                            {copied ? <Check size={16} className="text-emerald-500" /> : <Clipboard size={16} />}
-                                        </button>
-                                    </div>
                                 </div>
 
                                 <Button
                                     onClick={handleClose}
                                     className="w-full py-4 rounded-2xl uppercase tracking-[0.2em] text-[10px] font-black"
                                 >
-                                    Complete Assignment
+                                    Mission Accomplished
                                 </Button>
                             </div>
                         )}
