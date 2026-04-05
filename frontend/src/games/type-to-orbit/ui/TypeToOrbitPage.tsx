@@ -439,6 +439,7 @@ export function BurnerBurstPage({ onBack }: TypeToOrbitPageProps) {
                 )}
 
                 {/* Results Screen */}
+                {snapshot.phase === 'orbit' && (!snapshot.endTime || (performance.now() - snapshot.endTime > 500)) && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
