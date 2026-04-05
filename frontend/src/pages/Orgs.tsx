@@ -77,16 +77,26 @@ const Orgs: React.FC<OrgsProps> = ({ user, userProgress, onNavigate, onViewRepor
     const fetchDetails = async (id: string) => {
         try {
             setDetailsLoading(true);
-            const [details, analytics, invites] = await Promise.all([
-                apiFetch(`/api/orgs/${id}`),
+            
+            // Core details first
+            const details = await apiFetch(`/api/orgs/${id}`);
+            setOrgDetails(details);
+
+            // Supplementary data (load in parallel but don't block core)
+            Promise.all([
                 apiFetch(`/api/orgs/${id}/analytics`),
                 apiFetch(`/api/org-invites?orgId=${id}`)
-            ]);
-            setOrgDetails(details);
-            setOrgAnalytics(analytics);
-            setPendingInvites(invites.invites || []);
+            ]).then(([analytics, invites]) => {
+                if (analytics) setOrgAnalytics(analytics);
+                if (invites) setPendingInvites(invites.invites || []);
+            }).catch(err => {
+                console.warn('Failed to load supplementary org data:', err);
+                // We keep moving because the core details are already set
+            });
+
         } catch (error) {
-            console.error('Failed to fetch org details or analytics:', error);
+            console.error('Failed to fetch org details:', error);
+            alert('Failed to load organization details. Please try again.');
         } finally {
             setDetailsLoading(false);
         }

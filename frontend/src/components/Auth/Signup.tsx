@@ -20,7 +20,7 @@ const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
         setError('');
 
         if (password !== confirmPassword) {
-            setError('Security Keys Do Not Match');
+            setError('Passwords Do Not Match');
             return;
         }
 
@@ -64,14 +64,14 @@ const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
 
                 <div className="mb-12">
                     <h1 className="text-4xl sm:text-5xl font-black mb-4 text-text-main tracking-tighter uppercase">
-                        Create Profile
+                        Create Account
                     </h1>
-                    <p className="text-text-muted text-sm font-black uppercase tracking-[0.3em] opacity-40">Registering Professional Profile</p>
+                    <p className="text-text-muted text-sm font-black uppercase tracking-[0.3em] opacity-40">Join the Elite Fleet</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-6 text-left">
                     <div className="space-y-3">
-                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.4em] ml-1">Professional ID</label>
+                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.4em] ml-1">E-mail</label>
                         <div className="relative group">
                             <div className="absolute left-5 top-1/2 -translate-y-1/2 text-text-muted/40 group-focus-within:text-primary transition-colors">
                                 <Mail size={18} />
@@ -80,7 +80,7 @@ const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                placeholder="USER@TOUCHFLOW.PRO"
+                                placeholder="user@touchflow.pro"
                                 className="w-full pl-14 pr-6 py-5 bg-white/5 border border-white/10 rounded-2xl focus:outline-none focus:border-primary/40 focus:ring-4 focus:ring-primary/5 transition-all font-black text-xs uppercase tracking-widest text-text-main placeholder:text-text-muted/20"
                                 required
                             />
@@ -88,7 +88,7 @@ const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
                     </div>
 
                     <div className="space-y-3">
-                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.4em] ml-1">Security Key</label>
+                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.4em] ml-1">Password</label>
                         <div className="relative group">
                             <div className="absolute left-5 top-1/2 -translate-y-1/2 text-text-muted/40 group-focus-within:text-primary transition-colors">
                                 <Lock size={18} />
@@ -105,7 +105,7 @@ const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
                     </div>
 
                     <div className="space-y-3">
-                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.4em] ml-1">Confirm Key</label>
+                        <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.4em] ml-1">Confirm Password</label>
                         <div className="relative group">
                             <div className="absolute left-5 top-1/2 -translate-y-1/2 text-text-muted/40 group-focus-within:text-primary transition-colors">
                                 <Shield size={18} />
@@ -133,18 +133,18 @@ const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
                         disabled={loading}
                         className="w-full bg-primary text-white py-6 rounded-2xl font-black text-xs uppercase tracking-[0.4em] shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-4 group mt-4"
                     >
-                        {loading ? 'Initializing...' : 'Generate Profile'}
+                        {loading ? 'Initializing...' : 'Create Account'}
                         <Rocket size={18} className="group-hover:-translate-y-1 group-hover:translate-x-1 transition-transform" />
                     </button>
                 </form>
 
                 <div className="mt-12 pt-10 border-t border-white/5 flex flex-col gap-6">
                     <div className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted/40">
-                        Existing Professional? <span
+                        Existing Member? <span
                             onClick={onSwitchToLogin}
                             className="text-primary cursor-pointer hover:text-primary/80 transition-colors ml-2 border-b border-primary/20"
                         >
-                            Authorize Profile
+                            Sign In
                         </span>
                     </div>
                 </div>

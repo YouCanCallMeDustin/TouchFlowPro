@@ -60,24 +60,24 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup }) => {
 
                 <div className="mb-12">
                     <h1 className="text-4xl sm:text-5xl font-black mb-4 text-text-main tracking-tighter uppercase">
-                        Identity Verified
+                        Sign In
                     </h1>
-                    <p className="text-text-muted text-sm font-black uppercase tracking-[0.3em] opacity-40">Verifying Professional Profile</p>
+                    <p className="text-text-muted text-sm font-black uppercase tracking-[0.3em] opacity-40">Access Your Professional Profile</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-8 text-left">
                     <Input
-                        label="Professional ID"
+                        label="E-mail"
                         type="email"
                         value={email}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                        placeholder="USER@TOUCHFLOW.PRO"
+                        placeholder="user@touchflow.pro"
                         required
                         startIcon={<Mail size={18} />}
                     />
 
                     <Input
-                        label="Security Key"
+                        label="Password"
                         type="password"
                         value={password}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
@@ -99,18 +99,18 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup }) => {
                         className="w-full py-6 text-xs uppercase tracking-[0.4em] font-black"
                         size="lg"
                     >
-                        {!loading && 'Authorize Profile'}
+                        {!loading && 'Sign In'}
                         {!loading && <ArrowRight size={18} className="ml-4 group-hover:translate-x-1 transition-transform" />}
                     </Button>
                 </form>
 
                 <div className="mt-12 pt-10 border-t border-[var(--border)] flex flex-col gap-6">
                     <div className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted/40">
-                        New Professional? <span
+                        New Member? <span
                             onClick={onSwitchToSignup}
                             className="text-primary cursor-pointer hover:text-primary/80 transition-colors ml-2"
                         >
-                            Create Profile
+                            Create Account
                         </span>
                     </div>
                 </div>

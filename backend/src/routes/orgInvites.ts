@@ -113,4 +113,80 @@ router.post('/accept', authenticateToken, async (req, res) => {
     }
 });
 
+/**
+ * GET /api/org-invites
+ * List pending invitations for an organization
+ */
+router.get('/', authenticateToken, async (req, res) => {
+    try {
+        const { orgId } = req.query;
+        const { id: userId } = (req as AuthRequest).user!;
+
+        if (!orgId) {
+            return res.status(400).json({ error: 'Organization ID required' });
+        }
+
+        // 1. Verify membership and role
+        const membership = await prisma.orgMember.findUnique({
+            where: { orgId_userId: { orgId: orgId as string, userId } }
+        });
+
+        if (!membership || membership.role !== 'ADMIN') {
+            return res.status(403).json({ error: 'Access denied: Only admins can view invitations' });
+        }
+
+        // 2. Fetch pending invites
+        const invites = await prisma.orgInvite.findMany({
+            where: {
+                orgId: orgId as string,
+                acceptedAt: null,
+                expiresAt: { gte: new Date() }
+            },
+            orderBy: { createdAt: 'desc' }
+        });
+
+        res.json({ invites });
+    } catch (error) {
+        console.error('List invites error:', error);
+        res.status(500).json({ error: 'Failed to fetch invitations' });
+    }
+});
+
+/**
+ * DELETE /api/org-invites/:id
+ * Cancel/Delete an invitation
+ */
+router.delete('/:id', authenticateToken, async (req, res) => {
+    try {
+        const inviteId = req.params.id;
+        const { id: userId } = (req as AuthRequest).user!;
+
+        const invite = await prisma.orgInvite.findUnique({
+            where: { id: inviteId }
+        });
+
+        if (!invite) {
+            return res.status(404).json({ error: 'Invitation not found' });
+        }
+
+        // Verify the requester is an ADMIN of the org
+        const membership = await prisma.orgMember.findUnique({
+            where: { orgId_userId: { orgId: invite.orgId, userId } }
+        });
+
+        if (!membership || membership.role !== 'ADMIN') {
+            return res.status(403).json({ error: 'Access denied: Only admins can cancel invitations' });
+        }
+
+        await prisma.orgInvite.delete({
+            where: { id: inviteId }
+        });
+
+        res.json({ message: 'Invitation cancelled' });
+    } catch (error) {
+        console.error('Delete invite error:', error);
+        res.status(500).json({ error: 'Failed to cancel invitation' });
+    }
+});
+
 export default router;

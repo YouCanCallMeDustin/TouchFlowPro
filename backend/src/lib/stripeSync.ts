@@ -88,10 +88,37 @@ export async function syncUserWithStripe(userId: string, email: string) {
                 status = 'enterprise';
                 planTier = 'ENTERPRISE';
                 seatLimit = 100;
+            } else {
+                // FALLBACK: If ID doesn't match, check the product data
+                console.log(`[StripeSync] No ID match. Inspecting product: ${price.product}`);
+                try {
+                    const product = await stripe.products.retrieve(price.product as string);
+                    const name = product.name.toUpperCase();
+                    
+                    if (name.includes('ENTERPRISE')) {
+                        status = 'enterprise';
+                        planTier = 'ENTERPRISE';
+                        seatLimit = 100;
+                    } else if (name.includes('PRO') || name.includes('TEAM')) {
+                        status = 'pro';
+                        planTier = 'PRO';
+                        seatLimit = 10;
+                    } else if (name.includes('STARTER')) {
+                        status = 'starter';
+                        planTier = 'FREE';
+                        seatLimit = 1;
+                    }
+                    
+                    if (status !== 'free') {
+                        console.log(`[StripeSync] AUTO-RECOVERED plan "${status}" based on Product Name: "${product.name}"`);
+                    }
+                } catch (prodErr) {
+                    console.error('[StripeSync] Failed to retrieve product for fallback:', prodErr);
+                }
             }
 
             if (status === 'free') {
-                console.warn(`[StripeSync] FAILED to match Price ID ${priceId} against any configured Price IDs.`);
+                console.warn(`[StripeSync] FAILED to match Price ID ${priceId} or Product details against any configured plans.`);
             }
 
             console.log(`[StripeSync] Identified plan: ${status} Tier: ${planTier}`);

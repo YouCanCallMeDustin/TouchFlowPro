@@ -346,15 +346,19 @@ const Settings: React.FC<SettingsProps> = ({ onNavigate }) => {
                                             const { apiFetch } = await import('../utils/api');
                                             const res = await apiFetch('/api/subscriptions/sync', { method: 'POST' });
 
-                                            // Even if not "updated" in DB, the effective status might have changed (e.g. joined team)
-                                            // or we just want to ensure the frontend is fresh.
-                                            alert(`Subscription Synchronization Complete.\nResolved Status: ${res.status.toUpperCase()}${res.updated ? '\n(Database updated)' : ''}`);
-
-                                            // Hard reload to refresh all contexts (Auth, User, etc)
-                                            window.location.reload();
-                                        } catch (e) {
+                                            alert(`Synchronization Successful.\nStatus: ${res.status.toUpperCase()}\nYour profile has been aligned with the latest Stripe configuration.`);
+                                            
+                                            // Only reload if the status actually changed to avoid unnecessary session churn
+                                            if (res.updated) {
+                                                window.location.reload();
+                                            }
+                                        } catch (e: any) {
                                             console.error('Sync failed:', e);
-                                            alert('Failed to synchronize subscription status. Please try logging out and back in if the issue persists.');
+                                            if (e.status === 401) {
+                                                alert('Session expired or unauthorized. Please log out and back in to re-authenticate with the new billing system.');
+                                            } else {
+                                                alert('Failed to synchronize status. If you just subscribed, please wait 30 seconds for Stripe to process.');
+                                            }
                                         }
                                     }}
                                     className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border border-white/5 w-full flex items-center justify-center gap-2"
