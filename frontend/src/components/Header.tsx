@@ -247,11 +247,11 @@ export const Header: React.FC<HeaderProps> = ({
                 </div>
 
                 {/* SECONDARY NAV (Desktop/Tablet preferred, but scrollable on mobile if logged in) */}
-                {userProgress && stage !== 'auth_login' && stage !== 'auth_signup' && stage !== 'welcome' && (
+                {(userProgress || stage === 'welcome') && stage !== 'auth_login' && stage !== 'auth_signup' && (
                     <div className="max-w-7xl mx-auto mt-2 hidden md:block">
                         <nav className="flex items-center gap-1 nav-container overflow-x-visible pb-2 md:pb-0">
                             {navigationLinks
-                                .filter(navItem => user ? true : (navItem.id === 'training_dropdown' || navItem.id === 'careers_dropdown'))
+                                .filter(navItem => user ? true : (navItem.id === 'training_dropdown' || navItem.id === 'careers_dropdown' || navItem.id === 'orgs'))
                                 .map((navItem) => {
                                 if (navItem.type === 'dropdown') {
                                     return (
@@ -285,19 +285,21 @@ export const Header: React.FC<HeaderProps> = ({
                             })}
                         </nav>
 
-                        <div className="px-2 border-t border-white/5 pt-4">
-                            <Breadcrumbs
-                                items={[
-                                    { label: 'Home', onClick: () => setStage('dashboard') },
-                                    {
-                                        label: stage === 'lesson' ? 'Curriculum' : stage.replace('_', ' '),
-                                        onClick: stage === 'lesson' ? () => setStage('curriculum') : undefined,
-                                        active: stage !== 'lesson'
-                                    },
-                                    stage === 'lesson' ? { label: currentLesson?.title || 'Active Session', active: true } : null
-                                ].filter((i): i is any => !!i)}
-                            />
-                        </div>
+                        {userProgress && (
+                            <div className="px-2 border-t border-white/5 pt-4">
+                                <Breadcrumbs
+                                    items={[
+                                        { label: 'Home', onClick: () => setStage('dashboard') },
+                                        {
+                                            label: stage === 'lesson' ? 'Curriculum' : stage.replace('_', ' '),
+                                            onClick: stage === 'lesson' ? () => setStage('curriculum') : undefined,
+                                            active: stage !== 'lesson'
+                                        },
+                                        stage === 'lesson' ? { label: currentLesson?.title || 'Active Session', active: true } : null
+                                    ].filter((i): i is any => !!i)}
+                                />
+                            </div>
+                        )}
                     </div>
                 )}
             </header>

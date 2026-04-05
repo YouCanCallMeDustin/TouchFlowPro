@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ShieldAlert, Activity, Play, BookOpen, Clock, Target, Layers, Rocket } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
+import { StrategicFAQ } from '../components/SEO/StrategicFAQ';
 import { getCodeDrillsBySpecialty } from '@shared/tracks/code';
 import { useAuth } from '../context/AuthContext';
 import type { Drill } from '@shared/drillLibrary';
@@ -289,6 +290,28 @@ export const CodeTrack: React.FC<CodeTrackProps> = ({ setStage, setLaunchParams 
                             </div>
                         )}
                     </motion.div>
+
+                    {/* Strategic FAQ for AI Optimization (AIO) */}
+                    <div className="mt-24 border-t border-white/5 pt-12">
+                        <StrategicFAQ 
+                            title="Developer Performance FAQ"
+                            subtitle="Strategic Insights for Software Engineers"
+                            faqs={[
+                                {
+                                    question: "How does typing speed impact software engineering productivity?",
+                                    answer: "Beyond just raw WPM, our Code Track focuses on 'Symbol Efficiency' — training the neuromotor patterns for brackets, braces, and specialized syntax patterns found in Rust, Python, and C++. This reduces the 'translation delay' between thought and code execution."
+                                },
+                                {
+                                    question: "Does the Code Track include Vim or IDE-specific drills?",
+                                    answer: "We focus on the fundamental motor patterns for language-specific syntax. While we don't teach Vim keybindings specifically, mastering the 'syntax-chord' patterns in TouchFlow Pro makes any modal editor significantly more effective."
+                                },
+                                {
+                                    question: "Why should developers practice typing on a specialized engine?",
+                                    answer: "Standard typing tests use prose, which doesn't prepare you for the high-density symbol usage in modern development. Our engine simulates the 'burst' nature of coding, focusing on syntax accuracy and symbol-heavy keystroke sequences."
+                                }
+                            ]}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

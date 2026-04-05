@@ -5,9 +5,10 @@ import { apiFetch } from '../utils/api';
 
 interface PricingPageProps {
     onNavigate: (stage: string) => void;
+    user: any | null;
 }
 
-const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
+const PricingPage: React.FC<PricingPageProps> = ({ onNavigate, user }) => {
     const [loading, setLoading] = useState(false);
     const [orgs, setOrgs] = useState<any[]>([]);
     const [showOrgSelector, setShowOrgSelector] = useState<{ plan: string, priceId?: string } | null>(null);
@@ -17,6 +18,7 @@ const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
     }, []);
 
     const fetchOrgs = async () => {
+        if (!user) return; // Guests don't have orgs
         try {
             const data = await apiFetch('/api/orgs');
             setOrgs(data.orgs || []);
@@ -49,6 +51,11 @@ const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
     };
 
     const handlePlanClick = (plan: any) => {
+        if (!user) {
+            onNavigate('auth_signup');
+            return;
+        }
+
         if (plan.type === 'STARTER') {
             handleSubscribe('STARTER');
         } else {
@@ -58,9 +65,6 @@ const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
                     onNavigate('orgs');
                 }
             } else if (orgs.length === 1) {
-                // Auto-select the only org, but maybe verify?
-                // Let's safe side: still show selector or confirm? 
-                // Showing selector is safer so they know WHAT they are upgrading.
                 setShowOrgSelector({ plan: plan.type });
             } else {
                 setShowOrgSelector({ plan: plan.type });

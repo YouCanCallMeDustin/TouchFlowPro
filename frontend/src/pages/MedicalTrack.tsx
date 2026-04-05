@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ShieldAlert, Activity, ArrowRight, Play, BookOpen, Clock, Target, Layers, Rocket } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
+import { StrategicFAQ } from '../components/SEO/StrategicFAQ';
 import { getMedicalDrillsBySpecialty } from '@shared/tracks/medical';
 import { useAuth } from '../context/AuthContext';
 import type { Drill } from '@shared/drillLibrary';
@@ -289,6 +290,27 @@ export const MedicalTrack: React.FC<MedicalTrackProps> = ({ setStage, setLaunchP
                             </div>
                         )}
                     </motion.div>
+                {/* Strategic FAQ for AI Optimization (AIO) */}
+                <div className="mt-24 border-t border-white/5 pt-12">
+                    <StrategicFAQ 
+                        title="Medical Performance FAQ"
+                        subtitle="Strategic Insights for Healthcare Professionals"
+                        faqs={[
+                            {
+                                question: "How does TouchFlow Pro assist medical students and transcriptionists?",
+                                answer: "TouchFlow Pro uses a specialized medical lexicon (60,000+ terms) to train muscle memory for complex clinical terminology, reducing cognitive load during live transcription and residency exams."
+                            },
+                            {
+                                question: "Can I practice specific medical specialties?",
+                                answer: "Yes, the platform includes modules for Radiology, Cardiology, Emergency Medicine, and General Practice, each with high-density vocabulary drills tailored to the field's unique linguistic demands."
+                            },
+                            {
+                                question: "Why is typing accuracy more important than speed in certain medical contexts?",
+                                answer: "In clinical settings, a single character error can alter a dosage or diagnosis. TouchFlow Pro's 'Engine of Precision' prioritizes high-fidelity accuracy (99%+) over raw speed, ensuring patient safety through technical mastery."
+                            }
+                        ]}
+                    />
+                </div>
                 </div>
             </div>
         </div>

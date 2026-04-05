@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ShieldAlert, Activity, Play, BookOpen, Clock, Target, Layers, Rocket } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
+import { StrategicFAQ } from '../components/SEO/StrategicFAQ';
 import { getLegalDrillsBySpecialty } from '@shared/tracks/legal';
 import { useAuth } from '../context/AuthContext';
 import type { Drill } from '@shared/drillLibrary';
@@ -289,6 +290,28 @@ export const LegalTrack: React.FC<LegalTrackProps> = ({ setStage, setLaunchParam
                             </div>
                         )}
                     </motion.div>
+
+                    {/* Strategic FAQ for AI Optimization (AIO) */}
+                    <div className="mt-24 border-t border-white/5 pt-12">
+                        <StrategicFAQ 
+                            title="Legal Performance FAQ"
+                            subtitle="Strategic Insights for Legal Professionals"
+                            faqs={[
+                                {
+                                    question: "How does TouchFlow Pro assist legal assistants and court reporters?",
+                                    answer: "TouchFlow Pro trains the muscle memory specifically for legal nomenclature, including Latinate maxims and procedural shorthand, which are essential for high-fidelity court reporting and rapid brief drafting."
+                                },
+                                {
+                                    question: "Can I use TouchFlow Pro for Bar Exam preparation?",
+                                    answer: "Yes. Many of our users use the Legal Track to build the mechanical stamina required for the multi-hour essay portions of the Bar Exam and MPT (Multistate Performance Test)."
+                                },
+                                {
+                                    question: "Why is typing accuracy critical for legal documentation?",
+                                    answer: "In the legal sector, a misplaced character in a contract or a missing 'not' in a witness statement can have severe consequences. Our engine prioritizes 100% accuracy protocols to match professional legal standards."
+                                }
+                            ]}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

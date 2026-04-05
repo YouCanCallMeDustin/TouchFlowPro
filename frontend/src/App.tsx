@@ -17,7 +17,8 @@ import {
   Compass, 
   Shield, 
   Users,
-  Gamepad2
+  Gamepad2,
+  Zap
 } from 'lucide-react'
 
 import PageTransition from './components/PageTransition'
@@ -88,6 +89,7 @@ const TypingSpeedTestArticle      = lazy(() => import('./pages/articles/TypingSp
 const ImproveTypingSpeedArticle   = lazy(() => import('./pages/articles/ImproveTypingSpeedArticle').then(m => ({ default: m.ImproveTypingSpeedArticle })))
 const TypingAccuracyArticle       = lazy(() => import('./pages/articles/TypingAccuracyArticle').then(m => ({ default: m.TypingAccuracyArticle })))
 const FastestTypingTechniquesArticle = lazy(() => import('./pages/articles/FastestTypingTechniquesArticle').then(m => ({ default: m.FastestTypingTechniquesArticle })))
+const ComparisonArticle            = lazy(() => import('./pages/articles/ComparisonArticle').then(m => ({ default: m.ComparisonArticle })))
 
 
 const STAGE_ROUTES: Partial<Record<Stage, string>> = {
@@ -116,6 +118,7 @@ const STAGE_ROUTES: Partial<Record<Stage, string>> = {
   'article_improve_typing_speed': '/articles/improve-typing-speed',
   'article_typing_accuracy': '/articles/typing-accuracy',
   'article_fastest_techniques': '/articles/fastest-typing-techniques',
+  'article_comparison': '/articles/touchflow-vs-monkeytype',
   auth_login: '/login',
   auth_signup: '/signup',
   assessment: '/assessment',
@@ -153,6 +156,7 @@ function App() {
   const { settings: userSettings } = useSettings()
   const [showSaveProgressModal, setShowSaveProgressModal] = useState<{ metrics: TypingMetrics; drillId: string } | null>(null);
   const [reportOrgId, setReportOrgId] = useState<string | null>(null);
+  const [authRedirectIntent, setAuthRedirectIntent] = useState<Stage | null>(null);
   const lastStageRef = useRef<Stage>(stage);
 
   useEffect(() => {
@@ -225,7 +229,8 @@ function App() {
           lessonScores: {},
           currentLesson: 'b1'
         });
-        setStage('dashboard');
+        setStage(authRedirectIntent || 'dashboard');
+        setAuthRedirectIntent(null);
         return;
       }
 
@@ -233,7 +238,8 @@ function App() {
       if (response.ok) {
         const data = await response.json()
         setUserProgress(data)
-        setStage('dashboard')
+        setStage(authRedirectIntent || 'dashboard')
+        setAuthRedirectIntent(null)
       } else {
         // If not found, user might need assessment
         setStage('welcome')
@@ -855,9 +861,17 @@ function App() {
               </PageTransition>
             )}
 
-            {stage === 'pricing' && user && (
+            {stage === 'pricing' && (
               <PageTransition key="pricing">
-                <PricingPage onNavigate={(stage) => setStage(stage as Stage)} />
+                <PricingPage 
+                  user={user}
+                  onNavigate={(stage) => {
+                    if (stage === 'auth_signup' || stage === 'auth_login') {
+                      setAuthRedirectIntent('pricing');
+                    }
+                    setStage(stage as Stage);
+                  }} 
+                />
               </PageTransition>
             )}
 
@@ -937,8 +951,22 @@ function App() {
                     featureName="Teams & Organizations" 
                     description="Manage high-performance squads, deploy group training plans, and monitor collective operational efficiency."
                     icon={Users}
-                    onSignup={() => setStage('auth_signup')}
-                    onLogin={() => setStage('auth_login')}
+                    onSignup={() => {
+                      setAuthRedirectIntent('pricing');
+                      setStage('auth_signup');
+                    }}
+                    onLogin={() => {
+                      setAuthRedirectIntent('pricing');
+                      setStage('auth_login');
+                    }}
+                    primaryAction={{
+                      label: "View Enterprise Pricing",
+                      onClick: () => {
+                        setAuthRedirectIntent('pricing');
+                        setStage('auth_signup');
+                      },
+                      icon: Zap
+                    }}
                   />
                 )}
               </PageTransition>
@@ -1092,6 +1120,12 @@ function App() {
             {stage === 'article_fastest_techniques' && (
               <PageTransition key="fastest-techniques">
                 <FastestTypingTechniquesArticle onNavigate={setStage} />
+              </PageTransition>
+            )}
+
+            {stage === 'article_comparison' && (
+              <PageTransition key="article_comparison">
+                <ComparisonArticle onNavigate={setStage} />
               </PageTransition>
             )}
           </AnimatePresence>

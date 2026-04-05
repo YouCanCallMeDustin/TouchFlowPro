@@ -9,6 +9,11 @@ interface PublicFeatureTeaserProps {
     icon: LucideIcon;
     onSignup: () => void;
     onLogin: () => void;
+    primaryAction?: {
+        label: string;
+        onClick: () => void;
+        icon?: LucideIcon;
+    };
 }
 
 export const PublicFeatureTeaser: React.FC<PublicFeatureTeaserProps> = ({
@@ -16,7 +21,8 @@ export const PublicFeatureTeaser: React.FC<PublicFeatureTeaserProps> = ({
     description,
     icon: Icon,
     onSignup,
-    onLogin
+    onLogin,
+    primaryAction
 }) => {
     return (
         <div className="max-w-4xl mx-auto py-20 px-6">
@@ -76,12 +82,21 @@ export const PublicFeatureTeaser: React.FC<PublicFeatureTeaserProps> = ({
 
                 {/* Final Call to Action */}
                 <div className="relative z-10 mt-16 flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <Button
-                        onClick={onSignup}
-                        className="w-full sm:w-auto px-10 py-5 rounded-2xl text-[11px] font-black uppercase tracking-[0.3em] shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3 group/btn"
-                    >
-                        Claim My Operative ID <UserPlus size={16} />
-                    </Button>
+                    {primaryAction ? (
+                        <Button
+                            onClick={primaryAction.onClick}
+                            className="w-full sm:w-auto px-10 py-5 rounded-2xl text-[11px] font-black uppercase tracking-[0.3em] shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3 group/btn bg-gradient-to-r from-primary to-secondary"
+                        >
+                            {primaryAction.label} {primaryAction.icon && <primaryAction.icon size={16} />}
+                        </Button>
+                    ) : (
+                        <Button
+                            onClick={onSignup}
+                            className="w-full sm:w-auto px-10 py-5 rounded-2xl text-[11px] font-black uppercase tracking-[0.3em] shadow-2xl shadow-primary/30 hover:scale-105 active:scale-95 transition-all flex items-center justify-center gap-3 group/btn"
+                        >
+                            Claim My Operative ID <UserPlus size={16} />
+                        </Button>
+                    )}
                     <button
                         onClick={onLogin}
                         className="w-full sm:w-auto px-10 py-5 rounded-2xl bg-white/5 border border-white/10 text-text-muted hover:text-white hover:bg-white/10 text-[11px] font-black uppercase tracking-[0.3em] transition-all flex items-center justify-center gap-3"

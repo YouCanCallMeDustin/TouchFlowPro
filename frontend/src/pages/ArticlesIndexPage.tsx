@@ -9,6 +9,12 @@ interface ArticlesIndexPageProps {
 
 const articles = [
     {
+        title: "TouchFlow Pro vs. MonkeyType: Professional Differences",
+        desc: "Why professionals in medical, legal, and engineering fields require the precision and lexical density of TouchFlow Pro over hobbyist typing games.",
+        path: "/articles/touchflow-vs-monkeytype",
+        readTime: "8 min read"
+    },
+    {
         title: "How to Break Your Typing Speed Plateau",
         desc: "Stuck at 60 or 80 WPM? Learn the science behind typing speed plateaus and research-backed methods to successfully hit 100+ WPM.",
         path: "/articles/typing-speed-plateau",

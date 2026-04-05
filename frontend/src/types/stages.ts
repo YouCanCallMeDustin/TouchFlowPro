@@ -10,4 +10,5 @@ export type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'les
   | 'article_typing_test'
   | 'article_improve_typing_speed'
   | 'article_typing_accuracy'
-  | 'article_fastest_techniques';
+  | 'article_fastest_techniques'
+  | 'article_comparison';

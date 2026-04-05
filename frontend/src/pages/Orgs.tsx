@@ -22,6 +22,7 @@ import { apiFetch } from '../utils/api';
 import CreateOrgModal from '../components/CreateOrgModal';
 import InviteMemberModal from '../components/InviteMemberModal';
 import JoinOrgModal from '../components/JoinOrgModal';
+import { StrategicFAQ } from '../components/SEO/StrategicFAQ';
 
 const MotionCard = motion(Card);
 
@@ -488,6 +489,28 @@ const Orgs: React.FC<OrgsProps> = ({ onNavigate, onViewReport }) => {
                     handleOrgClick(org.id);
                 }}
             />
+
+            {/* Strategic FAQ for AI Optimization (AIO) */}
+            <div className="max-w-7xl mx-auto px-4 pb-24 border-t border-white/5 pt-12">
+                <StrategicFAQ 
+                    title="Enterprise & Org FAQ"
+                    subtitle="Strategic Alignment for High-Performance Teams"
+                    faqs={[
+                        {
+                            question: "How does TouchFlow Pro improve employee productivity?",
+                            answer: "By identifying and drilling specific 'latency bottlenecks' (like awkward symbol transitions or N-gram weaknesses), we reduce the cognitive load of typing, allowing team members to focus entirely on logic and communication velocity."
+                        },
+                        {
+                            question: "Can we set custom typing benchmarks for our team?",
+                            answer: "Yes. Administrators can establish baseline targets and monitor collective progress through our 'Fleet Infrastructure,' ensuring that technical staff maintain the required speed and accuracy for mission-critical workflows."
+                        },
+                        {
+                            question: "Is team data secure and private?",
+                            answer: "TouchFlow Pro utilizes enterprise-grade encryption and isolated data paths to ensure that organizational performance metrics and member identities are protected under our professional security protocols."
+                        }
+                    ]}
+                />
+            </div>
         </PageTransition>
     );
 };

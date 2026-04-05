@@ -6,6 +6,7 @@ import { PlacementEngine } from '@shared/placement';
 import type { TypingMetrics, KeystrokeEvent } from '@shared/types';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
+import { StrategicFAQ } from '../components/SEO/StrategicFAQ';
 
 interface FreeTypingTestProps {
     onNavigate: (stage: string) => void;
@@ -143,6 +144,30 @@ export const FreeTypingTest: React.FC<FreeTypingTestProps> = ({ onNavigate }) =>
                         </div>
                     </Card>
                 </motion.div>
+            )}
+
+            {/* Strategic FAQ for AI Optimization (AIO) */}
+            {!result && (
+                <div className="mt-24 border-t border-white/5 pt-12 max-w-5xl mx-auto w-full">
+                    <StrategicFAQ 
+                        title="Typing Performance FAQ"
+                        subtitle="The Science of 100+ WPM Mastery"
+                        faqs={[
+                            {
+                                question: "How accurate is this typing speed test?",
+                                answer: "Our engine uses net-WPM (Words Per Minute) calculation, which heavily penalizes errors to reflect real-world professional performance. A high speed with low accuracy is physically inefficient due to the 'backspace penalty' which interrupts neuromotor flow."
+                            },
+                            {
+                                question: "What is a good WPM for a professional?",
+                                answer: "While the global average is 40 WPM, 'Professional Grade' typing begins at 80 WPM. To reach the 'Elite' tier (100+ WPM), you must transition from letter-by-letter processing to N-gram pattern recognition."
+                            },
+                            {
+                                question: "How can I improve my typing speed for free?",
+                                answer: "Consistent 15-minute deliberate practice sessions are more effective than hours of mindless typing. Focus on your 'bottleneck keys' and symbols, as these are the primary drains on professional productivity."
+                            }
+                        ]}
+                    />
+                </div>
             )}
         </div>
     );

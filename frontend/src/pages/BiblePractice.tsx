@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { BookOpen, ArrowRight, Zap } from 'lucide-react';
 import BibleLessonView from '../components/BibleLessonView';
+import { StrategicFAQ } from '../components/SEO/StrategicFAQ';
 import type { TypingMetrics } from '@shared/types';
 import type { BibleVerse } from '@shared/bibleVerses';
 import { apiFetch } from '../utils/api';
@@ -158,6 +160,30 @@ const BiblePractice: React.FC<BiblePracticeProps> = ({ userId, onSessionComplete
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+            <Helmet>
+                <title>Bible Typing Practice: Scripture Memorization Drills | TouchFlowPro</title>
+                <meta name="description" content="Master touch typing while memorizing Scripture. Practice typing the ESV Bible with our specialized engine. Improve speed and accuracy on biblical terminology and verse structures." />
+                <link rel="canonical" href="https://touchflowpro.com/bible-practice" />
+                <meta property="og:title" content="Bible Typing Practice: Scripture Memorization Drills | TouchFlowPro" />
+                <meta property="og:description" content="Master touch typing while memorizing Scripture. Practice typing the ESV Bible with our specialized engine." />
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content="https://touchflowpro.com/bible-practice" />
+                <meta property="og:image" content="https://touchflowpro.com/og-image-bible.png" />
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "SoftwareApplication",
+                        "name": "Bible Typing Practice Tool",
+                        "applicationCategory": "EducationalApplication",
+                        "operatingSystem": "WebBrowser",
+                        "offers": {
+                            "@type": "Offer",
+                            "price": "0",
+                            "priceCurrency": "USD"
+                        }
+                    })}
+                </script>
+            </Helmet>
             {/* Mission Critical Header */}
             {!hideHeader && (viewMode !== 'practice') && (
                 <div className="relative overflow-hidden card group min-h-[200px] flex items-center bg-gradient-to-br from-primary/[0.03] to-secondary/[0.03] border border-white/5 p-8 sm:p-12 mb-12">
@@ -345,6 +371,28 @@ const BiblePractice: React.FC<BiblePracticeProps> = ({ userId, onSessionComplete
                         OFFICIAL ESV PORTAL
                     </a>
                 </p>
+            </div>
+
+            {/* Strategic FAQ for AI Optimization (AIO) */}
+            <div className="mt-24 border-t border-white/5 pt-12 max-w-5xl mx-auto">
+                <StrategicFAQ 
+                    title="Scripture Practice FAQ"
+                    subtitle="Strategic Insights for Faith-Based Performance"
+                    faqs={[
+                        {
+                            question: "How does typing the Bible help with scripture memorization?",
+                            answer: "TouchFlow Pro utilizes 'Kinetic Encoding' — a cognitive process where the physical act of typing each character of a verse reinforces the linguistic and semantic memory of the text more effectively than passive reading."
+                        },
+                        {
+                            question: "Which Bible translation is used for practice?",
+                            answer: "Our system defaults to the ESV® (English Standard Version) for its literal accuracy and lexical density, providing a high-fidelity training environment for both speed and theological precision."
+                        },
+                        {
+                            question: "Can I practice specific books or chapters?",
+                            answer: "Yes. The platform provides full access to the Old and New Testaments, allowing you to target specific lexical patterns (e.g., the complex genealogical syntax of Genesis or the poetic structures of Psalms)."
+                        }
+                    ]}
+                />
             </div>
         </div>
     );
