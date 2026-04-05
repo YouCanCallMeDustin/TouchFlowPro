@@ -347,7 +347,7 @@ const Profile: React.FC<ProfileProps> = ({ userId, userEmail, onProfileUpdate })
                                         type="text"
                                         value={city}
                                         onChange={(e) => setCity(e.target.value)}
-                                        className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                                        className="w-full bg-slate-500/5 dark:bg-slate-900/50 border border-slate-200/80 dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-text-muted/40"
                                         placeholder="Spokane"
                                     />
                                 </div>
@@ -357,7 +357,7 @@ const Profile: React.FC<ProfileProps> = ({ userId, userEmail, onProfileUpdate })
                                         type="text"
                                         value={state}
                                         onChange={(e) => setState(e.target.value)}
-                                        className="w-full bg-white/50 dark:bg-slate-900/50 border border-slate-200 dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
+                                        className="w-full bg-slate-500/5 dark:bg-slate-900/50 border border-slate-200/80 dark:border-white/10 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-text-muted/40"
                                         placeholder="WA"
                                     />
                                 </div>

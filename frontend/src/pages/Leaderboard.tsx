@@ -153,7 +153,7 @@ const Leaderboard: React.FC<{ userId: string }> = ({ userId }) => {
                                         transition={{ delay: index * 0.05 }}
                                         className={`flex items-center p-4 rounded-2xl border transition-all duration-300 ${entry.userId === userId
                                             ? 'bg-primary/10 border-primary/30 shadow-lg shadow-primary/5'
-                                            : 'bg-white/40 dark:bg-slate-800/40 border-white/20 hover:bg-white/60 dark:hover:bg-slate-800/60'
+                                            : 'bg-white/[0.02] dark:bg-white/[0.02] border-white/5 hover:bg-white/[0.05] dark:hover:bg-white/[0.05]'
                                             }`}
                                     >
                                         <div className="w-12 flex justify-center">
