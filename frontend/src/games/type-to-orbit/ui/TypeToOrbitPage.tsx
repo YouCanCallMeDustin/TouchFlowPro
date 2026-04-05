@@ -5,7 +5,8 @@ import { type RaceSnapshot } from '../engine/types';
 import { soundManager } from '../engine/SoundManager';
 import { RaceTrack } from './RaceTrack';
 import { TypingDashboard } from './TypingDashboard';
-import { Play, RotateCcw, Trophy, AlertTriangle, Cpu } from 'lucide-react';
+import { Play, RotateCcw, Trophy, AlertTriangle, Cpu, Maximize2, Minimize2, Clock, Calendar, Globe } from 'lucide-react';
+import { apiFetch } from '../../../utils/api';
 import './type-to-orbit.css';
 
 interface TypeToOrbitPageProps {
@@ -52,14 +53,91 @@ export function BurnerBurstPage({ onBack }: TypeToOrbitPageProps) {
     const [eventMessage, setEventMessage] = useState<string | null>(null);
     const [difficulty, setDifficulty] = useState<'EASY' | 'MEDIUM' | 'HARD' | 'INSANE'>('MEDIUM');
 
-    // Shake State
+    // UI State
     const [shake, setShake] = useState({ x: 0, y: 0 });
+    const [isFullscreen, setIsFullscreen] = useState(false);
+    const [leaderboard, setLeaderboard] = useState<any[]>([]);
+    const [leaderboardPeriod, setLeaderboardPeriod] = useState<'daily' | 'weekly' | 'all'>('all');
+    const [isSavingScore, setIsSavingScore] = useState(false);
+
     const triggerShake = (intensity: number = 5) => {
         const x = (Math.random() - 0.5) * intensity;
         const y = (Math.random() - 0.5) * intensity;
         setShake({ x, y });
         setTimeout(() => setShake({ x: 0, y: 0 }), 50);
     };
+
+    const toggleFullscreen = () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => {
+                console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+            });
+            setIsFullscreen(true);
+        } else {
+            document.exitFullscreen();
+            setIsFullscreen(false);
+        }
+    };
+
+    useEffect(() => {
+        const handleFsChange = () => setIsFullscreen(!!document.fullscreenElement);
+        document.addEventListener('fullscreenchange', handleFsChange);
+        return () => document.removeEventListener('fullscreenchange', handleFsChange);
+    }, []);
+
+    const fetchLeaderboard = async () => {
+        try {
+            const resp = await apiFetch(`/api/games/burner-burst/leaderboard?period=${leaderboardPeriod}`);
+            if (resp.ok) {
+                const data = await resp.json();
+                setLeaderboard(data);
+            }
+        } catch (err) {
+            console.error('Failed to fetch leaderboard:', err);
+        }
+    };
+
+    useEffect(() => {
+        fetchLeaderboard();
+    }, [leaderboardPeriod]);
+
+    // Save Score Logic
+    useEffect(() => {
+        if (snapshot?.phase === 'orbit' && !isSavingScore) {
+            const saveScore = async () => {
+                setIsSavingScore(true);
+                try {
+                    await apiFetch('/api/games/burner-burst/scores', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            summary: {
+                                mode: 'arcade',
+                                score: Math.floor(snapshot.player.wpm),
+                                roundsCleared: 1,
+                                longestStreak: 0, // Placeholder
+                                avgWpm: snapshot.player.wpm,
+                                accuracy: snapshot.player.accuracy,
+                                difficultyLevel: difficulty === 'EASY' ? 1 : difficulty === 'MEDIUM' ? 2 : difficulty === 'HARD' ? 3 : 4,
+                                durationSeconds: (snapshot.endTime! - snapshot.startTime) / 1000
+                            }
+                        })
+                    });
+                    fetchLeaderboard(); // Refresh after saving
+                } catch (err) {
+                    console.error('Failed to save score:', err);
+                }
+            };
+            saveScore();
+        }
+    }, [snapshot?.phase]);
+
+    // Reset saving flag on lobby
+    useEffect(() => {
+        if (snapshot?.phase === 'lobby') {
+            setIsSavingScore(false);
+        }
+    }, [snapshot?.phase]);
 
     // Initialize Engine
     useEffect(() => {
@@ -208,14 +286,22 @@ export function BurnerBurstPage({ onBack }: TypeToOrbitPageProps) {
                 )}
             </AnimatePresence>
 
-            {/* Back Button */}
-            <div className="absolute top-6 left-6 z-50">
+            {/* Navigation Controls */}
+            <div className="absolute top-6 left-6 z-50 flex items-center gap-3">
                 <button
                     onClick={onBack}
-                    className="flex items-center gap-2 px-4 py-2 bg-slate-800/80 hover:bg-slate-700/80 text-white rounded-lg backdrop-blur-sm transition-all border border-white/10 group"
+                    className="flex items-center gap-2 px-4 py-3 bg-slate-900/90 hover:bg-slate-800 text-white rounded-xl backdrop-blur-md transition-all border border-white/5 group shadow-2xl"
                 >
-                    <RotateCcw size={16} className="group-hover:-rotate-90 transition-transform" />
-                    <span className="text-sm font-bold tracking-wider">ABORT</span>
+                    <RotateCcw size={16} className="group-hover:-rotate-90 transition-transform text-slate-400" />
+                    <span className="text-[10px] font-black tracking-[0.2em] uppercase">Abort Flight</span>
+                </button>
+
+                <button
+                    onClick={toggleFullscreen}
+                    className="p-3 bg-slate-900/90 hover:bg-slate-800 text-white rounded-xl backdrop-blur-md transition-all border border-white/5 group shadow-2xl"
+                    title="Toggle Fullscreen"
+                >
+                    {isFullscreen ? <Minimize2 size={16} className="text-blue-400" /> : <Maximize2 size={16} className="text-slate-400" />}
                 </button>
             </div>
 
@@ -242,38 +328,80 @@ export function BurnerBurstPage({ onBack }: TypeToOrbitPageProps) {
                                 </p>
                             </motion.div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12 text-left">
-                                <div className="bg-white/5 p-4 rounded-xl border border-white/5">
-                                    <div className="text-[10px] text-slate-500 uppercase font-bold mb-1 flex items-center gap-2"><Cpu size={12} /> AI Opponents</div>
-                                    <Chatter difficulty={difficulty} />
-                                </div>
-                                <div className="bg-white/5 p-4 rounded-xl border border-white/5">
-                                    <div className="text-[10px] text-slate-500 uppercase font-bold mb-1 flex items-center gap-2"><AlertTriangle size={12} /> Efficiency</div>
-                                    <div className="text-sm text-slate-300">Errors reduce your fuel efficiency. Type cleanly!</div>
-                                </div>
-                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 text-left">
+                                <div className="space-y-4">
+                                    <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+                                        <div className="text-[10px] text-slate-500 uppercase font-bold mb-2 flex items-center gap-2"><Cpu size={12} /> AI Opponents</div>
+                                        <Chatter difficulty={difficulty} />
+                                    </div>
+                                    <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+                                        <div className="text-[10px] text-slate-500 uppercase font-bold mb-2 flex items-center gap-2"><AlertTriangle size={12} /> Efficiency</div>
+                                        <div className="text-sm text-slate-300">Errors reduce your fuel efficiency. Type cleanly!</div>
+                                    </div>
 
-                            {/* Difficulty Selector */}
-                            <div className="bg-white/5 p-2 rounded-xl border border-white/5 max-w-md mx-auto mb-8 flex gap-1">
-                                {(['EASY', 'MEDIUM', 'HARD', 'INSANE'] as const).map((level) => (
-                                    <button
-                                        key={level}
-                                        onClick={() => setDifficulty(level)}
-                                        className={`flex-1 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all border ${difficulty === level
-                                            ? 'bg-blue-600 border-blue-500 text-white shadow-lg'
-                                            : 'bg-black/40 border-white/10 text-slate-300 hover:text-white hover:bg-white/10'
-                                            }`}
-                                    >
-                                        {level}
-                                    </button>
-                                ))}
+                                    {/* Difficulty Selector */}
+                                    <div className="bg-white/5 p-1.5 rounded-xl border border-white/5 flex gap-1">
+                                        {(['EASY', 'MEDIUM', 'HARD', 'INSANE'] as const).map((level) => (
+                                            <button
+                                                key={level}
+                                                onClick={() => setDifficulty(level)}
+                                                className={`flex-1 py-3 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all border ${difficulty === level
+                                                    ? 'bg-blue-600 border-blue-500 text-white shadow-lg'
+                                                    : 'bg-black/40 border-white/5 text-slate-500 hover:text-white hover:bg-white/10'
+                                                    }`}
+                                            >
+                                                {level}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Hall of Fame */}
+                                <div className="bg-black/40 border border-white/5 rounded-2xl overflow-hidden flex flex-col">
+                                    <div className="p-4 border-b border-white/5 bg-white/[0.02] flex items-center justify-between">
+                                        <div className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-400">Hall of Fame</div>
+                                        <div className="flex bg-black/40 rounded-lg p-0.5 border border-white/5">
+                                            {[
+                                                { id: 'daily', icon: Clock },
+                                                { id: 'weekly', icon: Calendar },
+                                                { id: 'all', icon: Globe }
+                                            ].map((p) => (
+                                                <button
+                                                    key={p.id}
+                                                    onClick={() => setLeaderboardPeriod(p.id as any)}
+                                                    className={`p-1.5 rounded-md transition-all ${leaderboardPeriod === p.id ? 'bg-blue-600 text-white' : 'text-slate-600 hover:text-slate-400'}`}
+                                                >
+                                                    <p.icon size={12} />
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="flex-1 overflow-y-auto max-h-[220px] scrollbar-thin scrollbar-thumb-white/10 animate-in fade-in duration-500">
+                                        {leaderboard.length > 0 ? (
+                                            leaderboard.map((entry, idx) => (
+                                                <div key={entry.id} className="flex items-center justify-between p-3 border-b border-white/5 last:border-0 hover:bg-white/[0.02] transition-colors">
+                                                    <div className="flex items-center gap-3">
+                                                        <span className={`text-[10px] font-black w-4 ${idx === 0 ? 'text-yellow-500' : idx === 1 ? 'text-slate-400' : idx === 2 ? 'text-amber-700' : 'text-slate-600'}`}>{idx + 1}</span>
+                                                        <span className="text-xs font-bold text-slate-300 truncate max-w-[100px]">{entry.username}</span>
+                                                    </div>
+                                                    <div className="text-xs font-black text-white">{Math.floor(entry.score)} <span className="text-[8px] opacity-40 uppercase">WPM</span></div>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div className="flex flex-col items-center justify-center h-full py-12 opacity-30">
+                                                <Trophy size={24} className="mb-2" />
+                                                <span className="text-[10px] font-bold uppercase tracking-widest">No Sector Data</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
                             </div>
 
                             <button
                                 onClick={handleStart}
-                                className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black uppercase tracking-widest rounded-xl transition-all hover:scale-[1.02] active:scale-[0.98] shadow-[0_0_30px_rgba(37,99,235,0.4)] flex items-center justify-center gap-3"
+                                className="w-full py-5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black uppercase tracking-[0.3em] rounded-2xl transition-all hover:scale-[1.01] active:scale-[0.99] shadow-[0_0_50px_rgba(37,99,235,0.3)] flex items-center justify-center gap-3"
                             >
-                                <Play fill="currentColor" size={20} /> Initiate Launch
+                                <Play fill="currentColor" size={18} /> Initiate Launch Protocol
                             </button>
                         </div>
                     </div>
@@ -311,14 +439,13 @@ export function BurnerBurstPage({ onBack }: TypeToOrbitPageProps) {
                 )}
 
                 {/* Results Screen */}
-                {snapshot.phase === 'orbit' && (!snapshot.endTime || (performance.now() - snapshot.endTime > 500)) && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="absolute inset-0 flex items-center justify-center bg-black/90 backdrop-blur-xl pointer-events-auto"
+                        className="absolute inset-0 flex items-center justify-center bg-black/90 backdrop-blur-xl pointer-events-auto z-[70]"
                         onAnimationStart={() => setEventMessage(null)} // Clear overlap
                     >
-                        <div className="bg-slate-900/50 border border-white/10 p-10 rounded-[2.5rem] text-center max-w-2xl w-full shadow-2xl relative overflow-hidden backdrop-blur-md">
+                        <div className="bg-slate-900/50 border border-white/10 p-10 rounded-[2.5rem] text-center max-w-2xl w-full shadow-2xl relative overflow-hidden backdrop-blur-md max-h-[90vh] overflow-y-auto scrollbar-none">
                             <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500" />
 
                             <motion.div

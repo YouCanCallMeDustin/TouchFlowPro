@@ -60,14 +60,33 @@ router.post('/:gameId/scores', authenticateToken, async (req: any, res) => {
     }
 });
 
-// GET /api/games/:gameId/leaderboard - Fetch top scores
+// GET /api/games/:gameId/leaderboard - Fetch top scores with time filtering
 router.get('/:gameId/leaderboard', async (req, res) => {
     try {
         const { gameId } = req.params;
-        const { mode = 'arcade', limit = '10' } = req.query;
+        const { mode = 'arcade', limit = '10', period = 'all' } = req.query;
+
+        // Define time filter
+        let dateFilter = {};
+        const now = new Date();
+
+        if (period === 'daily') {
+            const startOfDay = new Date(now.setHours(0, 0, 0, 0));
+            dateFilter = { timestamp: { gte: startOfDay } };
+        } else if (period === 'weekly') {
+            const day = now.getDay();
+            const diff = now.getDate() - day + (day === 0 ? -6 : 1); // Adjust when day is sunday
+            const startOfWeek = new Date(now.setDate(diff));
+            startOfWeek.setHours(0, 0, 0, 0);
+            dateFilter = { timestamp: { gte: startOfWeek } };
+        }
 
         const scores = await prisma.gameScore.findMany({
-            where: { gameId, mode: mode as string },
+            where: { 
+                gameId, 
+                mode: mode as string,
+                ...dateFilter
+            },
             orderBy: { score: 'desc' },
             take: parseInt(limit as string),
             include: {
@@ -75,7 +94,8 @@ router.get('/:gameId/leaderboard', async (req, res) => {
                     select: {
                         id: true,
                         name: true,
-                        email: true
+                        email: true,
+                        photoUrl: true
                     }
                 }
             }
@@ -85,6 +105,7 @@ router.get('/:gameId/leaderboard', async (req, res) => {
             id: s.id,
             userId: s.userId,
             username: s.user.name || s.user.email.split('@')[0],
+            photoUrl: (s.user as any).photoUrl || null,
             score: s.score,
             streak: s.longestStreak,
             avgNetWPM: s.avgWpm,

@@ -550,14 +550,16 @@ function App() {
         <link rel="canonical" href={`https://touchflowpro.com${location.pathname === '/' ? '' : location.pathname}`} />
       </Helmet>
       <div className={`min-h-screen bg-bg-main selection:bg-primary/20 relative ${isTypingMode ? 'h-screen overflow-hidden flex flex-col' : ''}`}>
-        <Header
-          user={user}
-          userProgress={userProgress}
-          stage={stage}
-          setStage={setStage}
-          logout={logout}
-          currentLesson={currentLesson}
-        />
+        {!String(stage).startsWith('games_') && (
+          <Header
+            user={user}
+            userProgress={userProgress}
+            stage={stage}
+            setStage={setStage}
+            logout={logout}
+            currentLesson={currentLesson}
+          />
+        )}
 
         <main className={`relative z-10 ${isTypingMode ? 'flex-1 flex flex-col items-center pt-2 overflow-y-auto scrollbar-none' : 'pt-24 pb-12 px-4'}`}>
           <Suspense fallback={

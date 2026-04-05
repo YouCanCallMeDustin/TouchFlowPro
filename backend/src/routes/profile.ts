@@ -30,7 +30,8 @@ router.get('/:userId', async (req: Request, res: Response) => {
             age: (user as any).age || null,
             photoUrl: (user as any).photoUrl || null,
             subscriptionStatus: effectiveStatus as any,
-            subscriptionEndDate: user.subscriptionEndDate
+            subscriptionEndDate: user.subscriptionEndDate,
+            createdAt: user.createdAt
         };
 
         res.json(profileData);
@@ -83,7 +84,8 @@ router.put('/:userId', async (req: Request, res: Response) => {
             state: (updatedUser as any).state || null,
             age: (updatedUser as any).age || null,
             photoUrl: (updatedUser as any).photoUrl || null,
-            subscriptionStatus: effectiveStatus as any
+            subscriptionStatus: effectiveStatus as any,
+            createdAt: (updatedUser as any).createdAt
         };
 
         res.json(profileData);

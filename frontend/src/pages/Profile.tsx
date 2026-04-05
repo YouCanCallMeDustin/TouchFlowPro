@@ -393,7 +393,7 @@ const Profile: React.FC<ProfileProps> = ({ userId, userEmail, onProfileUpdate })
                                 </button>
                                 <button
                                     onClick={() => fetchProfile()}
-                                    className="px-6 bg-slate-100 dark:bg-slate-800 text-text-muted rounded-xl py-3 text-sm font-black uppercase tracking-widest hover:bg-slate-200 dark:hover:bg-slate-700 transition-all"
+                                    className="px-6 bg-red-500/10 text-red-500 border border-red-500/20 rounded-xl py-3 text-sm font-black uppercase tracking-widest hover:bg-red-500/20 transition-all"
                                 >
                                     Reset
                                 </button>

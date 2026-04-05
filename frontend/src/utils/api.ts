@@ -20,10 +20,10 @@ export const apiFetch = async <T = any>(endpoint: string, options: RequestInit =
     const token = localStorage.getItem('tfp_token');
 
     const headers = {
-        'Content-Type': 'application/json',
+        ...(options.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
         ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
         ...options.headers,
-    };
+    } as any;
 
     const response = await fetch(url, {
         ...options,
