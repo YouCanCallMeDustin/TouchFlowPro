@@ -120,18 +120,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
     return (
         <div className="w-full">
             <Helmet>
-                <title>Hit 100+ WPM: The Elite Typing Trainer for Professionals | TouchFlow Pro</title>
-                <meta name="description" content="Master elite typing speed with science-backed drills. Increase your WPM, eliminate fatigue, and benchmark your performance. Built for Engineers, Medical Professionals, and Legal Clerks." />
+                                <title>Elite Typing Trainer for Professionals | TouchFlow Pro</title>
+                <meta name="description" content="Master elite touch typing with professional analytics and fatigue detection. Reach 100+ WPM with science-backed drills. Start your free baseline test in 60 seconds!" />
                 <link rel="canonical" href="https://touchflowpro.com/" />
-                <meta property="og:title" content="Hit 100+ WPM: Typing Training for Professionals" />
-                <meta property="og:description" content="Increase your typing speed and accuracy with deliberate practice. Benchmarked for elite careers." />
+                <meta property="og:title" content="Elite Typing Training for Professionals | TouchFlow Pro" />
+                <meta property="og:description" content="Master 100+ WPM with deliberate practice and fatigue-aware analytics. Engineered for high-performance careers." />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content="https://touchflowpro.com/" />
                 <meta property="og:image" content="https://touchflowpro.com/og-image.png" />
                 <meta property="og:site_name" content="TouchFlowPro" />
                 <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content="TouchFlowPro — Advanced Typing Speed & Accuracy Trainer | Break Your Plateau" />
-                <meta name="twitter:description" content="Professional-grade typing performance training for serious typists. Keystroke analytics, deliberate practice drills, and structured plans to push past your WPM plateau. Start training now." />
+                <meta name="twitter:title" content="Elite Typing Training for Professionals | TouchFlow Pro" />
+                <meta name="twitter:description" content="Professional-grade typing performance training for serious typists. Reach 100+ WPM with science-backed drills and real-time fatigue detection. Start training now." />
                 <script type="application/ld+json">
                     {JSON.stringify({
                         "@context": "https://schema.org",
@@ -174,8 +174,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                         Increase Typing <span className="text-primary italic">Speed (WPM).</span>
                     </h1>
 
-                    <motion.p variants={itemVariants} className="text-text-muted text-base md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed font-bold">
-                        TouchFlow Pro is the typing improvement platform for working professionals. Train with spaced repetition, fatigue detection, and performance analytics—so your speed climbs without your accuracy collapsing.
+                                        <motion.p variants={itemVariants} className="text-text-muted text-base md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed font-bold">
+                        TouchFlow Pro is the typing improvement platform for working professionals. Our engine monitors your burst-to-drift ratio to detect cognitive fatigue before your error rate spikes.
                     </motion.p>
 
                     <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
@@ -263,20 +263,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                         <p className="text-text-muted text-sm font-bold uppercase tracking-[0.3em] opacity-40">Precision tools for precision work.</p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <FeatureCard
+                                                <FeatureCard
                             icon={Brain}
                             title="Professional Training Engine"
-                            description="Spaced repetition + adaptive drills to turn weak points into strengths."
+                            description="Deep-motor learning drills using adaptive algorithmic reviews to eliminate your specific key-sequence bottlenecks."
                         />
                         <FeatureCard
                             icon={LineChart}
-                            title="Analytics That Coach You"
-                            description="Heatmaps, session history, weekly trends, plateau detection, and next-step recommendations."
+                            title="Performance Analytics"
+                            description="High-resolution heatmaps and plateau detection that tracks your rhythm stability across multi-hour sessions."
                         />
                         <FeatureCard
                             icon={Activity}
-                            title="Endurance & Fatigue Awareness"
-                            description="Fatigue scoring adjusts intensity and scheduling so you improve without burning out."
+                            title="Cognitive Fatigue Awareness"
+                            description="Real-time variance monitoring detects fatigue signals before you lock in bad habits, suggesting optimal rest intervals."
                         />
                     </div>
                 </div>
@@ -438,15 +438,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                             popular
                             onClick={onStartAssessment}
                         />
-                        <PricingCard
+                                                <PricingCard
                             name="Enterprise"
                             price="$299"
-                            description="Up to 100 users"
+                            description="For professional organizations"
                             features={[
-                                "Org dashboards + coaching metrics",
-                                "Seat management + roles",
-                                "Weekly PDF/CSV reporting",
-                                "Billing portal + admin controls"
+                                "Team dashboards + coaching metrics",
+                                "SSO & SAML support (Google/Okta)",
+                                "HIPAA-compliant data handling",
+                                "Admin controls & SOC2-ready infra"
                             ]}
                             cta="Contact Sales"
                             onClick={onStartAssessment}
@@ -458,7 +458,57 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                 </div>
             </section>
 
-            {/* 9) FAQ (reduce friction) */}
+                        {/* 9) EXPERT AUTHORITY SECTION */}
+            <section className="py-32 px-4 border-t border-white/5 bg-gradient-to-br from-primary/5 to-transparent">
+                <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <Card className="p-12 border-primary/20 bg-primary/5 relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 p-12 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity">
+                            <Brain size={300} />
+                        </div>
+                        <div className="relative z-10">
+                            <span className="text-[10px] font-black uppercase tracking-[0.5em] text-primary mb-6 block">The Methodology</span>
+                            <h2 className="text-4xl font-black text-text-main tracking-tighter uppercase italic leading-[0.9] mb-8">
+                                The Science <br />Behind the <span className="text-primary italic">Flow.</span>
+                            </h2>
+                            <p className="text-text-muted text-sm font-medium leading-relaxed mb-6 opacity-80">
+                                TouchFlow Pro wasn't built like a game. It was built as a precision tool for people whose livelihood depends on their keyboard. 
+                            </p>
+                            <div className="space-y-4">
+                                <div className="flex items-start gap-3">
+                                    <Check size={16} className="text-primary shrink-0 mt-0.5" />
+                                    <p className="text-[11px] font-bold text-text-main uppercase tracking-tight">Spaced Repetition for Motor Skills (SRM)</p>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Check size={16} className="text-primary shrink-0 mt-0.5" />
+                                    <p className="text-[11px] font-bold text-text-main uppercase tracking-tight">Kinesthetic Memory Encoding</p>
+                                </div>
+                                <div className="flex items-start gap-3">
+                                    <Check size={16} className="text-primary shrink-0 mt-0.5" />
+                                    <p className="text-[11px] font-bold text-text-main uppercase tracking-tight">Latency Variance Analytics</p>
+                                </div>
+                            </div>
+                        </div>
+                    </Card>
+
+                    <div className="space-y-8">
+                        <div>
+                            <h3 className="text-2xl font-black uppercase tracking-tight italic mb-4">Letter from the Founder</h3>
+                            <p className="text-text-muted text-lg font-bold leading-relaxed mb-6 opacity-60">
+                                "I built TouchFlow Pro because I hit a persistent 80 WPM plateau as a Software Engineer. Conventional sites offered games; I needed a debugger for my hands. We built this to be the most technically advanced training engine on the market."
+                            </p>
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary" />
+                                <div>
+                                    <h4 className="text-sm font-black uppercase tracking-widest leading-none mb-1">Dustin</h4>
+                                    <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest opacity-40">Lead Engineer & Founder, 145 Peak WPM</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 10) FAQ (reduce friction) */}
             <section className="py-32 px-4">
                 <div className="max-w-3xl mx-auto">
                     <div className="text-center mb-24">

@@ -1,0 +1,163 @@
+{
+  "url": "https://touchflowpro.com/",
+  "page_title": "TouchFlow Pro | Learn Touch Typing & Increase WPM",
+  "search_intent": "Commercial / Educational",
+  "audience": "Professional typists, developers, and students aiming for elite performance.",
+  "overall_score": 73,
+  "critical_issues_count": 1,
+  "quick_wins_count": 2,
+
+  "detected_sections": [
+    {
+      "heading_level": "H1",
+      "section_name": "Learn Touch Typing. Increase Typing Speed (WPM)."
+    },
+    {
+      "heading_level": "H2",
+      "section_name": "Engineered for Pros."
+    },
+    {
+      "heading_level": "H2",
+      "section_name": "Success in 3 Steps."
+    },
+    {
+      "heading_level": "H2",
+      "section_name": "Simple plans."
+    }
+  ],
+
+  "categories": [
+    {
+      "category_name": "Content Quality and Relevance",
+      "score": 7,
+      "priority": "Medium",
+      "issues": [
+        {
+          "section": "Engineered for Pros",
+          "problem": "Vague technical terminology like 'fatigue detection' lacks depth.",
+          "why_it_matters": "Skeptical professionals need proof of value before committing.",
+          "what_to_add": "Technical breakdown of fatigue metrics (e.g., burst-to-drift ratio).",
+          "example_fix": "Our engine monitors your 'burst-to-drift' ratio—the micro-seconds between keystrokes—to detect cognitive fatigue before your error rate spikes."
+        }
+      ]
+    },
+    {
+      "category_name": "Building Credibility and Authority",
+      "score": 4,
+      "priority": "High",
+      "issues": [
+        {
+          "section": "Homepage Body",
+          "problem": "Missing author credentials or expert bio.",
+          "why_it_matters": "E-E-A-T score relies heavily on clear expertise and authority signals.",
+          "what_to_add": "A 'Meet the Team' or 'Designed by Experts' section.",
+          "example_fix": "Designed by [Name], a Lead Software Engineer who reached a consistent 120 WPM through neuro-efficiency training."
+        }
+      ]
+    },
+    {
+      "category_name": "Increase Audience Engagement",
+      "score": 8,
+      "priority": "Low",
+      "issues": [
+        {
+          "section": "Success in 3 Steps",
+          "problem": "Static visuals could be more interactive.",
+          "why_it_matters": "Drives higher dwell time and demonstrates the product better.",
+          "what_to_add": "GIFs or interactive UI demos of the dashboard.",
+          "example_fix": "[GIF showing live speed chart and bottleneck detection]"
+        }
+      ]
+    },
+    {
+        "category_name": "Building Trust with Transparency",
+        "score": 6,
+        "priority": "Medium",
+        "issues": [
+          {
+            "section": "Pricing Section",
+            "problem": "Enterprise plan features are vague.",
+            "why_it_matters": "B2B customers need clear security and reporting details.",
+            "what_to_add": "List SSO support, team analytics, and HIPAA compliance.",
+            "example_fix": "Enterprise includes HIPAA-compliant data handling, Team Performance Dashboards, and custom training modules."
+          }
+        ]
+      },
+      {
+        "category_name": "Metadata Optimization",
+        "score": 8,
+        "priority": "Low",
+        "issues": [
+          {
+            "section": "Metadata",
+            "problem": "Meta description lacks a hook for the baseline test.",
+            "why_it_matters": "Higher CTR leads to more entry-level users.",
+            "what_to_add": "A clear CTA ('Start in 60s').",
+            "example_fix": "Reach 100+ WPM. Start your free baseline test in 60 seconds."
+          }
+        ]
+      }
+  ],
+
+  "metadata": {
+    "current_title": "TouchFlow Pro | Learn Touch Typing & Increase WPM",
+    "recommended_title": "TouchFlow Pro: Elite Typing Training for Professionals",
+    "current_meta_description": "Engineered for excellence. Learn touch typing and increase your WPM with professional analytics.",
+    "recommended_meta_description": "Master touch typing and reach 100+ WPM. Use professional analytics and fatigue detection. Start your free baseline test in 60 seconds!",
+    "recommended_url": "https://touchflowpro.com"
+  },
+
+  "priority_action_plan": {
+    "high_priority": [
+      {
+        "section": "Expertise",
+        "fix": "Implement an Author/Expert section with specific credentials and background."
+      }
+    ],
+    "medium_priority": [
+      {
+        "section": "Product Detail",
+        "fix": "Detail the 'Fatigue Detection' logic and show actual dashboard screenshots."
+      }
+    ],
+    "low_priority": [
+      {
+        "section": "Metadata",
+        "fix": "Add 'Free Baseline Test' hook to the meta description to boost CTR."
+      }
+    ]
+  },
+
+  "spreadsheet_rows": [
+    {
+      "category": "Credibility & Authority",
+      "score": 4,
+      "priority": "High",
+      "recommendations": "Add Author/Expert bio section with specific WPM/Dev credentials."
+    },
+    {
+      "category": "Content Quality",
+      "score": 7,
+      "priority": "Medium",
+      "recommendations": "Expand technical explanation of fatigue detection and performance hooks."
+    },
+    {
+        "category": "Transparency",
+        "score": 6,
+        "priority": "Medium",
+        "recommendations": "Detail Enterprise features (SSO, Security, Compliance) for B2B trust."
+      },
+    {
+      "category": "Engagement",
+      "score": 8,
+      "priority": "Low",
+      "recommendations": "Add interactive UI demos or GIF walkthroughs of the dashboard."
+    },
+    {
+      "category": "Metadata",
+      "score": 8,
+      "priority": "Low",
+      "recommendations": "Rewrite meta description to include 'Free Baseline Test' CTA."
+    }
+  ]
+}
