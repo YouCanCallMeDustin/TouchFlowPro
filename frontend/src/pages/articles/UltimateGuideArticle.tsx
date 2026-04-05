@@ -51,7 +51,21 @@ export const UltimateGuideArticle: React.FC<ArticleProps> = () => {
                                         }
                               },
                               "datePublished": "2024-01-01T08:00:00+08:00",
-                              "dateModified": "2026-03-29T00:54:45.398Z"
+                              "dateModified": "2026-04-05T00:00:00Z"
+                    })}
+                </script>
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                                "@context": "https://schema.org",
+                                "@type": "SoftwareApplication",
+                                "name": "TouchFlow Pro",
+                                "applicationCategory": "EducationalApplication",
+                                "operatingSystem": "WebBrowser",
+                                "aggregateRating": {
+                                    "@type": "AggregateRating",
+                                    "ratingValue": "4.9",
+                                    "reviewCount": "248"
+                                }
                     })}
                 </script>
                 <script type="application/ld+json">

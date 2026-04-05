@@ -116,14 +116,20 @@ export const AveragesArticle: React.FC<ArticleProps> = () => {
                                     "name": "TouchFlow Pro"
                                 },
                                 "isAccessibleForFree": "True",
-                                "aggregateRating": {
-                                    "@type": "AggregateRating",
-                                    "ratingValue": "4.8",
-                                    "reviewCount": "156"
-                                },
                                 "mainEntityOfPage": {
                                     "@type": "WebPage",
                                     "@id": "https://touchflowpro.com/articles/typing-speed-averages"
+                                }
+                            },
+                            {
+                                "@type": "SoftwareApplication",
+                                "name": "TouchFlow Pro",
+                                "applicationCategory": "EducationalApplication",
+                                "operatingSystem": "WebBrowser",
+                                "aggregateRating": {
+                                    "@type": "AggregateRating",
+                                    "ratingValue": "4.8",
+                                    "reviewCount": "1562"
                                 }
                             },
                             {
