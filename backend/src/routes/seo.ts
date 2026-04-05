@@ -43,6 +43,7 @@ const SEO_PAGES: { slug: string; lastmod: string; priority: string }[] = [
     { slug: 'typing-speed-plateau', lastmod: '2026-04-03', priority: '0.9' },
     { slug: 'improve-typing-speed', lastmod: '2026-04-03', priority: '0.9' },
     { slug: '60-wpm-to-100-wpm', lastmod: '2026-04-03', priority: '0.9' },
+    { slug: 'touchflow-vs-monkeytype', lastmod: '2026-04-05', priority: '0.9' },
 ];
 
 /**
@@ -62,6 +63,10 @@ router.get('/sitemap.xml', (_req: Request, res: Response) => {
         { loc: '/faq', priority: '0.6', changefreq: 'monthly' },
         { loc: '/contact', priority: '0.5', changefreq: 'monthly' },
         { loc: '/pricing', priority: '0.7', changefreq: 'monthly' },
+        { loc: '/medical-track', priority: '0.8', changefreq: 'monthly' },
+        { loc: '/legal-track', priority: '0.8', changefreq: 'monthly' },
+        { loc: '/coding-track', priority: '0.8', changefreq: 'monthly' },
+        { loc: '/bible-practice', priority: '0.8', changefreq: 'monthly' },
     ];
 
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
