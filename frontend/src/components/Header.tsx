@@ -247,10 +247,12 @@ export const Header: React.FC<HeaderProps> = ({
                 </div>
 
                 {/* SECONDARY NAV (Desktop/Tablet preferred, but scrollable on mobile if logged in) */}
-                {user && userProgress && stage !== 'auth_login' && stage !== 'auth_signup' && stage !== 'welcome' && (
+                {userProgress && stage !== 'auth_login' && stage !== 'auth_signup' && stage !== 'welcome' && (
                     <div className="max-w-7xl mx-auto mt-2 hidden md:block">
                         <nav className="flex items-center gap-1 nav-container overflow-x-visible pb-2 md:pb-0">
-                            {navigationLinks.map((navItem) => {
+                            {navigationLinks
+                                .filter(navItem => user ? true : (navItem.id === 'training_dropdown' || navItem.id === 'careers_dropdown'))
+                                .map((navItem) => {
                                 if (navItem.type === 'dropdown') {
                                     return (
                                         <Dropdown

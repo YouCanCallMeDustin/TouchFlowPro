@@ -26,7 +26,7 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
 
     // Fetch Completed Drills
     useEffect(() => {
-        if (!userId) return;
+        if (!userId || userId === 'guest') return;
         apiFetch('/api/drills/completed')
             .then(res => res.json())
             .then(data => {

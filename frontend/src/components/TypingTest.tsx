@@ -482,10 +482,10 @@ const TypingTest: React.FC<Props> = ({
                             spellCheck="false"
                         />
                         <div className={`
-                            w-full p-3 text-center rounded-xl border-2 transition-all duration-300
-                            ${isStarted ? 'bg-primary/5 border-primary/30 shadow-inner' : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-white/10'}
+                            w-full p-4 text-center rounded-xl border-2 transition-all duration-300 cursor-pointer
+                            ${isStarted ? 'bg-primary/5 border-primary/30 shadow-inner' : 'bg-primary border-primary text-white shadow-xl shadow-primary/30 hover:scale-[1.01]'}
                         `}>
-                            <span className={`text-[10px] font-black uppercase tracking-[0.2em] ${isStarted ? 'text-primary' : 'text-text-muted opacity-50 animate-pulse'}`}>
+                            <span className={`text-[10px] font-black uppercase tracking-[0.2em] ${isStarted ? 'text-primary' : 'text-white animate-pulse'}`}>
                                 {isStarted ? 'Sequence in Progress...' : (dictationMode ? 'Press CTRL + ENTER to play audio or type to begin' : 'Click here and begin typing')}
                             </span>
                         </div>

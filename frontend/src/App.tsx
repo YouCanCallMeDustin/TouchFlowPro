@@ -6,6 +6,19 @@ import { Helmet } from 'react-helmet-async';
 import { AnimatePresence } from 'framer-motion'
 import { Card } from './components/ui/Card'
 import { Button } from './components/ui/Button'
+import { 
+  BarChart3, 
+  Activity, 
+  Award, 
+  TrendingUp, 
+  Clock, 
+  BookOpen, 
+  Trophy, 
+  Compass, 
+  Shield, 
+  Users,
+  Gamepad2
+} from 'lucide-react'
 
 import PageTransition from './components/PageTransition'
 import AchievementModal from './components/AchievementModal'
@@ -14,6 +27,7 @@ import { LandingPage } from './components/LandingPage'
 import Login from './components/Auth/Login'
 import Signup from './components/Auth/Signup'
 import { Header } from './components/Header';
+import { SaveProgressModal } from './components/Auth/SaveProgressModal';
 import { useAuth } from './context/AuthContext'
 import { useSettings } from './context/SettingsContext'
 import { useLaunchStore } from './state/launchStore'
@@ -59,6 +73,8 @@ const AboutPage             = lazy(() => import('./pages/AboutPage'))
 const ContactPage           = lazy(() => import('./pages/ContactPage'))
 const FaqPage               = lazy(() => import('./pages/FaqPage'))
 const ArticlesIndexPage     = lazy(() => import('./pages/ArticlesIndexPage'))
+// Auth
+const PublicFeatureTeaser    = lazy(() => import('./components/Auth/PublicFeatureTeaser').then(m => ({ default: m.PublicFeatureTeaser })))
 // Articles
 const TypingPlateauArticle        = lazy(() => import('./pages/articles/TypingPlateauArticle').then(m => ({ default: m.TypingPlateauArticle })))
 const TypeFasterArticle           = lazy(() => import('./pages/articles/TypeFasterArticle').then(m => ({ default: m.TypeFasterArticle })))
@@ -80,6 +96,7 @@ const STAGE_ROUTES: Partial<Record<Stage, string>> = {
   medicalTrack: '/medical-typing-practice',
   legalTrack: '/legal-typing-test',
   codingTrack: '/code-typing-practice',
+  curriculum: '/curriculum',
   pricing: '/pricing',
   terms: '/terms',
   privacy: '/privacy-policy',
@@ -134,6 +151,7 @@ function App() {
   const [isFetchingProgress, setIsFetchingProgress] = useState(false)
   const [showAchievement, setShowAchievement] = useState<{ type?: string, isLevel?: boolean, level?: number } | null>(null)
   const { settings: userSettings } = useSettings()
+  const [showSaveProgressModal, setShowSaveProgressModal] = useState<{ metrics: TypingMetrics; drillId: string } | null>(null);
   const [reportOrgId, setReportOrgId] = useState<string | null>(null);
   const lastStageRef = useRef<Stage>(stage);
 
@@ -235,6 +253,19 @@ function App() {
         // fetchProgress will bump them to 'dashboard'.
         fetchProgress(user.id)
       } else {
+        // Initialize guest progress if needed for public curriculum/tracks
+        if (!userProgress) {
+          setUserProgress({
+            userId: 'guest',
+            name: 'Guest User',
+            assignedLevel: 'Beginner',
+            subscriptionStatus: 'starter',
+            completedLessons: [],
+            unlockedLevels: ['Beginner', 'Specialist'],
+            lessonScores: {},
+            currentLesson: 'b1'
+          });
+        }
         // Only override state if we aren't explicitly on a public route
         if (!ROUTE_STAGES[location.pathname] || location.pathname === '/') {
           setStage('welcome')
@@ -423,7 +454,11 @@ function App() {
   }
 
   const handleSessionComplete = async (metrics: TypingMetrics, type: string, drillId: string, keystrokes?: any[], liveMetrics?: any[]) => {
-    if (!user) return
+    if (!user) {
+      // GUEST COMPLETION: Trigger sign-up conversion modal
+      setShowSaveProgressModal({ metrics, drillId });
+      return;
+    }
 
     try {
       const response = await apiFetch('/api/sessions/complete', {
@@ -630,10 +665,10 @@ function App() {
               </PageTransition>
             )}
 
-            {stage === 'curriculum' && userProgress && user && (
+            {stage === 'curriculum' && userProgress && (
               <PageTransition key="curriculum">
                 <Curriculum
-                  userId={user.id}
+                  userId={user?.id || 'guest'}
                   progress={userProgress}
                   onStartLesson={handleStartLesson}
                   onSessionComplete={handleSessionComplete}
@@ -667,30 +702,69 @@ function App() {
               </PageTransition>
             )}
 
-            {stage === 'analytics' && user && (
+            {stage === 'analytics' && (
               <PageTransition key="analytics">
-                <div className="w-full space-y-12">
-                  <AnalyticsDashboard />
-                </div>
+                {user ? (
+                   <div className="w-full space-y-12">
+                   <AnalyticsDashboard />
+                 </div>
+                ) : (
+                  <PublicFeatureTeaser 
+                    featureName="Performance Analytics" 
+                    description="Dive deep into your performance metrics, identifying your speed bottlenecks and heatmapping your keyboard accuracy."
+                    icon={BarChart3}
+                    onSignup={() => setStage('auth_signup')}
+                    onLogin={() => setStage('auth_login')}
+                  />
+                )}
               </PageTransition>
             )}
 
-            {stage === 'history' && user && (
+            {stage === 'history' && (
               <PageTransition key="history">
-                <SessionHistory userId={user.id} />
+                {user ? (
+                  <SessionHistory userId={user.id} />
+                ) : (
+                  <PublicFeatureTeaser 
+                    featureName="Operational Log" 
+                    description="Keep a persistent record of every training session, tracking your progress over time with high-fidelity historical data."
+                    icon={Activity}
+                    onSignup={() => setStage('auth_signup')}
+                    onLogin={() => setStage('auth_login')}
+                  />
+                )}
               </PageTransition>
             )}
 
-            {stage === 'achievements' && user && (
+            {stage === 'achievements' && (
               <PageTransition key="achievements">
-                <AchievementsPanel userId={user.id} />
+                {user ? (
+                  <AchievementsPanel userId={user.id} />
+                ) : (
+                  <PublicFeatureTeaser 
+                    featureName="Achievement Registry" 
+                    description="Unlock legendary badges and certifications as you hit milestones in speed, accuracy, and operational consistency."
+                    icon={Award}
+                    onSignup={() => setStage('auth_signup')}
+                    onLogin={() => setStage('auth_login')}
+                  />
+                )}
               </PageTransition>
             )}
 
-
-            {stage === 'goals' && user && (
+            {stage === 'goals' && (
               <PageTransition key="goals">
-                <GoalsDashboard userId={user.id} />
+                {user ? (
+                  <GoalsDashboard userId={user.id} />
+                ) : (
+                  <PublicFeatureTeaser 
+                    featureName="Strategic Objectives" 
+                    description="Set custom performance targets and track your trajectory toward elite-level typing mastery."
+                    icon={TrendingUp}
+                    onSignup={() => setStage('auth_signup')}
+                    onLogin={() => setStage('auth_login')}
+                  />
+                )}
               </PageTransition>
             )}
 
@@ -710,34 +784,74 @@ function App() {
               </PageTransition>
             )}
 
-            {stage === 'practice' && user && (
+            {stage === 'practice' && (
               <PageTransition key="practice">
-                <Practice userId={user.id} onSessionComplete={handleSessionComplete} />
+                <Practice userId={user?.id || 'guest'} onSessionComplete={handleSessionComplete} />
               </PageTransition>
             )}
 
-            {stage === 'practice_tests' && user && (
+            {stage === 'practice_tests' && (
               <PageTransition key="practice_tests">
-                <PracticeTests userId={user.id} onNavigate={setStage} />
+                {user ? (
+                  <PracticeTests userId={user.id} onNavigate={setStage} />
+                ) : (
+                  <PublicFeatureTeaser 
+                    featureName="Combat Evaluations" 
+                    description="Access standardized practice tests to precisely measure your baseline and readiness for official certification."
+                    icon={Clock}
+                    onSignup={() => setStage('auth_signup')}
+                    onLogin={() => setStage('auth_login')}
+                  />
+                )}
               </PageTransition>
             )}
 
-            {stage === 'bible_practice' && user && (
+            {stage === 'bible_practice' && (
               <PageTransition key="bible_practice">
-                <BiblePractice userId={user.id} onSessionComplete={handleSessionComplete} />
+                {user ? (
+                  <BiblePractice userId={user.id} onSessionComplete={handleSessionComplete} />
+                ) : (
+                  <PublicFeatureTeaser 
+                    featureName="Faith & Scriptures" 
+                    description="Practice high-fidelity transcriptions of sacred texts with beautiful typographic immersion."
+                    icon={BookOpen}
+                    onSignup={() => setStage('auth_signup')}
+                    onLogin={() => setStage('auth_login')}
+                  />
+                )}
               </PageTransition>
             )}
 
 
-            {stage === 'leaderboard' && user && (
+            {stage === 'leaderboard' && (
               <PageTransition key="leaderboard">
-                <Leaderboard userId={user.id} />
+                {user ? (
+                  <Leaderboard userId={user.id} />
+                ) : (
+                  <PublicFeatureTeaser 
+                    featureName="Global Rankings" 
+                    description="Compare your velocity against elite operatives worldwide. See where you stand on the global performance matrix."
+                    icon={Trophy}
+                    onSignup={() => setStage('auth_signup')}
+                    onLogin={() => setStage('auth_login')}
+                  />
+                )}
               </PageTransition>
             )}
 
-            {stage === 'code_practice' && user && (
+            {stage === 'code_practice' && (
               <PageTransition key="code_practice">
-                <CodePractice userId={user.id} onSessionComplete={handleSessionComplete} />
+                {user ? (
+                  <CodePractice userId={user.id} onSessionComplete={handleSessionComplete} />
+                ) : (
+                  <PublicFeatureTeaser 
+                    featureName="Technical Synthesis" 
+                    description="Advanced syntax drills for software engineering, DevOps protocols, and complex terminal operations."
+                    icon={Compass}
+                    onSignup={() => setStage('auth_signup')}
+                    onLogin={() => setStage('auth_login')}
+                  />
+                )}
               </PageTransition>
             )}
 
@@ -759,12 +873,22 @@ function App() {
               </PageTransition>
             )}
 
-            {stage === 'certificate' && user && (
+            {stage === 'certificate' && (
               <PageTransition key="certificate">
-                <TypingCertificate
-                  userId={user.id}
-                  userName={userProgress?.name || user.name || user.email}
-                />
+                {user ? (
+                   <TypingCertificate
+                   userId={user.id}
+                   userName={userProgress?.name || user.name || user.email}
+                 />
+                ) : (
+                  <PublicFeatureTeaser 
+                    featureName="Elite Certification" 
+                    description="Earn professional-grade diplomas verifying your terminal performance for career advancement and proof of mastery."
+                    icon={Shield}
+                    onSignup={() => setStage('auth_signup')}
+                    onLogin={() => setStage('auth_login')}
+                  />
+                )}
               </PageTransition>
             )}
 
@@ -798,19 +922,29 @@ function App() {
               </PageTransition>
             )}
 
-            {stage === 'orgs' && user && (
+            {stage === 'orgs' && (
               <PageTransition key="orgs">
-                <Orgs
-                  onNavigate={(s: string) => setStage(s as Stage)}
-                  onViewReport={(orgId) => {
-                    setReportOrgId(orgId);
-                    setStage('sample_report');
-                  }}
-                />
+                {user ? (
+                   <Orgs
+                   onNavigate={(s: string) => setStage(s as Stage)}
+                   onViewReport={(orgId) => {
+                     setReportOrgId(orgId);
+                     setStage('sample_report');
+                   }}
+                 />
+                ) : (
+                  <PublicFeatureTeaser 
+                    featureName="Teams & Organizations" 
+                    description="Manage high-performance squads, deploy group training plans, and monitor collective operational efficiency."
+                    icon={Users}
+                    onSignup={() => setStage('auth_signup')}
+                    onLogin={() => setStage('auth_login')}
+                  />
+                )}
               </PageTransition>
             )}
 
-            {stage === 'medicalTrack' && user && (
+            {stage === 'medicalTrack' && (
               <PageTransition key="medicalTrack">
                 <MedicalTrack
                   setStage={setStage}
@@ -824,7 +958,7 @@ function App() {
               </PageTransition>
             )}
 
-            {stage === 'legalTrack' && user && (
+            {stage === 'legalTrack' && (
               <PageTransition key="legalTrack">
                 <LegalTrack
                   setStage={setStage}
@@ -838,7 +972,7 @@ function App() {
               </PageTransition>
             )}
 
-            {stage === 'codingTrack' && user && (
+            {stage === 'codingTrack' && (
               <PageTransition key="codingTrack">
                 <CodeTrack
                   setStage={setStage}
@@ -852,42 +986,49 @@ function App() {
               </PageTransition>
             )}
 
-            {stage === 'games' && user && (
+            {stage === 'games' && (
               <PageTransition key="games">
-                <GamesLanding onNavigate={(s) => setStage(s as Stage)} />
+                {user ? (
+                   <GamesLanding onNavigate={(s) => setStage(s as Stage)} />
+                ) : (
+                  <PublicFeatureTeaser 
+                    featureName="Terminal Sector Games" 
+                    description="Access high-fidelity training simulations like Accuracy Assassin and Spell Rush to gamify your path to elite terminal proficiency."
+                    icon={Gamepad2}
+                    onSignup={() => setStage('auth_signup')}
+                    onLogin={() => setStage('auth_login')}
+                  />
+                )}
               </PageTransition>
             )}
 
-            {stage === 'games_accuracy_assassin' && user && (
-              <PageTransition key="games_accuracy_assassin">
-                <AccuracyAssassinPage onBack={() => setStage('games')} />
-              </PageTransition>
-            )}
-
-            {stage === 'games_burner_burst' && user && (
-              <PageTransition key="games_burner_burst">
-                <BurnerBurstPage onBack={() => setStage('games')} />
-              </PageTransition>
-            )}
-
-            {stage === 'games_spell_rush' && user && (
-              <PageTransition key="games_spell_rush">
-                {/* SpellRush handles its own layout, but we might want a back button wrapper if it doesn't have one? 
-                      Current SpellRush implementation has strict layout. 
-                      Let's wrap it in a div with a back button overlay strictly for now or just render it. 
-                      The game supposedly has a "Game Over" screen with Retry. 
-                      But no "Exit" button in the HUD. 
-                      I should wrap it with a back button to 'games'. 
-                  */}
-                <div className="relative w-full h-full">
-                  <SpellRushGame />
-                  <button
-                    onClick={() => setStage('games')}
-                    className="fixed top-4 left-4 z-[60] px-4 py-2 bg-slate-800/80 text-white rounded-lg backdrop-blur text-xs font-bold uppercase tracking-wider hover:bg-slate-700 border border-white/10"
-                  >
-                    Exit Game
-                  </button>
-                </div>
+            {(stage === 'games_accuracy_assassin' || stage === 'games_burner_burst' || stage === 'games_spell_rush') && (
+              <PageTransition key="games_locked">
+                 {user ? (
+                   <>
+                    {stage === 'games_accuracy_assassin' && <AccuracyAssassinPage onBack={() => setStage('games')} />}
+                    {stage === 'games_burner_burst' && <BurnerBurstPage onBack={() => setStage('games')} />}
+                    {stage === 'games_spell_rush' && (
+                      <div className="relative w-full h-full">
+                        <SpellRushGame />
+                        <button
+                          onClick={() => setStage('games')}
+                          className="fixed top-4 left-4 z-[60] px-4 py-2 bg-slate-800/80 text-white rounded-lg backdrop-blur text-xs font-bold uppercase tracking-wider hover:bg-slate-700 border border-white/10"
+                        >
+                          Exit Game
+                        </button>
+                      </div>
+                    )}
+                   </>
+                 ) : (
+                  <PublicFeatureTeaser 
+                    featureName="Combat Training Simulation" 
+                    description="This specific terminal simulation is currently locked for non-operatives. Claim your ID to begin high-velocity training."
+                    icon={Gamepad2}
+                    onSignup={() => setStage('auth_signup')}
+                    onLogin={() => setStage('auth_login')}
+                  />
+                 )}
               </PageTransition>
             )}
 
@@ -963,6 +1104,20 @@ function App() {
           achievementType={showAchievement?.type}
           isLeveledUp={showAchievement?.isLevel}
           newLevel={showAchievement?.level}
+        />
+
+        <SaveProgressModal
+          isOpen={!!showSaveProgressModal}
+          onClose={() => setShowSaveProgressModal(null)}
+          metrics={showSaveProgressModal?.metrics || null}
+          onSignup={() => {
+            setShowSaveProgressModal(null);
+            setStage('auth_signup');
+          }}
+          onLogin={() => {
+            setShowSaveProgressModal(null);
+            setStage('auth_login');
+          }}
         />
 
         {!isTypingMode && (

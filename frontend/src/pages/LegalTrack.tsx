@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShieldAlert, Activity, Play, BookOpen, Clock, Target, Layers } from 'lucide-react';
+import { ShieldAlert, Activity, Play, BookOpen, Clock, Target, Layers, Rocket } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { getLegalDrillsBySpecialty } from '@shared/tracks/legal';
@@ -112,22 +112,32 @@ export const LegalTrack: React.FC<LegalTrackProps> = ({ setStage, setLaunchParam
             </Helmet>
             <div className="flex items-center justify-between mb-8">
                 <div>
-                    <h1 className="text-3xl font-black uppercase text-text-main flex items-center gap-3">
+                    <h1 className="text-3xl font-black uppercase text-text-main flex items-center gap-3 tracking-tighter">
                         <BookOpen className="w-8 h-8 text-primary" />
-                        Legal Competency Engine
+                        Legal Transcription Engine
                     </h1>
-                    <p className="text-text-muted mt-2 tracking-wide">Master specialized legal terminology and documentation</p>
+                    <p className="text-text-muted mt-2 tracking-wide text-sm opacity-80 max-w-xl">
+                        Elite-level typing performance for legal professionals. Master court reporting syntax, contract terminology, and litigation documentation.
+                    </p>
                 </div>
                 {/* Terminology Risk Score Widget */}
-                <div className="card rounded-2xl border border-white/5 p-4 flex items-center gap-4 hover:border-primary/20 transition-all shadow-lg shadow-black/20">
-                    <div className={`p-3 rounded-xl ${riskScore !== null && riskScore > 50 ? 'bg-amber-500/10 text-amber-500' : 'bg-emerald-500/10 text-emerald-500'}`}>
+                <div className="card rounded-2xl border border-white/5 p-4 flex items-center gap-4 hover:border-primary/20 transition-all shadow-lg shadow-black/20 group">
+                    <div className={`p-3 rounded-xl transition-colors ${!user ? 'bg-slate-500/10 text-text-muted opacity-40' : riskScore !== null && riskScore > 50 ? 'bg-amber-500/10 text-amber-500' : 'bg-emerald-500/10 text-emerald-500'}`}>
                         <ShieldAlert className="w-6 h-6" />
                     </div>
                     <div>
                         <div className="text-[10px] font-black uppercase tracking-widest text-text-muted opacity-60">Terminology Risk Score</div>
                         <div className="text-2xl font-black text-text-main flex items-baseline gap-2 mt-1">
-                            {isLoadingRisk ? '...' : riskScore}
-                            <span className="text-xs font-black uppercase tracking-widest text-text-muted opacity-40">/ 100</span>
+                            {!user ? (
+                                <button onClick={() => setStage('auth_login')} className="text-[10px] text-primary hover:underline uppercase tracking-widest">Connect ID</button>
+                            ) : isLoadingRisk ? (
+                                <span className="animate-pulse">...</span>
+                            ) : (
+                                <>
+                                    {riskScore}
+                                    <span className="text-xs font-black uppercase tracking-widest text-text-muted opacity-40">/ 100</span>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -136,6 +146,23 @@ export const LegalTrack: React.FC<LegalTrackProps> = ({ setStage, setLaunchParam
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
                 {/* Sidebar */}
                 <div className="lg:col-span-1 space-y-2">
+                    {!user && (
+                        <div className="mb-6 p-4 rounded-2xl bg-primary/5 border border-primary/20 shadow-lg shadow-primary/5">
+                            <div className="flex items-center gap-2 text-primary mb-2">
+                                <Rocket size={14} className="animate-pulse" />
+                                <span className="text-[10px] font-black uppercase tracking-widest">Entry Level Detected</span>
+                            </div>
+                            <p className="text-[10px] text-text-muted font-bold leading-relaxed mb-4">
+                                You are in **Guest Mode**. Your performance data will not be saved.
+                            </p>
+                            <button 
+                                onClick={() => setStage('auth_signup')}
+                                className="w-full py-2 bg-primary text-white text-[9px] font-black uppercase tracking-[0.2em] rounded-lg shadow-lg shadow-primary/20 hover:scale-105 transition-all"
+                            >
+                                Claim Profile
+                            </button>
+                        </div>
+                    )}
                     <div className="text-[10px] font-black text-primary opacity-60 uppercase tracking-[0.2em] mb-4 px-3 flex items-center gap-2">
                         <Layers size={14} />
                         Specialties

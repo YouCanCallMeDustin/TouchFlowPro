@@ -200,47 +200,47 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
 
     const handleFinish = async () => {
         if (testMetrics && mode === 'results') {
-            // ... (Achievements logic from original file)
-            try {
-                const achievementRes = await apiFetch(`/api/achievements/${_userId}/check`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                const achievementData = await achievementRes.json();
+            if (_userId !== 'guest') {
+                try {
+                    const achievementRes = await apiFetch(`/api/achievements/${_userId}/check`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    const achievementData = await achievementRes.json();
 
-                if (achievementData.newAchievements && achievementData.newAchievements.length > 0) {
-                    // ... map icons
-                    const ACHIEVEMENT_TYPES: Record<string, { name: string; description: string; icon: string }> = {
-                        'first_drill': { name: 'First Steps', description: 'Complete your first drill', icon: '🎯' },
-                        'week_warrior': { name: 'Week Warrior', description: 'Practice for 7 consecutive days', icon: '🔥' },
-                        '100_wpm_club': { name: '100 WPM Club', description: 'Achieve 100+ WPM', icon: '⚡' },
-                        'precision_pro': { name: 'Precision Pro', description: '98%+ accuracy', icon: '🎯' },
-                        'marathon_runner': { name: 'Marathon Runner', description: 'Complete 50 drills', icon: '🏃' },
-                        'early_bird': { name: 'Early Bird', description: 'Practice before 9 AM', icon: '🌅' },
-                        'night_owl': { name: 'Night Owl', description: 'Practice after 10 PM', icon: '🦉' },
-                        'perfect_week': { name: 'Perfect Week', description: '7 days, 95%+ accuracy', icon: '💎' },
-                        'speed_demon': { name: 'Speed Demon', description: '120+ WPM achieved', icon: '🚀' },
-                        'completionist': { name: 'Completionist', description: 'Earn all badges', icon: '👑' },
-                    };
+                    if (achievementData.newAchievements && achievementData.newAchievements.length > 0) {
+                        const ACHIEVEMENT_TYPES: Record<string, { name: string; description: string; icon: string }> = {
+                            'first_drill': { name: 'First Steps', description: 'Complete your first drill', icon: '🎯' },
+                            'week_warrior': { name: 'Week Warrior', description: 'Practice for 7 consecutive days', icon: '🔥' },
+                            '100_wpm_club': { name: '100 WPM Club', description: 'Achieve 100+ WPM', icon: '⚡' },
+                            'precision_pro': { name: 'Precision Pro', description: '98%+ accuracy', icon: '🎯' },
+                            'marathon_runner': { name: 'Marathon Runner', description: 'Complete 50 drills', icon: '🏃' },
+                            'early_bird': { name: 'Early Bird', description: 'Practice before 9 AM', icon: '🌅' },
+                            'night_owl': { name: 'Night Owl', description: 'Practice after 10 PM', icon: '🦉' },
+                            'perfect_week': { name: 'Perfect Week', description: '7 days, 95%+ accuracy', icon: '💎' },
+                            'speed_demon': { name: 'Speed Demon', description: '120+ WPM achieved', icon: '🚀' },
+                            'completionist': { name: 'Completionist', description: 'Earn all badges', icon: '👑' },
+                        };
 
-                    const firstNew = achievementData.newAchievements[0];
-                    const badgeInfo = ACHIEVEMENT_TYPES[firstNew.badgeType];
-                    if (badgeInfo) {
-                        setNewAchievement(badgeInfo);
-                        setShowCelebration(true);
+                        const firstNew = achievementData.newAchievements[0];
+                        const badgeInfo = ACHIEVEMENT_TYPES[firstNew.badgeType];
+                        if (badgeInfo) {
+                            setNewAchievement(badgeInfo);
+                            setShowCelebration(true);
+                        }
                     }
+                } catch (error) {
+                    console.error('Failed to check achievements:', error);
                 }
-            } catch (error) {
-                console.error('Failed to check achievements:', error);
-            }
 
-            try {
-                await apiFetch(`/api/streaks/${_userId}/record`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
-            } catch (error) {
-                console.error('Failed to record streak:', error);
+                try {
+                    await apiFetch(`/api/streaks/${_userId}/record`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                } catch (error) {
+                    console.error('Failed to record streak:', error);
+                }
             }
 
             onComplete(testMetrics, passed, keystrokes);
