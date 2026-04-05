@@ -122,13 +122,13 @@ router.get('/', authenticateToken, async (req, res) => {
         const { orgId } = req.query;
         const { id: userId } = (req as AuthRequest).user!;
 
-        if (!orgId) {
-            return res.status(400).json({ error: 'Organization ID required' });
+        if (!orgId || typeof orgId !== 'string') {
+            return res.status(400).json({ error: 'Organization ID required as a string' });
         }
 
         // 1. Verify membership and role
         const membership = await prisma.orgMember.findUnique({
-            where: { orgId_userId: { orgId: orgId as string, userId } }
+            where: { orgId_userId: { orgId: orgId, userId } }
         });
 
         if (!membership || membership.role !== 'ADMIN') {
@@ -158,7 +158,7 @@ router.get('/', authenticateToken, async (req, res) => {
  */
 router.delete('/:id', authenticateToken, async (req, res) => {
     try {
-        const inviteId = req.params.id;
+        const inviteId = req.params.id as string;
         const { id: userId } = (req as AuthRequest).user!;
 
         const invite = await prisma.orgInvite.findUnique({
