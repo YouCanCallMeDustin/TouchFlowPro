@@ -80,7 +80,7 @@ export const MedicalTrack: React.FC<MedicalTrackProps> = ({ setStage, setLaunchP
         <div className="max-w-6xl mx-auto px-4 py-8">
             <Helmet>
                 <title>Medical Transcription Typing Training & Drills | TouchFlowPro</title>
-                <meta name="description" content="Master specialized healthcare terminology and clinical documentation with our Medical Typing Practice engine. Improve speed and accuracy on SOAP notes and medical syntax." />
+                <meta name="description" content="Master healthcare terminology and clinical documentation with our Medical Typing engine. Improve speed and accuracy on SOAP notes and medical syntax." />
                 <link rel="canonical" href="https://touchflowpro.com/medical-track" />
                 <meta property="og:title" content="Medical Transcription Typing Training & Drills | TouchFlowPro" />
                 <meta property="og:description" content="Master specialized healthcare terminology and clinical documentation with our Medical Typing Practice engine. Improve speed and accuracy on SOAP notes and medical syntax." />

@@ -16,7 +16,7 @@ export const TouchTypingGuideArticle: React.FC<ArticleProps> = () => {
         <div className="min-h-screen py-12 px-4 flex flex-col items-center">
             <Helmet>
                 <title>Touch Typing Guide: Learn to Type Without Looking (2026) | TouchFlowPro</title>
-                <meta name="description" content="Master touch typing with this step-by-step guide. Learn proper keyboard finger placement, build muscle memory, and improve your typing speed and accuracy — all without looking at the keys." />
+                <meta name="description" content="The definitive guide to authentic touch typing. Learn muscle memory, finger placement, and why looking at your keyboard is capping your professional speed." />
                 <link rel="canonical" href="https://touchflowpro.com/articles/touch-typing-guide" />
                 <meta property="og:title" content="Touch Typing Guide: Learn to Type Without Looking (2026) | TouchFlowPro" />
                 <meta property="og:description" content="Master touch typing with this step-by-step guide. Learn proper keyboard finger placement, build muscle memory, and improve your typing speed and accuracy — all without looking at the keys." />

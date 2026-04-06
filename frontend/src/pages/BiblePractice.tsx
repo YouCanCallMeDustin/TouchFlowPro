@@ -162,7 +162,7 @@ const BiblePractice: React.FC<BiblePracticeProps> = ({ userId, onSessionComplete
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
             <Helmet>
                 <title>Bible Typing Practice: Scripture Memorization Drills | TouchFlowPro</title>
-                <meta name="description" content="Master touch typing while memorizing Scripture. Practice typing the ESV Bible with our specialized engine. Improve speed and accuracy on biblical terminology and verse structures." />
+                <meta name="description" content="Master touch typing while memorizing Scripture. Practice typing the ESV Bible with our specialized engine. Improve speed and accuracy on biblical terminology." />
                 <link rel="canonical" href="https://touchflowpro.com/bible-practice" />
                 <meta property="og:title" content="Bible Typing Practice: Scripture Memorization Drills | TouchFlowPro" />
                 <meta property="og:description" content="Master touch typing while memorizing Scripture. Practice typing the ESV Bible with our specialized engine." />

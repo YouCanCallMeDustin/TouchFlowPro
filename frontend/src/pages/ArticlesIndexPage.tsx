@@ -103,7 +103,7 @@ export default function ArticlesIndexPage({ onBack }: ArticlesIndexPageProps) {
         <div className="w-full px-4 flex flex-col items-center py-12">
             <Helmet>
                 <title>Typing Performance Library: Professional Training & Research | TouchFlow Pro</title>
-                <meta name="description" content="Explore the definitive library of professional typing guides. Master 100+ WPM, optimize accuracy, and discover the science of keyboard performance for engineers, doctors, and legal pros." />
+                <meta name="description" content="Explore our library of professional typing guides. Master 100+ WPM, optimize accuracy, and discover keyboard science for engineers, doctors, and legal pros." />
                 <link rel="canonical" href="https://touchflowpro.com/articles" />
                 <script type="application/ld+json">
                     {JSON.stringify({

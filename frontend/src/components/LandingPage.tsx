@@ -28,7 +28,7 @@ interface LandingPageProps {
 }
 
 const containerVariants: Variants = {
-    hidden: { opacity: 0 },
+    hidden: { opacity: 1 },
     visible: {
         opacity: 1,
         transition: {
@@ -121,7 +121,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
         <div className="w-full">
             <Helmet>
                                 <title>Elite Typing Trainer for Professionals | TouchFlow Pro</title>
-                <meta name="description" content="Master elite touch typing with professional analytics and fatigue detection. Reach 100+ WPM with science-backed drills. Start your free baseline test in 60 seconds!" />
+                <meta name="description" content="Master elite touch typing with professional analytics and fatigue detection. Reach 100+ WPM with science-backed drills. Start your free baseline test now." />
                 <link rel="canonical" href="https://touchflowpro.com/" />
                 <meta property="og:title" content="Elite Typing Training for Professionals | TouchFlow Pro" />
                 <meta property="og:description" content="Master 100+ WPM with deliberate practice and fatigue-aware analytics. Engineered for high-performance careers." />
@@ -169,7 +169,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                         <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">Precision Typing For Professionals</span>
                     </motion.div>
 
-                    <h1 className="text-5xl md:text-[5.5rem] font-black mb-6 leading-[0.9] tracking-tighter uppercase italic text-text-main animate-in fade-in slide-in-from-bottom-4 duration-500 fill-mode-both">
+                    <h1 className="text-5xl md:text-[5.5rem] font-black mb-6 leading-[0.9] tracking-tighter uppercase italic text-text-main">
                         Learn Touch Typing. <br />
                         Increase Typing <span className="text-primary italic">Speed (WPM).</span>
                     </h1>

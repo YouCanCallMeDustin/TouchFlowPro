@@ -548,6 +548,8 @@ function App() {
   return (
     <ErrorBoundary>
       <Helmet>
+        <title>Elite Typing Trainer for Professionals | TouchFlow Pro</title>
+        <meta name="description" content="Master elite touch typing with professional analytics and fatigue detection. Reach 100+ WPM with science-backed drills. Start your free baseline test now." />
         <link rel="canonical" href={`https://touchflowpro.com${location.pathname === '/' ? '' : location.pathname}`} />
       </Helmet>
       <div className={`min-h-screen bg-bg-main selection:bg-primary/20 relative ${isTypingMode ? 'h-screen overflow-hidden flex flex-col' : ''}`}>
