@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 
-const API_KEY = "abfda58abd0480aa668dd43578e1700";
+const API_KEY = "2abfda58abd0480aa668dd43578e1700";
 const HOST = "touchflowpro.com";
 const KEY_LOCATION = `https://${HOST}/${API_KEY}.txt`;
 
