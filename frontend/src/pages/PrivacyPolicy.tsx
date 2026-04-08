@@ -26,15 +26,16 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
                 <h1 className="text-3xl font-heading font-extrabold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-2">
                     Privacy Policy
                 </h1>
-                <p className="text-text-muted text-sm mb-8">Last updated: February 10, 2026</p>
+                <p className="text-text-muted text-sm mb-8">Last updated: April 8, 2026</p>
 
                 <div className="space-y-8 text-text-main text-sm leading-relaxed">
                     <section>
                         <h2 className="text-lg font-heading font-bold text-text-main mb-3">1. Introduction</h2>
                         <p>
-                            TouchFlow Pro ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains
-                            how we collect, use, disclose, and safeguard your information when you use our typing proficiency platform
-                            ("the Service"). By using the Service, you consent to the data practices described in this policy.
+                            TouchFlow Pro ("we," "our," or "us") is an enterprise-grade performance calibration platform. This Privacy Policy explains
+                            how we collect, use, disclose, and safeguard your data when you use our high-fidelity typing proficiency system
+                            ("the Service"). By using the Service, you consent to the data practices described in this policy, specifically regarding 
+                            advanced biokinetic performance metrics.
                         </p>
                     </section>
 
@@ -43,84 +44,66 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
 
                         <h3 className="text-sm font-bold text-text-main mb-2 mt-4">2.1 Account Information</h3>
                         <ul className="list-disc list-inside space-y-2 text-text-muted">
-                            <li>Email address</li>
-                            <li>Password (stored as a secure hash — we never store plaintext passwords)</li>
-                            <li>Display name, city, state, and age (optional profile fields)</li>
-                            <li>Profile photo (if uploaded)</li>
+                            <li>Email address and authentication credentials.</li>
+                            <li>Password (stored as a secure salted hash).</li>
+                            <li>Organization affiliation (if applicable for team licensing).</li>
+                            <li>Profile metadata (Display name, professional designation).</li>
                         </ul>
 
-                        <h3 className="text-sm font-bold text-text-main mb-2 mt-4">2.2 Typing & Performance Data</h3>
+                        <h3 className="text-sm font-bold text-text-main mb-2 mt-4">2.2 Biokinetic & Performance Data</h3>
+                        <p className="mb-3 text-text-muted">As a performance-focused platform, we collect high-resolution interaction data to facilitate cognitive fatigue detection and motor-skill analytics:</p>
                         <ul className="list-disc list-inside space-y-2 text-text-muted">
-                            <li>Typing speed (WPM), accuracy, and error patterns</li>
-                            <li>Keystroke timing data (used for adaptive learning and analytics)</li>
-                            <li>Practice session history and duration</li>
-                            <li>Achievement progress, streaks, and level progression</li>
-                            <li>Custom drill content you create</li>
+                            <li>Typing speed (WPM), accuracy, and detailed error taxonomy.</li>
+                            <li><strong className="text-text-main">Biokinetic Rhythm Data:</strong> Sub-millisecond keystroke timing, burst-to-drift ratios, and latency variance.</li>
+                            <li>Kinetic memory encoding progress and "OK Plateau" metrics.</li>
+                            <li>Session history, duration, and cognitive drift indicators.</li>
                         </ul>
 
-                        <h3 className="text-sm font-bold text-text-main mb-2 mt-4">2.3 Payment Information</h3>
+                        <h3 className="text-sm font-bold text-text-main mb-2 mt-4">2.3 Organizational Data</h3>
                         <ul className="list-disc list-inside space-y-2 text-text-muted">
-                            <li>Payment processing is handled entirely by Stripe. We do not store your credit card numbers,
-                                bank account details, or other financial information on our servers.</li>
-                            <li>We store your Stripe Customer ID to manage your subscription status.</li>
+                            <li>For Enterprise and Organization accounts, we collect team-wide performance aggregates and seat-management metadata.</li>
                         </ul>
 
-                        <h3 className="text-sm font-bold text-text-main mb-2 mt-4">2.4 Automatically Collected Data</h3>
+                        <h3 className="text-sm font-bold text-text-main mb-2 mt-4">2.4 Payment Information</h3>
                         <ul className="list-disc list-inside space-y-2 text-text-muted">
-                            <li>Browser type and version</li>
-                            <li>Device information</li>
-                            <li>IP address (for security purposes)</li>
-                            <li>Usage patterns and feature interactions</li>
+                            <li>Secure payment processing is handled exclusively by Stripe. We do not store financial instruments on our local infrastructure.</li>
                         </ul>
                     </section>
 
                     <section>
                         <h2 className="text-lg font-heading font-bold text-text-main mb-3">3. How We Use Your Information</h2>
                         <ul className="list-disc list-inside space-y-2 text-text-muted">
-                            <li><strong className="text-text-main">Provide the Service:</strong> Deliver typing lessons, track progress, generate analytics, and power adaptive learning.</li>
-                            <li><strong className="text-text-main">Personalization:</strong> Customize practice recommendations, difficulty levels, and content based on your performance.</li>
-                            <li><strong className="text-text-main">Leaderboards:</strong> Display anonymized performance data on public leaderboards (using your display name or a default identifier).</li>
-                            <li><strong className="text-text-main">Communication:</strong> Send account-related notifications, practice reminders (if enabled), and service updates.</li>
-                            <li><strong className="text-text-main">Payments:</strong> Process subscription payments and manage billing through Stripe.</li>
-                            <li><strong className="text-text-main">Security:</strong> Detect and prevent fraud, abuse, and unauthorized access.</li>
-                            <li><strong className="text-text-main">Improvement:</strong> Analyze aggregate usage data to improve the Service, fix bugs, and develop new features.</li>
+                            <li><strong className="text-text-main">Performance Calibration:</strong> Powering adaptive learning algorithms based on your specific biokinetic rhythm.</li>
+                            <li><strong className="text-text-main">Cognitive Analytics:</strong> Identifying fatigue patterns to suggest optimal rest intervals.</li>
+                            <li><strong className="text-text-main">Workforce Auditing:</strong> Providing organization administrators with verified performance reports for team members under their license.</li>
+                            <li><strong className="text-text-main">System Integrity:</strong> Detecting and prevents automated "botting" or fraudulent performance claims.</li>
                         </ul>
                     </section>
 
                     <section>
-                        <h2 className="text-lg font-heading font-bold text-text-main mb-3">4. Data Sharing & Disclosure</h2>
-                        <p className="mb-3">We do <strong>not</strong> sell your personal information. We may share data only in these limited circumstances:</p>
+                        <h2 className="text-lg font-heading font-bold text-text-main mb-3">4. Data Sharing & Organizational Oversight</h2>
+                        <p className="mb-3 text-text-muted">We do not sell your personal information. However, data visibility depends on your account type:</p>
                         <ul className="list-disc list-inside space-y-2 text-text-muted">
-                            <li><strong className="text-text-main">Stripe:</strong> Payment data is shared with Stripe for subscription processing.</li>
-                            <li><strong className="text-text-main">ESV API:</strong> Bible practice requests are sent to the ESV API to retrieve verse text. No personal data is shared with this service.</li>
-                            <li><strong className="text-text-main">Legal Requirements:</strong> We may disclose information if required by law, court order, or governmental authority.</li>
-                            <li><strong className="text-text-main">Safety:</strong> We may disclose information to protect the rights, safety, or property of TouchFlow Pro, its users, or the public.</li>
+                            <li><strong className="text-text-main">Organization Accounts:</strong> If you are using the Service under an enterprise or organization license (e.g., provided by your employer), your performance metrics, history, and assessment results are visible to the designated Organization Administrator.</li>
+                            <li><strong className="text-text-main">Public Benchmarks:</strong> Anonymized performance data may be used for global ranking and research purposes.</li>
+                            <li><strong className="text-text-main">Service Providers:</strong> We use Railway for secure cloud hosting and Stripe for PCI-compliant billing.</li>
                         </ul>
                     </section>
 
                     <section>
-                        <h2 className="text-lg font-heading font-bold text-text-main mb-3">5. Data Storage & Security</h2>
+                        <h2 className="text-lg font-heading font-bold text-text-main mb-3">5. Enterprise-Grade Security</h2>
                         <ul className="list-disc list-inside space-y-2 text-text-muted">
-                            <li>Your data is stored on secure servers hosted by Railway (cloud infrastructure provider).</li>
-                            <li>Passwords are hashed using industry-standard algorithms (bcrypt).</li>
-                            <li>Authentication is handled via JSON Web Tokens (JWT) transmitted over HTTPS.</li>
-                            <li>We implement administrative, technical, and physical safeguards to protect your data.</li>
-                            <li>While we strive to protect your personal information, no method of electronic storage or transmission is 100% secure.</li>
+                            <li>All data is encrypted in transit (TLS 1.2+) and at rest on Railway enterprise infrastructure.</li>
+                            <li>Authentication is managed via secure signed tokens with session-hijacking protection.</li>
+                            <li>Continuous security monitoring and access control audits are performed to protect organizational integrity.</li>
                         </ul>
                     </section>
 
                     <section>
-                        <h2 className="text-lg font-heading font-bold text-text-main mb-3">6. Your Rights</h2>
-                        <p className="mb-3">You have the right to:</p>
-                        <ul className="list-disc list-inside space-y-2 text-text-muted">
-                            <li><strong className="text-text-main">Access:</strong> Request a copy of the personal data we hold about you.</li>
-                            <li><strong className="text-text-main">Correction:</strong> Update or correct inaccurate information in your profile.</li>
-                            <li><strong className="text-text-main">Deletion:</strong> Request deletion of your account and all associated data.</li>
-                            <li><strong className="text-text-main">Export:</strong> Request your data in a portable format.</li>
-                            <li><strong className="text-text-main">Opt-out:</strong> Disable practice reminders and non-essential notifications at any time.</li>
-                        </ul>
-                        <p className="mt-3">
-                            To exercise any of these rights, contact us at{' '}
+                        <h2 className="text-lg font-heading font-bold text-text-main mb-3">6. Your Rights & Data Portability</h2>
+                        <p className="mb-3 text-text-muted">You maintain standard rights of access, correction, and deletion. For users under an Organization License, deletion requests may be subject to your organization’s data retention policies or employment agreements.</p>
+                        <p>
+                            To exercise these rights, please contact our compliance desk at{' '}
                             <a href="mailto:touchflowpro@gmail.com" className="text-primary hover:text-secondary transition-colors font-semibold">
                                 touchflowpro@gmail.com
                             </a>.
@@ -128,45 +111,9 @@ export default function PrivacyPolicy({ onBack }: PrivacyPolicyProps) {
                     </section>
 
                     <section>
-                        <h2 className="text-lg font-heading font-bold text-text-main mb-3">7. Cookies & Local Storage</h2>
+                        <h2 className="text-lg font-heading font-bold text-text-main mb-3">7. Contact</h2>
                         <p>
-                            We use browser local storage and cookies to maintain your authentication session, remember your theme
-                            preference, and store temporary application state. We do not use third-party tracking cookies or
-                            advertising trackers.
-                        </p>
-                    </section>
-
-                    <section>
-                        <h2 className="text-lg font-heading font-bold text-text-main mb-3">8. Children's Privacy</h2>
-                        <p>
-                            The Service is not intended for children under 13 years of age. We do not knowingly collect personal
-                            information from children under 13. If you believe a child under 13 has provided us with personal data,
-                            please contact us and we will promptly delete it.
-                        </p>
-                    </section>
-
-                    <section>
-                        <h2 className="text-lg font-heading font-bold text-text-main mb-3">9. Data Retention</h2>
-                        <p>
-                            We retain your personal data for as long as your account is active or as needed to provide the Service.
-                            Upon account deletion, we will remove your personal data within 30 days, except where retention is
-                            required by law or for legitimate business purposes (e.g., fraud prevention).
-                        </p>
-                    </section>
-
-                    <section>
-                        <h2 className="text-lg font-heading font-bold text-text-main mb-3">10. Changes to This Policy</h2>
-                        <p>
-                            We may update this Privacy Policy from time to time. We will notify you of material changes by posting
-                            a notice within the Service or by email. Your continued use of the Service after changes are posted
-                            constitutes acceptance of the updated policy.
-                        </p>
-                    </section>
-
-                    <section>
-                        <h2 className="text-lg font-heading font-bold text-text-main mb-3">11. Contact Us</h2>
-                        <p>
-                            If you have questions or concerns about this Privacy Policy or our data practices, please contact us at{' '}
+                            Compliance inquiries regarding this policy or our data sovereignty standards can be sent to{' '}
                             <a href="mailto:touchflowpro@gmail.com" className="text-primary hover:text-secondary transition-colors font-semibold">
                                 touchflowpro@gmail.com
                             </a>.
