@@ -1,6 +1,6 @@
 import ReactGA from "react-ga4";
 
-const MEASUREMENT_ID = "G-W242Q5PVFY";
+const MEASUREMENT_ID = "G-HF7K076SEK";
 
 /**
  * Initializes Google Analytics 4 with the specified measurement ID.
