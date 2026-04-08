@@ -8,6 +8,7 @@ export const SOCIAL_LINKS = {
     SOURCEFORGE: "https://sourceforge.net/projects/touchflowpro/",
     INDIEHACKERS: "https://www.indiehackers.com/product/touchflowpro",
     DEVTO: "https://dev.to/touchflowpro",
+    TRUSTPILOT: "https://www.trustpilot.com/review/touchflowpro.com",
 };
 
 export const CONTACT_INFO = {

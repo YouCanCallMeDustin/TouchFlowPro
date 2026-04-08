@@ -137,8 +137,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                     <div className="flex flex-wrap items-center gap-x-8 gap-y-4 mb-8">
                         <button onClick={() => onNavigate('terms')} className="text-[10px] font-black uppercase tracking-widest text-text-muted hover:text-primary opacity-60 transition-colors">Legal</button>
                         <button onClick={() => onNavigate('privacy')} className="text-[10px] font-black uppercase tracking-widest text-text-muted hover:text-primary opacity-60 transition-colors">Privacy Policy</button>
-                        <button className="text-[10px] font-black uppercase tracking-widest text-text-muted hover:text-primary opacity-60 transition-colors">Terms & Conditions</button>
-                        <button className="text-[10px] font-black uppercase tracking-widest text-text-muted hover:text-primary opacity-60 transition-colors">Trust in Reviews</button>
+                        <button onClick={() => onNavigate('terms')} className="text-[10px] font-black uppercase tracking-widest text-text-muted hover:text-primary opacity-60 transition-colors">Terms & Conditions</button>
+                        <a href={SOCIAL_LINKS.TRUSTPILOT} target="_blank" rel="noopener noreferrer" className="text-[10px] font-black uppercase tracking-widest text-text-muted hover:text-primary opacity-60 transition-colors">Trust in Reviews</a>
                         <button className="text-[10px] font-black uppercase tracking-widest text-text-muted hover:text-primary opacity-60 transition-colors">System Status</button>
                         <button className="text-[10px] font-black uppercase tracking-widest text-text-muted hover:text-primary opacity-60 transition-colors">Cookie Preferences</button>
                     </div>

@@ -158,6 +158,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                             "https://www.producthunt.com/@touch_flow_pro",
                             "https://www.saashub.com/touch-flow-pro",
                             "https://sourceforge.net/projects/touchflowpro/",
+                            "https://www.trustpilot.com/review/touchflowpro.com",
                             "https://www.indiehackers.com/product/touchflowpro",
                             "https://dev.to/touchflowpro"
                         ]
