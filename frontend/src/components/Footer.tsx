@@ -20,7 +20,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                             Professional-grade typing performance training for serious typists. 
                             Break through the OK Plateau with science-backed drills and fatigue-aware analytics.
                         </p>
-                        <div className="flex items-center gap-4">
+                        <div className="grid grid-cols-5 sm:grid-cols-5 gap-3">
                             <a 
                                 href={SOCIAL_LINKS.LINKEDIN} 
                                 target="_blank" 
