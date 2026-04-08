@@ -121,25 +121,30 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
         <div className="w-full">
             <Helmet>
                                 <title>Elite Typing Trainer for Professionals | TouchFlow Pro</title>
-                <meta name="description" content="Master elite touch typing with professional analytics and fatigue detection. Reach 100+ WPM with science-backed drills. Start your free baseline test now." />
-                <link rel="canonical" href="https://touchflowpro.com/" />
-                <meta property="og:title" content="Elite Typing Training for Professionals | TouchFlow Pro" />
-                <meta property="og:description" content="Master 100+ WPM with deliberate practice and fatigue-aware analytics. Engineered for high-performance careers." />
+                <meta name="description" content="Master elite touch typing with professional analytics, fatigue detection, and enterprise-grade team reporting. Engineered for Medical, Legal, and Tech organizations. Start your baseline performance test now." />
+                <link rel="canonical" href="https://touchflowpro.com" />
+                <meta property="og:title" content="Elite Typing Performance Engine for Teams | TouchFlow Pro" />
+                <meta property="og:description" content="Master 100+ WPM with deliberate practice and enterprise-grade team analytics. Engineered for high-performance organizations." />
                 <meta property="og:type" content="website" />
-                <meta property="og:url" content="https://touchflowpro.com/" />
+                <meta property="og:url" content="https://touchflowpro.com" />
                 <meta property="og:image" content="https://touchflowpro.com/og-image.png" />
-                <meta property="og:site_name" content="TouchFlowPro" />
+                <meta property="og:site_name" content="TouchFlow Pro" />
                 <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content="Elite Typing Training for Professionals | TouchFlow Pro" />
-                <meta name="twitter:description" content="Professional-grade typing performance training for serious typists. Reach 100+ WPM with science-backed drills and real-time fatigue detection. Start training now." />
+                <meta name="twitter:title" content="TouchFlow Pro | Professional Workforce Typing Performance" />
+                <meta name="twitter:description" content="Professional-grade typing performance training and organization dashboards. Reach 100+ WPM with science-backed drills and real-time team reporting." />
                 <script type="application/ld+json">
                     {JSON.stringify({
                         "@context": "https://schema.org",
-                        "@type": "Organization",
+                        "@type": "SoftwareApplication",
                         "name": "TouchFlow Pro",
-                        "url": "https://touchflowpro.com",
-                        "logo": "https://touchflowpro.com/logo.png",
-                        "description": "Professional-grade typing performance training for serious typists.",
+                        "operatingSystem": "All",
+                        "applicationCategory": "BusinessApplication, Productivity",
+                        "description": "Enterprise-grade typing performance training and organization reporting for Medical, Legal, and Technical teams.",
+                        "offers": {
+                            "@type": "Offer",
+                            "price": "9.00",
+                            "priceCurrency": "USD"
+                        },
                         "founder": {
                             "@type": "Person",
                             "name": "Dustin Shoemake"
