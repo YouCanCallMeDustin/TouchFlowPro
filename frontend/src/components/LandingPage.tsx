@@ -145,7 +145,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                             "name": "Dustin Shoemake"
                         },
                         "sameAs": [
-                            "https://www.linkedin.com/company/touchflowpro/"
+                            "https://www.linkedin.com/company/touchflowpro/",
+                            "https://x.com/TouchFlowPro",
+                            "https://www.facebook.com/profile.php?id=61588312147071",
+                            "https://wellfound.com/company/https-touchflowpro-com",
+                            "https://www.producthunt.com/@touch_flow_pro",
+                            "https://www.saashub.com/touch-flow-pro",
+                            "https://sourceforge.net/projects/touchflowpro/",
+                            "https://www.indiehackers.com/product/touchflowpro",
+                            "https://dev.to/touchflowpro"
                         ]
                     })}
                 </script>
@@ -505,12 +513,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                                     <h4 className="text-sm font-black uppercase tracking-widest leading-none mb-1">Dustin Shoemake</h4>
                                     <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest opacity-40 mb-2">Lead Engineer & Founder, 145 Peak WPM</p>
                                     <a 
-                                        href="https://www.linkedin.com/in/touch-flow-pro-602ab5401" 
+                                        href="https://www.linkedin.com/company/touchflowpro/" 
                                         target="_blank" 
                                         rel="noopener noreferrer"
                                         className="text-[9px] font-black uppercase tracking-widest text-primary hover:underline flex items-center gap-1"
                                     >
-                                        Verify Profile on LinkedIn
+                                        Verify Brand on LinkedIn
                                     </a>
                                 </div>
                             </div>
