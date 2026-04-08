@@ -1,7 +1,7 @@
 import { TypingEngine } from '@shared/typingEngine'
 import type { Stage } from './types/stages';
 import { useState, useEffect, useCallback, lazy, Suspense, useRef } from 'react'
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { AnimatePresence } from 'framer-motion'
 import { Card } from './components/ui/Card'
