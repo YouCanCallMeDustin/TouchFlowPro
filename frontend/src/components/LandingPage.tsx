@@ -122,6 +122,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
             <Helmet>
                                 <title>Elite Typing Trainer for Professionals | TouchFlow Pro</title>
                 <meta name="description" content="Master elite touch typing with professional analytics, fatigue detection, and enterprise-grade team reporting. Engineered for Medical, Legal, and Tech organizations. Start your baseline performance test now." />
+                <meta name="trustpilot-one-time-domain-verification-id" content="6d23ae4a-e1ba-425d-bc63-b8de3d6accfe" />
                 <link rel="canonical" href="https://touchflowpro.com" />
                 <meta property="og:title" content="Elite Typing Performance Engine for Teams | TouchFlow Pro" />
                 <meta property="og:description" content="Master 100+ WPM with deliberate practice and enterprise-grade team analytics. Engineered for high-performance organizations." />
