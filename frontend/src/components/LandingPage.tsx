@@ -140,8 +140,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                         "url": "https://touchflowpro.com",
                         "logo": "https://touchflowpro.com/logo.png",
                         "description": "Professional-grade typing performance training for serious typists.",
+                        "founder": {
+                            "@type": "Person",
+                            "name": "Dustin Shoemake"
+                        },
                         "sameAs": [
-                            "https://twitter.com/touchflowpro",
                             "https://www.linkedin.com/company/touchflowpro/"
                         ]
                     })}
@@ -499,8 +502,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                             <div className="flex items-center gap-4">
                                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary" />
                                 <div>
-                                    <h4 className="text-sm font-black uppercase tracking-widest leading-none mb-1">Dustin</h4>
-                                    <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest opacity-40">Lead Engineer & Founder, 145 Peak WPM</p>
+                                    <h4 className="text-sm font-black uppercase tracking-widest leading-none mb-1">Dustin Shoemake</h4>
+                                    <p className="text-[10px] font-bold text-text-muted uppercase tracking-widest opacity-40 mb-2">Lead Engineer & Founder, 145 Peak WPM</p>
+                                    <a 
+                                        href="https://www.linkedin.com/in/touch-flow-pro-602ab5401" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        className="text-[9px] font-black uppercase tracking-widest text-primary hover:underline flex items-center gap-1"
+                                    >
+                                        Verify Profile on LinkedIn
+                                    </a>
                                 </div>
                             </div>
                         </div>
