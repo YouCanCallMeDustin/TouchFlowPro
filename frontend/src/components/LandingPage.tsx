@@ -172,6 +172,54 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                         "url": "https://touchflowpro.com"
                     })}
                 </script>
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "FAQPage",
+                        "mainEntity": [
+                            {
+                                "@type": "Question",
+                                "name": "Is this for beginners?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "No—TouchFlow Pro is built for intermediate and advanced typists who want measurable progress. It is a professional alternative to games like Monkeytype."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "Will it make me faster or just show charts?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "It trains speed and accuracy with a system that adapts to your weak points and fatigue. The charts are the diagnostic data used to guide the training."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "What’s fatigue detection?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "We detect performance drops and rhythm instability. When you’re tired, we adjust intensity so you don’t lock in sloppy habits."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "Can teams use this?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Yes. Organizations get dashboards, coaching metrics, and weekly PDF/CSV reports to track team-wide progress."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "Do you have a free trial?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Yes—start free, run your baseline, and upgrade when you want advanced analytics and reports."
+                                }
+                            }
+                        ]
+                    })}
+                </script>
             </Helmet>
             {/* 1) HERO */}
             <section className="relative min-h-[90vh] w-full flex items-center justify-center overflow-hidden px-4 md:px-0">
@@ -193,7 +241,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                     </h1>
 
                                         <motion.p variants={itemVariants} className="text-text-muted text-base md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed font-bold">
-                        TouchFlow Pro is the typing improvement platform for working professionals. Our engine monitors your burst-to-drift ratio to detect cognitive fatigue before your error rate spikes.
+                        Unlike casual game-based trainers like Monkeytype or simple beginner apps like TypingClub, TouchFlow Pro is the typing improvement platform dedicated strictly for working professionals. Our engine monitors your burst-to-drift ratio to detect cognitive fatigue before your error rate spikes.
                     </motion.p>
 
                     <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
@@ -250,7 +298,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                                 Typing speed isn’t the <br />real goal. <span className="text-secondary/50">Reliable performance is.</span>
                             </h2>
                             <p className="text-text-muted text-lg font-bold leading-relaxed mb-8 opacity-60">
-                                Most typing sites train you to spike WPM in short bursts. Real work requires accuracy under time pressure, low error rates, and endurance across long sessions.
+                                Most typing sites format like gamified Monkeytype clones and train you to spike WPM in short bursts. Real work requires accuracy under time pressure, low error rates, and endurance across long sessions.
                             </p>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -545,7 +593,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartAssessment, onV
                     <div className="space-y-4">
                         <AccordionItem
                             question="Is this for beginners?"
-                            answer="No—TouchFlow Pro is built for intermediate and advanced typists who want measurable progress."
+                            answer="No—TouchFlow Pro is built for intermediate and advanced typists who want measurable progress. It is a professional alternative to games like Monkeytype or TypingClub."
                         />
                         <AccordionItem
                             question="Will it make me faster or just show charts?"

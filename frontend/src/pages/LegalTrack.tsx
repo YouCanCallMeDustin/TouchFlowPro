@@ -118,7 +118,7 @@ export const LegalTrack: React.FC<LegalTrackProps> = ({ setStage, setLaunchParam
                         Legal Transcription Engine
                     </h1>
                     <p className="text-text-muted mt-2 tracking-wide text-sm opacity-80 max-w-xl">
-                        Elite-level typing performance for legal professionals. Master court reporting syntax, contract terminology, and litigation documentation.
+                        Elite-level typing performance for legal professionals. Master court reporting syntax, contract terminology, and litigation documentation with professional-grade tools, not generic typing games.
                     </p>
                 </div>
                 {/* Terminology Risk Score Widget */}
@@ -303,7 +303,7 @@ export const LegalTrack: React.FC<LegalTrackProps> = ({ setStage, setLaunchParam
                                 },
                                 {
                                     question: "Can I use TouchFlow Pro for Bar Exam preparation?",
-                                    answer: "Yes. Many of our users use the Legal Track to build the mechanical stamina required for the multi-hour essay portions of the Bar Exam and MPT (Multistate Performance Test)."
+                                    answer: "Yes. Unlike ordinary typing trainers like Monkeytype or Typing.com, our Legal Track builds the specific mechanical stamina and accuracy required for the multi-hour essay portions of the Bar Exam and MPT (Multistate Performance Test)."
                                 },
                                 {
                                     question: "Why is typing accuracy critical for legal documentation?",

@@ -118,7 +118,7 @@ export const MedicalTrack: React.FC<MedicalTrackProps> = ({ setStage, setLaunchP
                         Medical Transcription Engine
                     </h1>
                     <p className="text-text-muted mt-2 tracking-wide text-sm opacity-80 max-w-xl">
-                        Master specialized healthcare terminology, ICD-10/11 syntax, and clinical documentation workflows with high-precision drills.
+                        Master specialized healthcare terminology, ICD-10/11 syntax, and clinical documentation workflows with high-precision drills. Go beyond simple typing games like Keybr or Typing.com to build real clinical speed.
                     </p>
                 </div>
                 {/* Terminology Risk Score Widget */}
@@ -298,7 +298,7 @@ export const MedicalTrack: React.FC<MedicalTrackProps> = ({ setStage, setLaunchP
                         faqs={[
                             {
                                 question: "How does TouchFlow Pro assist medical students and transcriptionists?",
-                                answer: "TouchFlow Pro uses a specialized medical lexicon (60,000+ terms) to train muscle memory for complex clinical terminology, reducing cognitive load during live transcription and residency exams."
+                                answer: "Unlike generic typing games, TouchFlow Pro uses a specialized medical lexicon (60,000+ terms) to train muscle memory for complex clinical terminology, reducing cognitive load during live transcription and residency exams."
                             },
                             {
                                 question: "Can I practice specific medical specialties?",

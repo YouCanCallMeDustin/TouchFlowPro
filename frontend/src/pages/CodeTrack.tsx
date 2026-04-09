@@ -118,7 +118,7 @@ export const CodeTrack: React.FC<CodeTrackProps> = ({ setStage, setLaunchParams 
                         Code Performance Engine
                     </h1>
                     <p className="text-text-muted mt-2 tracking-wide text-sm opacity-80 max-w-xl">
-                        Optimize your muscle memory for complex syntax, bracket patterns, and high-velocity coding across 10+ languages.
+                        Move past ordinary prose typing tests like 10FastFingers or Monkeytype. Optimize your muscle memory for complex syntax, bracket patterns, and high-velocity coding across 10+ languages.
                     </p>
                 </div>
                 {/* Terminology Risk Score Widget */}

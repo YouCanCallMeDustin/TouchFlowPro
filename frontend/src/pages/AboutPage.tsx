@@ -54,7 +54,7 @@ export default function AboutPage({ onBack }: AboutPageProps) {
                         Our <span className="text-primary italic">Mission.</span>
                     </h1>
                     <p className="text-text-muted text-lg max-w-2xl mx-auto font-bold uppercase tracking-wider opacity-60">
-                        We build precision tools for modern professionals.
+                        While typing games like Monkeytype are great for students, we build precision tools for modern professionals.
                     </p>
                 </motion.div>
 

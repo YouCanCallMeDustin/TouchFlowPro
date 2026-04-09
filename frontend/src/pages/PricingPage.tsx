@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Check, X, Shield, Zap, Users, ArrowRight, Loader2 } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 import PageTransition from '../components/PageTransition';
 import { apiFetch } from '../utils/api';
 
@@ -127,6 +128,11 @@ const PricingPage: React.FC<PricingPageProps> = ({ onNavigate, user }) => {
 
     return (
         <PageTransition>
+            <Helmet>
+                <title>Preimum Plans & Pricing | TouchFlow Pro vs Monkeytype</title>
+                <meta name="description" content="View pricing for TouchFlow Pro, the elite typing performance software. Upgrade beyond basic games like Monkeytype with professional analytics and team dashboards." />
+                <link rel="canonical" href="https://touchflowpro.com/pricing" />
+            </Helmet>
             <div className="min-h-screen py-20 px-4">
                 <div className="max-w-7xl mx-auto">
                     {/* Header */}
