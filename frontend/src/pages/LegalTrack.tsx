@@ -70,7 +70,8 @@ export const LegalTrack: React.FC<LegalTrackProps> = ({ setStage, setLaunchParam
                 kind: 'DRILL',
                 drillId: drill.id,
                 title: drill.title,
-                promptText: drill.content || (drill as any).passage
+                promptText: drill.content || (drill as any).passage,
+                transcriptionMode: true
             });
             setStage('practice');
         }

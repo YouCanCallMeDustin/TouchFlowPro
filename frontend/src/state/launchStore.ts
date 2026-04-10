@@ -9,6 +9,7 @@ interface LaunchState {
             kind: string;
             promptText?: string;
             drillId?: string;
+            transcriptionMode?: boolean;
         };
         planItemId?: string;
         recommendedSeconds?: number;

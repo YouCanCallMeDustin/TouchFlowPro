@@ -23,6 +23,7 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
     const [selectedDifficulty, setSelectedDifficulty] = useState<string>('All');
     const [activeDrill, setActiveDrill] = useState<Lesson | null>(null);
     const [completedDrills, setCompletedDrills] = useState<Set<string>>(new Set());
+    const [transcriptionMode, setTranscriptionMode] = useState(false);
 
     // Fetch Completed Drills
     useEffect(() => {
@@ -81,6 +82,9 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
                     if (pendingLaunch.launch.promptText) {
                         practiceLesson.content = pendingLaunch.launch.promptText;
                     }
+                    if (pendingLaunch.launch.transcriptionMode) {
+                        setTranscriptionMode(true);
+                    }
                     setActiveDrill(practiceLesson);
                     clearPendingLaunch();
                 } else if (pendingLaunch.launch.promptText) {
@@ -120,6 +124,9 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
                         description: 'Specialty track drill session',
                         warmupSteps: dynamicWarmupSteps.length > 0 ? dynamicWarmupSteps : undefined
                     };
+                    if (pendingLaunch.launch.transcriptionMode) {
+                        setTranscriptionMode(true);
+                    }
                     setActiveDrill(customLesson);
                     clearPendingLaunch();
                 }
@@ -139,6 +146,9 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
                     masteryThreshold: 0,
                     description: 'Scheduled training task'
                 };
+                if (pendingLaunch.launch.transcriptionMode) {
+                    setTranscriptionMode(true);
+                }
                 setActiveDrill(customLesson);
                 clearPendingLaunch();
             }
@@ -187,6 +197,7 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
         } finally {
             // Force return to list view
             setActiveDrill(null);
+            setTranscriptionMode(false);
             // Refresh completed list locally for immediate feedback (though effect handles it too)
             if (activeDrill) {
                 setCompletedDrills(prev => new Set(prev).add(activeDrill.id));
@@ -200,7 +211,8 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
                 lesson={activeDrill}
                 userId={userId}
                 onComplete={handleDrillComplete}
-                onCancel={() => setActiveDrill(null)}
+                onCancel={() => { setActiveDrill(null); setTranscriptionMode(false); }}
+                transcriptionMode={transcriptionMode}
             />
         );
     }

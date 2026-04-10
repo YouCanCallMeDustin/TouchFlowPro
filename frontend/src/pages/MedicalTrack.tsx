@@ -70,7 +70,8 @@ export const MedicalTrack: React.FC<MedicalTrackProps> = ({ setStage, setLaunchP
                 kind: 'DRILL',
                 drillId: drill.id,
                 title: drill.title,
-                promptText: drill.content || (drill as any).passage
+                promptText: drill.content || (drill as any).passage,
+                transcriptionMode: true
             });
             setStage('practice');
         }

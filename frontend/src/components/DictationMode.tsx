@@ -46,6 +46,7 @@ interface DictationUIProps {
 
 export const DictationUI: React.FC<DictationUIProps> = ({ text, isStarted, userInput, onSpeedChange, currentSpeed, drillId }) => {
     const [showPeek, setShowPeek] = useState(false);
+    const [lockTextVisible, setLockTextVisible] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -111,6 +112,9 @@ export const DictationUI: React.FC<DictationUIProps> = ({ text, isStarted, userI
                     if (currentIndex > 0) {
                         onSpeedChange(speeds[currentIndex - 1]);
                     }
+                } else if (e.key === 'v' || e.key === 'V') {
+                    e.preventDefault();
+                    setLockTextVisible(prev => !prev);
                 }
             }
         };
@@ -159,7 +163,15 @@ export const DictationUI: React.FC<DictationUIProps> = ({ text, isStarted, userI
                         className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-primary hover:border-primary transition-all shadow-sm active:scale-95 select-none"
                         title="Hold to peek at text"
                     >
-                        <span>👁️</span> Hold to Peek
+                        <span>👁️</span> Hold
+                    </button>
+
+                    <button
+                        onClick={() => setLockTextVisible(prev => !prev)}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-sm active:scale-95 ${lockTextVisible ? 'bg-indigo-500 text-white border border-indigo-500/20' : 'bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-400 hover:text-indigo-500 hover:border-indigo-500'}`}
+                        title="Toggle persistent text visibility (CTRL + V)"
+                    >
+                        <span>{lockTextVisible ? '🔓' : '🔒'}</span> {lockTextVisible ? 'Locked' : 'View (CTRL+V)'}
                     </button>
                 </div>
             </div>
@@ -184,7 +196,7 @@ export const DictationUI: React.FC<DictationUIProps> = ({ text, isStarted, userI
                 )}
 
                 <div className="relative z-10 w-full flex flex-col items-center">
-                    {showPeek ? (
+                    {(showPeek || lockTextVisible) ? (
                         <p className="text-2xl font-mono text-white leading-relaxed max-w-2xl animate-in fade-in duration-200 text-center">
                             {text}
                         </p>

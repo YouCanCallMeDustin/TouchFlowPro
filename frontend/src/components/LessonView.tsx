@@ -28,11 +28,12 @@ interface LessonViewProps {
     onCancel: () => void;
     initialDrillText?: string;
     timeLimit?: number;
+    transcriptionMode?: boolean;
 }
 
 type Mode = 'intro' | 'theory' | 'warmup' | 'practice' | 'test' | 'results' | 'adaptive';
 
-const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComplete, onCancel, initialDrillText, timeLimit }) => {
+const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComplete, onCancel, initialDrillText, timeLimit, transcriptionMode }) => {
     const [mode, setMode] = useState<Mode>('intro');
     const [testMetrics, setTestMetrics] = useState<TypingMetrics | null>(null);
     const [passed, setPassed] = useState(false);
@@ -73,11 +74,12 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
 
             // Handle timer immediately
             setPlanTimerActive(true);
-        } else if (initialDrillText) {
-            setPracticeText(initialDrillText);
+        } else if (initialDrillText || transcriptionMode) {
+            if (initialDrillText) setPracticeText(initialDrillText);
+            else setPracticeText(lesson.content);
             setMode('practice');
         }
-    }, [initialDrillText, lesson.id, pendingLaunch]);
+    }, [initialDrillText, lesson.id, pendingLaunch, transcriptionMode]);
 
     const [newAchievement, setNewAchievement] = useState<{ name: string; icon: string; description: string } | null>(null);
     const [, setWarmupCompleted] = useState(false);
@@ -272,10 +274,10 @@ const LessonView: React.FC<LessonViewProps> = ({ lesson, userId: _userId, onComp
 
     // Auto-enable dictation mode recommendation for medical/legal
     useEffect(() => {
-        if (lesson.category === 'Medical' || lesson.category === 'Legal') {
+        if (lesson.category === 'Medical' || lesson.category === 'Legal' || transcriptionMode) {
             setDictationModeEnabled(true);
         }
-    }, [lesson.category]);
+    }, [lesson.category, transcriptionMode]);
 
     return (
         <div className="max-w-5xl mx-auto w-full relative">
