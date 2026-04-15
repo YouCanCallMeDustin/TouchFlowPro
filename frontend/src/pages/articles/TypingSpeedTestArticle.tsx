@@ -53,19 +53,19 @@ export const TypingSpeedTestArticle: React.FC<ArticleProps> = () => {
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm italic">
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Net WPM:** The only metric that matters. Errors are catastrophic.</span>
+                            <span>Net WPM: The only metric that matters. Errors are catastrophic.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Cadence Tracking:** Measuring the rhythm between every single key.</span>
+                            <span>Cadence Tracking: Measuring the rhythm between every single key.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Jitter Telemetry:** Identifies neural hesitation in technical words.</span>
+                            <span>Jitter Telemetry: Identifies neural hesitation in technical words.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Burst Analysis:** Distinguishing speed from uncontrollable rushing.</span>
+                            <span>Burst Analysis: Distinguishing speed from uncontrollable rushing.</span>
                         </li>
                     </ul>
                 </Card>
@@ -75,7 +75,7 @@ export const TypingSpeedTestArticle: React.FC<ArticleProps> = () => {
                         <h2 className="text-3xl font-black text-white uppercase italic mb-6">What defines a Professional Typing Speed Test?</h2>
                         <div className="bg-white/5 p-8 rounded-3xl border border-white/10 border-l-4 border-l-primary">
                             <p className="text-xl text-text-main font-medium leading-relaxed mb-0 italic">
-                                A **Professional Typing Speed Test** differs from casual games by prioritizing **Net WPM** and **Structural Stability**. While standard tests measure gross speed, a professional evaluator applies a heavy penalty for errors, reflecting the high cost of correction in legal, medical, and technical fields. Key metrics include **Keystroke Cadence** (rhythmic consistency), **Burst-to-Drift Ratios**, and **N-Gram Transition Latency**. These diagnostic values allow professionals to pinpoint exact neuromuscular bottlenecks rather than just receiving a surface-level speed score.
+                                A Professional Typing Speed Test differs from casual games by prioritizing Net WPM and Structural Stability. While standard tests measure gross speed, a professional evaluator applies a heavy penalty for errors, reflecting the high cost of correction in legal, medical, and technical fields. Key metrics include Keystroke Cadence (rhythmic consistency), Burst-to-Drift Ratios, and N-Gram Transition Latency. These diagnostic values allow professionals to pinpoint exact neuromuscular bottlenecks rather than just receiving a surface-level speed score.
                             </p>
                         </div>
                     </section>
@@ -116,7 +116,7 @@ export const TypingSpeedTestArticle: React.FC<ArticleProps> = () => {
                             <BarChart3 className="text-primary" /> 2. Telemetry: The Science of Jitter
                         </h2>
                         <p>
-                            Our speed test doesn't just watch your clock—it watches your **jitter**. Keystroke jitter is the variance in time between identical bigrams (e.g., 'TH'). High jitter indicates that your muscle memory is not yet "hardened," making you prone to errors under pressure.
+                            Our speed test doesn't just watch your clock—it watches your jitter. Keystroke jitter is the variance in time between identical bigrams (e.g., 'TH'). High jitter indicates that your muscle memory is not yet "hardened," making you prone to errors under pressure.
                         </p>
                     </section>
 

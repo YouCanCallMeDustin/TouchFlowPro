@@ -53,19 +53,19 @@ export const TypingPracticeArticle: React.FC<ArticleProps> = () => {
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm italic">
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Warmup (3m):** Dynamic finger mobility and home-row anchoring.</span>
+                            <span>Warmup (3m): Dynamic finger mobility and home-row anchoring.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Delta Drills (10m):** High-intensity remediation of specific weak keys.</span>
+                            <span>Delta Drills (10m): High-intensity remediation of specific weak keys.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Diagnostic (2m):** One official WPM test to anchor the daily delta.</span>
+                            <span>Diagnostic (2m): One official WPM test to anchor the daily delta.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Consistency Logic:** 15m daily &gt; 2hrs weekly. No exceptions.</span>
+                            <span>Consistency Logic: 15m daily &gt; 2hrs weekly. No exceptions.</span>
                         </li>
                     </ul>
                 </Card>
@@ -75,7 +75,7 @@ export const TypingPracticeArticle: React.FC<ArticleProps> = () => {
                         <h2 className="text-3xl font-black text-white uppercase italic mb-6">How to Practice Typing Like a Professional?</h2>
                         <div className="bg-white/5 p-8 rounded-3xl border border-white/10 border-l-4 border-l-primary">
                             <p className="text-xl text-text-main font-medium leading-relaxed mb-0 italic">
-                                To maximize **Professional Typing Practice**, you must adhere to the **Consistency Over Duration** principle. A 15-minute daily session of **Systemic Deliberate Practice** is 5x more effective than an occasional two-hour marathon. Effective routines include **3-minute neuromuscular warmups**, 10 minutes of **Adaptive Telemetry Drills** focusing on specific n-gram weaknesses, and a 2-minute **Baseline Diagnostic** to track weekly WPM delta. This methodical approach ensures that your brain consolidates motor patterns during sleep, leading to permanent 5-10 WPM gains per week.
+                                To maximize Professional Typing Practice, you must adhere to the Consistency Over Duration principle. A 15-minute daily session of Systemic Deliberate Practice is 5x more effective than an occasional two-hour marathon. Effective routines include 3-minute neuromuscular warmups, 10 minutes of Adaptive Telemetry Drills focusing on specific n-gram weaknesses, and a 2-minute Baseline Diagnostic to track weekly WPM delta. This methodical approach ensures that your brain consolidates motor patterns during sleep, leading to permanent 5-10 WPM gains per week.
                             </p>
                         </div>
                     </section>

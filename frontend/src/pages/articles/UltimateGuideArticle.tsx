@@ -53,19 +53,19 @@ export const UltimateGuideArticle: React.FC<ArticleProps> = () => {
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm italic">
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Phase 1:** Precision Discovery (0-40 WPM). Mastering mechanics.</span>
+                            <span>Phase 1: Precision Discovery (0-40 WPM). Mastering mechanics.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Phase 2:** Neuromuscular Expansion (40-80 WPM). N-Gram efficiency.</span>
+                            <span>Phase 2: Neuromuscular Expansion (40-80 WPM). N-Gram efficiency.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Phase 3:** Elite Pipelining (80-150 WPM). Sight-reading mastery.</span>
+                            <span>Phase 3: Elite Pipelining (80-150 WPM). Sight-reading mastery.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Maintenance:** 15-minute daily deltas to prevent skill decay.</span>
+                            <span>Maintenance: 15-minute daily deltas to prevent skill decay.</span>
                         </li>
                     </ul>
                 </Card>
@@ -75,7 +75,7 @@ export const UltimateGuideArticle: React.FC<ArticleProps> = () => {
                         <h2 className="text-3xl font-black text-white uppercase italic mb-6">Mastering the Machine: The Definitive Typing Speed Guide</h2>
                         <div className="bg-white/5 p-8 rounded-3xl border border-white/10 border-l-4 border-l-primary">
                             <p className="text-xl text-text-main font-medium leading-relaxed mb-0 italic">
-                                The **Ultimate Typing Speed Guide** provides a three-phase roadmap to elite performance: **Phase 1: Precision Discovery** (mastering touch typing mechanics at 99%+ accuracy), **Phase 2: Neuromuscular Expansion** (utilizing N-gram gestalting and pace ladders to break the 60 WPM plateau), and **Phase 3: Elite Pipelining** (achieving 100-150 WPM through horizontal sight reading and millisecond telemetry remediation). Mastering these phases ensures that professional typists maximize their cognitive-to-screen bandwidth, eliminating the keyboard as a bottleneck to creative and technical output.
+                                The Ultimate Typing Speed Guide provides a three-phase roadmap to elite performance: Phase 1: Precision Discovery (mastering touch typing mechanics at 99%+ accuracy), Phase 2: Neuromuscular Expansion (utilizing N-gram gestalting and pace ladders to break the 60 WPM plateau), and Phase 3: Elite Pipelining (achieving 100-150 WPM through horizontal sight reading and millisecond telemetry remediation). Mastering these phases ensures that professional typists maximize their cognitive-to-screen bandwidth, eliminating the keyboard as a bottleneck to creative and technical output.
                             </p>
                         </div>
                     </section>
@@ -96,7 +96,7 @@ export const UltimateGuideArticle: React.FC<ArticleProps> = () => {
                             <Target className="text-primary" /> Phase 1: Precision Discovery (0-40 WPM)
                         </h2>
                         <p>
-                            In the foundation phase, your goal is not speed—it is **structural integrity**. You must master the spatial mapping of all 26 keys without once looking at your hands.
+                            In the foundation phase, your goal is not speed—it is structural integrity. You must master the spatial mapping of all 26 keys without once looking at your hands.
                         </p>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
                             <Link to="/articles/beginners-guide-to-typing" className="p-4 bg-white/5 border border-white/10 rounded-2xl hover:border-primary transition-all">
@@ -119,7 +119,7 @@ export const UltimateGuideArticle: React.FC<ArticleProps> = () => {
                             <Zap className="text-primary" /> Phase 2: Neuromuscular Expansion (40-80 WPM)
                         </h2>
                         <p>
-                            This is where most typists stall. To break the "OK Plateau," you must shift from processing characters to processing **Gestalts** (word blocks).
+                            This is where most typists stall. To break the "OK Plateau," you must shift from processing characters to processing Gestalts (word blocks).
                         </p>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
                             <Link to="/articles/improve-typing-speed" className="p-6 bg-white/5 border border-white/10 rounded-2xl hover:border-primary transition-all group">
@@ -140,7 +140,7 @@ export const UltimateGuideArticle: React.FC<ArticleProps> = () => {
                             <Zap className="text-primary animate-pulse" /> Phase 3: Elite Pipelining (80-150 WPM)
                         </h2>
                         <p>
-                            At this level, you are no longer typing—you are **pipelining**. Your brain is processing 3-4 words ahead of your fingers, creating a continuous stream of input.
+                            At this level, you are no longer typing—you are pipelining. Your brain is processing 3-4 words ahead of your fingers, creating a continuous stream of input.
                         </p>
                         <ul className="space-y-4 text-sm mt-8">
                             <li className="flex gap-4 items-start bg-white/5 p-4 rounded-xl border-l-2 border-primary">

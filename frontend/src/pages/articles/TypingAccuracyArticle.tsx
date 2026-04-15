@@ -53,19 +53,19 @@ export const TypingAccuracyArticle: React.FC<ArticleProps> = () => {
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm italic">
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Zero Backspace:** Training without correction to force focus.</span>
+                            <span>Zero Backspace: Training without correction to force focus.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Rhythmic Stability:** Maintaining a metronomic cadence.</span>
+                            <span>Rhythmic Stability: Maintaining a metronomic cadence.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Home Row Discipline:** Strict adherence to anchor points.</span>
+                            <span>Home Row Discipline: Strict adherence to anchor points.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Millisecond Monitoring:** Detecting subconscious hesitation zones.</span>
+                            <span>Millisecond Monitoring: Detecting subconscious hesitation zones.</span>
                         </li>
                     </ul>
                 </Card>
@@ -75,7 +75,7 @@ export const TypingAccuracyArticle: React.FC<ArticleProps> = () => {
                         <h2 className="text-3xl font-black text-white uppercase italic mb-6">How to Improve Typing Accuracy? (The Featured Snippet)</h2>
                         <div className="bg-white/5 p-8 rounded-3xl border border-white/10 border-l-4 border-l-primary">
                             <p className="text-xl text-text-main font-medium leading-relaxed mb-0 italic">
-                                To **improve typing accuracy**, professionals must shift focus from speed to **"Rhythmic Stability."** The most effective framework includes implementing **No-Backspace Drills** (forcing the brain to verify every keystroke before execution), maintaining consistent **Home Row Anchoring**, and utilizing **Slow-Motion Practice** (typing at 50% max speed to rebuild "perfect" muscle memory). Improving accuracy by just 2% can increase effective WPM by 15% by eliminating the "backspace debt" cost of error correction.
+                                To improve typing accuracy, professionals must shift focus from speed to "Rhythmic Stability." The most effective framework includes implementing No-Backspace Drills (forcing the brain to verify every keystroke before execution), maintaining consistent Home Row Anchoring, and utilizing Slow-Motion Practice (typing at 50% max speed to rebuild "perfect" muscle memory). Improving accuracy by just 2% can increase effective WPM by 15% by eliminating the "backspace debt" cost of error correction.
                             </p>
                         </div>
                     </section>
@@ -105,7 +105,7 @@ export const TypingAccuracyArticle: React.FC<ArticleProps> = () => {
                         </p>
                         <Card className="p-6 bg-white/5 border border-white/10 my-8">
                             <h4 className="text-primary font-black uppercase text-[10px] tracking-widest mb-2 flex items-center gap-2"><Target size={14}/> The Drill</h4>
-                            <p className="text-sm italic mb-0">Commit to 5 minutes of typing where you **never** press backspace. If you make a mistake, leave it and move on. This forces your brain to "verify-and-fire" each key with 100% certainty.</p>
+                            <p className="text-sm italic mb-0">Commit to 5 minutes of typing where you never press backspace. If you make a mistake, leave it and move on. This forces your brain to "verify-and-fire" each key with 100% certainty.</p>
                         </Card>
                     </section>
 

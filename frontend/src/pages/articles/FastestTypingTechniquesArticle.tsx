@@ -53,19 +53,19 @@ export const FastestTypingTechniquesArticle: React.FC<ArticleProps> = () => {
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm italic">
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Burst Dynamics:** Shift from letters to "n-gram" gestures.</span>
+                            <span>Burst Dynamics: Shift from letters to "n-gram" gestures.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Predictive Pipelining:** Reading 3-5 words ahead of active input.</span>
+                            <span>Predictive Pipelining: Reading 3-5 words ahead of active input.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Tactile Optimization:** Choosing switches based on return latency.</span>
+                            <span>Tactile Optimization: Choosing switches based on return latency.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**AI-Hybrid Workflows:** Leveraging predictive intent for 200+ effective WPM.</span>
+                            <span>AI-Hybrid Workflows: Leveraging predictive intent for 200+ effective WPM.</span>
                         </li>
                     </ul>
                 </Card>
@@ -75,7 +75,7 @@ export const FastestTypingTechniquesArticle: React.FC<ArticleProps> = () => {
                         <h2 className="text-3xl font-black text-white uppercase italic mb-6">What is the Fastest Typing Technique? (The Featured Snippet)</h2>
                         <div className="bg-white/5 p-8 rounded-3xl border border-white/10 border-l-4 border-l-primary">
                             <p className="text-xl text-text-main font-medium leading-relaxed mb-0 italic">
-                                The **fastest typing technique** is a hybrid method known as **"Burst-to-Stabilize"** touch typing. Unlike traditional rhythmic typing, this method involves accelerating your finger speed on familiar letter clusters (n-grams like "the", "ion", "ing") and stabilizing your rhythm on complex words. When combined with **Predictive Pipelining**—reading several words ahead while the hands finish the current word—elite typists can sustain speeds of **120 to 180 WPM**.
+                                The fastest typing technique is a hybrid method known as "Burst-to-Stabilize" touch typing. Unlike traditional rhythmic typing, this method involves accelerating your finger speed on familiar letter clusters (n-grams like "the", "ion", "ing") and stabilizing your rhythm on complex words. When combined with Predictive Pipelining—reading several words ahead while the hands finish the current word—elite typists can sustain speeds of 120 to 180 WPM.
                             </p>
                         </div>
                     </section>
@@ -105,7 +105,7 @@ export const FastestTypingTechniquesArticle: React.FC<ArticleProps> = () => {
                     <section id="pipelining">
                         <h2 className="text-3xl font-black text-white uppercase italic tracking-tight mb-6">2. Pipelining: Decoupling Eyes from Hands</h2>
                         <p>
-                            The biggest bottleneck for intermediate typists is "Visual Lag." If you are looking at the word you are currently typing, you are already too slow. Pro typists use **Predictive Pipelining**:
+                            The biggest bottleneck for intermediate typists is "Visual Lag." If you are looking at the word you are currently typing, you are already too slow. Pro typists use Predictive Pipelining:
                         </p>
                         <ul className="space-y-4">
                             <li className="bg-white/5 p-4 rounded-xl border-l-2 border-primary">

@@ -53,19 +53,19 @@ export const TouchTypingGuideArticle: React.FC<ArticleProps> = () => {
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm italic">
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Zero-Look Mastery:** Complete reliance on neuromuscular spatial mapping.</span>
+                            <span>Zero-Look Mastery: Complete reliance on neuromuscular spatial mapping.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Home Row Anchoring:** The permanent reference point for all 10 fingers.</span>
+                            <span>Home Row Anchoring: The permanent reference point for all 10 fingers.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Layout Evolution:** From QWERTY to Dvorak and Colemak efficiency.</span>
+                            <span>Layout Evolution: From QWERTY to Dvorak and Colemak efficiency.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Ergonomic Baseline:** Maintaining structural health during high-WPM output.</span>
+                            <span>Ergonomic Baseline: Maintaining structural health during high-WPM output.</span>
                         </li>
                     </ul>
                 </Card>
@@ -75,7 +75,7 @@ export const TouchTypingGuideArticle: React.FC<ArticleProps> = () => {
                         <h2 className="text-3xl font-black text-white uppercase italic mb-6 text-primary">What is Touch Typing? (The Professional Definition)</h2>
                         <div className="bg-white/5 p-8 rounded-3xl border border-white/10 border-l-4 border-l-primary">
                             <p className="text-xl text-text-main font-medium leading-relaxed mb-0 italic">
-                                **Touch typing** is a neuromuscular method of data entry that relies on **procedural muscle memory** rather than visual feedback. Instead of looking at the keyboard, each of the ten fingers is assigned specific keys and trained to return to the **Home Row** (ASDF and JKL;) after every stroke. This allows for seamless data entry at the "speed of thought," typically ranging from 40 WPM for beginners to over **150 WPM** for elite professionals, while reducing cognitive load and ergonomic strain.
+                                Touch typing is a neuromuscular method of data entry that relies on procedural muscle memory rather than visual feedback. Instead of looking at the keyboard, each of the ten fingers is assigned specific keys and trained to return to the Home Row (ASDF and JKL;) after every stroke. This allows for seamless data entry at the "speed of thought," typically ranging from 40 WPM for beginners to over 150 WPM for elite professionals, while reducing cognitive load and ergonomic strain.
                             </p>
                         </div>
                     </section>
@@ -96,7 +96,7 @@ export const TouchTypingGuideArticle: React.FC<ArticleProps> = () => {
                             <History className="text-primary" /> The Evolution of Input
                         </h2>
                         <p>
-                            The **QWERTY** layout was patented in 1873 by Christopher Sholes. Legend suggests it was designed to prevent mechanical typewriter jams by separating frequently used letter pairs. Today, despite modern digital switches, QWERTY remains the global standard for professional communication.
+                            The QWERTY layout was patented in 1873 by Christopher Sholes. Legend suggests it was designed to prevent mechanical typewriter jams by separating frequently used letter pairs. Today, despite modern digital switches, QWERTY remains the global standard for professional communication.
                         </p>
                     </section>
 
@@ -109,7 +109,7 @@ export const TouchTypingGuideArticle: React.FC<ArticleProps> = () => {
                            <Card className="p-6 bg-white/5 border border-white/10">
                                 <Keyboard className="text-primary mb-3" size={24} />
                                 <h4 className="text-white font-bold text-xs uppercase mb-2">The Anchor Point</h4>
-                                <p className="text-[10px] opacity-60 italic leading-relaxed">The tactile bumps on **F** and **J** are your cognitive zero. If your hands drift, your accuracy collapses. Always return to these anchors.</p>
+                                <p className="text-[10px] opacity-60 italic leading-relaxed">The tactile bumps on F and J are your cognitive zero. If your hands drift, your accuracy collapses. Always return to these anchors.</p>
                            </Card>
                            <Card className="p-6 bg-white/5 border border-white/10">
                                 <Hand className="text-primary mb-3" size={24} />

@@ -53,19 +53,19 @@ export const TypeFasterArticle: React.FC<ArticleProps> = () => {
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm italic">
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**N-Gram Gestalting:** Executing common word blocks as a single neural command.</span>
+                            <span>N-Gram Gestalting: Executing common word blocks as a single neural command.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Zero-Look Commitment:** Deleting the visual feedback loop to trust muscle memory.</span>
+                            <span>Zero-Look Commitment: Deleting the visual feedback loop to trust muscle memory.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Metronomic Rhythm:** Stabilizing keystroke timing to prevent mechanical jams.</span>
+                            <span>Metronomic Rhythm: Stabilizing keystroke timing to prevent mechanical jams.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Backspace Auditing:** Tracking 'error debt' to identify structural weaknesses.</span>
+                            <span>Backspace Auditing: Tracking 'error debt' to identify structural weaknesses.</span>
                         </li>
                     </ul>
                 </Card>
@@ -75,7 +75,7 @@ export const TypeFasterArticle: React.FC<ArticleProps> = () => {
                         <h2 className="text-3xl font-black text-white uppercase italic mb-6">How to Type Faster and Accurately? (The Scientific Edge)</h2>
                         <div className="bg-white/5 p-8 rounded-3xl border border-white/10 border-l-4 border-l-primary">
                             <p className="text-xl text-text-main font-medium leading-relaxed mb-0 italic">
-                                To **type faster accurately**, you must move beyond raw finger velocity and prioritize **Rhythmic Stability**. Professional typing is an exercise in neuromuscular efficiency: you must eliminate **Backspace Debt**—the three-keystroke time penalty incurred by every typo. By implementing **N-Gram Gestalting** (recognizing letter clusters as single 'chords') and maintaining **99%+ Precision Benchmarks**, you allow your subconscious to execute complex patterns without conscious friction, resulting in 100+ WPM output with zero cognitive fatigue.
+                                To type faster accurately, you must move beyond raw finger velocity and prioritize Rhythmic Stability. Professional typing is an exercise in neuromuscular efficiency: you must eliminate Backspace Debt—the three-keystroke time penalty incurred by every typo. By implementing N-Gram Gestalting (recognizing letter clusters as single 'chords') and maintaining 99%+ Precision Benchmarks, you allow your subconscious to execute complex patterns without conscious friction, resulting in 100+ WPM output with zero cognitive fatigue.
                             </p>
                         </div>
                     </section>
@@ -94,7 +94,7 @@ export const TypeFasterArticle: React.FC<ArticleProps> = () => {
                     <section id="gestalting">
                         <h2 className="text-3xl font-black text-white uppercase italic tracking-tight mb-6">1. N-Gram Gestalting: Thinking in Chords</h2>
                         <p>
-                            Beginners type `T-H-E`. Professionals type `THE`. This shift is called **Gestalting**. Your brain begins to treat the top 500 n-grams (common letter clusters) as single neural entities.
+                            Beginners type `T-H-E`. Professionals type `THE`. This shift is called Gestalting. Your brain begins to treat the top 500 n-grams (common letter clusters) as single neural entities.
                         </p>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
                             <Card className="p-6 bg-white/5 border border-white/10">
@@ -124,7 +124,7 @@ export const TypeFasterArticle: React.FC<ArticleProps> = () => {
                     <section id="tactile">
                         <h2 className="text-3xl font-black text-white uppercase italic tracking-tight mb-6">3. Tactile vs. Visual Feedback Loops</h2>
                         <p>
-                            To **type faster accurately**, you must trust your fingertips more than your eyes. Visual confirmation is slow (approx. 200ms latency). Tactile confirmation is significantly faster.
+                            To type faster accurately, you must trust your fingertips more than your eyes. Visual confirmation is slow (approx. 200ms latency). Tactile confirmation is significantly faster.
                         </p>
                         <ul className="space-y-4 text-sm mt-8">
                             <li className="flex gap-4 items-start bg-white/5 p-4 rounded-xl border-l-2 border-primary">

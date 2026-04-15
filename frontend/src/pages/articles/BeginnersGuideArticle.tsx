@@ -56,19 +56,19 @@ export const BeginnersGuideArticle: React.FC<ArticleProps> = () => {
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm italic">
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**The Home Row** is your permanent base of operations.</span>
+                            <span>The Home Row is your permanent base of operations.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Rule #1:** Never look down. Use a cloth if you have to.</span>
+                            <span>Rule #1: Never look down. Use a cloth if you have to.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Daily Sprints:** 15 minutes of guided practice beats 3 hours of gaming.</span>
+                            <span>Daily Sprints: 15 minutes of guided practice beats 3 hours of gaming.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Accuracy &gt; WPM:** Speed is a byproduct of precise muscle memory.</span>
+                            <span>Accuracy &gt; WPM: Speed is a byproduct of precise muscle memory.</span>
                         </li>
                     </ul>
                 </Card>
@@ -78,7 +78,7 @@ export const BeginnersGuideArticle: React.FC<ArticleProps> = () => {
                         <h2 className="text-3xl font-black text-white uppercase italic mb-6 text-center md:text-left">What is Touch Typing? (The Definition)</h2>
                         <div className="bg-white/5 p-8 rounded-3xl border border-white/10 border-l-4 border-l-primary">
                             <p className="text-xl text-text-main font-medium leading-relaxed mb-0 italic">
-                                **Touch typing** is the ability to type on a keyboard without looking at the keys, relying entirely on muscle memory and tactile feedback. By assigning specific "finger zones" to each of your ten fingers, you eliminate the mental load of searching for keys, allowing for speeds of **80-120+ WPM** with near-perfect accuracy.
+                                Touch typing is the ability to type on a keyboard without looking at the keys, relying entirely on muscle memory and tactile feedback. By assigning specific "finger zones" to each of your ten fingers, you eliminate the mental load of searching for keys, allowing for speeds of 80-120+ WPM with near-perfect accuracy.
                             </p>
                         </div>
                     </section>
@@ -97,7 +97,7 @@ export const BeginnersGuideArticle: React.FC<ArticleProps> = () => {
                     <section id="homerow">
                         <h2 className="text-3xl font-black text-white uppercase italic tracking-tight mb-6">Phase 1: The Home Row Foundation</h2>
                         <p>
-                            Every keyboard has two small tactile bumps on the **F** and **J** keys. These are your "home" sensors. Your left index finger rests on **F**, and your right index finger rests on **J**. From here, your fingers naturally fall onto the **A, S, D, F** and **J, K, L, ;** keys.
+                            Every keyboard has two small tactile bumps on the F and J keys. These are your "home" sensors. Your left index finger rests on F, and your right index finger rests on J. From here, your fingers naturally fall onto the A, S, D, F and J, K, L, ; keys.
                         </p>
                         <Card className="p-6 bg-white/5 border border-white/10 my-8">
                             <h4 className="text-primary font-black uppercase text-[10px] tracking-widest mb-2">The Golden Rule</h4>
@@ -149,7 +149,7 @@ export const BeginnersGuideArticle: React.FC<ArticleProps> = () => {
                     <section id="strategy">
                         <h2 className="text-3xl font-black text-white uppercase italic tracking-tight mb-8">Phase 4: Training Strategy for Speed</h2>
                         <p>
-                            If you focus on speed at the start, you will hit a plateau at 40 WPM that is nearly impossible to break. Follow this **Accuracy-First Protocol**:
+                            If you focus on speed at the start, you will hit a plateau at 40 WPM that is nearly impossible to break. Follow this Accuracy-First Protocol:
                         </p>
                         <div className="space-y-8">
                             {[

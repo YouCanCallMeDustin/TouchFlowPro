@@ -53,19 +53,19 @@ export const ComparisonArticle: React.FC<ArticleProps> = () => {
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm italic">
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Monkeytype:** Best for aesthetic customization and casual speed tests.</span>
+                            <span>Monkeytype: Best for aesthetic customization and casual speed tests.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**TouchFlow Pro:** Best for professional remediation and niche industries.</span>
+                            <span>TouchFlow Pro: Best for professional remediation and niche industries.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Key Diff:** TouchFlow Pro tracks 'jitter telemetry' to find neural bottlenecks.</span>
+                            <span>Key Diff: TouchFlow Pro tracks 'jitter telemetry' to find neural bottlenecks.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Verdict:** Use Monkeytype for maintenance; use TouchFlow for growth.</span>
+                            <span>Verdict: Use Monkeytype for maintenance; use TouchFlow for growth.</span>
                         </li>
                     </ul>
                 </Card>
@@ -75,7 +75,7 @@ export const ComparisonArticle: React.FC<ArticleProps> = () => {
                         <h2 className="text-3xl font-black text-white uppercase italic mb-6">Monkeytype vs TouchFlow Pro: The 2026 Verdict</h2>
                         <div className="bg-white/5 p-8 rounded-3xl border border-white/10 border-l-4 border-l-primary">
                             <p className="text-xl text-text-main font-medium leading-relaxed mb-0 italic">
-                                Comparing **Monkeytype vs TouchFlow Pro** reveals a fundamental difference in design philosophy. **Monkeytype** is an open-source, community-driven platform optimized for custom aesthetics and raw speed maintenance. In contrast, **TouchFlow Pro** is an enterprise-grade performance engine designed for **Professional Remediation**—utilizing millisecond telemetry to fix structural typing bottlenecks in legal, medical, and engineering fields. While Monkeytype is the best choice for hobbyist customizability, TouchFlow Pro is the superior tool for professionals who need a systemic roadmap to 100+ WPM.
+                                Comparing Monkeytype vs TouchFlow Pro reveals a fundamental difference in design philosophy. Monkeytype is an open-source, community-driven platform optimized for custom aesthetics and raw speed maintenance. In contrast, TouchFlow Pro is an enterprise-grade performance engine designed for Professional Remediation—utilizing millisecond telemetry to fix structural typing bottlenecks in legal, medical, and engineering fields. While Monkeytype is the best choice for hobbyist customizability, TouchFlow Pro is the superior tool for professionals who need a systemic roadmap to 100+ WPM.
                             </p>
                         </div>
                     </section>
@@ -94,7 +94,7 @@ export const ComparisonArticle: React.FC<ArticleProps> = () => {
                     <section id="analytics">
                         <h2 className="text-3xl font-black text-white uppercase italic tracking-tight mb-6">1. Analytics vs. Aesthetics</h2>
                         <p>
-                            Monkeytype is beloved for its "zen mode" and infinite themes. However, for a professional, aesthetics are secondary to **ROI**. TouchFlow Pro prioritizes the dashboard over the design, giving you a heatmap of your neuromuscular failures.
+                            Monkeytype is beloved for its "zen mode" and infinite themes. However, for a professional, aesthetics are secondary to ROI. TouchFlow Pro prioritizes the dashboard over the design, giving you a heatmap of your neuromuscular failures.
                         </p>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-12">
                            <Card className="p-6 bg-white/5 border border-white/10 h-full">
@@ -113,7 +113,7 @@ export const ComparisonArticle: React.FC<ArticleProps> = () => {
                             <BarChart3 className="text-primary" /> 2. Telemetry: Tracking the Neural Gap
                         </h2>
                         <p>
-                            While most platforms track WPM and Accuracy, TouchFlow Pro tracks **Temporal Jitter**. We measure the exact millisecond delay between specific key combinations (e.g., the 'S' to 'E' transition). If your 'jitter' is high, it indicates a structural muscle memory flaw that a simple speed test won't fix.
+                            While most platforms track WPM and Accuracy, TouchFlow Pro tracks Temporal Jitter. We measure the exact millisecond delay between specific key combinations (e.g., the 'S' to 'E' transition). If your 'jitter' is high, it indicates a structural muscle memory flaw that a simple speed test won't fix.
                         </p>
                     </section>
 

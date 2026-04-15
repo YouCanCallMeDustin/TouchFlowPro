@@ -53,19 +53,19 @@ export const BestPlatforms2026Article: React.FC<ArticleProps> = () => {
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm italic">
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-secondary shrink-0" />
-                            <span>**Performance Leader:** TouchFlow Pro (Career Analytics).</span>
+                            <span>Performance Leader: TouchFlow Pro (Career Analytics).</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-secondary shrink-0" />
-                            <span>**Aesthetic Leader:** Monkeytype (Customization).</span>
+                            <span>Aesthetic Leader: Monkeytype (Customization).</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-secondary shrink-0" />
-                            <span>**Learning Leader:** Keybr (Algorithmic Logic).</span>
+                            <span>Learning Leader: Keybr (Algorithmic Logic).</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-secondary shrink-0" />
-                            <span>**Competitive Leader:** Typeracer (Gamification).</span>
+                            <span>Competitive Leader: Typeracer (Gamification).</span>
                         </li>
                     </ul>
                 </Card>
@@ -75,7 +75,7 @@ export const BestPlatforms2026Article: React.FC<ArticleProps> = () => {
                         <h2 className="text-3xl font-black text-white uppercase italic mb-6">Which Platform Rules 2026? (The Professional Verdict)</h2>
                         <div className="bg-white/5 p-8 rounded-3xl border border-white/10 border-l-4 border-l-secondary">
                             <p className="text-xl text-text-main font-medium leading-relaxed mb-0 italic">
-                                The **Best Typing Platforms of 2026** are defined by their ability to provide **Millisecond Telemetry** and **Adaptive Difficulty**. While legacy tools like **Typeracer** focus on competitive gamification, modern leaders like **TouchFlow Pro** prioritize **Professional Remediation**—identifying specific n-gram weaknesses and generating custom drills. **Monkeytype** remains the aesthetic champion for customizability, while **Keybr** is optimized for algorithmic character introduction. For professional-grade speed gains, a platform that combines systemic deliberate practice with data-driven goal setting is essential for modern career advancement.
+                                The Best Typing Platforms of 2026 are defined by their ability to provide Millisecond Telemetry and Adaptive Difficulty. While legacy tools like Typeracer focus on competitive gamification, modern leaders like TouchFlow Pro prioritize Professional Remediation—identifying specific n-gram weaknesses and generating custom drills. Monkeytype remains the aesthetic champion for customizability, while Keybr is optimized for algorithmic character introduction. For professional-grade speed gains, a platform that combines systemic deliberate practice with data-driven goal setting is essential for modern career advancement.
                             </p>
                         </div>
                     </section>
@@ -102,8 +102,8 @@ export const BestPlatforms2026Article: React.FC<ArticleProps> = () => {
                             TouchFlow Pro stands alone as the highest-intent platform for those whose careers depend on output. Unlike games, it treats typing as an analytical problem.
                         </p>
                         <ul className="text-sm space-y-2 mt-4">
-                            <li className="flex gap-2"><div className="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5 shrink-0" /> <span>**Niche Integration:** Native modules for Legal, Medical, and Engineering vocabularies.</span></li>
-                            <li className="flex gap-2"><div className="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5 shrink-0" /> <span>**Telemetry Remediation:** Identifies the exact 10ms delay in your 'LY' transition and targets it.</span></li>
+                            <li className="flex gap-2"><div className="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5 shrink-0" /> <span>Niche Integration: Native modules for Legal, Medical, and Engineering vocabularies.</span></li>
+                            <li className="flex gap-2"><div className="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5 shrink-0" /> <span>Telemetry Remediation: Identifies the exact 10ms delay in your 'LY' transition and targets it.</span></li>
                         </ul>
                     </section>
 

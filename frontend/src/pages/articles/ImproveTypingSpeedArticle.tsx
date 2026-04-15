@@ -53,19 +53,19 @@ export const ImproveTypingSpeedArticle: React.FC<ArticleProps> = () => {
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm italic">
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**SMART Benchmarks:** Set weekly WPM targets based on percentile data.</span>
+                            <span>SMART Benchmarks: Set weekly WPM targets based on percentile data.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Delta Practice:** Focus only on the 10% of keys where you are slowest.</span>
+                            <span>Delta Practice: Focus only on the 10% of keys where you are slowest.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Micro-Consistency:** 15 minutes of deep focus beats 2 hours of casual play.</span>
+                            <span>Micro-Consistency: 15 minutes of deep focus beats 2 hours of casual play.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Sleep Consolidation:** Train hard, then sleep to lock in motor patterns.</span>
+                            <span>Sleep Consolidation: Train hard, then sleep to lock in motor patterns.</span>
                         </li>
                     </ul>
                 </Card>
@@ -75,7 +75,7 @@ export const ImproveTypingSpeedArticle: React.FC<ArticleProps> = () => {
                         <h2 className="text-3xl font-black text-white uppercase italic mb-6">How to Improve Typing Speed Expertly? (The Systemic Approach)</h2>
                         <div className="bg-white/5 p-8 rounded-3xl border border-white/10 border-l-4 border-l-primary">
                             <p className="text-xl text-text-main font-medium leading-relaxed mb-0 italic">
-                                To **improve typing speed**, you must move beyond repetition and adopt **Systemic Deliberate Practice**. This means shifting from "typing a lot" to "practicing with intent." Key phases include **Baseline Benchmarking** (identifying your current speed vs. goals), **Isolating Transition Friction** (using millisecond telemetry to find hidden hesitations between bigrams), and maintaining a **15-minute daily focus session**. This method ensures that each keystroke is reinforced at a neuromuscular level, leading to permanent 5-10 WPM gains per month.
+                                To improve typing speed, you must move beyond repetition and adopt Systemic Deliberate Practice. This means shifting from "typing a lot" to "practicing with intent." Key phases include Baseline Benchmarking (identifying your current speed vs. goals), Isolating Transition Friction (using millisecond telemetry to find hidden hesitations between bigrams), and maintaining a 15-minute daily focus session. This method ensures that each keystroke is reinforced at a neuromuscular level, leading to permanent 5-10 WPM gains per month.
                             </p>
                         </div>
                     </section>
@@ -94,7 +94,7 @@ export const ImproveTypingSpeedArticle: React.FC<ArticleProps> = () => {
                     <section id="benchmarks">
                         <h2 className="text-3xl font-black text-white uppercase italic tracking-tight mb-6">1. Analytical Benchmarking</h2>
                         <p>
-                            You cannot improve what you do not measure. A casual typing test is a snapshot; analytical benchmarking is a diagnostic. Professionals use **SMART Goals** to drive improvement:
+                            You cannot improve what you do not measure. A casual typing test is a snapshot; analytical benchmarking is a diagnostic. Professionals use SMART Goals to drive improvement:
                         </p>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
                             <Card className="p-6 bg-white/5 border border-white/10">
@@ -124,7 +124,7 @@ export const ImproveTypingSpeedArticle: React.FC<ArticleProps> = () => {
                     <section id="delta">
                         <h2 className="text-3xl font-black text-white uppercase italic tracking-tight mb-6">3. Delta Training: Weakness Isolation</h2>
                         <p>
-                            Most practice software gives you random text. To **improve typing speed** fast, you need **Delta Training**. This focuses 100% of your effort on your "Delta keys"—the specific character transitions where your delay is &gt;30ms higher than your average.
+                            Most practice software gives you random text. To improve typing speed fast, you need Delta Training. This focuses 100% of your effort on your "Delta keys"—the specific character transitions where your delay is &gt;30ms higher than your average.
                         </p>
                         <ul className="space-y-4 text-sm mt-8">
                             <li className="flex gap-4 items-start">

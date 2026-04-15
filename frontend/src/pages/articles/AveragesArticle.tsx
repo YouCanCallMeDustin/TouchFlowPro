@@ -76,15 +76,15 @@ export const AveragesArticle: React.FC<ArticleProps> = () => {
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm italic">
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>The **Global Median** remains stable at 40 WPM.</span>
+                            <span>The Global Median remains stable at 40 WPM.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Professional Competitive Edge** starts at 75+ WPM.</span>
+                            <span>Professional Competitive Edge starts at 75+ WPM.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>Accuracy below **92%** negates speed gains due to correction latency.</span>
+                            <span>Accuracy below 92% negates speed gains due to correction latency.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
@@ -98,7 +98,7 @@ export const AveragesArticle: React.FC<ArticleProps> = () => {
                         <h2 className="text-3xl font-black text-white uppercase italic mb-6">What is the Average Typing Speed? (The Featured Snippet)</h2>
                         <div className="bg-white/5 p-8 rounded-3xl border border-white/10 border-l-4 border-l-primary">
                             <p className="text-xl text-text-main font-medium leading-relaxed mb-0 italic">
-                                The **average typing speed is 40 words per minute (WPM)**. For most administrative, legal, or technical professions, a "good" typing speed is considered **65 to 80 WPM**, placing you in the top 15% of the global workforce. Elite performers, such as court reporters and senior software developers, often exceed **100 WPM** with an accuracy rate of 98% or higher.
+                                The average typing speed is 40 words per minute (WPM). For most administrative, legal, or technical professions, a "good" typing speed is considered 65 to 80 WPM, placing you in the top 15% of the global workforce. Elite performers, such as court reporters and senior software developers, often exceed 100 WPM with an accuracy rate of 98% or higher.
                             </p>
                         </div>
                     </section>
@@ -118,7 +118,7 @@ export const AveragesArticle: React.FC<ArticleProps> = () => {
                         <h2 className="text-3xl font-black text-white uppercase italic tracking-tight mb-6">1. Typing Speed Benchmarks</h2>
                         <TypingSpeedTable />
                         <p className="mt-8">
-                            While 40 WPM is the technical average, we define **Functional Velocity** as the speed at which your keyboard disappears. At 40 WPM, you are still "translating" thoughts to fingers. At 80 WPM, your fingers respond directly to your logic.
+                            While 40 WPM is the technical average, we define Functional Velocity as the speed at which your keyboard disappears. At 40 WPM, you are still "translating" thoughts to fingers. At 80 WPM, your fingers respond directly to your logic.
                         </p>
                     </section>
 
@@ -151,7 +151,7 @@ export const AveragesArticle: React.FC<ArticleProps> = () => {
                                 <TrendingUp className="text-primary" /> The "Accuracy Trap"
                             </h3>
                             <p className="text-xs italic opacity-80 leading-relaxed">
-                                A typist at 80 WPM with 90% accuracy is actually **slower** than a typist at 60 WPM with 100% accuracy. The cost of hitting backspace, re-orienting, and re-typing is approximately 1.5 seconds per error.
+                                A typist at 80 WPM with 90% accuracy is actually slower than a typist at 60 WPM with 100% accuracy. The cost of hitting backspace, re-orienting, and re-typing is approximately 1.5 seconds per error.
                             </p>
                             <div className="mt-4 p-4 bg-primary/10 border border-primary/20 rounded-xl">
                                 <p className="text-[10px] uppercase font-black text-primary mb-1">Expert Tip</p>

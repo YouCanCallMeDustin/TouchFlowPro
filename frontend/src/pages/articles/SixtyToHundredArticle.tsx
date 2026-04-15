@@ -53,19 +53,19 @@ export const SixtyToHundredArticle: React.FC<ArticleProps> = () => {
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm italic">
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Accuracy Protocol:** Lock in 98%+ before pushing the limits.</span>
+                            <span>Accuracy Protocol: Lock in 98%+ before pushing the limits.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Visual Buffet:** Read 3 words ahead to eliminate cognitive gaps.</span>
+                            <span>Visual Buffet: Read 3 words ahead to eliminate cognitive gaps.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Deliberate Drills:** Focus on n-grams (the, ion, ing) as single gestures.</span>
+                            <span>Deliberate Drills: Focus on n-grams (the, ion, ing) as single gestures.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Session Logic:** 15 minutes of deep focus beats 2 hours of casual play.</span>
+                            <span>Session Logic: 15 minutes of deep focus beats 2 hours of casual play.</span>
                         </li>
                     </ul>
                 </Card>
@@ -75,7 +75,7 @@ export const SixtyToHundredArticle: React.FC<ArticleProps> = () => {
                         <h2 className="text-3xl font-black text-white uppercase italic mb-6">How to Go From 60 to 100 WPM? (The Speed Secret)</h2>
                         <div className="bg-white/5 p-8 rounded-3xl border border-white/10 border-l-4 border-l-primary">
                             <p className="text-xl text-text-main font-medium leading-relaxed mb-0 italic">
-                                Transitioning from **60 WPM** (High Average) to **100 WPM** (Elite) requires a fundamental shift from sequential letter input to **pattern-based chunking**. At 60 WPM, your brain still processes letters. At 100 WPM, your fingers execute whole words as pre-programmed "macros." To break this chasm, you must prioritize **rhythmic stability** and **predictive pipelining**—reading two words ahead of your active input cursor.
+                                Transitioning from 60 WPM (High Average) to 100 WPM (Elite) requires a fundamental shift from sequential letter input to pattern-based chunking. At 60 WPM, your brain still processes letters. At 100 WPM, your fingers execute whole words as pre-programmed "macros." To break this chasm, you must prioritize rhythmic stability and predictive pipelining—reading two words ahead of your active input cursor.
                             </p>
                         </div>
                     </section>
@@ -124,7 +124,7 @@ export const SixtyToHundredArticle: React.FC<ArticleProps> = () => {
                     <section id="gestures">
                         <h2 className="text-3xl font-black text-white uppercase italic tracking-tight mb-6">Phase 3: Transitioning to N-Gram Gestures</h2>
                         <p>
-                            Stop typing: **T-H-E**. Start executing the **THE** gesture. Pro typists internalize the top 300 common bigrams and trigrams. 
+                            Stop typing: T-H-E. Start executing the THE gesture. Pro typists internalize the top 300 common bigrams and trigrams. 
                         </p>
                         <ul className="space-y-4 text-sm mt-8">
                             <li className="flex gap-4 items-start">

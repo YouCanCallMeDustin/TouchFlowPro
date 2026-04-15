@@ -53,19 +53,19 @@ export const TypingPlateauArticle: React.FC<ArticleProps> = () => {
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm italic">
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Neural Shock:** Intentionally over-speeding to break muscle memory.</span>
+                            <span>Neural Shock: Intentionally over-speeding to break muscle memory.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Pace Ladders:** Cycling between precision and velocity every 30s.</span>
+                            <span>Pace Ladders: Cycling between precision and velocity every 30s.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**The Paradox:** Slowing down to 50% speed to rebuild core rhythm.</span>
+                            <span>The Paradox: Slowing down to 50% speed to rebuild core rhythm.</span>
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Data Isolation:** Drilling specific millisecond "hesitation" zones.</span>
+                            <span>Data Isolation: Drilling specific millisecond "hesitation" zones.</span>
                         </li>
                     </ul>
                 </Card>
@@ -75,7 +75,7 @@ export const TypingPlateauArticle: React.FC<ArticleProps> = () => {
                         <h2 className="text-3xl font-black text-white uppercase italic mb-6">How to Break a Typing Speed Plateau? (The Featured Snippet)</h2>
                         <div className="bg-white/5 p-8 rounded-3xl border border-white/10 border-l-4 border-l-primary">
                             <p className="text-xl text-text-main font-medium leading-relaxed mb-0 italic">
-                                To **break a typing speed plateau**, you must force your brain out of the "Autonomous Stage" (the 'OK Plateau') and back into the "Cognitive Stage" of motor learning. This is achieved through **Targeted Variable Training**: implement **Pace Ladders** (sprinting at 110% speed followed by stabilizing at 90%), isolate **Micro-Hesitation Bigrams** (using millisecond telemetry to find hidden delays), and adopt the **Slow-to-Speed Paradox**—practicing "perfect sets" at half speed to recalibrate neuro-gestures.
+                                To break a typing speed plateau, you must force your brain out of the "Autonomous Stage" (the 'OK Plateau') and back into the "Cognitive Stage" of motor learning. This is achieved through Targeted Variable Training: implement Pace Ladders (sprinting at 110% speed followed by stabilizing at 90%), isolate Micro-Hesitation Bigrams (using millisecond telemetry to find hidden delays), and adopt the Slow-to-Speed Paradox—practicing "perfect sets" at half speed to recalibrate neuro-gestures.
                             </p>
                         </div>
                     </section>
@@ -94,7 +94,7 @@ export const TypingPlateauArticle: React.FC<ArticleProps> = () => {
                     <section id="neuroscience">
                         <h2 className="text-3xl font-black text-white uppercase italic tracking-tight mb-6">1. The Neuroscience of the 'OK Plateau'</h2>
                         <p>
-                            Fitts and Posner identified three stages of skill acquisition: Cognitive, Associative, and Autonomous. Most typists hit a plateau at 50-70 WPM because they reach the **Autonomous Stage**. Your brain offloads typing to procedural memory, which is efficient but resistant to change.
+                            Fitts and Posner identified three stages of skill acquisition: Cognitive, Associative, and Autonomous. Most typists hit a plateau at 50-70 WPM because they reach the Autonomous Stage. Your brain offloads typing to procedural memory, which is efficient but resistant to change.
                         </p>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-12">
                             <Card className="p-6 bg-white/5 border border-white/10">
@@ -118,7 +118,7 @@ export const TypingPlateauArticle: React.FC<ArticleProps> = () => {
                     <section id="ladders">
                         <h2 className="text-3xl font-black text-white uppercase italic tracking-tight mb-6">2. Pace Ladders: Shattering the Ceiling</h2>
                         <p>
-                            A plateau exists because you never exceed your comfort zone. To break it, you must "shock" the nervous system using **Pace Ladders**:
+                            A plateau exists because you never exceed your comfort zone. To break it, you must "shock" the nervous system using Pace Ladders:
                         </p>
                         <ul className="space-y-4 text-sm mt-8">
                             <li className="flex gap-4 items-start bg-white/5 p-4 rounded-xl">
@@ -141,7 +141,7 @@ export const TypingPlateauArticle: React.FC<ArticleProps> = () => {
                     <section id="paradox">
                         <h2 className="text-3xl font-black text-white uppercase italic tracking-tight mb-6">3. The Slow-to-Speed Paradox</h2>
                         <p>
-                            Counter-intuitively, the fastest way to get faster is often to slow down. High-speed plateaus are usually caused by **Micro-Stutters** in your rhythm. By practicing at 50 WPM when your max is 80, you can identify why your fingers "hitch" on certain transitions, such as `Q-U` or `P-O`.
+                            Counter-intuitively, the fastest way to get faster is often to slow down. High-speed plateaus are usually caused by Micro-Stutters in your rhythm. By practicing at 50 WPM when your max is 80, you can identify why your fingers "hitch" on certain transitions, such as `Q-U` or `P-O`.
                         </p>
                     </section>
 
