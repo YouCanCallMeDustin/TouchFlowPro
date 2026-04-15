@@ -6,6 +6,7 @@ import { BarChart3, ArrowRight } from 'lucide-react';
 import { TypingSpeedTable } from '../../components/articles/TypingSpeedTable';
 import { WPMCalculator } from '../../components/articles/WPMCalculator';
 import { AggregateRating } from '../../components/articles/AggregateRating';
+import { Helmet } from 'react-helmet-async';
 import type { Stage } from '../../types/stages';
 
 interface ArticleProps {

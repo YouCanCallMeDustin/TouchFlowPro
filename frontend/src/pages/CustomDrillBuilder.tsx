@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PenTool } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 import { apiFetch } from '../utils/api';
+import { Helmet } from 'react-helmet-async';
 
 interface CustomDrillBuilderProps {
     userId: string;

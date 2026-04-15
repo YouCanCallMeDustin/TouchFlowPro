@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { History, Box, ChevronUp, ChevronDown, Download } from 'lucide-react';
 import { apiFetch } from '../utils/api';
 

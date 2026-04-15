@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import TypingTest from '../components/TypingTest';
 import type { KeystrokeEvent, TypingMetrics } from '@shared/types';
 import type { Stage } from '../types/stages';

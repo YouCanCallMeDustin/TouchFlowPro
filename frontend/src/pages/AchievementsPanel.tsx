@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { Award } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 import { apiFetch } from '../utils/api';
 import PageTransition from '../components/PageTransition';
 

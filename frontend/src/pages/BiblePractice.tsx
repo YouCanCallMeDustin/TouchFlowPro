@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { BookOpen, ArrowRight, Zap } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 import BibleLessonView from '../components/BibleLessonView';
 import { StrategicFAQ } from '../components/SEO/StrategicFAQ';
 import type { TypingMetrics } from '@shared/types';

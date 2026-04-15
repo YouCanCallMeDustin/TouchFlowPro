@@ -5,6 +5,7 @@ import { Card } from '../../components/ui/Card';
 import { BookOpen, Target, Zap, Activity, BarChart3 } from 'lucide-react';
 import { TypingSpeedTable } from '../../components/articles/TypingSpeedTable';
 import { AggregateRating } from '../../components/articles/AggregateRating';
+import { Helmet } from 'react-helmet-async';
 import type { Stage } from '../../types/stages';
 
 interface ArticleProps {

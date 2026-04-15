@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Zap } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 import { LiveMetricsBar } from '../components/LiveMetricsBar';
 import { VirtualKeyboard } from '../components/VirtualKeyboard';
 import { TypingEngine } from '@shared/typingEngine';

@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Download, Zap, Target, Clock, Code } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 
 const Extension: React.FC = () => {
     return (

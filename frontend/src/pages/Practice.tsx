@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { drillLibrary, type Drill } from '@shared/drillLibrary';
 import { medicalDrillPacks } from '@shared/tracks/medical';
 import { legalDrillPacks } from '@shared/tracks/legal';

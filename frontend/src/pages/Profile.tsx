@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { Fingerprint, Camera, Upload, Loader2 } from 'lucide-react';
 import { apiFetch } from '../utils/api';
 import PageTransition from '../components/PageTransition';

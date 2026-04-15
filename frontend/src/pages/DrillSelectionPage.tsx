@@ -11,6 +11,7 @@ import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import type { Lesson } from '@shared/curriculum';
 import { apiFetch } from '../utils/api';
+import { Helmet } from 'react-helmet-async';
 
 interface DrillSelectionPageProps {
     lesson: Lesson;

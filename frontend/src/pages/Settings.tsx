@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Save, Volume2, Monitor, Shield, User, Loader2, Check, Download, Info, CreditCard } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
+import { Helmet } from 'react-helmet-async';
 import { useSettings, type UserSettings } from '../context/SettingsContext';
 import { useAuth } from '../context/AuthContext';
 

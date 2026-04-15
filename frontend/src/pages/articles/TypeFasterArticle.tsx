@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Card } from '../../components/ui/Card';
 import { ArrowRight, Zap, Target, ShieldCheck } from 'lucide-react';
 import { AggregateRating } from '../../components/articles/AggregateRating';
+import { Helmet } from 'react-helmet-async';
 import type { Stage } from '../../types/stages';
 
 interface ArticleProps {

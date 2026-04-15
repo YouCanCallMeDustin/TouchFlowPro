@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { codeSnippets } from '../data/codeSnippets';
 import { type Lesson } from '@shared/curriculum';
 import LessonView from '../components/LessonView';

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ShieldAlert, Activity, ArrowRight, Play, BookOpen, Clock, Target, Layers, Rocket } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { StrategicFAQ } from '../components/SEO/StrategicFAQ';
 import { getMedicalDrillsBySpecialty } from '@shared/tracks/medical';
 import { useAuth } from '../context/AuthContext';

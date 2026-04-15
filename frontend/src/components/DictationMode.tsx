@@ -52,12 +52,10 @@ export const DictationUI: React.FC<DictationUIProps> = ({ text, isStarted, userI
     const [autoSyncEnabled, setAutoSyncEnabled] = useState<boolean>(() => localStorage.getItem('tf_auto_sync') !== 'false');
     const [audioCurrentTime, setAudioCurrentTime] = useState(0);
     const [audioDuration, setAudioDuration] = useState(0);
-    const [speechCharIndex, setCharacterIndex] = useState(0);
     const [ambiance, setAmbiance] = useState<'none' | 'medical' | 'legal'>(() => (localStorage.getItem('tf_ambiance') as any) || 'none');
     const [showSettings, setShowSettings] = useState(false);
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const ambianceRef = useRef<HTMLAudioElement | null>(null);
-    const lastSpeakRef = useRef<number>(0);
 
     // Ambiance Logic
     useEffect(() => {
@@ -162,11 +160,6 @@ export const DictationUI: React.FC<DictationUIProps> = ({ text, isStarted, userI
             audioRef.current.pause();
         }
     }, [isPlaying, voiceProfile, text]);
-
-    // Progress Tracking logic moved to linear meter component for cleaner state logic
-    const currentProgressChar = audioDuration > 0 
-        ? (audioCurrentTime / audioDuration) * text.length 
-        : 0;
 
     const handleRewind = () => {
         if (audioRef.current) {

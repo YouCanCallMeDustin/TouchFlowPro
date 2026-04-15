@@ -5,6 +5,7 @@ import type { Stage } from '../../types/stages';
 import { Card } from '../../components/ui/Card';
 import { ArrowRight } from 'lucide-react';
 import { AggregateRating } from '../../components/articles/AggregateRating';
+import { Helmet } from 'react-helmet-async';
 
 interface ArticleProps {
     onNavigate: (stage: Stage) => void;

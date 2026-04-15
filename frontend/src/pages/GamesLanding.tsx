@@ -1,6 +1,7 @@
 // ── Games Landing Page ──
 
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import { Crosshair, Rocket, Sparkles } from 'lucide-react';
 
 interface GamesLandingProps {
