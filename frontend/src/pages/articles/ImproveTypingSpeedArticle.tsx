@@ -124,7 +124,7 @@ export const ImproveTypingSpeedArticle: React.FC<ArticleProps> = () => {
                     <section id="delta">
                         <h2 className="text-3xl font-black text-white uppercase italic tracking-tight mb-6">3. Delta Training: Weakness Isolation</h2>
                         <p>
-                            Most practice software gives you random text. To **improve typing speed** fast, you need **Delta Training**. This focuses 100% of your effort on your "Delta keys"—the specific character transitions where your delay is >30ms higher than your average.
+                            Most practice software gives you random text. To **improve typing speed** fast, you need **Delta Training**. This focuses 100% of your effort on your "Delta keys"—the specific character transitions where your delay is &gt;30ms higher than your average.
                         </p>
                         <ul className="space-y-4 text-sm mt-8">
                             <li className="flex gap-4 items-start">

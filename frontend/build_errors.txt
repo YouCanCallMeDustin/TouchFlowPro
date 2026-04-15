@@ -1,60 +1,12 @@
-src/components/LandingPage.tsx(70,38): error TS2322: Type '{ visible: { opacity: number; x: number; transition: { type: string; damping: number; stiffness: number; }; }; hidden: { opacity: number; x: number; transition: { type: string; damping: number; stiffness: number; }; }; }' is not assignable to type 'Variants'.
-  Property 'visible' is incompatible with index signature.
-    Type '{ opacity: number; x: number; transition: { type: string; damping: number; stiffness: number; }; }' is not assignable to type 'Variant'.
-      Type '{ opacity: number; x: number; transition: { type: string; damping: number; stiffness: number; }; }' is not assignable to type 'TargetAndTransition'.
-        Type '{ opacity: number; x: number; transition: { type: string; damping: number; stiffness: number; }; }' is not assignable to type '{ transition?: Transition<any> | undefined; transitionEnd?: ResolvedValues$1 | undefined; }'.
-          Types of property 'transition' are incompatible.
-            Type '{ type: string; damping: number; stiffness: number; }' is not assignable to type 'Transition<any> | undefined'.
-              Type '{ type: string; damping: number; stiffness: number; }' is not assignable to type 'TransitionWithValueOverrides<any>'.
-                Type '{ type: string; damping: number; stiffness: number; }' is not assignable to type 'ValueAnimationTransition<any>'.
-                  Types of property 'type' are incompatible.
-                    Type 'string' is not assignable to type 'AnimationGeneratorType | undefined'.
-src/components/LandingPage.tsx(114,33): error TS2322: Type '{ hidden: { opacity: number; y: number; }; visible: { opacity: number; y: number; transition: { duration: number; ease: number[]; }; }; }' is not assignable to type 'Variants'.
-  Property 'visible' is incompatible with index signature.
-    Type '{ opacity: number; y: number; transition: { duration: number; ease: number[]; }; }' is not assignable to type 'Variant'.
-      Type '{ opacity: number; y: number; transition: { duration: number; ease: number[]; }; }' is not assignable to type 'TargetAndTransition'.
-        Type '{ opacity: number; y: number; transition: { duration: number; ease: number[]; }; }' is not assignable to type '{ transition?: Transition<any> | undefined; transitionEnd?: ResolvedValues$1 | undefined; }'.
-          Types of property 'transition' are incompatible.
-            Type '{ duration: number; ease: number[]; }' is not assignable to type 'Transition<any> | undefined'.
-              Type '{ duration: number; ease: number[]; }' is not assignable to type 'TransitionWithValueOverrides<any>'.
-                Type '{ duration: number; ease: number[]; }' is not assignable to type 'ValueAnimationTransition<any>'.
-                  Types of property 'ease' are incompatible.
-                    Type 'number[]' is not assignable to type 'Easing | Easing[] | undefined'.
-                      Type 'number[]' is not assignable to type 'EasingFunction | Easing[]'.
-                        Type 'number[]' is not assignable to type 'Easing[]'.
-                          Type 'number' is not assignable to type 'Easing'.
-src/components/LandingPage.tsx(118,32): error TS2322: Type '{ hidden: { opacity: number; y: number; }; visible: { opacity: number; y: number; transition: { duration: number; ease: number[]; }; }; }' is not assignable to type 'Variants'.
-  Property 'visible' is incompatible with index signature.
-    Type '{ opacity: number; y: number; transition: { duration: number; ease: number[]; }; }' is not assignable to type 'Variant'.
-      Type '{ opacity: number; y: number; transition: { duration: number; ease: number[]; }; }' is not assignable to type 'TargetAndTransition'.
-        Type '{ opacity: number; y: number; transition: { duration: number; ease: number[]; }; }' is not assignable to type '{ transition?: Transition<any> | undefined; transitionEnd?: ResolvedValues$1 | undefined; }'.
-          Types of property 'transition' are incompatible.
-            Type '{ duration: number; ease: number[]; }' is not assignable to type 'Transition<any> | undefined'.
-              Type '{ duration: number; ease: number[]; }' is not assignable to type 'TransitionWithValueOverrides<any>'.
-                Type '{ duration: number; ease: number[]; }' is not assignable to type 'ValueAnimationTransition<any>'.
-                  Types of property 'ease' are incompatible.
-                    Type 'number[]' is not assignable to type 'Easing | Easing[] | undefined'.
-                      Type 'number[]' is not assignable to type 'EasingFunction | Easing[]'.
-                        Type 'number[]' is not assignable to type 'Easing[]'.
-                          Type 'number' is not assignable to type 'Easing'.
-src/components/LandingPage.tsx(128,33): error TS2322: Type '{ hidden: { opacity: number; y: number; }; visible: { opacity: number; y: number; transition: { duration: number; ease: number[]; }; }; }' is not assignable to type 'Variants'.
-  Property 'visible' is incompatible with index signature.
-    Type '{ opacity: number; y: number; transition: { duration: number; ease: number[]; }; }' is not assignable to type 'Variant'.
-      Type '{ opacity: number; y: number; transition: { duration: number; ease: number[]; }; }' is not assignable to type 'TargetAndTransition'.
-        Type '{ opacity: number; y: number; transition: { duration: number; ease: number[]; }; }' is not assignable to type '{ transition?: Transition<any> | undefined; transitionEnd?: ResolvedValues$1 | undefined; }'.
-          Types of property 'transition' are incompatible.
-            Type '{ duration: number; ease: number[]; }' is not assignable to type 'Transition<any> | undefined'.
-              Type '{ duration: number; ease: number[]; }' is not assignable to type 'TransitionWithValueOverrides<any>'.
-                Type '{ duration: number; ease: number[]; }' is not assignable to type 'ValueAnimationTransition<any>'.
-                  Types of property 'ease' are incompatible.
-                    Type 'number[]' is not assignable to type 'Easing | Easing[] | undefined'.
-                      Type 'number[]' is not assignable to type 'EasingFunction | Easing[]'.
-                        Type 'number[]' is not assignable to type 'Easing[]'.
-                          Type 'number' is not assignable to type 'Easing'.
-src/components/ui/Button.tsx(2,1): error TS6192: All imports in import declaration are unused.
-src/components/VirtualKeyboard.tsx(19,11): error TS6133: 'getKeyColor' is declared but its value is never read.
-src/components/VirtualKeyboard.tsx(23,15): error TS6133: 'color' is declared but its value is never read.
-src/pages/CodePractice.tsx(4,10): error TS6133: 'Curriculum' is declared but its value is never read.
-src/pages/CodePractice.tsx(7,32): error TS6133: 'Lock' is declared but its value is never read.
-src/pages/CodePractice.tsx(19,11): error TS6133: 'user' is declared but its value is never read.
-src/pages/Dashboard.tsx(18,5): error TS6133: 'Trophy' is declared but its value is never read.
+src/pages/articles/TypingAccuracyArticle.tsx(5,72): error TS6133: 'MousePointer2' is declared but its value is never read.
+src/pages/articles/TypingPlateauArticle.tsx(156,95): error TS2304: Cannot find name 'Target'.
+src/pages/articles/TypingPracticeArticle.tsx(5,17): error TS6133: 'Zap' is declared but its value is never read.
+src/pages/articles/TypingPracticeArticle.tsx(5,22): error TS6133: 'Target' is declared but its value is never read.
+src/pages/articles/TypingPracticeArticle.tsx(5,30): error TS6133: 'Activity' is declared but its value is never read.
+src/pages/articles/TypingPracticeArticle.tsx(5,64): error TS6133: 'CheckCircle' is declared but its value is never read.
+src/pages/articles/TypingPracticeArticle.tsx(5,77): error TS6133: 'BarChart3' is declared but its value is never read.
+src/pages/articles/TypingSpeedTestArticle.tsx(5,20): error TS6133: 'Zap' is declared but its value is never read.
+src/pages/articles/TypingSpeedTestArticle.tsx(5,25): error TS6133: 'Target' is declared but its value is never read.
+src/pages/articles/TypingSpeedTestArticle.tsx(5,68): error TS6133: 'CheckCircle' is declared but its value is never read.
+src/pages/articles/TypingSpeedTestArticle.tsx(5,81): error TS6133: 'ShieldCheck' is declared but its value is never read.
+src/pages/articles/UltimateGuideArticle.tsx(5,10): error TS6133: 'BookOpen' is declared but its value is never read.

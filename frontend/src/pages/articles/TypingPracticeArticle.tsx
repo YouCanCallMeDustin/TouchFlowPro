@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Card } from '../../components/ui/Card';
-import { Clock, Zap, Target, Activity, ArrowRight, HelpCircle, CheckCircle, BarChart3 } from 'lucide-react';
+import { Clock, ArrowRight, HelpCircle } from 'lucide-react';
 import { AggregateRating } from '../../components/articles/AggregateRating';
 import { Helmet } from 'react-helmet-async';
 import type { Stage } from '../../types/stages';
@@ -65,7 +65,7 @@ export const TypingPracticeArticle: React.FC<ArticleProps> = () => {
                         </li>
                         <li className="flex gap-2">
                             <ArrowRight size={16} className="text-primary shrink-0" />
-                            <span>**Consistency Logic:** 15m daily > 2hrs weekly. No exceptions.</span>
+                            <span>**Consistency Logic:** 15m daily &gt; 2hrs weekly. No exceptions.</span>
                         </li>
                     </ul>
                 </Card>

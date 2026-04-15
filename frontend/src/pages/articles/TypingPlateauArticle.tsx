@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Card } from '../../components/ui/Card';
-import { Brain, Activity, Zap, ArrowRight, HelpCircle, Layers, Gauge } from 'lucide-react';
+import { Brain, Activity, Zap, ArrowRight, HelpCircle, Layers, Gauge, Target } from 'lucide-react';
 import { AggregateRating } from '../../components/articles/AggregateRating';
 import { Helmet } from 'react-helmet-async';
 import type { Stage } from '../../types/stages';
@@ -150,7 +150,7 @@ export const TypingPlateauArticle: React.FC<ArticleProps> = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                            <div className="space-y-4">
                                 <h4 className="text-white font-bold flex items-center gap-2"><Gauge size={18} className="text-primary" /> Subconscious Hesitation</h4>
-                                <p className="text-xs opacity-60 italic leading-relaxed">Using millisecond analytics to find keys where you pause for >50ms longer than average. These are your "silent bottlenecks."</p>
+                                <p className="text-xs opacity-60 italic leading-relaxed">Using millisecond analytics to find keys where you pause for &gt;50ms longer than average. These are your "silent bottlenecks."</p>
                            </div>
                            <div className="space-y-4">
                                 <h4 className="text-white font-bold flex items-center gap-2"><Target size={18} className="text-primary" /> Accuracy Drift</h4>

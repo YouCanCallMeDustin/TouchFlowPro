@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Card } from '../../components/ui/Card';
-import { BookOpen, Target, Zap, Activity, ArrowRight, HelpCircle, BarChart3, ClipboardCheck } from 'lucide-react';
+import { Target, Zap, Activity, ArrowRight, HelpCircle, BarChart3, ClipboardCheck } from 'lucide-react';
 import { AggregateRating } from '../../components/articles/AggregateRating';
 import { Helmet } from 'react-helmet-async';
 import type { Stage } from '../../types/stages';
