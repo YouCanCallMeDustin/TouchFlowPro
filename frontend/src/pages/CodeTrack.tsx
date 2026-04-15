@@ -79,18 +79,31 @@ export const CodeTrack: React.FC<CodeTrackProps> = ({ setStage, setLaunchParams 
     return (
         <div className="max-w-6xl mx-auto px-4 py-8">
             <Helmet>
-                <title>Coding Typing Practice: Developer Keyboard Drills | TouchFlowPro</title>
-                <meta name="description" content="Master programming syntax and code patterns. Improve your coding velocity by practicing your typing speed on TypeScript, Python, React, Rust, and more." />
+                <title>Coding Typing Practice: Developer Keyboard Drills | TouchFlow Pro</title>
+                <meta name="description" content="Master programming syntax and code patterns. Improve your coding velocity by practicing your typing speed on TypeScript, Python, React, Rust, and more. Optimized for developer productivity." />
                 <link rel="canonical" href="https://touchflowpro.com/code-track" />
-                <meta property="og:title" content="Coding Typing Practice: Developer Keyboard Drills | TouchFlowPro" />
+                <meta property="og:title" content="Coding Typing Practice: Developer Keyboard Drills | TouchFlow Pro" />
                 <meta property="og:description" content="Master programming syntax and code patterns. Improve your coding velocity by practicing your typing speed on TypeScript, Python, React, Rust, and more." />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content="https://touchflowpro.com/code-track" />
                 <meta property="og:image" content="https://touchflowpro.com/og-image.png" />
-                <meta property="og:site_name" content="TouchFlowPro" />
+                <meta property="og:site_name" content="TouchFlow Pro" />
                 <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content="Coding Typing Practice: Developer Keyboard Drills | TouchFlowPro" />
-                <meta name="twitter:description" content="Master programming syntax and code patterns. Improve your coding velocity by practicing your typing speed on TypeScript, Python, React, Rust, and more." />
+                <meta name="twitter:title" content="Coding Typing Practice: Developer Keyboard Drills | TouchFlow Pro" />
+                <meta name="twitter:description" content="Master programming syntax and code patterns. Improve your coding velocity." />
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "Course",
+                        "name": "Software Engineering Typing Track",
+                        "description": "Master high-resolution symbol patterns and syntax for 10+ programming languages.",
+                        "provider": {
+                            "@type": "Organization",
+                            "name": "TouchFlow Pro",
+                            "sameAs": "https://touchflowpro.com"
+                        }
+                    })}
+                </script>
                 <script type="application/ld+json">
                     {JSON.stringify({
                         "@context": "https://schema.org",

@@ -80,18 +80,31 @@ export const MedicalTrack: React.FC<MedicalTrackProps> = ({ setStage, setLaunchP
     return (
         <div className="max-w-6xl mx-auto px-4 py-8">
             <Helmet>
-                <title>Medical Transcription Typing Training & Drills | TouchFlowPro</title>
-                <meta name="description" content="Master healthcare terminology and clinical documentation with our Medical Typing engine. Improve speed and accuracy on SOAP notes and medical syntax." />
+                <title>Medical Typing Test: Master Specialized Healthcare Terminology | TouchFlow Pro</title>
+                <meta name="description" content="Master healthcare terminology and clinical documentation with our Medical Typing engine. Improve speed and accuracy on SOAP notes and medical syntax. Professional-grade assessment." />
                 <link rel="canonical" href="https://touchflowpro.com/medical-track" />
-                <meta property="og:title" content="Medical Transcription Typing Training & Drills | TouchFlowPro" />
+                <meta property="og:title" content="Medical Typing Test: Specialized Healthcare Training | TouchFlow Pro" />
                 <meta property="og:description" content="Master specialized healthcare terminology and clinical documentation with our Medical Typing Practice engine. Improve speed and accuracy on SOAP notes and medical syntax." />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content="https://touchflowpro.com/medical-track" />
                 <meta property="og:image" content="https://touchflowpro.com/og-image.png" />
-                <meta property="og:site_name" content="TouchFlowPro" />
+                <meta property="og:site_name" content="TouchFlow Pro" />
                 <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content="Medical Transcription Typing Practice & Speed Tests | TouchFlowPro" />
+                <meta name="twitter:title" content="Medical Typing Test & Professional Speed Certification | TouchFlow Pro" />
                 <meta name="twitter:description" content="Specialized typing drills for medical professionals. Master ICD-10 terminology, anatomy, and pharmacology for accurate charting and transcription." />
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "Course",
+                        "name": "Medical Transcription Typing Track",
+                        "description": "Master 60,000+ medical terms and SOAP note documentation.",
+                        "provider": {
+                            "@type": "Organization",
+                            "name": "TouchFlow Pro",
+                            "sameAs": "https://touchflowpro.com"
+                        }
+                    })}
+                </script>
                 <script type="application/ld+json">
                     {JSON.stringify({
                         "@context": "https://schema.org",

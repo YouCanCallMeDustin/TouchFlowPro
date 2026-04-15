@@ -13,4 +13,7 @@ export type Stage = 'welcome' | 'assessment' | 'placement' | 'curriculum' | 'les
   | 'article_fastest_techniques'
   | 'article_comparison'
   | 'article_beginners_guide'
-  | 'article_best_2026';
+  | 'article_best_2026'
+  | 'article_law'
+  | 'article_medical_scribe'
+  | 'article_engineer';

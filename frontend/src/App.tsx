@@ -93,6 +93,9 @@ const FastestTypingTechniquesArticle = lazy(() => import('./pages/articles/Faste
 const ComparisonArticle            = lazy(() => import('./pages/articles/ComparisonArticle').then(m => ({ default: m.ComparisonArticle })))
 const BeginnersGuideArticle        = lazy(() => import('./pages/articles/BeginnersGuideArticle').then(m => ({ default: m.BeginnersGuideArticle })))
 const BestPlatforms2026Article     = lazy(() => import('./pages/articles/BestPlatforms2026Article').then(m => ({ default: m.BestPlatforms2026Article })))
+const LawTypingArticle             = lazy(() => import('./pages/articles/LawTypingArticle').then(m => ({ default: m.LawTypingArticle })))
+const MedicalScribeArticle         = lazy(() => import('./pages/articles/MedicalScribeArticle').then(m => ({ default: m.MedicalScribeArticle })))
+const EngineerTypingArticle        = lazy(() => import('./pages/articles/EngineerTypingArticle').then(m => ({ default: m.EngineerTypingArticle })))
 
 
 const STAGE_ROUTES: Partial<Record<Stage, string>> = {
@@ -125,6 +128,9 @@ const STAGE_ROUTES: Partial<Record<Stage, string>> = {
   'article_comparison': '/articles/touchflow-vs-monkeytype',
   'article_beginners_guide': '/articles/typing-platform-for-beginners',
   'article_best_2026': '/articles/best-typing-platforms-2026',
+  'article_law': '/articles/typing-speed-for-lawyers',
+  'article_medical_scribe': '/articles/icd-10-typing-practice',
+  'article_engineer': '/articles/vs-code-typing-hacks',
   auth_login: '/login',
   auth_signup: '/signup',
   assessment: '/assessment',
@@ -1148,6 +1154,30 @@ function App() {
             {stage === 'article_best_2026' && (
               <PageTransition key="article_best_2026">
                 <BestPlatforms2026Article onNavigate={(s) => setStage(s as Stage)} />
+              </PageTransition>
+            )}
+            {stage === 'article_law' && (
+              <PageTransition key="article_law">
+                <LawTypingArticle onStartTraining={() => {
+                  setAuthRedirectIntent('legalTrack');
+                  setStage('auth_signup');
+                }} />
+              </PageTransition>
+            )}
+            {stage === 'article_medical_scribe' && (
+              <PageTransition key="article_medical_scribe">
+                <MedicalScribeArticle onStartTraining={() => {
+                  setAuthRedirectIntent('medicalTrack');
+                  setStage('auth_signup');
+                }} />
+              </PageTransition>
+            )}
+            {stage === 'article_engineer' && (
+              <PageTransition key="article_engineer">
+                <EngineerTypingArticle onStartTraining={() => {
+                  setAuthRedirectIntent('codingTrack');
+                  setStage('auth_signup');
+                }} />
               </PageTransition>
             )}
           </AnimatePresence>

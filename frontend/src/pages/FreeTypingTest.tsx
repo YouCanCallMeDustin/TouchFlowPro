@@ -38,7 +38,7 @@ export const FreeTypingTest: React.FC<FreeTypingTestProps> = ({ onNavigate }) =>
     return (
         <div className="w-full px-4 flex flex-col items-center">
             <Helmet>
-                <title>Free 1-Minute Typing Test: Test Your WPM Online | TouchFlowPro</title>
+                <title>1-Minute Typing Speed Test: Professional Grade Assessment | TouchFlow Pro</title>
                 <meta name="description" content="Test your typing speed and accuracy for free with our 1-Minute Speed Test. Determine your baseline WPM and find your performance tier." />
                 <link rel="canonical" href="https://touchflowpro.com/free-typing-test" />
                 <meta property="og:title" content="Free 1-Minute Typing Test: Test Your WPM Online | TouchFlowPro" />

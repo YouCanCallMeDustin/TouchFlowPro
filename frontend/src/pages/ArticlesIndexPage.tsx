@@ -97,6 +97,24 @@ const articles = [
         desc: "How to mentally prepare, measure, and analyze a 1-minute typing test for accurate baseline diagnostic reporting.",
         path: "/articles/typing-speed-test",
         readTime: "4 min read"
+    },
+    {
+        title: "Typing Speed for Lawyers: The ROI of Fast Transcription",
+        desc: "Discover how typing speed impacts legal billables. Learn the ROI of fast transcription for lawyers, clerks, and legal assistants.",
+        path: "/articles/typing-speed-for-lawyers",
+        readTime: "7 min read"
+    },
+    {
+        title: "ICD-10 Typing Practice: Drills for Medical Scribes",
+        desc: "Master clinical documentation speed. Dedicated ICD-10 typing practice and SOAP note drills for medical scribes and transcribers.",
+        path: "/articles/icd-10-typing-practice",
+        readTime: "6 min read"
+    },
+    {
+        title: "VS Code Typing Hacks for Senior Engineers",
+        desc: "Optimize your developer workflow. Specialist typing hacks for VS Code, Vim, and high-velocity engineering.",
+        path: "/articles/vs-code-typing-hacks",
+        readTime: "5 min read"
     }
 ];
 
