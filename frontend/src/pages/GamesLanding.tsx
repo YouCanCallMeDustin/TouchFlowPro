@@ -46,7 +46,11 @@ export function GamesLanding({ onNavigate }: GamesLandingProps) {
     ];
 
     return (
-        <div className="w-full max-w-4xl mx-auto">
+      <div className="w-full max-w-4xl mx-auto">
+            <Helmet>
+                <title>Games Landing | TouchFlow Pro</title>
+                <meta name="description" content="TouchFlow Pro games landing — professional typing training and speed test tools." />
+            </Helmet>
             <div className="text-center mb-12">
                 <motion.h1
                     initial={{ opacity: 0, y: 20 }}

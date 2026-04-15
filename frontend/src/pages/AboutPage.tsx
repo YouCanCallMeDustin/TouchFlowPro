@@ -1,4 +1,3 @@
-import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Target, Users, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';

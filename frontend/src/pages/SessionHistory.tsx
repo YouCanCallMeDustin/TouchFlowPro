@@ -81,7 +81,7 @@ const SessionHistory: React.FC<SessionHistoryProps> = ({ userId }) => {
 
     if (loading && results.length === 0) {
         return (
-            <div className="flex items-center justify-center min-h-[400px]">
+      <div className="flex items-center justify-center min-h-[400px]">
                 <div className="flex flex-col items-center gap-4 animate-pulse">
                     <div className="w-12 h-12 rounded-full border-4 border-primary border-t-transparent animate-spin" />
                     <div className="text-[10px] font-black uppercase tracking-[0.4em] text-text-muted">Syncing Mission Logs...</div>
@@ -92,6 +92,10 @@ const SessionHistory: React.FC<SessionHistoryProps> = ({ userId }) => {
 
     return (
         <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-8 pb-20">
+            <Helmet>
+                <title>Session History | TouchFlow Pro</title>
+                <meta name="description" content="TouchFlow Pro session history — professional typing training and speed test tools." />
+            </Helmet>
             {/* Header */}
             {/* Header */}
             <div className="relative overflow-hidden card group min-h-[220px] flex items-center bg-gradient-to-br from-primary/[0.03] to-secondary/[0.03] border border-white/10 p-8 sm:p-12 mt-8">

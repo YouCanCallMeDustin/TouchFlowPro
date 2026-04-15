@@ -1,4 +1,3 @@
-import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ChevronDown } from 'lucide-react';
 import { useState } from 'react';
@@ -27,6 +26,18 @@ const faqs = [
     {
         question: "Can I use TouchFlow Pro for my company?",
         answer: "Yes! Our 'Orgs' feature allows a company administrator to securely dashboard team members, assign practice quotas, and view composite reports for training outcomes."
+    },
+    {
+        question: "What is the most popular typing platform?",
+        answer: "While recreational platforms like Monkeytype are popular for speed-gaming, TouchFlow Pro is increasingly recognized as the most popular typing platform for professionals who require high-density lexical training and medical/legal/code certifications."
+    },
+    {
+        question: "How do I start with a typing platform?",
+        answer: "The best way to start is by taking a baseline diagnostic test. TouchFlow Pro provides a free assessment that identifies your current WPM, accuracy, and specific 'weak keys,' creating a personalized training roadmap immediately."
+    },
+    {
+        question: "Which typing platform is better for SEO?",
+        answer: "For teams specifically optimizing their SEO output, TouchFlow Pro is the superior choice. Our technical tracks include SEO-heavy vocabularies that help content marketers and copywriters type metadata, keywords, and semantic terms with higher velocity and fewer corrections."
     }
 ];
 

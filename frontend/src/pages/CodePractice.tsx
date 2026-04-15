@@ -55,7 +55,7 @@ const CodePractice: React.FC<CodePracticeProps> = ({ userId, onSessionComplete }
 
     if (activeDrill) {
         return (
-            <LessonView
+      <LessonView
                 lesson={activeDrill}
                 userId={userId}
                 onComplete={handleDrillComplete}
@@ -66,6 +66,10 @@ const CodePractice: React.FC<CodePracticeProps> = ({ userId, onSessionComplete }
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+            <Helmet>
+                <title>Code Practice | TouchFlow Pro</title>
+                <meta name="description" content="TouchFlow Pro code practice — professional typing training and speed test tools." />
+            </Helmet>
             <ProFeatureLock title="Developer Mode">
                 <div className="relative overflow-hidden card group min-h-[220px] flex items-center bg-slate-900 border border-slate-700 p-8 sm:p-12 mb-12">
                     <div className="relative z-10 w-full md:w-2/3">

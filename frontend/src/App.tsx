@@ -91,6 +91,8 @@ const ImproveTypingSpeedArticle   = lazy(() => import('./pages/articles/ImproveT
 const TypingAccuracyArticle       = lazy(() => import('./pages/articles/TypingAccuracyArticle').then(m => ({ default: m.TypingAccuracyArticle })))
 const FastestTypingTechniquesArticle = lazy(() => import('./pages/articles/FastestTypingTechniquesArticle').then(m => ({ default: m.FastestTypingTechniquesArticle })))
 const ComparisonArticle            = lazy(() => import('./pages/articles/ComparisonArticle').then(m => ({ default: m.ComparisonArticle })))
+const BeginnersGuideArticle        = lazy(() => import('./pages/articles/BeginnersGuideArticle').then(m => ({ default: m.BeginnersGuideArticle })))
+const BestPlatforms2026Article     = lazy(() => import('./pages/articles/BestPlatforms2026Article').then(m => ({ default: m.BestPlatforms2026Article })))
 
 
 const STAGE_ROUTES: Partial<Record<Stage, string>> = {
@@ -121,6 +123,8 @@ const STAGE_ROUTES: Partial<Record<Stage, string>> = {
   'article_typing_accuracy': '/articles/typing-accuracy',
   'article_fastest_techniques': '/articles/fastest-typing-techniques',
   'article_comparison': '/articles/touchflow-vs-monkeytype',
+  'article_beginners_guide': '/articles/typing-platform-for-beginners',
+  'article_best_2026': '/articles/best-typing-platforms-2026',
   auth_login: '/login',
   auth_signup: '/signup',
   assessment: '/assessment',
@@ -549,8 +553,8 @@ function App() {
   return (
     <ErrorBoundary>
       <Helmet>
-        <title>Elite Typing Trainer for Professionals | TouchFlow Pro</title>
-        <meta name="description" content="Master elite touch typing with professional analytics and fatigue detection. Reach 100+ WPM with science-backed drills. Start your free baseline test now." />
+        <title>Elite Typing Platform for Professionals | TouchFlow Pro</title>
+        <meta name="description" content="Master elite touch typing on the premier typing platform for professionals. Professional analytics, fatigue detection, and science-backed drills. Reach 100+ WPM." />
         <link rel="canonical" href={`https://touchflowpro.com${location.pathname === '/' ? '' : location.pathname}`} />
       </Helmet>
       <div className={`min-h-screen bg-bg-main selection:bg-primary/20 relative ${isTypingMode ? 'h-screen overflow-hidden flex flex-col' : ''}`}>
@@ -1134,6 +1138,16 @@ function App() {
             {stage === 'article_comparison' && (
               <PageTransition key="article_comparison">
                 <ComparisonArticle onNavigate={setStage} />
+              </PageTransition>
+            )}
+            {stage === 'article_beginners_guide' && (
+              <PageTransition key="article_beginners_guide">
+                <BeginnersGuideArticle onNavigate={(s) => setStage(s as Stage)} />
+              </PageTransition>
+            )}
+            {stage === 'article_best_2026' && (
+              <PageTransition key="article_best_2026">
+                <BestPlatforms2026Article onNavigate={(s) => setStage(s as Stage)} />
               </PageTransition>
             )}
           </AnimatePresence>

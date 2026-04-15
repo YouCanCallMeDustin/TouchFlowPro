@@ -126,7 +126,7 @@ export const EnhancedPractice: React.FC = () => {
             const wordChars = word + (hasSpace ? ' ' : '');
 
             return (
-                <span key={wIdx} className="inline-block whitespace-nowrap">
+      <span key={wIdx} className="inline-block whitespace-nowrap">
                     {wordChars.split('').map((char) => {
                         const index = charIndex++;
                         let className = 'text-2xl ';
@@ -159,6 +159,10 @@ export const EnhancedPractice: React.FC = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black p-8">
+            <Helmet>
+                <title>Enhanced Practice | TouchFlow Pro</title>
+                <meta name="description" content="TouchFlow Pro enhanced practice — professional typing training and speed test tools." />
+            </Helmet>
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <motion.div

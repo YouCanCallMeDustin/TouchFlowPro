@@ -74,7 +74,7 @@ const Leaderboard: React.FC<{ userId: string }> = ({ userId }) => {
 
     if (loading) {
         return (
-            <div className="max-w-4xl mx-auto p-6 flex flex-col items-center justify-center min-h-[50vh]">
+      <div className="max-w-4xl mx-auto p-6 flex flex-col items-center justify-center min-h-[50vh]">
                 <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin mb-4" />
                 <span className="text-[10px] font-black uppercase tracking-widest text-text-muted">Fetching Ranks</span>
             </div>
@@ -83,6 +83,10 @@ const Leaderboard: React.FC<{ userId: string }> = ({ userId }) => {
 
     return (
         <PageTransition>
+            <Helmet>
+                <title>Leaderboard | TouchFlow Pro</title>
+                <meta name="description" content="TouchFlow Pro leaderboard — professional typing training and speed test tools." />
+            </Helmet>
             <div className="max-w-5xl mx-auto p-4 sm:p-8 space-y-12">
                 <div className="relative overflow-hidden card group min-h-[220px] flex items-center bg-gradient-to-br from-primary/[0.03] to-secondary/[0.03] border border-white/10 p-8 sm:p-12 mb-12">
                     <div className="relative z-10 w-full md:w-2/3">

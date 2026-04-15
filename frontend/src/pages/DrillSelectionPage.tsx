@@ -33,7 +33,11 @@ const DrillSelectionPage: React.FC<DrillSelectionPageProps> = ({ lesson, onStart
     }, [lesson.id]);
 
     return (
-        <div className="max-w-6xl mx-auto w-full px-4 py-12 animate-in fade-in slide-in-from-bottom-6 duration-700">
+      <div className="max-w-6xl mx-auto w-full px-4 py-12 animate-in fade-in slide-in-from-bottom-6 duration-700">
+            <Helmet>
+                <title>Drill Selection Page | TouchFlow Pro</title>
+                <meta name="description" content="TouchFlow Pro drill selection page — professional typing training and speed test tools." />
+            </Helmet>
             {/* Header Section */}
             <header className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div className="space-y-4">

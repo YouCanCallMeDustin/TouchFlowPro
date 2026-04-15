@@ -200,11 +200,15 @@ const SampleReport: React.FC<SampleReportProps> = ({ onBack, orgId }) => {
     };
 
     return (
-        <motion.div
+      <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="max-w-7xl mx-auto px-4 py-8 space-y-8"
         >
+            <Helmet>
+                <title>Sample Report | TouchFlow Pro</title>
+                <meta name="description" content="TouchFlow Pro sample report — professional typing training and speed test tools." />
+            </Helmet>
             {/* Header / Nav */}
             <div className="flex items-center justify-between">
                 <Button

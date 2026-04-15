@@ -107,7 +107,7 @@ const AnalyticsDashboard: React.FC = () => {
 
     if (error || !summary || !userId) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-6 text-center">
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-6 text-center">
                 <div className="p-6 rounded-full bg-rose-500/10 text-rose-500">
                     <AlertCircle size={48} />
                 </div>
@@ -123,6 +123,10 @@ const AnalyticsDashboard: React.FC = () => {
 
     return (
         <PageTransition>
+            <Helmet>
+                <title>Analytics Dashboard | TouchFlow Pro</title>
+                <meta name="description" content="TouchFlow Pro analytics dashboard — professional typing training and speed test tools." />
+            </Helmet>
             <div className="max-w-7xl mx-auto px-4 py-12 space-y-12">
 
                 {/* Header Section */}

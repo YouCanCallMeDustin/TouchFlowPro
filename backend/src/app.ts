@@ -42,6 +42,7 @@ import seoRoutes from './routes/seo';
 import medicalRoutes from './routes/medical';
 import legalRoutes from './routes/legal';
 import codeRoutes from './routes/code';
+import ttsRoutes from './routes/tts';
 
 const app = express();
 
@@ -132,6 +133,7 @@ app.use('/api/games', gamesRoutes);
 app.use('/api/medical', medicalRoutes);
 app.use('/api/legal', legalRoutes);
 app.use('/api/code', codeRoutes);
+app.use('/api/tts', ttsRoutes);
 
 // SEO routes (MUST be before static and SPA fallback)
 app.use('/', seoRoutes);

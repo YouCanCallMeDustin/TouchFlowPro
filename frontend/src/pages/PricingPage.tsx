@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Check, X, Shield, Zap, Users, ArrowRight, Loader2 } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
 import PageTransition from '../components/PageTransition';
 import { apiFetch } from '../utils/api';
 

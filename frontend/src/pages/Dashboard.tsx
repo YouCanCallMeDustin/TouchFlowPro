@@ -254,7 +254,7 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
 
     if (loading) {
         return (
-            <div className="max-w-7xl mx-auto p-6 flex items-center justify-center min-h-[70vh]">
+      <div className="max-w-7xl mx-auto p-6 flex items-center justify-center min-h-[70vh]">
                 <div className="flex flex-col items-center gap-6">
                     <div className="relative w-16 h-16">
                         <div className="absolute inset-0 border-4 border-primary/10 rounded-full" />
@@ -268,6 +268,10 @@ const Dashboard: React.FC<DashboardProps> = ({ userId, onNavigate, userEmail, us
 
     return (
         <PageTransition>
+            <Helmet>
+                <title>Dashboard | TouchFlow Pro</title>
+                <meta name="description" content="TouchFlow Pro dashboard — professional typing training and speed test tools." />
+            </Helmet>
             <motion.div
                 variants={containerVariants}
                 initial="hidden"

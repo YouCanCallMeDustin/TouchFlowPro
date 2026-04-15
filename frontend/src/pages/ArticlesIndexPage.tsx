@@ -1,7 +1,7 @@
-import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { ArrowLeft, BookOpen, Clock, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 
 interface ArticlesIndexPageProps {
     onBack: () => void;
@@ -61,6 +61,18 @@ const articles = [
         desc: "Why typing accurately is the foundation for fast speeds. Address the 'backspace penalty' killing your total net WPM.",
         path: "/articles/typing-accuracy",
         readTime: "5 min read"
+    },
+    {
+        title: "The Best Typing Platform for Beginners in 2026",
+        desc: "Starting your journey? Discover why TouchFlow Pro is the premier typing platform for beginners looking for professional results.",
+        path: "/articles/typing-platform-for-beginners",
+        readTime: "7 min read"
+    },
+    {
+        title: "Best Typing Platform 2026: Professional Performance Guide",
+        desc: "The definitive guide to the leading typing tools of 2026. Why performance architecture is replacing casual games.",
+        path: "/articles/best-typing-platforms-2026",
+        readTime: "8 min read"
     },
     {
         title: "Ultimate Guide to Typing Speed in 2026",

@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+import axios from 'axios';
 
 const API_KEY = "2abfda58abd0480aa668dd43578e1700";
 const HOST = "touchflowpro.com";
@@ -32,6 +32,8 @@ const SEO_PAGES = [
     'improve-typing-speed',
     '60-wpm-to-100-wpm',
     'touchflow-vs-monkeytype',
+    'typing-platform-for-beginners',
+    'best-typing-platforms-2026'
 ];
 
 const articleUrls = SEO_PAGES.map(slug => `https://${HOST}/articles/${slug}`);
@@ -49,25 +51,26 @@ async function submitToIndexNow() {
     };
 
     try {
-        const response = await fetch('https://api.indexnow.org/indexnow', {
-            method: 'POST',
+        const response = await axios.post('https://api.indexnow.org/indexnow', payload, {
             headers: {
                 'Content-Type': 'application/json; charset=utf-8'
-            },
-            body: JSON.stringify(payload)
+            }
         });
 
-        if (response.ok) {
+        if (response.status === 200) {
             console.log("✅ Successfully submitted to IndexNow. (HTTP 200 OK)");
         } else if (response.status === 202) {
             console.log("✅ Successfully submitted. IndexNow returned HTTP 202 Accepted (URL validated and added to queue).");
         } else {
             console.error(`❌ IndexNow submission failed with HTTP ${response.status} ${response.statusText}`);
-            const text = await response.text();
-            console.log("Response body:", text);
+            console.log("Response body:", response.data);
         }
-    } catch(err) {
-        console.error("❌ Error submitting to IndexNow:", err);
+    } catch(err: any) {
+        console.error("❌ Error submitting to IndexNow:", err.message);
+        if (err.response) {
+            console.log("Response status:", err.response.status);
+            console.log("Response data:", err.response.data);
+        }
     }
 }
 

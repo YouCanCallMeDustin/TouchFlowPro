@@ -111,7 +111,7 @@ const CustomDrillBuilder: React.FC<CustomDrillBuilderProps> = ({ userId }) => {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen">
                 <div className="text-2xl font-bold text-primary-blue">Loading...</div>
             </div>
         );
@@ -119,6 +119,10 @@ const CustomDrillBuilder: React.FC<CustomDrillBuilderProps> = ({ userId }) => {
 
     return (
         <div className="max-w-7xl mx-auto p-6 space-y-6">
+            <Helmet>
+                <title>Custom Drill Builder | TouchFlow Pro</title>
+                <meta name="description" content="TouchFlow Pro custom drill builder — professional typing training and speed test tools." />
+            </Helmet>
             <Toaster position="top-right" />
 
             {/* Header */}

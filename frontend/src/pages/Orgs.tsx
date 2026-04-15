@@ -167,7 +167,7 @@ const Orgs: React.FC<OrgsProps> = ({ user, userProgress, onNavigate, onViewRepor
 
     if (loading && orgs.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[60vh]">
+      <div className="flex flex-col items-center justify-center min-h-[60vh]">
                 <Loader2 className="animate-spin text-primary mb-4" size={48} />
                 <p className="text-text-muted font-black uppercase tracking-[0.3em] text-[10px]">Synchronizing Orgs...</p>
             </div>
@@ -176,6 +176,10 @@ const Orgs: React.FC<OrgsProps> = ({ user, userProgress, onNavigate, onViewRepor
 
     return (
         <PageTransition>
+            <Helmet>
+                <title>Orgs | TouchFlow Pro</title>
+                <meta name="description" content="TouchFlow Pro orgs — professional typing training and speed test tools." />
+            </Helmet>
             <div className="max-w-7xl mx-auto px-4 py-12 space-y-12" onClick={() => setOpenMenuMemberId(null)}>
                 {/* Header Container */}
                 <div className="relative overflow-hidden card group min-h-[220px] flex items-center bg-gradient-to-br from-primary/[0.03] to-secondary/[0.03] border border-white/10 p-8 sm:p-12">

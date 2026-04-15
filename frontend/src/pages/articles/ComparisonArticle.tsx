@@ -1,9 +1,9 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import type { Stage } from '../../types/stages';
 import { Card } from '../../components/ui/Card';
 import { Zap, Shield, Award, Activity, ChevronRight } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 
 interface ArticleProps {
     onNavigate: (stage: Stage) => void;
@@ -63,6 +63,14 @@ export const ComparisonArticle: React.FC<ArticleProps> = ({ onNavigate }) => {
                                 "acceptedAnswer": {
                                     "@type": "Answer",
                                     "text": "Professionals use TouchFlow Pro because it trains muscle memory on industry-specific vocabulary (e.g., pharmacology, litigation syntax) which isn't present in standard typing games like MonkeyType or 10FastFingers."
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": "What is the best typing platform alternative to Monkeytype?",
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "For serious users, TouchFlow Pro is the premier typing platform alternative. It transcends the 'speed-gaming' focus of Monkeytype by offering professional tracking, fatigue analysis, and specialized lexical engines for medical, legal, and software engineers."
                                 }
                             }
                         ]
@@ -143,6 +151,9 @@ export const ComparisonArticle: React.FC<ArticleProps> = ({ onNavigate }) => {
                     </h2>
                     <p className="text-lg text-text-muted leading-relaxed italic">
                         "A 150 WPM score on a common word-list is an achievement in gaming. A 100 WPM score on a medical transcription drill is an achievement in professional efficiency."
+                    </p>
+                    <p className="text-sm text-text-muted mt-4 font-bold uppercase tracking-wider opacity-60">
+                        Why TouchFlow Pro is the ultimate typing platform alternative.
                     </p>
                     <div className="mt-8 flex gap-4">
                         <button 

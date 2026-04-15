@@ -74,7 +74,7 @@ export const AchievementsPanel: React.FC<AchievementsProps> = ({ userId }) => {
 
     if (loading) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6">
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6">
                 <div className="relative w-16 h-16">
                     <div className="absolute inset-0 border-4 border-primary/10 rounded-full" />
                     <div className="absolute inset-0 border-4 border-primary border-t-transparent rounded-full animate-spin shadow-[0_0_15px_var(--primary)]" />
@@ -86,6 +86,10 @@ export const AchievementsPanel: React.FC<AchievementsProps> = ({ userId }) => {
 
     return (
         <PageTransition>
+            <Helmet>
+                <title>Achievements Panel | TouchFlow Pro</title>
+                <meta name="description" content="TouchFlow Pro achievements panel — professional typing training and speed test tools." />
+            </Helmet>
             <div className="max-w-7xl mx-auto p-4 sm:p-10 space-y-12">
                 {/* Header */}
                 <div className="relative overflow-hidden card group min-h-[220px] flex items-center bg-gradient-to-br from-primary/[0.03] to-secondary/[0.03] border border-white/10 p-8 sm:p-12">

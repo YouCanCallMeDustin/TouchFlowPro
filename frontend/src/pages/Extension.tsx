@@ -4,7 +4,11 @@ import { Download, Zap, Target, Clock, Code } from 'lucide-react';
 
 const Extension: React.FC = () => {
     return (
-        <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+            <Helmet>
+                <title>Extension | TouchFlow Pro</title>
+                <meta name="description" content="TouchFlow Pro extension — professional typing training and speed test tools." />
+            </Helmet>
             {/* Hero Section */}
             <div className="text-center mb-16 relative">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[100px] -z-10" />

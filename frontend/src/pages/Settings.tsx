@@ -84,7 +84,7 @@ const Settings: React.FC<SettingsProps> = ({ onNavigate }) => {
 
     if (loading || !localSettings) {
         return (
-            <div className="flex justify-center items-center min-h-[50vh]">
+      <div className="flex justify-center items-center min-h-[50vh]">
                 <Loader2 className="animate-spin text-primary" size={32} />
             </div>
         );
@@ -182,6 +182,10 @@ const Settings: React.FC<SettingsProps> = ({ onNavigate }) => {
 
     return (
         <PageTransition>
+            <Helmet>
+                <title>Settings | TouchFlow Pro</title>
+                <meta name="description" content="TouchFlow Pro settings — professional typing training and speed test tools." />
+            </Helmet>
             <div className="max-w-4xl mx-auto p-8 space-y-8">
                 <div className="flex justify-between items-center bg-white/[0.02] border border-white/5 p-8 rounded-3xl backdrop-blur-xl">
                     <div>

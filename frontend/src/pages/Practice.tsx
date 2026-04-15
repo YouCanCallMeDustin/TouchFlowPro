@@ -207,7 +207,7 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
 
     if (activeDrill) {
         return (
-            <LessonView
+      <LessonView
                 lesson={activeDrill}
                 userId={userId}
                 onComplete={handleDrillComplete}
@@ -219,6 +219,10 @@ const Practice: React.FC<PracticeProps> = ({ userId, onSessionComplete }) => {
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+            <Helmet>
+                <title>Practice | TouchFlow Pro</title>
+                <meta name="description" content="TouchFlow Pro practice — professional typing training and speed test tools." />
+            </Helmet>
             <div className="relative overflow-hidden card group min-h-[220px] flex items-center bg-gradient-to-br from-primary/[0.03] to-secondary/[0.03] border border-white/10 p-8 sm:p-12 mb-12">
                 <div className="relative z-10 w-full md:w-2/3">
                     <div className="flex items-center gap-3 mb-6">

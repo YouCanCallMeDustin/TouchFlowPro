@@ -187,6 +187,9 @@ const TypingTest: React.FC<Props> = ({
     }, []);
 
     useEffect(() => {
+        // Only run auto-scroll in standard mode, not dictation mode
+        if (dictationMode) return;
+
         const activeChar = document.getElementById('typing-active-char');
         const container = document.getElementById('typing-text-container');
         
@@ -199,7 +202,7 @@ const TypingTest: React.FC<Props> = ({
                 activeChar.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }
-    }, [userInput]);
+    }, [userInput, dictationMode]);
 
     const { settings } = useSettings();
 
@@ -362,32 +365,27 @@ const TypingTest: React.FC<Props> = ({
     };
 
     return (
-        <div className="w-full max-w-5xl mx-auto space-y-4">
-            {/* Header Metrics */}
-            <div className={`grid grid-cols-1 md:grid-cols-4 gap-2 ${settings?.reduceMotion ? '' : 'animate-in fade-in slide-in-from-bottom-4 duration-500'}`}>
+        <div className="w-full max-w-5xl mx-auto space-y-1.5">
+            {/* Header Metrics (Compact Command Bar) */}
+            <div className={`flex items-center justify-between bg-slate-900/60 backdrop-blur-md px-6 py-2.5 rounded-2xl border border-white/10 ${settings?.reduceMotion ? '' : 'animate-in fade-in slide-in-from-top-2 duration-500'}`}>
                 {[
                     { label: 'Velocity', value: liveWPM, unit: 'WPM', color: 'text-primary' },
                     { label: 'Precision', value: metrics.accuracy, unit: '%', color: 'text-secondary' },
                     { label: 'Progress', value: Math.round((userInput.length / text.length) * 100), unit: '%', color: 'text-accent' },
                     {
-                        label: timeLimit ? 'Time Left' : 'Key Delay',
+                        label: timeLimit ? 'Time Left' : 'Delay',
                         value: timeLimit && timeLeft !== null ? formatTime(timeLeft) : liveMetrics.averageKeyDelay,
                         unit: timeLimit ? '' : 'ms',
                         color: timeLimit && (timeLeft || 0) < 30 ? 'text-rose-500 animate-pulse' : 'text-text-main'
                     }
                 ].map((stat, i) => (
-                    <motion.div
-                        key={i}
-                        initial={settings?.reduceMotion ? false : { opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={settings?.reduceMotion ? { duration: 0 } : { delay: i * 0.1 }}
-                        className="card p-2 flex flex-col items-center justify-center space-y-0.5"
-                    >
-                        <span className="text-[9px] font-black uppercase tracking-widest text-text-muted">{stat.label}</span>
-                        <div className={`text-xl font-black ${stat.color}`}>
-                            {stat.value}<span className="text-[9px] ml-0.5 opacity-50">{stat.unit}</span>
+                    <div key={i} className="flex items-baseline gap-2">
+                        <span className="text-[8px] font-black uppercase tracking-widest text-text-muted opacity-50">{stat.label}</span>
+                        <div className={`text-sm font-black ${stat.color}`}>
+                            {stat.value}<span className="text-[8px] ml-0.5 opacity-50 font-medium">{stat.unit}</span>
                         </div>
-                    </motion.div>
+                        {i < 3 && <div className="w-1 h-1 bg-white/5 rounded-full ml-4 hidden md:block"></div>}
+                    </div>
                 ))}
             </div>
 
@@ -418,8 +416,8 @@ const TypingTest: React.FC<Props> = ({
 
             <div
                 ref={containerRef}
-                onClick={() => inputRef.current?.focus()}
-                className={`relative card cursor-text p-4 transition-all duration-500 overflow-hidden ${accuracyGlow} ${settings?.fontScale === 'LG' ? 'p-8' : ''}`}
+                onClick={() => inputRef.current?.focus({ preventScroll: true })}
+                className={`relative card cursor-text p-2.5 transition-all duration-500 overflow-hidden ${accuracyGlow} ${settings?.fontScale === 'LG' ? 'p-6' : ''}`}
             >
                 {/* Sudden Death Effects */}
                 <AnimatePresence>
