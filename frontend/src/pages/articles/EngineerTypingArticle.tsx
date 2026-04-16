@@ -15,6 +15,17 @@ export const EngineerTypingArticle: React.FC<ArticleProps> = ({ onStartTraining 
                 <title>Typing Speed for Software Engineers: Symbol Density & Speed | TouchFlow</title>
                 <meta name="description" content="Master typing speed for software engineers. Learn why symbol accuracy and IDE efficiency are more important than raw WPM for high-performance coding." />
                 <link rel="canonical" href="https://touchflowpro.com/articles/typing-speed-for-software-engineers" />
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "Article",
+                        "headline": "Typing Speed for Software Engineers: Symbol Density & Speed Mastery",
+                        "description": "Master typing speed for software engineers. Learn why symbol accuracy and IDE efficiency are more important than raw WPM for high-performance coding.",
+                        "author": { "@type": "Organization", "name": "TouchFlow Pro" },
+                        "datePublished": "2026-04-14",
+                        "dateModified": "2026-04-16"
+                    })}
+                </script>
             </Helmet>
 
             <motion.article 

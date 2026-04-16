@@ -15,6 +15,17 @@ export const MedicalScribeArticle: React.FC<ArticleProps> = ({ onStartTraining }
                 <title>ICD-10 Typing Practice: Drills for Medical Scribes | TouchFlow</title>
                 <meta name="description" content="Master ICD-10 typing practice and SOAP note documentation. Learn the speed requirements for medical scribes and pass your scribe typing test today." />
                 <link rel="canonical" href="https://touchflowpro.com/articles/icd-10-typing-practice" />
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "Article",
+                        "headline": "ICD-10 Typing Practice: Drills for Medical Scribes and Clinical Charting",
+                        "description": "Master ICD-10 typing practice and SOAP note documentation. Learn the speed requirements for medical scribes and pass your scribe typing test today.",
+                        "author": { "@type": "Organization", "name": "TouchFlow Pro" },
+                        "datePublished": "2026-04-14",
+                        "dateModified": "2026-04-16"
+                    })}
+                </script>
             </Helmet>
 
             <motion.article 

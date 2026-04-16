@@ -190,6 +190,7 @@ const REDIRECT_MAP: InstanceType<typeof Map<string, string>> = new Map([
     ['/medical-transcription-typing-test', '/articles/medical-transcription-typing-test'],
     ['/legal-typing-test', '/articles/legal-typing-test'],
     ['/typing-test-for-programmers', '/articles/typing-test-for-programmers'],
+    ['/code-typing-practice', '/articles/typing-test-for-programmers'],
 ]);
 
 REDIRECT_MAP.forEach((newPath, oldPath) => {

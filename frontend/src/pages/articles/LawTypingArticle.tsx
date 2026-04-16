@@ -15,6 +15,17 @@ export const LawTypingArticle: React.FC<ArticleProps> = ({ onStartTraining }) =>
                 <title>Typing Speed for Lawyers: The ROI of Fast Transcription | TouchFlow</title>
                 <meta name="description" content="Discover how typing speed for lawyers impacts billable hours and accuracy. Learn the ROI of 100+ WPM and master legal transcription speed today." />
                 <link rel="canonical" href="https://touchflowpro.com/articles/typing-speed-for-lawyers" />
+                <script type="application/ld+json">
+                    {JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "Article",
+                        "headline": "Typing Speed for Lawyers: The ROI of Fast Transcription and Drafting Accuracy",
+                        "description": "Discover how typing speed for lawyers impacts billable hours and accuracy. Learn the ROI of 100+ WPM and master legal transcription speed today.",
+                        "author": { "@type": "Organization", "name": "TouchFlow Pro" },
+                        "datePublished": "2026-04-14",
+                        "dateModified": "2026-04-16"
+                    })}
+                </script>
             </Helmet>
 
             <motion.article 

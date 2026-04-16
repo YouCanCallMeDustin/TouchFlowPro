@@ -33,6 +33,14 @@ export const BeginnersGuideArticle: React.FC<ArticleProps> = () => {
                                     { "@type": "HowToStep", "text": "Practice without looking at the keyboard ('The No-Sight Rule')." },
                                     { "@type": "HowToStep", "text": "Prioritize accuracy over speed until muscle memory is established." }
                                 ]
+                            },
+                            {
+                                "@type": "Article",
+                                "headline": "How to Learn Touch Typing: The Definitive 2026 Beginner's Guide",
+                                "description": "Master touch typing from scratch. Learn the home row, finger zones, and the 'No-Sight' rule to double your typing speed in 30 days.",
+                                "author": { "@type": "Organization", "name": "TouchFlow Pro" },
+                                "datePublished": "2026-04-14",
+                                "dateModified": "2026-04-16"
                             }
                         ]
                     })}

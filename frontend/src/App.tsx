@@ -131,10 +131,43 @@ const STAGE_ROUTES: Partial<Record<Stage, string>> = {
   'article_law': '/articles/typing-speed-for-lawyers',
   'article_medical_scribe': '/articles/icd-10-typing-practice',
   'article_engineer': '/articles/vs-code-typing-hacks',
+  'article_speed_accuracy': '/articles/typing-speed-vs-accuracy',
+  'article_accuracy_guide': '/articles/how-to-improve-typing-accuracy',
+  'article_60_wpm_guide': '/articles/how-to-type-60-wpm',
+  'article_medical_transcription': '/articles/medical-transcription-typing-test',
+  'article_legal_typing': '/articles/legal-typing-test',
+  'article_coder_typing': '/articles/typing-test-for-programmers',
   auth_login: '/login',
   auth_signup: '/signup',
   assessment: '/assessment',
   sample_report: '/sample-report',
+};
+
+const SEO_METADATA: Record<string, { title: string; description: string }> = {
+  article_speed_accuracy: {
+    title: "Typing Speed vs. Accuracy: The Professional Balance | TouchFlow Pro",
+    description: "Learn why prioritizing accuracy over raw speed is the secret to elite typing performance. Understand the 'backspace penalty' and how to maximize net WPM."
+  },
+  article_accuracy_guide: {
+    title: "How to Improve Typing Accuracy: Expert Strategies | TouchFlow Pro",
+    description: "Master precision typing with science-backed drills and motor learning techniques. Eliminate errors and build a flawless foundation for 100+ WPM."
+  },
+  article_60_wpm_guide: {
+    title: "How to Type 60 WPM: Breaking the Intermediate Barrier | TouchFlow Pro",
+    description: "Stuck at 40 WPM? Discover the structural changes needed to hit 60 WPM. Master home row discipline and rhythm for consistent speed gains."
+  },
+  article_medical_transcription: {
+    title: "Medical Transcription Typing Test: Free Practice & Assessment | TouchFlow Pro",
+    description: "Test your typing speed with real medical terminology, patient charts, and clinical notes. The ultimate medical transcription typing test for healthcare professionals."
+  },
+  article_legal_typing: {
+    title: "Legal Typing Test: Professional Assessment & Practice | TouchFlow Pro",
+    description: "Assess your legal keyboarding speed with authentic court transcripts, legal briefs, and case law terminology. Optimized for legal professionals."
+  },
+  article_coder_typing: {
+    title: "Typing Test for Programmers & Coders | TouchFlow Pro",
+    description: "Test your developer typing speed with real code snippets, algorithms, and technical symbols. Built specifically for software engineers and programmers."
+  }
 };
 
 const ROUTE_STAGES: Record<string, Stage> = Object.fromEntries(
@@ -1178,6 +1211,30 @@ function App() {
                   setAuthRedirectIntent('codingTrack');
                   setStage('auth_signup');
                 }} />
+              </PageTransition>
+            )}
+
+            {Object.keys(SEO_METADATA).includes(stage) && (
+              <PageTransition key={stage}>
+                <div className="max-w-4xl mx-auto py-12 px-4 text-center">
+                  <Helmet>
+                    <title>{SEO_METADATA[stage].title}</title>
+                    <meta name="description" content={SEO_METADATA[stage].description} />
+                  </Helmet>
+                  <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-12 backdrop-blur-xl">
+                    <h1 className="text-3xl font-black mb-6 uppercase tracking-tight italic">
+                      Performance <span className="text-primary italic">Resource.</span>
+                    </h1>
+                    <p className="text-text-muted mb-8 leading-relaxed max-w-xl mx-auto">
+                      This technical resource is optimized for search indexing. Please use the medical, legal, or coding tracks to start your training session.
+                    </p>
+                    <div className="flex flex-wrap justify-center gap-4">
+                      <Button onClick={() => setStage('medicalTrack')} className="font-black uppercase tracking-widest text-[10px]">Medical Track</Button>
+                      <Button onClick={() => setStage('legalTrack')} className="font-black uppercase tracking-widest text-[10px]">Legal Track</Button>
+                      <Button onClick={() => setStage('codingTrack')} className="font-black uppercase tracking-widest text-[10px]">Coding Track</Button>
+                    </div>
+                  </div>
+                </div>
               </PageTransition>
             )}
           </AnimatePresence>
